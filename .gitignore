@@ -1,2 +1,3 @@
 decan-env/
 node_modules/
+.venv/

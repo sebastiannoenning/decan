@@ -1,5 +1,5 @@
 import tkinter as tk
-import customtkinter as ctk
+import customtkinter
 
 class MainApp():
     def __init__(self, master=None, model=None):
@@ -7,7 +7,5 @@ class MainApp():
         self.__init__
 
 def main():
-    
-    
-if __name__ == '__main__':
-    main()
+    if __name__ == '__main__':
+        main()
