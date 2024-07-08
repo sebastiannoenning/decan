@@ -2,3 +2,5 @@ decan-env/
 node_modules/
 server/node_modules/
 .venv/
+
+echo .DS_Store >> ~/.gitignore_global
