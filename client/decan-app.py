@@ -8,17 +8,21 @@ customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "gr
 class CustomApp(customtkinter.CTk):
     def __init__(self, size=[800,480]):
         customtkinter.CTk.__init__(self)
-
+        
+        #Attribtues
         self.title_font = customtkinter.CTkFont(family='Helvetica', size=18, weight="bold")
         self.body_font = customtkinter.CTkFont(family='Helvetica', size=14)
         self.title("splash")
         self.width, self.height = size[0],size[1]
+        self.resizable(False,False)
 
+        #Page Container
         page_container = customtkinter.CTkFrame(self)
         page_container.pack(side="top", fill="both", expand=True)
         page_container.grid_rowconfigure(0, minsize=self.height, weight=1)  # configure grid system
         page_container.grid_columnconfigure(0, minsize=self.width, weight=1)
         
+        #Frame Manager
         self.frames = {}
         for F in (LoginPg, DecanApplication):
             page_name = F.__name__
@@ -82,7 +86,7 @@ class DecanApplication(customtkinter.CTkFrame):
 
         #Attributes
         self.controller = controller
-        self.title = 'Login Page'
+        self.title = 'Decan App'
 
 
 
