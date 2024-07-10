@@ -1,6 +1,6 @@
 //export{}
 const express = require('express')
-const db = require('./config/db.js')
+const db = require('../configs/db');
 const router = express.Router()
 
 router.get('/users', (req,res) => {

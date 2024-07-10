@@ -1,12 +1,21 @@
 const express = require('express')
 const cors = require('cors')
+const mysql = require('mysql')
 const bodyParser = require('body-parser')
 const router = require('./routes/router')
+const db = require('./configs/db')
 
 const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
+
+db.connect((err) => {
+  if (err){
+    console.log(err)
+  }
+  console.log('Database Connected')
+});
 
 const corsOptions = {
   origin:'*',
