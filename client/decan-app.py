@@ -63,6 +63,7 @@ class LoginPg(customtkinter.CTkFrame):
 
         button_confirm = customtkinter.CTkButton(master=self,text="Confirm",command=self.login).grid(row=5, column=0, columnspan=2, sticky='nsew',pady=(6,0))
 
+    #login function for decan-app
     def login(self):
         payload = {
             "username":self.entry_username.get(),
@@ -80,8 +81,7 @@ class LoginPg(customtkinter.CTkFrame):
         except requests.exceptions.RequestException as e:
             print('server-side error')
 
-
-
+    #simple function for changing/showing the password
     def change_format(self):
         match self.entry_password.cget("show"):
             case '*':
