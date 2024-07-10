@@ -2,9 +2,9 @@ const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql')
 const bodyParser = require('body-parser')
+const router = require('./routes/router')
 
 const app = express()
-const port = 3000
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
@@ -15,10 +15,17 @@ const corsOptions = {
   optionSuccessStatus: 200
 }
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+const database = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: '',
+  database: decan
+})
 
-app.listen(port, () => {
+app.use(cors(corsOptions))
+app.use('/', router)
+
+const port = 3000
+const server = app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
-});
+})
