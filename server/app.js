@@ -15,13 +15,6 @@ const corsOptions = {
   optionSuccessStatus: 200
 }
 
-const database = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: '',
-  database: decan
-})
-
 app.use(cors(corsOptions))
 app.use('/', router)
 
@@ -29,3 +22,4 @@ const port = 3000
 const server = app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 })
+

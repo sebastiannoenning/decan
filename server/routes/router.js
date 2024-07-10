@@ -1,5 +1,6 @@
-export{}
+//export{}
 const express = require('express')
+const db = require('./config/db.js')
 const router = express.Router()
 
 router.get('/users', (req,res) => {
@@ -9,3 +10,5 @@ router.get('/users', (req,res) => {
         return res.json(data);
     }) 
 })
+
+module.exports = router;
