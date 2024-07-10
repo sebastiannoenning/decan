@@ -10,7 +10,7 @@ export const userSchema = {
     userProfile: joi.object({
       forename: joi.string().min(1).max(35).required(),
       surname: joi.string().max(50).optional(),
-      dateofbirth: joi.date().iso().less('now').min('1-1-1900').required(),
+      dateofbirth: joi.date().iso().less('now').min('1900-01-01').required(),
       photo: joi.string().label('Image upload').optional(),
       address: joi.number().max(10).optional()
     }),

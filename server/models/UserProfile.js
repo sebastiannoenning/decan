@@ -23,12 +23,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     Photo: {
       type: DataTypes.STRING(90),
+      comment: "Will direct to a filepath with the image stored.",
       allowNull: true
     },
     'UP.UserAddressID': {
       type: DataTypes.INTEGER,
       allowNull: true,
-      comment: "Will direct to a filepath with the image stored.",
       references: {
         model: 'Address',
         key: 'AddressID'

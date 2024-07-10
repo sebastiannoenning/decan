@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import font as tkfont
 import customtkinter
+import requests
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -62,13 +63,22 @@ class LoginPg(customtkinter.CTkFrame):
         button_confirm = customtkinter.CTkButton(master=self,text="Confirm",command=self.login).grid(row=5, column=0, columnspan=2, sticky='nsew',pady=(6,0))
 
     def login(self):
-        user = 'daniel'
-        password = 'danielspassword'
-        if self.entry_username.get()=='daniel' and self.entry_password.get()=='danielspassword':
-            print('Correct Login')
-            self.controller.show_frame("DecanApplication")
-        else: 
-            print('Invalid Login')
+        payload = {
+            "username":self.entry_username.get(),
+            "password":self.entry_password.get()
+        }
+        try:
+            response = requests.post('http://localhost:3000/login', json=payload)
+            response.raise_for_status()
+            data = response.json()
+            if data['auth']:
+                print(data['message'])
+                self.controller.show_frame("DecanApplication")
+            else:
+                print(data['message'])
+        except requests.exceptions.RequestException as e:
+            print('server-side error')
+
 
 
     def change_format(self):
