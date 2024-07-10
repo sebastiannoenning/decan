@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import font as tkfont
+from hashlib import sha256
 import customtkinter
 import requests
 
@@ -65,7 +66,7 @@ class LoginPg(customtkinter.CTkFrame):
     def login(self):
         payload = {
             "username":self.entry_username.get(),
-            "password":self.entry_password.get()
+            "password":(sha256(self.entry_password.get().encode('utf-8')).hexdigest())
         }
         try:
             response = requests.post('http://localhost:3000/login', json=payload)
