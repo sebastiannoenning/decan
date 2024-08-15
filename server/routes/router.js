@@ -11,6 +11,14 @@ router.get('/users', (req,res) => {
     }) 
 })
 
+router.get('/events', (req,res) => {
+    const sql = 'SELECT * FROM Events';
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    }) 
+})
+
 router.post('/login', (req,res) => {
     const { username , password } = req.body;
 
