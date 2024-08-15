@@ -19,6 +19,17 @@ router.get('/events', (req,res) => {
     }) 
 })
 
+router.get('/user/events', (req,res) => {
+    const { username } = req.body;
+
+    const sql = 'SELECT * FROM Events WHERE (SELECT UserID FROM Users WHERE Username = ?)';
+    db.query(sql, [username], (err, data) => {
+        if (err) return res.json(err);
+        if (data.length > 0){ return res.json({data, message: 'success'})
+        } else { return res.json({auth: false, message: 'incorrect username or password'}); }
+    }) 
+})
+
 router.post('/login', (req,res) => {
     const { username , password } = req.body;
 
