@@ -1,3 +1,5 @@
 configs/db.js
 
 client/assets/
+
+client/.qtcreator/
