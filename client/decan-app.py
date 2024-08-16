@@ -7,7 +7,7 @@ import requests
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
 
-class CustomApp(customtkinter.CTk):
+class DecanApp(customtkinter.CTk):
     def __init__(self, size=[800,480]):
         customtkinter.CTk.__init__(self)
         
@@ -23,17 +23,18 @@ class CustomApp(customtkinter.CTk):
         page_container.pack(side="top", fill="both", expand=True)
         page_container.grid_rowconfigure(0, minsize=self.height, weight=1)  # configure grid system
         page_container.grid_columnconfigure(0, minsize=self.width, weight=1)
+        page_container.grid(row=0, column=0)
         
         #Frame Manager
         self.frames = {}
-        for F in (LoginPg, DecanApplication):
+        for F in (LoginPg, HomePg):
             page_name = F.__name__
             frame = F(parent=page_container, controller=self)
             self.frames[page_name] = frame
 
-            frame.grid(row=0, column=0)
+            frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame("LoginPg")
+        self.show_frame("HomePg")
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]
@@ -51,7 +52,7 @@ class LoginPg(customtkinter.CTkFrame):
 
         label_title = customtkinter.CTkLabel(self, text="Login", font=controller.title_font).grid(row=0,column=0,columnspan=2)
 
-        label_username = customtkinter.CTkLabel(self, text="Username", font=controller.body_font).grid(row=1,column=0,columnspan=2,sticky='w',padx=6)
+        label_username = customtkinter.CTkLabel(self, text="Username", font=controller.body_font).grid(row=1,column=0,columnspan=2,sticky='',padx=6)
         self.entry_username = customtkinter.CTkEntry(master=self, placeholder_text="Username", corner_radius=0,)
         self.entry_username.grid(row=2,column=0,columnspan=2,sticky='nsew')
 
@@ -75,7 +76,7 @@ class LoginPg(customtkinter.CTkFrame):
             data = response.json()
             if data['auth']:
                 print(data['message'])
-                self.controller.show_frame("DecanApplication")
+                self.controller.show_frame("HomePg")
             else:
                 print(data['message'])
         except requests.exceptions.RequestException as e:
@@ -91,7 +92,7 @@ class LoginPg(customtkinter.CTkFrame):
                 self.entry_password.configure(show='*')
                 self.button_password.configure(text='Show')
 
-class DecanApplication(customtkinter.CTkFrame):
+class HomePg(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
         customtkinter.CTkFrame.__init__(self, parent)
 
@@ -103,5 +104,5 @@ class DecanApplication(customtkinter.CTkFrame):
 
 if __name__ == "__main__":
     print(tk.TkVersion)
-    app = CustomApp()
+    app = DecanApp()
     app.mainloop()
