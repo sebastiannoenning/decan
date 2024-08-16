@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 14.0.1, 2024-08-16T15:57:34. -->
+<!-- Written by QtCreator 14.0.1, 2024-08-16T20:06:44. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -154,7 +154,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/sebastianji/Documents/University Files/U-ECS Final Project/decan-calendar/decan/client/decan-pyqt/main.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/sebastianji/Documents/University Files/U-ECS Final Project/decan-calendar/decan/client/decan-pyqt/main.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/sebastianji/Documents/University Files/U-ECS Final Project/decan-calendar/decan/client/decan-pyqt/main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>

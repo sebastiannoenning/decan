@@ -1,6 +1,6 @@
 configs/db.js
 
-venv/ 
+./venv/ 
 
 client/assets/
 
