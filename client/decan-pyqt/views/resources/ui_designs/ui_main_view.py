@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'form.ui'
+## Form generated from reading UI file 'main_view.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -15,9 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QListWidget,
-    QListWidgetItem, QMainWindow, QPushButton, QScrollArea,
-    QSizePolicy, QStackedWidget, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QHeaderView, QLabel,
+    QLineEdit, QListWidget, QListWidgetItem, QMainWindow,
+    QPushButton, QScrollArea, QSizePolicy, QStackedWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -87,6 +88,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.b_showhidebutton.sizePolicy().hasHeightForWidth())
         self.b_showhidebutton.setSizePolicy(sizePolicy)
+        self.b_showhidebutton.setMinimumSize(QSize(24, 24))
         self.l_Username = QLabel(self.p_user_login)
         self.l_Username.setObjectName(u"l_Username")
         self.l_Username.setGeometry(QRect(10, 110, 300, 20))
@@ -140,11 +142,62 @@ class Ui_MainWindow(object):
         self.upcomingevents = QScrollArea(self.p_cal)
         self.upcomingevents.setObjectName(u"upcomingevents")
         self.upcomingevents.setGeometry(QRect(10, 10, 260, 440))
+        self.upcomingevents.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.upcomingevents.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 258, 438))
+        self.frame = QFrame(self.scrollAreaWidgetContents)
+        self.frame.setObjectName(u"frame")
+        self.frame.setGeometry(QRect(0, 0, 260, 880))
+        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayoutWidget = QWidget(self.frame)
+        self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
+        self.verticalLayoutWidget.setGeometry(QRect(0, 0, 261, 651))
+        self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.lineEdit = QLineEdit(self.verticalLayoutWidget)
+        self.lineEdit.setObjectName(u"lineEdit")
+
+        self.verticalLayout.addWidget(self.lineEdit)
+
+        self.lineEdit_2 = QLineEdit(self.verticalLayoutWidget)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+
+        self.verticalLayout.addWidget(self.lineEdit_2)
+
+        self.lineEdit_3 = QLineEdit(self.verticalLayoutWidget)
+        self.lineEdit_3.setObjectName(u"lineEdit_3")
+
+        self.verticalLayout.addWidget(self.lineEdit_3)
+
+        self.lineEdit_4 = QLineEdit(self.verticalLayoutWidget)
+        self.lineEdit_4.setObjectName(u"lineEdit_4")
+
+        self.verticalLayout.addWidget(self.lineEdit_4)
+
         self.upcomingevents.setWidget(self.scrollAreaWidgetContents)
+        self.table_days = QTableWidget(self.p_cal)
+        if (self.table_days.columnCount() < 7):
+            self.table_days.setColumnCount(7)
+        if (self.table_days.rowCount() < 6):
+            self.table_days.setRowCount(6)
+        self.table_days.setObjectName(u"table_days")
+        self.table_days.setGeometry(QRect(290, 10, 360, 440))
+        sizePolicy.setHeightForWidth(self.table_days.sizePolicy().hasHeightForWidth())
+        self.table_days.setSizePolicy(sizePolicy)
+        self.table_days.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.table_days.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.table_days.setRowCount(6)
+        self.table_days.setColumnCount(7)
+        self.table_days.horizontalHeader().setMinimumSectionSize(20)
+        self.table_days.horizontalHeader().setDefaultSectionSize(48)
+        self.table_days.horizontalHeader().setHighlightSections(True)
+        self.table_days.horizontalHeader().setProperty("showSortIndicator", True)
+        self.table_days.verticalHeader().setMinimumSectionSize(19)
+        self.table_days.verticalHeader().setDefaultSectionSize(69)
         self.pages.addWidget(self.p_cal)
         self.page_set = QWidget()
         self.page_set.setObjectName(u"page_set")
@@ -152,6 +205,9 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
+
+        self.b_showhidebutton.setDefault(False)
+
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -163,9 +219,12 @@ class Ui_MainWindow(object):
         self.b_events.setText(QCoreApplication.translate("MainWindow", u"Events", None))
         self.b_settings.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.l_sidebar.setText(QCoreApplication.translate("MainWindow", u"Sidebar", None))
-        self.tb_Username.setText(QCoreApplication.translate("MainWindow", u"Username", None))
+        self.tb_Username.setText("")
+        self.tb_Username.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Username", None))
         self.l_Login.setText(QCoreApplication.translate("MainWindow", u"Login", None))
-        self.tb_Password.setText(QCoreApplication.translate("MainWindow", u"Password", None))
+        self.tb_Password.setInputMask("")
+        self.tb_Password.setText("")
+        self.tb_Password.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Password", None))
         self.b_showhidebutton.setText("")
         self.l_Username.setText(QCoreApplication.translate("MainWindow", u"Username", None))
         self.l_Password.setText(QCoreApplication.translate("MainWindow", u"Password", None))

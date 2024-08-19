@@ -20,7 +20,7 @@ export const userSchema = {
     password: joi.string().min(8).max(64).required()
   }),
   updateUser: joi.object({
-    userID: joi.number().max(3),
+    userID: joi.number().max(3).required(),
     username: joi.string().min(6).max(32),
     forename: joi.string().min(1).max(35),
     surname: joi.string().max(50),
@@ -29,7 +29,7 @@ export const userSchema = {
     address: joi.number().max(10)
   }),
   updatePassword: joi.object({
-    userId: joi.number().max(3),
+    userId: joi.number().max(3).required(),
     password: joi.string().min(8).max(64).required(),
     passwordConfirmation: joi.string().required().valid(joi.ref('password'))
   })
