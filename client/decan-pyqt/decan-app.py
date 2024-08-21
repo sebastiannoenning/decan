@@ -14,9 +14,10 @@ class App(QApplication):
         #self.main_controller = MainController(self.model)
         self.main_view = MainWindow()#self.main_model, self.main_controller)
         self.main_view.show()
-        
+        #self load ui components
 
 
 if __name__ == '__main__':
     app = App(sys.argv)
     sys.exit(app.exec())
+    

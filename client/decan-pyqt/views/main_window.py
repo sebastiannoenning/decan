@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):#model, controller):
+    def __init__(self, parent=None):#, model, controller):
         super().__init__(parent)
 
         #self._model = model

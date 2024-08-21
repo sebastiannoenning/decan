@@ -402,7 +402,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>260</width>
+         <width>341</width>
          <height>440</height>
         </rect>
        </property>
@@ -417,7 +417,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>258</width>
+          <width>323</width>
           <height>438</height>
          </rect>
         </property>
@@ -426,8 +426,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>260</width>
-           <height>880</height>
+           <width>331</width>
+           <height>441</height>
           </rect>
          </property>
          <property name="frameShape">
@@ -436,91 +436,18 @@
          <property name="frameShadow">
           <enum>QFrame::Shadow::Raised</enum>
          </property>
-         <widget class="QWidget" name="verticalLayoutWidget">
+         <widget class="EventItem" name="widget" native="true">
           <property name="geometry">
            <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>261</width>
-            <height>651</height>
+            <x>20</x>
+            <y>150</y>
+            <width>281</width>
+            <height>211</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QLineEdit" name="lineEdit"/>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEdit_2"/>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEdit_3"/>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEdit_4"/>
-           </item>
-          </layout>
          </widget>
         </widget>
        </widget>
-      </widget>
-      <widget class="QTableWidget" name="table_days">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>10</y>
-         <width>360</width>
-         <height>440</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="rowCount">
-        <number>6</number>
-       </property>
-       <property name="columnCount">
-        <number>7</number>
-       </property>
-       <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>20</number>
-       </attribute>
-       <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>48</number>
-       </attribute>
-       <attribute name="horizontalHeaderHighlightSections">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="verticalHeaderMinimumSectionSize">
-        <number>19</number>
-       </attribute>
-       <attribute name="verticalHeaderDefaultSectionSize">
-        <number>69</number>
-       </attribute>
-       <row/>
-       <row/>
-       <row/>
-       <row/>
-       <row/>
-       <row/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
       </widget>
      </widget>
      <widget class="QWidget" name="page_set"/>
@@ -528,6 +455,14 @@
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EventItem</class>
+   <extends>QWidget</extends>
+   <header>views.resources.custom_classes.eventitem</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
