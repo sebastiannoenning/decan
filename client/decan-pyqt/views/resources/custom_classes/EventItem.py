@@ -11,19 +11,41 @@ class EventItem(QWidget):
         _layout = QVBoxLayout()
         self.setLayout(_layout)
 
+        _header, _midsection, _footer = self.setup_ui()
+
+        _layout.addLayout(_header, 0)
+        _layout.addWidget(_midsection, 1)
+        _layout.addWidget(_footer, 0)
+
+
+        pass
+
+    def setup_ui(self):
+        
         _header = QHBoxLayout()
         _midsection = QScrollArea()
         _footer = QLabel('Hello')
 
         _header1 = QScrollArea()
-        _header1text = QLabel('EventTitle, EventTitle, EventTitle, EventTitle')
+        _header1text = QLabel('EventTitle, '*10)
         _header1.setWidget(_header1text)
         _header1.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
         _header1.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         _header1.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
+        #create scroller & input type
         _header1scroll = QScroller.scroller(_header1.viewport())
         _header1scroll.grabGesture(_header1.viewport(), QScroller.ScrollerGestureType.LeftMouseButtonGesture)
+        #create properties profile
+        _header1scroll_props = _header1scroll.scrollerProperties()          #copy default properties
+        _header1scroll_props.setScrollMetric(                               #remove vertical overshoot
+            QScrollerProperties.ScrollMetric.VerticalOvershootPolicy, 1)        # ↪ 1 is enum for the 'OvershootAlwaysOff' setting --> couldn't refer to it directly
+        _header1scroll_props.setScrollMetric(                               #remove horizontal overshoot
+            QScrollerProperties.ScrollMetric.HorizontalOvershootPolicy, 1)      # ↪ 1 is enum for the 'OvershootAlwaysOff' setting --> couldn't refer to it directly
+        _header1scroll_props.setScrollMetric(                               #set axislock to 1 (locks to unidirectional input rather than bi-directional)
+            QScrollerProperties.ScrollMetric.AxisLockThreshold, 1)              # ↪ value can be set between 0 & 1, with 1 indicating strong lock.
+        
+        _header1scroll.setScrollerProperties(_header1scroll_props)  #set scroller properties to profile
 
         _header2 = QLabel('00:00')
 
@@ -37,6 +59,7 @@ class EventItem(QWidget):
         _header1.setMaximumHeight(_header1text.height())
         _header2.adjustSize()
         _header2.setMaximumWidth(_header2.width())
+        _header1.adjustSize()
 
         _header.addWidget(_header1, 0)
         _header.addWidget(_header2, 0)
@@ -50,12 +73,8 @@ class EventItem(QWidget):
         _midsectionscroll = QScroller.scroller(_midsection.viewport())
         _midsectionscroll.grabGesture(_midsection.viewport(), QScroller.ScrollerGestureType.LeftMouseButtonGesture)
 
-        _layout.addLayout(_header, 0)
-        _layout.addWidget(_midsection, 1)
-        _layout.addWidget(_footer, 0)
-
-
-        pass
-
-    #def setup_details(self):
-        #nothing
+        return _header, _midsection, _footer
+    
+   # def update_text(self, 
+  #                  ETitle, ETime, EDescription, ETravelTime): #new values
+        
