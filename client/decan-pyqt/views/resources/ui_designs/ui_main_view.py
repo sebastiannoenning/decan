@@ -15,11 +15,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QLineEdit,
-    QListWidget, QListWidgetItem, QMainWindow, QPushButton,
-    QScrollArea, QSizePolicy, QStackedWidget, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QHeaderView, QLabel,
+    QLineEdit, QListWidget, QListWidgetItem, QMainWindow,
+    QPushButton, QScrollArea, QSizePolicy, QStackedWidget,
+    QTableView, QWidget)
 
-from views.resources.custom_classes.eventitem import EventItem
+from views.resources.custom_classes.eventitem import EventItem, Event
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -153,10 +154,14 @@ class Ui_MainWindow(object):
         self.frame.setGeometry(QRect(0, 0, 331, 441))
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.widget = EventItem(self.frame)
+        self.Event = Event('New Event','Description, description'*10,'00:00')
+        self.widget = EventItem(self.frame, self.Event)
         self.widget.setObjectName(u"widget")
         self.widget.setGeometry(QRect(20, 150, 281, 211))
         self.upcomingevents.setWidget(self.scrollAreaWidgetContents)
+        self.tableView = QTableView(self.p_cal)
+        self.tableView.setObjectName(u"tableView")
+        self.tableView.setGeometry(QRect(360, 10, 291, 441))
         self.pages.addWidget(self.p_cal)
         self.page_set = QWidget()
         self.page_set.setObjectName(u"page_set")

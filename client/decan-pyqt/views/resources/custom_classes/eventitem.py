@@ -1,80 +1,143 @@
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtCore
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QObject, Signal
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties
 from PySide6.QtGui import QFont
 
+class Event(QObject):
+
+    """Event.
+
+    Attributes:
+        ETitle: EventTitle
+        _tmphist: Temporary history for history browsing (as NeighborList)
+
+    Signals:
+        updated: Emitted when one of the entry values has been changed
+        deleted: Emitted/called on deletion of the object
+    """
+
+    updated_text = QtCore.Signal()
+    deleted_object = QtCore.Signal()
+
+    def __init__(self, ETitle = 'ETitle'*10, EDescription = 'EDescription'*30, ETime = '00:00'):
+        super().__init__()
+        self.ETitle = ETitle
+        self.EDescription = EDescription
+        self.ETime = ETime
+
+    def set_data(self, NETitle = None, NEDescription = None, NETime = None):
+        updated = False
+
+        if (NETitle is not None) and (NETitle != self.ETitle): 
+            self.ETitle = NETitle
+            updated = True
+        if (NEDescription is not None) and (NEDescription!= self.EDescription): 
+            self.EDescription = NEDescription
+            updated = True
+        if (NETime is not None) and (NETime != self.ETime): 
+            self.ETime = NETime
+            updated = True
+
+        if updated: self.updated_text.emit()
+
+
+    def get_data(self):
+        return {
+            'ETitle': self.ETitle,
+            'EDescription': self.EDescription,
+            'ETime': self.ETime
+        }
+    
+    def __del__(self): self.deleted_object.emit()
+
 class EventItem(QWidget):
-    def __init__(self, parent=None):
+
+    """A "EventItem" widget with an several labels.
+
+    Attributes:
+        _layout: The QVBoxLayout containing all the nested labels
+        _event: The Event object with the attributes for the labels
+
+    Signals:
+    """
+        
+    def __init__(self, parent=None, event=None):
         super().__init__(parent)
 
-        _layout = QVBoxLayout()
-        self.setLayout(_layout)
+        self._event = event
+        self._event.updated_text.connect(self.update_text)
+        self._event.deleted_object.connect(self.deleteLater)
 
-        _header, _midsection, _footer = self.setup_ui()
-
-        _layout.addLayout(_header, 0)
-        _layout.addWidget(_midsection, 1)
-        _layout.addWidget(_footer, 0)
-
-
-        pass
+        self.setup_ui()
 
     def setup_ui(self):
-        
-        _header = QHBoxLayout()
-        _midsection = QScrollArea()
-        _footer = QLabel('Hello')
+        # create vertical box layout to hold all the items
+        self._layout = QVBoxLayout()
+        self.setLayout(self._layout)
 
-        _header1 = QScrollArea()
-        _header1text = QLabel('EventTitle, '*10)
-        _header1.setWidget(_header1text)
-        _header1.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
-        _header1.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        _header1.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        # Create 3 main parts for place in layout -- will add later
+        self._header = QHBoxLayout()         #Top row       Features two labels - one at fixed width (for EventTitle), and another nested in a scroll-area
+        self._midsection = QScrollArea()     #Mid row       Features one label, nested inside a scroll-area
+        self._footer = QLabel()       #Bottom row
 
-        #create scroller & input type
-        _header1scroll = QScroller.scroller(_header1.viewport())
-        _header1scroll.grabGesture(_header1.viewport(), QScroller.ScrollerGestureType.LeftMouseButtonGesture)
-        #create properties profile
-        _header1scroll_props = _header1scroll.scrollerProperties()          #copy default properties
-        _header1scroll_props.setScrollMetric(                               #remove vertical overshoot
-            QScrollerProperties.ScrollMetric.VerticalOvershootPolicy, 1)        # ↪ 1 is enum for the 'OvershootAlwaysOff' setting --> couldn't refer to it directly
-        _header1scroll_props.setScrollMetric(                               #remove horizontal overshoot
-            QScrollerProperties.ScrollMetric.HorizontalOvershootPolicy, 1)      # ↪ 1 is enum for the 'OvershootAlwaysOff' setting --> couldn't refer to it directly
-        _header1scroll_props.setScrollMetric(                               #set axislock to 1 (locks to unidirectional input rather than bi-directional)
-            QScrollerProperties.ScrollMetric.AxisLockThreshold, 1)              # ↪ value can be set between 0 & 1, with 1 indicating strong lock.
-        
-        _header1scroll.setScrollerProperties(_header1scroll_props)  #set scroller properties to profile
+        # Header Components
+        self._header1_wrapper = QScrollArea()               #Scroll Area
+        self._header1_title = QLabel('EventTitle')          # ↪ For nested QLabel, displaying ETITLE
+        self._header2_time = QLabel('00:00')                #QLabel, displaying ESTARTTIME
 
-        _header2 = QLabel('00:00')
+        #   Header_1 wrapper settings 
+        self._header1_wrapper.setWidget(self._header1_title)
+        self._header1_wrapper.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        self._header1_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self._header1_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        #   Create scroller & input type
+        self._header1scroll = QScroller.scroller(self._header1_wrapper.viewport())
+        self._header1scroll.grabGesture(self._header1_wrapper.viewport(), QScroller.ScrollerGestureType.LeftMouseButtonGesture)
+        #   Create properties profile
+        self._header1scroll_props = self._header1scroll.scrollerProperties()    # Copy default properties
+        self._header1scroll_props.setScrollMetric(                              #      Remove vertical overshoot
+            QScrollerProperties.ScrollMetric.VerticalOvershootPolicy, 1)        #       ↪ 1 is enum for the 'OvershootAlwaysOff' setting --> couldn't refer to it directly
+        self._header1scroll_props.setScrollMetric(                              #      Remove horizontal overshoot
+            QScrollerProperties.ScrollMetric.HorizontalOvershootPolicy, 1)      #       ↪ 1 is enum for the 'OvershootAlwaysOff' setting --> couldn't refer to it directly
+        self._header1scroll_props.setScrollMetric(                              #      Implement strong AxisLock (prevents bi-directional scroll movements)
+            QScrollerProperties.ScrollMetric.AxisLockThreshold, 1)              #       ↪ Value can be set between 0 & 1, with 1 indicating strong lock.
+        self._header1scroll.setScrollerProperties(self._header1scroll_props)  #set scroller properties to profile
 
-        _headerfont = QFont()
-        _headerfont.setFamilies([u"Arial"])
-        _headerfont.setPointSize(20)
-        _header1text.setFont(_headerfont)
-        _header2.setFont(_headerfont)
+        #   Header font styling for components
+        self._headerfont = QFont()
+        self._headerfont.setFamilies([u"Arial"])
+        self._headerfont.setPointSize(20)
+        self._header1_title.setFont(self._headerfont)
+        self._header2_time.setFont(self._headerfont)
 
-        _header1text.adjustSize()
-        _header1.setMaximumHeight(_header1text.height())
-        _header2.adjustSize()
-        _header2.setMaximumWidth(_header2.width())
-        _header1.adjustSize()
+        self._header1_title.adjustSize()
+        self._header1_wrapper.setMaximumHeight(self._header1_title.height())
+        self._header2_time.adjustSize()
+        self._header2_time.setMaximumWidth(self._header2_time.width())
 
-        _header.addWidget(_header1, 0)
-        _header.addWidget(_header2, 0)
+        self._header.addWidget(self._header1_wrapper, 0)
+        self._header.addWidget(self._header2_time, 0)
 
-        _midsection.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
-        _midsection.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        _midsectiontext = QLabel('Brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog')
-        _midsectiontext.setWordWrap(True)
-        _midsection.setWidget(_midsectiontext)
+        self._midsection.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
+        self._midsection.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self._midsection_text = QLabel('Brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog')
+        self._midsection_text.setWordWrap(True)
+        self._midsection.setWidget(self._midsection_text)
 
-        _midsectionscroll = QScroller.scroller(_midsection.viewport())
-        _midsectionscroll.grabGesture(_midsection.viewport(), QScroller.ScrollerGestureType.LeftMouseButtonGesture)
+        self._midsectionscroll = QScroller.scroller(self._midsection.viewport())
+        self._midsectionscroll.grabGesture(self._midsection.viewport(), QScroller.ScrollerGestureType.LeftMouseButtonGesture)
 
-        return _header, _midsection, _footer
+
+        # add rows to layout
+        self._layout.addLayout(self._header, 0)         # add header row
+        self._layout.addWidget(self._midsection, 1)     # add midsection row
+        self._layout.addWidget(self._footer, 0)         # add footer row
     
-   # def update_text(self, 
-  #                  ETitle, ETime, EDescription, ETravelTime): #new values
-        
+    def update_text(self):
+        data = self._event.get_data()
+        self._header1_title.setText(data['ETitle'])
+        self._header2_time.setText(data['ETime'])
+        self._midsection_text.setText(data['EDescription'])
+        self._header1_title.adjustSize()
+        self._midsection_text.adjustSize()

@@ -9,6 +9,7 @@ from PySide6.QtCore import Qt
 #     pyside6-uic resources/ui_files/main_view.ui -o resources/ui_designs/ui_main_view.py, or
 #     pyside2-uic main_view.ui -o ui_main_view.py
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
+from views.resources.custom_classes.eventitem import EventItem, Event
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):#, model, controller):
@@ -26,6 +27,8 @@ class MainWindow(QMainWindow):
 
         self._ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
+
+        self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
 
     def setup_links_nav(self):
