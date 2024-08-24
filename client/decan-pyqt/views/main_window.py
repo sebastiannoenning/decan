@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
-from PySide6.QtSql import QSqlDatabase, QSqlTableModel
+from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import Qt
 
@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         self._ui = Ui_MainWindow()
         self._ui.setupUi(self)
         
-        print(QSqlDatabase.drivers())
+        #print(QSqlDatabase.drivers())
 
         #remove title bar
         #self.setWindowFlag(Qt.FramelessWindowHint)
@@ -44,10 +44,30 @@ class MainWindow(QMainWindow):
         self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
 
     def setup_tables(self):
+        print(self._database.tables())
+        #query = QSqlQuery()
+        #query.exec('SELECT * FROM Events')
+        #print(query.size(), query.record().count())
         self._user_model = QSqlTableModel()
+        self._user_profile_model = QSqlRelationalTableModel()
+        self._event_model = QSqlRelationalTableModel()
+        
         self._user_model.setTable("Users")
-        self._ui.table_user.setModel(self._user_model)
+        self._user_profile_model.setTable("UserProfile")
+        self._event_model.setTable("Events")
+        
+        self._user_profile_model.setRelation(0, QSqlRelation("Users","UserID","Username"))
+        #self._user_profile_model.setRelation(5, QSqlRelation("Address","AddressID","AddressID"))
+        self._event_model.setRelation(6, QSqlRelation("Users","UserID","Username"))
+        
         self._user_model.select()
+        self._user_profile_model.select()
+        self._event_model.select()
+        
+        self._ui.table_user.setModel(self._user_model)
+        self._ui.table_user_profile.setModel(self._user_profile_model)
+        self._ui.table_events.setModel(self._event_model)
+        #print(self._user_model.rowCount())
         
     def setup_connection(self):
         self._database = QSqlDatabase.addDatabase('QMYSQL')
