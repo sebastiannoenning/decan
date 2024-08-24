@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
 
     def setup_tables(self):
-        self._user_model = QSqlTableModel
+        self._user_model = QSqlTableModel()
         self._user_model.setTable("Users")
         self._ui.table_user.setModel(self._user_model)
         self._user_model.select()
