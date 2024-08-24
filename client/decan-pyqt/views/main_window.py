@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
+from PySide6.QtSql import QSqlDatabase
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import Qt
 
@@ -28,7 +29,7 @@ class MainWindow(QMainWindow):
         self._ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
 
-        self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
+        #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
 
     def setup_links_nav(self):

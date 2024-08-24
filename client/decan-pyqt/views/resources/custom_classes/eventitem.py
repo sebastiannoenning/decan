@@ -10,7 +10,9 @@ class Event(QObject):
 
     Attributes:
         ETitle: EventTitle
-        _tmphist: Temporary history for history browsing (as NeighborList)
+        EDescription: Event Description
+        ETime: Event Time
+        ELocation: 
 
     Signals:
         updated: Emitted when one of the entry values has been changed
@@ -141,3 +143,5 @@ class EventItem(QWidget):
         self._midsection_text.setText(data['EDescription'])
         self._header1_title.adjustSize()
         self._midsection_text.adjustSize()
+
+    #def enterEvent(self, event):

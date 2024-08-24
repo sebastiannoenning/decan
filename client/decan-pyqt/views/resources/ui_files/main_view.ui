@@ -436,20 +436,10 @@
          <property name="frameShadow">
           <enum>QFrame::Shadow::Raised</enum>
          </property>
-         <widget class="EventItem" name="widget" native="true">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>150</y>
-            <width>281</width>
-            <height>211</height>
-           </rect>
-          </property>
-         </widget>
         </widget>
        </widget>
       </widget>
-      <widget class="QTableView" name="tableView">
+      <widget class="QTableView" name="table">
        <property name="geometry">
         <rect>
          <x>360</x>
@@ -460,19 +450,52 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_set"/>
+     <widget class="QWidget" name="page_set">
+      <widget class="QTableView" name="table_user">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>20</y>
+         <width>256</width>
+         <height>192</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QTableView" name="table_user_profile">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>20</y>
+         <width>256</width>
+         <height>192</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QTableView" name="table_tags">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>240</y>
+         <width>256</width>
+         <height>192</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QTableView" name="table_events">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>240</y>
+         <width>256</width>
+         <height>192</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>EventItem</class>
-   <extends>QWidget</extends>
-   <header>views.resources.custom_classes.eventitem</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

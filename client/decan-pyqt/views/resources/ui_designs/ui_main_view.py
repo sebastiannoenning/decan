@@ -20,8 +20,6 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHeaderView, QLabel,
     QPushButton, QScrollArea, QSizePolicy, QStackedWidget,
     QTableView, QWidget)
 
-from views.resources.custom_classes.eventitem import EventItem, Event
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -154,17 +152,25 @@ class Ui_MainWindow(object):
         self.frame.setGeometry(QRect(0, 0, 331, 441))
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.Event = Event('New Event','Description, description'*10,'00:00')
-        self.widget = EventItem(self.frame, self.Event)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(20, 150, 281, 211))
         self.upcomingevents.setWidget(self.scrollAreaWidgetContents)
-        self.tableView = QTableView(self.p_cal)
-        self.tableView.setObjectName(u"tableView")
-        self.tableView.setGeometry(QRect(360, 10, 291, 441))
+        self.table = QTableView(self.p_cal)
+        self.table.setObjectName(u"table")
+        self.table.setGeometry(QRect(360, 10, 291, 441))
         self.pages.addWidget(self.p_cal)
         self.page_set = QWidget()
         self.page_set.setObjectName(u"page_set")
+        self.table_user = QTableView(self.page_set)
+        self.table_user.setObjectName(u"table_user")
+        self.table_user.setGeometry(QRect(40, 20, 256, 192))
+        self.table_user_profile = QTableView(self.page_set)
+        self.table_user_profile.setObjectName(u"table_user_profile")
+        self.table_user_profile.setGeometry(QRect(330, 20, 256, 192))
+        self.table_tags = QTableView(self.page_set)
+        self.table_tags.setObjectName(u"table_tags")
+        self.table_tags.setGeometry(QRect(40, 240, 256, 192))
+        self.table_events = QTableView(self.page_set)
+        self.table_events.setObjectName(u"table_events")
+        self.table_events.setGeometry(QRect(330, 240, 256, 192))
         self.pages.addWidget(self.page_set)
         MainWindow.setCentralWidget(self.centralwidget)
 
