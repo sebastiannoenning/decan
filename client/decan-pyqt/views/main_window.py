@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         self._ui = Ui_MainWindow()
         self._ui.setupUi(self)
         
-        print(QSqlDatabase.drivers())
+        #print(QSqlDatabase.drivers())
 
         #remove title bar
         #self.setWindowFlag(Qt.FramelessWindowHint)
