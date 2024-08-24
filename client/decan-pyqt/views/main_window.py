@@ -11,6 +11,7 @@ from PySide6.QtCore import Qt
 #     pyside2-uic main_view.ui -o ui_main_view.py
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
 from views.resources.custom_classes.eventitem import EventItem, Event
+from models.user_model import UserModel
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):#, model, controller):
@@ -37,3 +38,8 @@ class MainWindow(QMainWindow):
         self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
         self._ui.b_calendar.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
         self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
+
+    def setup_tables(self):
+        self._user_model = UserModel
+        self._ui.table_user(self._user_model)
+        self._user_model.select()
