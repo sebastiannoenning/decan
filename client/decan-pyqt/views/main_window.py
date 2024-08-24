@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
-from PySide6.QtSql import QSqlDatabase
+from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import Qt
 
@@ -23,12 +23,16 @@ class MainWindow(QMainWindow):
         #self load ui components
         self._ui = Ui_MainWindow()
         self._ui.setupUi(self)
+        
+        print(QSqlDatabase.drivers())
 
         #remove title bar
         #self.setWindowFlag(Qt.FramelessWindowHint)
 
         self._ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
+        self.setup_connection()
+        self.setup_tables()
 
         #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
@@ -40,6 +44,19 @@ class MainWindow(QMainWindow):
         self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
 
     def setup_tables(self):
-        self._user_model = UserModel
-        self._ui.table_user(self._user_model)
+        self._user_model = QSqlTableModel
+        self._user_model.setTable("Users")
+        self._ui.table_user.setModel(self._user_model)
         self._user_model.select()
+        
+    def setup_connection(self):
+        self._database = QSqlDatabase.addDatabase('QMYSQL')
+        self._database.setHostName('localhost')
+        self._database.setUserName('sebastianji')
+        self._database.setPassword('genTen212!')
+        self._database.setDatabaseName('decan')
+
+        if not self._database.open():
+            print('connection failed')
+            print(self._database.lastError().text())
+            
