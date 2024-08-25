@@ -67,6 +67,7 @@ class MainWindow(QMainWindow):
         self._ui.table_user.setModel(self._user_model)
         self._ui.table_user_profile.setModel(self._user_profile_model)
         self._ui.table_events.setModel(self._event_model)
+        self._ui.frame.setModel(self._event_model)
         #print(self._user_model.rowCount())
         
     def setup_connection(self):
