@@ -64,7 +64,7 @@ class EventItem(QWidget):
     Signals:
     """
         
-    def __init__(self, parent=None, event=None):
+    def __init__(self, parent=None, event=Event):
         super().__init__(parent)
 
         self._event = event
@@ -85,7 +85,7 @@ class EventItem(QWidget):
 
         # Header Components
         self._header1_wrapper = QScrollArea()               #Scroll Area
-        self._header1_title = QLabel('EventTitle')          # ↪ For nested QLabel, displaying ETITLE
+        self._header1_title = QLabel('EventTitle'*10)          # ↪ For nested QLabel, displaying ETITLE
         self._header2_time = QLabel('00:00')                #QLabel, displaying ESTARTTIME
 
         #   Header_1 wrapper settings 
@@ -123,7 +123,7 @@ class EventItem(QWidget):
 
         self._midsection.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
         self._midsection.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self._midsection_text = QLabel('Brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog, brown dog')
+        self._midsection_text = QLabel('Brown dog, ','brown dog, '*10)
         self._midsection_text.setWordWrap(True)
         self._midsection.setWidget(self._midsection_text)
 

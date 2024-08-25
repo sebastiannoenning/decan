@@ -20,6 +20,8 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHeaderView, QLabel,
     QPushButton, QScrollArea, QSizePolicy, QStackedWidget,
     QTableView, QWidget)
 
+from views.resources.custom_classes.eventlistview import EventListView
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -147,7 +149,7 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 323, 438))
-        self.frame = QFrame(self.scrollAreaWidgetContents)
+        self.frame = EventListView(self.scrollAreaWidgetContents)
         self.frame.setObjectName(u"frame")
         self.frame.setGeometry(QRect(0, 0, 331, 441))
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
