@@ -4,55 +4,6 @@ from PySide6.QtCore import Qt, QObject, Signal
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties
 from PySide6.QtGui import QFont
 
-"""class Event(QObject):"""
-
-"""Event.
-
-    Attributes:
-        ETitle: EventTitle
-        EDescription: Event Description
-        ETime: Event Time
-        ELocation: 
-
-    Signals:
-        updated: Emitted when one of the entry values has been changed
-        deleted: Emitted/called on deletion of the object
-"""
-
-"""    updated_text = QtCore.Signal()
-    deleted_object = QtCore.Signal()
-
-    def __init__(self, ETitle = 'ETitle'*10, EDescription = 'EDescription'*30, ETime = '00:00'):
-        super().__init__()
-        self.ETitle = ETitle
-        self.EDescription = EDescription
-        self.ETime = ETime
-
-    def set_data(self, NETitle = None, NEDescription = None, NETime = None):
-        updated = False
-
-        if (NETitle is not None) and (NETitle != self.ETitle): 
-            self.ETitle = NETitle
-            updated = True
-        if (NEDescription is not None) and (NEDescription!= self.EDescription): 
-            self.EDescription = NEDescription
-            updated = True
-        if (NETime is not None) and (NETime != self.ETime): 
-            self.ETime = NETime
-            updated = True
-
-        if updated: self.updated_text.emit()
-
-
-    def get_data(self):
-        return {
-            'ETitle': self.ETitle,
-            'EDescription': self.EDescription,
-            'ETime': self.ETime
-        }
-    
-    def __del__(self): self.deleted_object.emit()"""
-
 class EventItem(QWidget):
 
     """A "EventItem" widget with an several labels.
