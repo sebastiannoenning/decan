@@ -60,6 +60,11 @@ class EventItem(QWidget):
     Attributes:
         _layout: The QVBoxLayout containing all the nested labels
         _event: The Event object with the attributes for the labels
+        EID : EventID
+        ETitle: EventTitle
+        EDescription: Event Description
+        ETime: Event Time
+        ELocation: 
 
     Signals:
     """
@@ -67,9 +72,10 @@ class EventItem(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        """self._event = event
-        self._event.updated_text.connect(self.update_text)
-        self._event.deleted_object.connect(self.deleteLater)"""
+        self.EID = None
+        self.ETitle = None
+        self.EDescription = None
+        self.ETime = None
 
         self.setup_ui()
 
@@ -135,13 +141,30 @@ class EventItem(QWidget):
         self._layout.addLayout(self._header, 0)         # add header row
         self._layout.addWidget(self._midsection, 1)     # add midsection row
         self._layout.addWidget(self._footer, 0)         # add footer row
-    
-    """def update_text(self):
-        data = self._event.get_data()
-        self._header1_title.setText(data['ETitle'])
-        self._header2_time.setText(data['ETime'])
-        self._midsection_text.setText(data['EDescription'])
-        self._header1_title.adjustSize()
-        self._midsection_text.adjustSize()"""
 
-    #def enterEvent(self, event):
+    def set_data(self, EID = None, ETitle = None, EDescription = None, ETime = None):
+
+        if (self.EID is None): # EID can only be set once, on the objects creation. subsequent calls to change the EID are ignored.
+            self.EID = EID
+        if (ETitle is not None) and (ETitle != self.ETitle): 
+            self.ETitle = ETitle
+            self._header1_title.setText(self.ETitle)
+            self._header1_title.adjustSize()
+        if (EDescription is not None) and (EDescription!= self.EDescription): 
+            self.EDescription = EDescription
+            self._midsection_text.setText(self.EDescription)
+            self._midsection_text.adjustSize()
+        if (ETime is not None) and (ETime != self.ETime): 
+            self.ETime = ETime
+            self._header2_time.setText(self.ETime)
+            self._header2_time.adjustSize()
+
+        self._midsection_text.adjustSize()
+
+    def get_data(self):
+        return {
+            'EID' : self.EID,
+            'ETitle': self.ETitle,
+            'EDescription': self.EDescription,
+            'ETime': self.ETime
+        }
