@@ -14,7 +14,7 @@ class EventListView(QFrame):
     def setup_ui(self):
         self._list_container = QVBoxLayout()
         self._list_container.setSpacing(0)
-        self._list_container.setContentsMargins(2)
+        self._list_container.setContentsMargins(2,2,2,2)
         self.setLayout(self._list_container)
         print('complete')
 
