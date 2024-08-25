@@ -4,9 +4,9 @@ from PySide6.QtCore import Qt, QObject, Signal
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties
 from PySide6.QtGui import QFont
 
-class Event(QObject):
+"""class Event(QObject):"""
 
-    """Event.
+"""Event.
 
     Attributes:
         ETitle: EventTitle
@@ -17,9 +17,9 @@ class Event(QObject):
     Signals:
         updated: Emitted when one of the entry values has been changed
         deleted: Emitted/called on deletion of the object
-    """
+"""
 
-    updated_text = QtCore.Signal()
+"""    updated_text = QtCore.Signal()
     deleted_object = QtCore.Signal()
 
     def __init__(self, ETitle = 'ETitle'*10, EDescription = 'EDescription'*30, ETime = '00:00'):
@@ -51,7 +51,7 @@ class Event(QObject):
             'ETime': self.ETime
         }
     
-    def __del__(self): self.deleted_object.emit()
+    def __del__(self): self.deleted_object.emit()"""
 
 class EventItem(QWidget):
 
@@ -64,12 +64,12 @@ class EventItem(QWidget):
     Signals:
     """
         
-    def __init__(self, parent=None, event=Event):
+    def __init__(self, parent=None):
         super().__init__(parent)
 
-        self._event = event
+        """self._event = event
         self._event.updated_text.connect(self.update_text)
-        self._event.deleted_object.connect(self.deleteLater)
+        self._event.deleted_object.connect(self.deleteLater)"""
 
         self.setup_ui()
 
@@ -123,7 +123,7 @@ class EventItem(QWidget):
 
         self._midsection.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
         self._midsection.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self._midsection_text = QLabel('Brown dog, ','brown dog, '*10)
+        self._midsection_text = QLabel('brown dog, '*10)
         self._midsection_text.setWordWrap(True)
         self._midsection.setWidget(self._midsection_text)
 
@@ -136,12 +136,12 @@ class EventItem(QWidget):
         self._layout.addWidget(self._midsection, 1)     # add midsection row
         self._layout.addWidget(self._footer, 0)         # add footer row
     
-    def update_text(self):
+    """def update_text(self):
         data = self._event.get_data()
         self._header1_title.setText(data['ETitle'])
         self._header2_time.setText(data['ETime'])
         self._midsection_text.setText(data['EDescription'])
         self._header1_title.adjustSize()
-        self._midsection_text.adjustSize()
+        self._midsection_text.adjustSize()"""
 
     #def enterEvent(self, event):

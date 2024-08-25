@@ -20,17 +20,19 @@ class EventListView(QFrame):
 
     def add_item(self, item: EventItem):
         _list = self._list_container
-        _list.addItem(item)
+        print(type(item))
+        _list.addWidget(item, 0)
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel]):
         self._model = model
         model_elements = model.rowCount()
         print(model_elements)
 
-        for i in range (0, model_elements):
-            self.add_item(self)
+        for i in range (0, 5):
+            event = EventItem()
+            self.add_item(event)
 
-        self._model.beforeInsert.connect()
-        self._model.beforeUpdate.connect()
-        self._model.beforeDelete.connect()
-        self._model.destroyed.connect()
+        #self._model.beforeInsert.connect()
+        #self._model.beforeUpdate.connect()
+        #self._model.beforeDelete.connect()
+        #self._model.destroyed.connect()
