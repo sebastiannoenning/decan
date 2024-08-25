@@ -34,16 +34,16 @@ class EventListView(QFrame):
                 'EventID'       : record.value("EventID"),
                 'ETitle'        : record.value("ETitle"),
                 'EDescription'  : record.value("EDescription"),
-                'ETime'         : record.value("EStartTime")
+                'ETime'         : record.value("EStart_Time")
             }
             event = EventItem(self)
             event.set_data(eventinfo['EventID'], eventinfo['ETitle'], eventinfo['EDescription'], eventinfo['ETime'])
             self.add_item(event)
 
-        #self._model.beforeInsert.connect()
+        """self._model.beforeInsert.connect()
         #self._model.beforeUpdate.connect()
         #self._model.beforeDelete.connect()
         #self._model.destroyed.connect()
         self._model.rowsInserted.connect()
         self._model.rowsRemoved.connect()
-        self._model.dataChanged.connect()
+        self._model.dataChanged.connect()"""
