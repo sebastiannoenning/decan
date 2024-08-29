@@ -123,6 +123,12 @@
          <height>420</height>
         </rect>
        </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
        <widget class="QWidget" name="p_user_login">
         <widget class="QLineEdit" name="tb_Username">
          <property name="geometry">
@@ -146,7 +152,7 @@
           <bool>false</bool>
          </property>
          <property name="placeholderText">
-          <string>Username</string>
+          <string>Enter your username here</string>
          </property>
         </widget>
         <widget class="QLabel" name="l_Login">
@@ -186,6 +192,9 @@
            <pointsize>18</pointsize>
           </font>
          </property>
+         <property name="inputMethodHints">
+          <set>Qt::InputMethodHint::ImhHiddenText</set>
+         </property>
          <property name="inputMask">
           <string/>
          </property>
@@ -196,7 +205,7 @@
           <bool>false</bool>
          </property>
          <property name="placeholderText">
-          <string>Password</string>
+          <string>Enter your password here</string>
          </property>
         </widget>
         <widget class="QPushButton" name="b_showhidebutton">
@@ -219,6 +228,9 @@
            <width>24</width>
            <height>24</height>
           </size>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
          </property>
          <property name="text">
           <string/>
@@ -385,24 +397,25 @@
         <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QListWidget" name="list_users">
+      <widget class="QWidget" name="gridLayoutWidget">
        <property name="geometry">
         <rect>
-         <x>335</x>
-         <y>30</y>
-         <width>315</width>
-         <height>420</height>
+         <x>340</x>
+         <y>50</y>
+         <width>160</width>
+         <height>80</height>
         </rect>
        </property>
+       <layout class="QGridLayout" name="gridLayout"/>
       </widget>
      </widget>
-     <widget class="QWidget" name="p_cal">
+     <widget class="QWidget" name="page_cal">
       <widget class="QScrollArea" name="upcomingevents">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>341</width>
+         <width>340</width>
          <height>440</height>
         </rect>
        </property>
@@ -412,42 +425,146 @@
        <property name="widgetResizable">
         <bool>true</bool>
        </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
+       <widget class="EventListView" name="scrollAreaWidgetContents">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>323</width>
+          <width>322</width>
           <height>438</height>
          </rect>
         </property>
-        <widget class="EventListView" name="frame">
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_addevent">
+      <widget class="QScrollArea" name="eventform">
+       <property name="geometry">
+        <rect>
+         <x>310</x>
+         <y>0</y>
+         <width>341</width>
+         <height>461</height>
+        </rect>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>339</width>
+          <height>459</height>
+         </rect>
+        </property>
+        <widget class="QWidget" name="verticalLayoutWidget">
          <property name="geometry">
           <rect>
            <x>0</x>
            <y>0</y>
            <width>331</width>
-           <height>441</height>
+           <height>385</height>
           </rect>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
-         </property>
+         <layout class="QVBoxLayout" name="generalcontainer">
+          <item>
+           <layout class="QFormLayout" name="GenericSettings">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_user">
+              <property name="text">
+               <string>User</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="selectuser"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_title">
+              <property name="text">
+               <string>Title</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="lineEdit">
+              <property name="text">
+               <string>Title</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_st">
+              <property name="text">
+               <string>StartDate</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDateTimeEdit" name="startedit"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_et">
+              <property name="text">
+               <string>EndDate</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QDateTimeEdit" name="endedit"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="expandusers">
+            <property name="text">
+             <string>Add Users (Expand)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListView" name="userview"/>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="componentsexpand">
+            <item>
+             <widget class="QPushButton" name="expandcomponent">
+              <property name="text">
+               <string>Add Components</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="select_add">
+              <item>
+               <widget class="QComboBox" name="selectcomponenttype"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="addcomponent">
+                <property name="text">
+                 <string>add</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="dynamiccomponentsection"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="addeventbutton">
+            <property name="text">
+             <string>AddEvent</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
-      </widget>
-      <widget class="QTableView" name="table">
-       <property name="geometry">
-        <rect>
-         <x>360</x>
-         <y>10</y>
-         <width>291</width>
-         <height>441</height>
-        </rect>
-       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="page_set">
@@ -499,7 +616,7 @@
  <customwidgets>
   <customwidget>
    <class>EventListView</class>
-   <extends>QFrame</extends>
+   <extends>QWidget</extends>
    <header>views.resources.custom_classes.eventlistview</header>
    <container>1</container>
   </customwidget>

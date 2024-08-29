@@ -15,11 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
-    QFormLayout, QGridLayout, QHBoxLayout, QHeaderView,
-    QLabel, QLineEdit, QListView, QMainWindow,
-    QPushButton, QScrollArea, QSizePolicy, QStackedWidget,
-    QTableView, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDateTimeEdit, QFormLayout,
+    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
+    QLineEdit, QListView, QMainWindow, QPushButton,
+    QScrollArea, QSizePolicy, QStackedWidget, QTableView,
+    QVBoxLayout, QWidget)
 
 from views.resources.custom_classes.eventlistview import EventListView
 
@@ -264,38 +264,6 @@ class Ui_MainWindow(object):
         self.generalcontainer.addWidget(self.addeventbutton)
 
         self.eventform.setWidget(self.scrollAreaWidgetContents_2)
-        self.temp = QWidget(self.page_addevent)
-        self.temp.setObjectName(u"temp")
-        self.temp.setGeometry(QRect(0, 160, 300, 50))
-        self.horizontalLayoutWidget_2 = QWidget(self.temp)
-        self.horizontalLayoutWidget_2.setObjectName(u"horizontalLayoutWidget_2")
-        self.horizontalLayoutWidget_2.setGeometry(QRect(0, 0, 301, 51))
-        self.horizontalLayout = QHBoxLayout(self.horizontalLayoutWidget_2)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.checkBox = QCheckBox(self.horizontalLayoutWidget_2)
-        self.checkBox.setObjectName(u"checkBox")
-
-        self.horizontalLayout.addWidget(self.checkBox)
-
-        self.scrollArea = QScrollArea(self.horizontalLayoutWidget_2)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_3 = QWidget()
-        self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 278, 42))
-        self.label_3 = QLabel(self.scrollAreaWidgetContents_3)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(0, 0, 250, 40))
-        font3 = QFont()
-        font3.setFamilies([u"Arial"])
-        font3.setPointSize(30)
-        font3.setBold(True)
-        self.label_3.setFont(font3)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents_3)
-
-        self.horizontalLayout.addWidget(self.scrollArea)
-
         self.pages.addWidget(self.page_addevent)
         self.page_set = QWidget()
         self.page_set.setObjectName(u"page_set")
@@ -354,7 +322,5 @@ class Ui_MainWindow(object):
         self.expandcomponent.setText(QCoreApplication.translate("MainWindow", u"Add Components", None))
         self.addcomponent.setText(QCoreApplication.translate("MainWindow", u"add", None))
         self.addeventbutton.setText(QCoreApplication.translate("MainWindow", u"AddEvent", None))
-        self.checkBox.setText("")
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
     # retranslateUi
 

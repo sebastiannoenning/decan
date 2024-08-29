@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
         self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
         self._ui.b_calendar.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
         self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
+        self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
 
     def setup_tables(self):
         print(self._database.tables())
@@ -67,7 +68,9 @@ class MainWindow(QMainWindow):
         self._ui.table_user.setModel(self._user_model)
         self._ui.table_user_profile.setModel(self._user_profile_model)
         self._ui.table_events.setModel(self._event_model)
-        self._ui.frame.setModel(self._event_model)
+
+        self._ui.scrollAreaWidgetContents.resize(self._ui.upcomingevents.width(), self._ui.upcomingevents.height())
+        self._ui.scrollAreaWidgetContents.setModel(self._event_model)
         #print(self._user_model.rowCount())
         
     def setup_connection(self):
