@@ -70,6 +70,11 @@ class EventItem(QWidget):
         side_scroll.setScrollerProperties(side_scroll_props)    #set scroller properties to profile
         return side_scroll
     
+    def _update_EAttribute(self, key, value):
+        self._EJSON.insert(key, value)
+        self.EAttributes = QJsonDocument(self._EJSON).toJson(QJsonDocument.JsonFormat.Compact)
+        print(self.EAttributes)
+    
     def __setup_ui(self):
         self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
@@ -114,6 +119,8 @@ class EventItem(QWidget):
 
         self._midsection = QVBoxLayout()
         self._midsection.setSpacing(4)
+
+        print(type(self._EJSON))
         
         if self._EJSON is not None:
             for key, value in self._EJSON.items():
@@ -124,7 +131,6 @@ class EventItem(QWidget):
                 if object_type == 'EDescription':
                     self.object = self.EDescription(self, value*10)
                     self.object.setObjectName(key)
-                    print(self.object.objectName())
                     self._midsection.addWidget(self.object)
                 elif object_type == 'EToDo' :
                     self.object = self.EToDo(self, value['ETaskDescription'], value['EBool']) # Parse EToDo Date
@@ -180,6 +186,11 @@ class EventItem(QWidget):
 
             self._checkbox = QCheckBox(self)
             self._checkbox.setChecked(self.box)
+            self._checkbox.checkStateChanged.connect(
+                self._parent._update_EAttribute(
+                    self.objectName(), 
+                    self._checkbox.isChecked()
+                    ))
 
             self._label = QLabel(self)
             self._label.setText(self.text)
