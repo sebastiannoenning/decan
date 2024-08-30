@@ -51,7 +51,7 @@ class EventItem(QWidget):
     #       ↪ Properties are not expected to be changed, so internal is fine. 
     #       ↪ This can be enforced with high-axis lock, removal of overshooting and slight padding (1-2px) on the scrollable objects.
     #       ↪ Internal function. Designed only to create a Scroller with these specific properties.
-    def __create_uni_scroller(self, viewport: QScrollArea):
+    def _create_uni_scroller(self, viewport: QScrollArea):
 
         #   Create properties profile
         side_scroll = QScroller.scroller(viewport.viewport())
@@ -95,7 +95,7 @@ class EventItem(QWidget):
         self._header1_wrapper.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
         self._header1_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self._header1_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self._header1_wrapperscroll = self.__create_uni_scroller(self._header1_wrapper)
+        self._header1_wrapperscroll = self._create_uni_scroller(self._header1_wrapper)
 
         #   Header font styling for components
         self._headerfont = QFont()
@@ -155,7 +155,7 @@ class EventItem(QWidget):
             self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.MinimumExpanding)
             self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-            self._scroll = self._parent.__create_uni_scroller(self)
+            self._scroll = self._parent._create_uni_scroller(self)
 
             self._label = QLabel(self)
             self._label.setText(self.text)
@@ -195,7 +195,7 @@ class EventItem(QWidget):
             self._wrapper.setMaximumHeight(self._label.height()+2)
             self._wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             self._wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            self._scroll = self._parent.__create_uni_scroller(self._wrapper)
+            self._scroll = self._parent._create_uni_scroller(self._wrapper)
 
             self._layout.addWidget(self._checkbox)
             self._layout.addWidget(self._wrapper)
