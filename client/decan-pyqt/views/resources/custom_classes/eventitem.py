@@ -5,7 +5,7 @@ import json
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QObject, Signal
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties, QCheckBox
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QMouseEvent
 
 class EventItem(QWidget):
 
@@ -35,9 +35,10 @@ class EventItem(QWidget):
 
     def mousePressEvent(self, event):
         # Check if the left mouse button was pressed
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             # Change the background color to a new color
             print(self.EID)
+            print(QMouseEvent.position(event))
 
         # Call the base class implementation to ensure the event is handled correctly
         super().mousePressEvent(event)
