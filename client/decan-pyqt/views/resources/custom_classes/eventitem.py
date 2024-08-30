@@ -71,7 +71,7 @@ class EventItem(QWidget):
         return side_scroll
     
     def _update_EAttribute(self, key, value):
-        self._EJSON.insert(key, value)
+        self._EJSON[key] = value
         self.EAttributes = QJsonDocument(self._EJSON).toJson(QJsonDocument.JsonFormat.Compact)
         print(self.EAttributes)
     
@@ -133,6 +133,7 @@ class EventItem(QWidget):
                     self.object.setObjectName(key)
                     self._midsection.addWidget(self.object)
                 elif object_type == 'EToDo' :
+                    print(value.type())
                     self.object = self.EToDo(self, value['ETaskDescription'], value['EBool']) # Parse EToDo Date
                     self.object.setObjectName(key)
                     self._midsection.addWidget(self.object)
