@@ -119,8 +119,6 @@ class EventItem(QWidget):
 
         self._midsection = QVBoxLayout()
         self._midsection.setSpacing(4)
-
-        print(type(self._EJSON))
         
         if self._EJSON is not None:
             for key, value in self._EJSON.items():
@@ -190,7 +188,10 @@ class EventItem(QWidget):
             self._checkbox.checkStateChanged.connect(
                 self._parent._update_EAttribute(
                     self.objectName(), 
-                    self._checkbox.isChecked()
+                    {
+                        'ETaskDescription'  : self.text,
+                        'EBool'             : self._checkbox.isChecked()
+                    }
                     ))
 
             self._label = QLabel(self)
@@ -213,8 +214,13 @@ class EventItem(QWidget):
             self._layout.addWidget(self._wrapper)
 
         def setText(self, new_text: str):
-            self._label.setText(new_text)
+            self.text = new_text
+            self._label.setText(self.text)
             self._label.adjustSize()
             self._wrapper.setMaximumHeight(self._label.height()+2)
+
+        def setBool(self, new_box: bool):
+            self.box = new_box
+            self._checkbox.setChecked(self.box)
 
 
