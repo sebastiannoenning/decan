@@ -19,25 +19,19 @@ class EventListView(QWidget):
         self._list_container.setSpacing(0)
         self._list_container.setContentsMargins(0,0,0,0)
         self.setLayout(self._list_container)
-        print('complete')
 
     def add_item(self, item: EventItem):
         _list = self._list_container
         item.setMaximumWidth(self.width()-10)
-        print('item size',self.sizeHint())
-        #print(type(item))
         _list.addWidget(item)
         self.resize(self.width(), (self.height()+item.height()))
-        print('widget size',self.sizeHint())
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel]):
         self._model = model
         model_elements = model.rowCount()
         print(model_elements)
-
         for i in range (0, model_elements):
             record = self._model.record(i)
-            print(record)
             eventinfo = {
                 'EventID'       : record.value("EventID"),
                 'ETitle'        : record.value("ETitle"),
