@@ -41,8 +41,8 @@ class MainWindow(QMainWindow):
         #defines all links for components in ui
         self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
         self._ui.b_calendar.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
-        self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
-        self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
+        self._ui.b_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
+        self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(3))
 
     def setup_tables(self):
         print(self._database.tables())
@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         
         self._user_profile_model.setRelation(0, QSqlRelation("Users","UserID","Username"))
         #self._user_profile_model.setRelation(5, QSqlRelation("Address","AddressID","AddressID"))
-        self._event_model.setRelation(6, QSqlRelation("Users","UserID","Username"))
+        self._event_model.setRelation(7, QSqlRelation("Users","UserID","Username"))
         
         self._user_model.select()
         self._user_profile_model.select()

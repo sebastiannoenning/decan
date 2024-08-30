@@ -3,7 +3,7 @@ import json
 
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtCore
-from PySide6.QtCore import Qt, QObject, Signal
+from PySide6.QtCore import Qt, QObject, Signal, QJsonDocument
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties, QCheckBox
 from PySide6.QtGui import QFont, QMouseEvent
 
@@ -28,7 +28,9 @@ class EventItem(QWidget):
         self.EID = EID
         self.ETitle = ETitle
         self.EStart_Time, EEnd_Time = EStartTime, None
-        self.EAttributes = EAttributes 
+        self.EAttributes = EAttributes
+        
+        self._EJSON = QJsonDocument.fromJson(self.EAttributes).object()
 
         self.setup_ui()
 
@@ -77,8 +79,8 @@ class EventItem(QWidget):
         # Header Components
         self._header.setSpacing(10)
         self._header1_wrapper = QScrollArea()               #Scroll Area
-        self._header1_title = QLabel('EventTitle'*10)       # ↪ For nested QLabel, displaying ETITLE
-        self._header2_time = QLabel('00:00')                #QLabel, displaying ESTARTTIME
+        self._header1_title = QLabel(self.ETitle)       # ↪ For nested QLabel, displaying ETITLE
+        self._header2_time = QLabel(self.EStart_Time[:5])                #QLabel, displaying ESTARTTIME
 
         #self._header2_time.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         #   Header_1 wrapper settings 
@@ -114,19 +116,19 @@ class EventItem(QWidget):
         self._additional = QVBoxLayout()
         self._additional.setSpacing(4)
         
-        if self.EAttributes is not None: 
-            for key, value in self.EAttributes.items():
+        if self._EJSON is not None:
+            for key, value in self._EJSON.items():
                 try:
                     object_type, index_number = key.rsplit('_', 1)
                 except:
-                    print("Not of type index")
+                    print("Type index")
                 if object_type == 'EDescription':
-                    self.object = self.EDescription(self, value)
+                    self.object = self.EDescription(self, value*10)
                     self.object.setObjectName(key)
                     #self.object.setup_scroll(self.uni_scroller(self.object))
                     self._additional.addWidget(self.object)
                 elif object_type == 'EToDo' :
-                    self.object = self.EToDo(self, value, value)
+                    self.object = self.EToDo(self, value['ETaskDescription'], value['EBool'])
                     self.object.setObjectName(key)
                     #self.object.setup_scroll(self.uni_scroller(self.object._wrapper))
                     self._additional.addWidget(self.object)
@@ -186,14 +188,14 @@ class EventItem(QWidget):
 
             self._label = QLabel(self)
             self._label.setText(self.text)
-            self._font = QFont(self)
+            self._font = QFont()
             self._font.setFamilies([u"Arial"])
             self._font.setPointSize(30)
             self._font.setBold(True)
             self._label.setFont(self._font)
             self._label.adjustSize()
 
-            self._wrapper = QScrollArea(self)
+            self._wrapper = QScrollArea()
             self._wrapper.setWidget(self._label)
             self._wrapper.setMaximumHeight(self._label.height()+2)
             self._scroll = self._parent.uni_scroller(self._wrapper)

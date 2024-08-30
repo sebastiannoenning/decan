@@ -3,7 +3,7 @@ import json
 
 from PySide6.QtWidgets import QFrame, QWidget, QVBoxLayout, QSizePolicy
 from PySide6.QtSql import QSqlRelationalTableModel, QSqlTableModel
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QByteArray
 
 from views.resources.custom_classes.eventitem import EventItem
 
@@ -35,15 +35,13 @@ class EventListView(QWidget):
         model_elements = model.rowCount()
         print(model_elements)
 
-        for i in range (0, 5):
+        for i in range (0, model_elements):
             record = self._model.record(i)
-            print(self._model.record(i).value("EAttributes"))
-            _json = '{"object_index": 0, "EDescription_1": "Wow this is a description", "EDescription_2": "Wow this is a description"}'
-            print(json.loads(_json))
+            print(record)
             eventinfo = {
                 'EventID'       : record.value("EventID"),
                 'ETitle'        : record.value("ETitle"),
-                'EAttributes'   : json.loads(_json),#record.value("EAttributes"),
+                'EAttributes'   : record.value("EAttributes"),#record.value("EAttributes"),
                 'ETime'         : record.value("EStart_Time")
             }
             event = EventItem(self, eventinfo['EventID'], eventinfo['ETitle'], eventinfo['ETime'], eventinfo['EAttributes'])
