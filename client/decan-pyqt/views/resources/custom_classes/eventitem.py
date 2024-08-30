@@ -198,10 +198,12 @@ class EventItem(QWidget):
             self._wrapper = QScrollArea()
             self._wrapper.setWidget(self._label)
             self._wrapper.setMaximumHeight(self._label.height()+2)
+            self._wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            self._wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             self._scroll = self._parent.uni_scroller(self._wrapper)
 
             self._layout.addWidget(self._checkbox)
-            self._layout.addWidget(self._label)
+            self._layout.addWidget(self._wrapper)
 
         def setText(self, new_text: str):
             self._label.setText(new_text)
