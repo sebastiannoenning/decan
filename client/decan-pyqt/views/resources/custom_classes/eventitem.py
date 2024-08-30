@@ -131,7 +131,7 @@ class EventItem(QWidget):
                     self.object.setObjectName(key)
                     self._midsection.addWidget(self.object)
                 elif object_type == 'EToDo' :
-                    print(value.type())
+                    print(type(value))
                     self.object = self.EToDo(self, value['ETaskDescription'], value['EBool']) # Parse EToDo Date
                     self.object.setObjectName(key)
                     self._midsection.addWidget(self.object)
