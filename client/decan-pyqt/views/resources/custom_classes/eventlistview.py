@@ -2,14 +2,16 @@ from typing import Union
 import json
 
 from PySide6.QtWidgets import QFrame, QWidget, QVBoxLayout, QSizePolicy
-from PySide6.QtSql import QSqlRelationalTableModel, QSqlTableModel
-from PySide6.QtCore import Qt, QByteArray
+from PySide6.QtSql import QSqlRelationalTableModel, QSqlTableModel, QSqlRecord
+from PySide6.QtCore import Qt, QByteArray, Slot
 
 from views.resources.custom_classes.eventitem import EventItem
 
 class EventListView(QWidget):
     def __init__(self) -> None:
         super().__init__()
+        self.items = dict()
+        self.current = int
         self.setup_ui()
 
     def setup_ui(self):
@@ -20,11 +22,23 @@ class EventListView(QWidget):
         self._list_container.setContentsMargins(0,0,0,0)
         self.setLayout(self._list_container)
 
-    def add_item(self, item: EventItem):
-        _list = self._list_container
-        item.setMaximumWidth(self.width()-10)
-        _list.addWidget(item)
-        self.resize(self.width(), (self.height()+item.height()))
+    def add_item(self, record: QSqlRecord):
+        eventinfo = {
+            'EventID'       : record.value("EventID"),
+            'ETitle'        : record.value("ETitle"),
+            'EAttributes'   : record.value("EAttributes"),
+            'ETime'         : record.value("EStart_Time")
+        }
+        self.items[eventinfo['EventID']] = EventItem(self, eventinfo['EventID'], eventinfo['ETitle'], eventinfo['ETime'], eventinfo['EAttributes'])
+        self.items[eventinfo['EventID']].setMaximumWidth(self.width()-10)
+
+        self.items[eventinfo['EventID']].mousePressed.connect(self.setSelected)
+        self._list_container.addWidget(self.items[eventinfo['EventID']])
+        self.resize(self.width(), (self.height()+self.items[eventinfo['EventID']].height()))
+    
+    def delete_item(self, EventID: int):
+        self._list_container.removeWidget(self.items[EventID])
+        self.items[EventID].deleteLater()
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel]):
         self._model = model
@@ -32,14 +46,7 @@ class EventListView(QWidget):
         print(model_elements)
         for i in range (0, model_elements):
             record = self._model.record(i)
-            eventinfo = {
-                'EventID'       : record.value("EventID"),
-                'ETitle'        : record.value("ETitle"),
-                'EAttributes'   : record.value("EAttributes"),#record.value("EAttributes"),
-                'ETime'         : record.value("EStart_Time")
-            }
-            event = EventItem(self, eventinfo['EventID'], eventinfo['ETitle'], eventinfo['ETime'], eventinfo['EAttributes'])
-            self.add_item(event)
+            self.add_item(record)
 
         """self._model.beforeInsert.connect()
         #self._model.beforeUpdate.connect()
@@ -48,3 +55,9 @@ class EventListView(QWidget):
         self._model.rowsInserted.connect()
         self._model.rowsRemoved.connect()
         self._model.dataChanged.connect()"""
+
+    @Slot(EventItem)
+    def setSelected(self, event: EventItem):
+        self.current = event.EID
+        print(self.current)
+
