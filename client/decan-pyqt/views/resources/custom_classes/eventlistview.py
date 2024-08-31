@@ -69,8 +69,7 @@ class EventListView(QWidget):
     def setData(self, event: EventItem):
         id, new_attributes = event.EID, event.EAttributes
         for i in range(self._model.rowCount()):
-            temp = self._model.record(i)
-            if temp.value['EventID'] == id:
+            if self._model.record(i).value('EventID') == id:
                 try:
                     index = self._model.index(i, 6)
                     self._model.setData(index, new_attributes, Qt.ItemDataRole.EditRole)
