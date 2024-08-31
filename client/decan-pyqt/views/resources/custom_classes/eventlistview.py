@@ -61,3 +61,9 @@ class EventListView(QWidget):
         self.current = event.EID
         print(self.current)
 
+    def deleteSelected(self):
+        if self.current is not None:
+            self.delete_item(self, self.current)
+        else:
+            print('No item selected!')
+

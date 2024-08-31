@@ -44,6 +44,8 @@ class MainWindow(QMainWindow):
         self._ui.b_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
         self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(3))
 
+        self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected())
+
     def setup_tables(self):
         print(self._database.tables())
         #query = QSqlQuery()
