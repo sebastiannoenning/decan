@@ -43,7 +43,7 @@ class EventItem(QWidget):
         if event.button() == Qt.MouseButton.LeftButton:
             # Change the background color to a new color
             self.mousePressed.emit(self)
-            print('mouse pressed!')
+            #print('mouse pressed!')
 
         # Call the base class implementation to ensure the event is handled correctly
         super().mousePressEvent(event)
@@ -133,10 +133,10 @@ class EventItem(QWidget):
                 if object_type == 'EToDo' :
                     self.object = self.EToDo(self, key, value['ETaskDescription'], value['EBool']) # Parse EToDo Date
                     self._midsection.addWidget(self.object)
-                if object_type == 'object_index':
-                    print(key,value)
+                """if object_type == 'object_index':
+                    print(key,value)#"""
 
-        print('header size:',self._header2_time.sizeHint())
+        """print('header size:',self._header2_time.sizeHint())
         print('midsection size:',self._midsection.sizeHint())
         print('footer size:',self._footer.sizeHint())#"""
 
