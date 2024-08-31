@@ -23,7 +23,7 @@ class EventItem(QWidget):
     """
 
     mousePressed = Signal(QObject)
-    itemChanged = Signal(QByteArray)
+    itemChanged = Signal(QObject)
         
     def __init__(self, parent: QWidget, EID: int, ETitle: str, EStartTime, EAttributes: QByteArray):
         super().__init__(parent)
@@ -43,6 +43,7 @@ class EventItem(QWidget):
         if event.button() == Qt.MouseButton.LeftButton:
             # Change the background color to a new color
             self.mousePressed.emit(self)
+            print('mouse pressed!')
 
         # Call the base class implementation to ensure the event is handled correctly
         super().mousePressEvent(event)
@@ -73,7 +74,7 @@ class EventItem(QWidget):
     def _update_EAttribute(self, key, value):
         self._EJSON[key] = value
         self.EAttributes = QJsonDocument(self._EJSON).toJson(QJsonDocument.JsonFormat.Compact)
-        print(self.EAttributes)
+        self.itemChanged.emit(self)
     
     def __setup_ui(self):
         self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
@@ -127,13 +128,10 @@ class EventItem(QWidget):
                 except:
                     print("Type index")
                 if object_type == 'EDescription':
-                    self.object = self.EDescription(self, value*10)
-                    self.object.setObjectName(key)
+                    self.object = self.EDescription(self, key, value*10)
                     self._midsection.addWidget(self.object)
                 elif object_type == 'EToDo' :
-                    print(type(value))
-                    self.object = self.EToDo(self, value['ETaskDescription'], value['EBool']) # Parse EToDo Date
-                    self.object.setObjectName(key)
+                    self.object = self.EToDo(self, key, value['ETaskDescription'], value['EBool']) # Parse EToDo Date
                     self._midsection.addWidget(self.object)
                 elif object_type == 'object_index':
                     print(key,value)
@@ -148,10 +146,11 @@ class EventItem(QWidget):
         self._layout.addWidget(self._footer, 0)         # Add footer row
     
     class EDescription(QScrollArea):
-        def __init__(self, parent, text: str):
+        def __init__(self, parent, name: str, text: str):
             super().__init__(parent)
             self._parent = parent
             self.text = text
+            self.setObjectName(name)
             self.__setup_ui()
             
         def __setup_ui(self):
@@ -171,11 +170,12 @@ class EventItem(QWidget):
             self._label.setText(new_text)
 
     class EToDo(QWidget):
-        def __init__(self, parent, text: str, box: bool):
+        def __init__(self, parent, name: str, text: str, box: bool):
             super().__init__(parent)
             self._parent = parent
             self.text = text
             self.box = box
+            self.setObjectName(name)
             self.__setup_ui()
         
         def __setup_ui(self):
@@ -185,14 +185,7 @@ class EventItem(QWidget):
 
             self._checkbox = QCheckBox(self)
             self._checkbox.setChecked(self.box)
-            self._checkbox.checkStateChanged.connect(
-                self._parent._update_EAttribute(
-                    self.objectName(), 
-                    {
-                        'ETaskDescription'  : self.text,
-                        'EBool'             : self._checkbox.isChecked()
-                    }
-                    ))
+            self._checkbox.checkStateChanged.connect(lambda: self.onChecked())
 
             self._label = QLabel(self)
             self._label.setText(self.text)
@@ -212,6 +205,16 @@ class EventItem(QWidget):
 
             self._layout.addWidget(self._checkbox)
             self._layout.addWidget(self._wrapper)
+            
+        def onChecked(self):
+            self.box = self._checkbox.isChecked()
+            self._parent._update_EAttribute(
+                self.objectName(),
+                {
+                    'ETaskDescription'  : self.text,
+                    'EBool'             : self.box
+                }
+                )
 
         def setText(self, new_text: str):
             self.text = new_text
