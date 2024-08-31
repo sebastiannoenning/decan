@@ -130,10 +130,10 @@ class EventItem(QWidget):
                 if object_type == 'EDescription':
                     self.object = self.EDescription(self, key, value*10)
                     self._midsection.addWidget(self.object)
-                elif object_type == 'EToDo' :
+                if object_type == 'EToDo' :
                     self.object = self.EToDo(self, key, value['ETaskDescription'], value['EBool']) # Parse EToDo Date
                     self._midsection.addWidget(self.object)
-                elif object_type == 'object_index':
+                if object_type == 'object_index':
                     print(key,value)
 
         print('header size:',self._header2_time.sizeHint())

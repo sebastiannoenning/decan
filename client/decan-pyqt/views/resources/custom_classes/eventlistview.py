@@ -37,13 +37,11 @@ class EventListView(QWidget):
         self.resize(self.width(), (self.height()+self.items[eventinfo['EventID']].height()))
     
     def delete_item(self, EventID: int):
-        key = str(EventID)
-        print(type(key))
         try:
-            self._list_container.removeWidget(self.items[key])
+            self._list_container.removeWidget(self.items[EventID])
             self.items[EventID].deleteLater()
         except:
-            print("No key")
+            print("No event passed")
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel]):
         self._model = model
@@ -68,6 +66,7 @@ class EventListView(QWidget):
 
     def deleteSelected(self):
         if self.current is not None:
+            print(self.current)
             self.delete_item(self.current)
         else:
             print('No item selected!')
