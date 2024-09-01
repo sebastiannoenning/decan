@@ -52,7 +52,7 @@ class EventItem(QWidget):
         opt = QStyleOption()
         opt.initFrom(self)
         p = QPainter(self)
-        self.style().drawPrimitive(QStyle.PE_Widget, opt, p, self)
+        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, p, self) 
 
     #   For use with all scrollers where uni-directional scrolling is key.
     #       ↪ Properties are not expected to be changed, so internal is fine. 
