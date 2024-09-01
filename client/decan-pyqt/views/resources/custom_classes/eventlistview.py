@@ -29,7 +29,7 @@ class EventListView(QWidget):
             'EAttributes'   : record.value("EAttributes"),
             'ETime'         : record.value("EStart_Time")
         }
-        print(self.items())
+        print(self.items)
         self.items[eventinfo['EventID']] = EventItem(self, eventinfo['EventID'], eventinfo['ETitle'], eventinfo['ETime'], eventinfo['EAttributes'])
         self.items[eventinfo['EventID']].setMaximumWidth(self.width()-10)
 
