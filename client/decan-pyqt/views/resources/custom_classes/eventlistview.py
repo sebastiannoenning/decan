@@ -64,6 +64,7 @@ class EventListView(QWidget):
     @Slot(EventItem)
     def setSelected(self, event: EventItem):
         if self.current is not None:
+            print(self.current)
             temp_name = self.items[self.current].objectName()
             self.items[self.current].setStyleSheet(f'EventItem#{temp_name}{{ background-color: black }}')
         self.current = event.EID
