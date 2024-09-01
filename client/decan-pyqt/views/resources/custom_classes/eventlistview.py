@@ -31,6 +31,7 @@ class EventListView(QWidget):
         }
         self.items[eventinfo['EventID']] = EventItem(self, eventinfo['EventID'], eventinfo['ETitle'], eventinfo['ETime'], eventinfo['EAttributes'])
         self.items[eventinfo['EventID']].setMaximumWidth(self.width()-10)
+        self.items[eventinfo['EventID']].setObjectName(eventinfo['EventID'])
 
         self.items[eventinfo['EventID']].mousePressed.connect(self.setSelected)
         self.items[eventinfo['EventID']].itemChanged.connect(self.setData)
@@ -63,8 +64,7 @@ class EventListView(QWidget):
     @Slot(EventItem)
     def setSelected(self, event: EventItem):
         self.current = event.EID
-        print(self.items[self.current])
-        self.items[self.current].setStyleSheet('EventItem#self.items[self.current] { background-color: #1d1d1d ; color: #f8f8f8}')
+        self.items[self.current].setStyleSheet('{ background-color: #1d1d1d ; color: #f8f8f8}')
         #print(self.current)
 
     @Slot(EventItem) 
