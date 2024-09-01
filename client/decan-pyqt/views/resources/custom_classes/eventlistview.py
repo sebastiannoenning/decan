@@ -31,7 +31,7 @@ class EventListView(QWidget):
         }
         self.items[eventinfo['EventID']] = EventItem(self, eventinfo['EventID'], eventinfo['ETitle'], eventinfo['ETime'], eventinfo['EAttributes'])
         self.items[eventinfo['EventID']].setMaximumWidth(self.width()-10)
-        self.items[eventinfo['EventID']].setObjectName(eventinfo['EventID'])
+        self.items[eventinfo['EventID']].setObjectName(str(eventinfo['EventID']))
 
         self.items[eventinfo['EventID']].mousePressed.connect(self.setSelected)
         self.items[eventinfo['EventID']].itemChanged.connect(self.setData)
