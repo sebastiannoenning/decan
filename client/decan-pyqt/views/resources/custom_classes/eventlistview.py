@@ -66,7 +66,7 @@ class EventListView(QWidget):
         self.current = event.EID
         current_name = event.objectName()
         print(current_name)
-        self.items[self.current].setStyleSheet('EventItem#{event}{ background-color: white ; color: #red}')
+        self.items[self.current].setStyleSheet(f'EventItem#{current_name}{{ background-color: white ; color: red }}')
         #print(self.current)
 
     @Slot(EventItem) 
