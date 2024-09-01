@@ -4,8 +4,8 @@ import json
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QObject, Signal, QJsonDocument, QByteArray
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties, QCheckBox
-from PySide6.QtGui import QFont, QMouseEvent
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties, QCheckBox, QStyleOption, QStyle
+from PySide6.QtGui import QFont, QMouseEvent, QPainter
 
 class EventItem(QWidget):
 
@@ -47,6 +47,12 @@ class EventItem(QWidget):
 
         # Call the base class implementation to ensure the event is handled correctly
         super().mousePressEvent(event)
+
+    def paintEvent(self, pe):
+        opt = QStyleOption()
+        opt.initFrom(self)
+        p = QPainter(self)
+        self.style().drawPrimitive(QStyle.PE_Widget, opt, p, self)
 
     #   For use with all scrollers where uni-directional scrolling is key.
     #       ↪ Properties are not expected to be changed, so internal is fine. 
