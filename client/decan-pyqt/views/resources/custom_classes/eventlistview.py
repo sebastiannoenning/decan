@@ -62,7 +62,9 @@ class EventListView(QWidget):
 
     @Slot(EventItem)
     def setSelected(self, event: EventItem):
+        self.items[self.current].setStyleSheet('EventItem#self.items[self.current] { background-color: #1d1d1d ; color: #f8f8f8}')
         self.current = event.EID
+        self.items[self.current].setStyleSheet('EventItem#self.items[self.current] { background-color: #1d1d1d ; color: #f8f8f8}')
         #print(self.current)
 
     @Slot(EventItem) 
