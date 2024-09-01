@@ -64,13 +64,15 @@ class EventListView(QWidget):
     @Slot(EventItem)
     def setSelected(self, event: EventItem):
         try:
-            temp_name = (self.items[self.current]).objectName()
-            self.items[self.current].setStyleSheet(f'EventItem#{temp_name}{{ background-color: black }}')
+            if (self.current is not None) or (self.current == event.EID):
+                temp_name = (self.items[self.current]).objectName()
+                self.items[self.current].setStyleSheet(f'EventItem#{temp_name}{{ background-color: grey }}')
+            else:
+                self.current = event.EID
+                current_name = event.objectName()
+                self.items[self.current].setStyleSheet(f'EventItem#{current_name}{{ background-color: light-blue }}')
         except:
             print('Error')
-        self.current = event.EID
-        current_name = event.objectName()
-        self.items[self.current].setStyleSheet(f'EventItem#{current_name}{{ background-color: white }}')
 
     @Slot(EventItem) 
     def setData(self, event: EventItem):
