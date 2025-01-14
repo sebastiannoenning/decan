@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
         self._user_profile_model.setRelation(0, QSqlRelation("Users","UserID","Username"))
         #self._user_profile_model.setRelation(5, QSqlRelation("Address","AddressID","AddressID"))
         self._event_model.setRelation(7, QSqlRelation("Users","UserID","Username"))
+        self._event_model.setFilter("UserID = '2'")
         
         self._user_model.select()
         self._user_profile_model.select()
