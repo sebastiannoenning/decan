@@ -73,7 +73,7 @@ class EventListView(QWidget):
                     self.items[self.current].setStyleSheet(f'EventItem#{prev_name}{{ background-color: grey }}')
                 self.current = event.EID
                 current_name = event.objectName()
-                self.items[self.current].setStyleSheet(f'EventItem#{current_name}{{ background-color: light-blue }}')
+                self.items[self.current].setStyleSheet(f'EventItem#{current_name}{{ background-color: lightblue }}')
         except:
             print('Error')
 
