@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
         self._database = QSqlDatabase.addDatabase('QMYSQL')
         self._database.setHostName('localhost')
         self._database.setUserName('sebastianji')
-        self._database.setPassword('genTen212!')
+        self._database.setPassword('admin')#genTen212!')
         self._database.setDatabaseName('decan')
 
         if not self._database.open():
