@@ -46,6 +46,9 @@ class MainWindow(QMainWindow):
 
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
 
+    def setup_combo(self):
+        self.userSelect
+
     def setup_tables(self):
         print(self._database.tables())
         #query = QSqlQuery()
@@ -76,12 +79,12 @@ class MainWindow(QMainWindow):
         self._ui.scrollAreaWidgetContents.setModel(self._event_model)
         #print(self._user_model.rowCount())
         # 
-        self._event_model2 =  QSqlRelationalTableModel()
+        """self._event_model2 =  QSqlRelationalTableModel()
         self._event_model2.setTable("Events") 
         self._event_model2.setRelation(7, QSqlRelation("Users","UserID","Username"))
         self._event_model2.setFilter("UserID = '3'")
         self._event_model2.select()
-        self._ui.scrollAreaWidgetContents.setModel(self._event_model2)
+        self._ui.scrollAreaWidgetContents.setModel(self._event_model2)"""
         
     def setup_connection(self):
         self._database = QSqlDatabase.addDatabase('QMYSQL')

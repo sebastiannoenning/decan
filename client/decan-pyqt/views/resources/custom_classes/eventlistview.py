@@ -49,11 +49,19 @@ class EventListView(QWidget):
             
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
-        print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
+        #print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
 
         #Clear current list items under the condtion that the model has changed
-        """     setModel should *not be used to update a read-only model list conveniently; 
-                that should be contingent w/ connections made via self._model
+        """     setModel should *not be used to update the widget model list conveniently; 
+                that should be contingent w/ connections made via self._model.
+                 ↪  events need to be cleared both via dictionary & removed from the widget;
+                        failure to do both will either result in memory leaks or unlinked dict entries
+                        'delete_item()' is a simple implementation intended to be used in conjunction
+                        with model.onEvent.connect()ions & specifies an eventID to delete.
+                ↪   that is why there is a seperate implementation for gradually removing events here:
+                        dictionaries are inherently unordered & so this implementation rather uses popitem
+                        to systematically remove & clear widgets in the order they were added in a LIFO fashion
+                        from the stack. this ensures all widgets are removed & no dictionary events are left unlinked.
         """
         while ((len(self.items) > 0) & (model != self._model)):
             key, value = self.items.popitem()
@@ -61,16 +69,11 @@ class EventListView(QWidget):
             self._list_container.removeWidget(value)
             value.deleteLater()
 
-
         self._model = model
         model_elements = model.rowCount()
-        #print(model_elements)
         for i in range (0, model_elements):
             record = self._model.record(i)
             self.add_item(record)
-
-        print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
-        #print(self.items)
 
         """self._model.beforeInsert.connect()
         #self._model.beforeUpdate.connect()
