@@ -43,7 +43,7 @@ class EventListView(QWidget):
             self._list_container.removeWidget(self.items[EventID])
             self.items[EventID].deleteLater()
         except Exception as e:
-            print("No event passed": Exception)
+            print("No event passed:", Exception)
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
         print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
