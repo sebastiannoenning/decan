@@ -12,7 +12,7 @@ class EventListView(QWidget):
         super().__init__()
         self.items = dict()
         self._model = None
-        self.current = int
+        self.current = None
         self.setup_ui()
 
     def setup_ui(self):
@@ -86,9 +86,11 @@ class EventListView(QWidget):
     @Slot(EventItem)
     def setSelected(self, event: EventItem):
         try:
-            if (self.current is not None) and (self.current == event.EID):
+            if ((self.current is not None) & (self.current == event.EID)):
                 temp_name = (self.items[self.current]).objectName()
+                #print(temp_name)
                 self.items[self.current].setStyleSheet(f'EventItem#{temp_name}{{ background-color: grey }}')
+                self.current = None
             else:
                 if self.current is not None:
                     prev_name = (self.items[self.current]).objectName()
