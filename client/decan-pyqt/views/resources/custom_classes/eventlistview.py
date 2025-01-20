@@ -42,15 +42,23 @@ class EventListView(QWidget):
         try:
             self._list_container.removeWidget(self.items[EventID])
             self.items[EventID].deleteLater()
+            del self.items[EventID]
         except Exception as e:
             print("No event passed:", Exception)
+            
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
         print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
 
         #Clear current list items under the condtion that the model has changed
-        """while ((len(self.items) > 0) & (model != self._model)):
-            self.items"""
+        """     setModel should *not be used to update a read-only model list conveniently; 
+                that should be contingent w/ connections made via self._model
+        """
+        while ((len(self.items) > 0) & (model != self._model)):
+            item = self.items.popitem()
+            print(item)
+            self._list_container.removeWidget(item)
+            item.deleteLater()
 
 
         self._model = model
@@ -61,7 +69,7 @@ class EventListView(QWidget):
             self.add_item(record)
 
         print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
-        print(self.items)
+        #print(self.items)
 
         """self._model.beforeInsert.connect()
         #self._model.beforeUpdate.connect()
