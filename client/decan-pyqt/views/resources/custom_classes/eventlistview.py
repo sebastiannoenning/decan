@@ -56,10 +56,10 @@ class EventListView(QWidget):
                 that should be contingent w/ connections made via self._model
         """
         while ((len(self.items) > 0) & (model != self._model)):
-            item = self.items.popitem()
-            print(item)
-            self._list_container.removeWidget(item)
-            item.deleteLater()
+            key, value = self.items.popitem()
+            print(value)
+            self._list_container.removeWidget(value)
+            value.deleteLater()
 
 
         self._model = model
