@@ -42,10 +42,17 @@ class EventListView(QWidget):
         try:
             self._list_container.removeWidget(self.items[EventID])
             self.items[EventID].deleteLater()
-        except:
-            print("No event passed")
+        except Exception as e:
+            print("No event passed": Exception)
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
+        print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
+
+        #Clear current list items under the condtion that the model has changed
+        """while ((len(self.items) > 0) & (model != self._model)):
+            self.items"""
+
+
         self._model = model
         model_elements = model.rowCount()
         #print(model_elements)
@@ -53,13 +60,16 @@ class EventListView(QWidget):
             record = self._model.record(i)
             self.add_item(record)
 
+        print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
+        print(self.items)
+
         """self._model.beforeInsert.connect()
         #self._model.beforeUpdate.connect()
         #self._model.beforeDelete.connect()
         #self._model.destroyed.connect()
         self._model.rowsInserted.connect()
         self._model.rowsRemoved.connect()
-        self._model.dataChanged.connect()"""
+        self._model.dataChanged.connect()""" #Implement later
 
     @Slot(EventItem)
     def setSelected(self, event: EventItem):
@@ -74,8 +84,8 @@ class EventListView(QWidget):
                 self.current = event.EID
                 current_name = event.objectName()
                 self.items[self.current].setStyleSheet(f'EventItem#{current_name}{{ background-color: lightblue }}')
-        except:
-            print('Error')
+        except Exception as e:
+            print('Error:', e)
 
     @Slot(EventItem) 
     def setData(self, event: EventItem):
@@ -88,8 +98,6 @@ class EventListView(QWidget):
                     self._model.submitAll()
                 except:
                     print('Unable to change data')
-    
-
 
     def deleteSelected(self):
         if self.current is not None:
