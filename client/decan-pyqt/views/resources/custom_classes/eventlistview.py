@@ -11,6 +11,7 @@ class EventListView(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.items = dict()
+        self._model = None
         self.current = int
         self.setup_ui()
 
