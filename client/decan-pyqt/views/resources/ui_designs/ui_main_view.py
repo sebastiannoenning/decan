@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDateTimeEdit, QFormLayo
     QVBoxLayout, QWidget)
 
 from views.resources.custom_classes.eventlistview import EventListView
+from views.resources.custom_classes.qmodelcombobox import QModelComboBox
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -160,9 +161,9 @@ class Ui_MainWindow(object):
         self.b_delete = QPushButton(self.page_cal)
         self.b_delete.setObjectName(u"b_delete")
         self.b_delete.setGeometry(QRect(420, 120, 100, 32))
-        self.userSelect = QComboBox(self.page_cal)
+        self.userSelect = QModelComboBox(self.page_cal)
         self.userSelect.setObjectName(u"userSelect")
-        self.userSelect.setGeometry(QRect(370, 0, 141, 32))
+        self.userSelect.setGeometry(QRect(360, 10, 141, 32))
         self.pages.addWidget(self.page_cal)
         self.page_addevent = QWidget()
         self.page_addevent.setObjectName(u"page_addevent")
