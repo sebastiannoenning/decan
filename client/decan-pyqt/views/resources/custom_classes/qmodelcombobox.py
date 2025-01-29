@@ -14,5 +14,6 @@ class QModelComboBox(QComboBox):
         model_elements = model.rowCount()
         for i in range (0, model_elements):
             record = self._model.record(i)
+            print("Value added to combo box:",record.value(column))
             self.addItem(record.value(column))
         

@@ -452,9 +452,9 @@
       <widget class="QModelComboBox" name="userSelect">
        <property name="geometry">
         <rect>
-         <x>360</x>
-         <y>10</y>
-         <width>141</width>
+         <x>370</x>
+         <y>60</y>
+         <width>181</width>
          <height>32</height>
         </rect>
        </property>
