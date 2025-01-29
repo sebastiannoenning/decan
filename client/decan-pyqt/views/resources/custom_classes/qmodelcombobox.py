@@ -8,6 +8,7 @@ class QModelComboBox(QComboBox):
         super().__init__()
         self._model = None
         self._column = 0
+        self.show()
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel], column: 0):
         self._model, self._column = model, column
