@@ -449,7 +449,7 @@
         <string>delete</string>
        </property>
       </widget>
-      <widget class="QModelComboBox" name="userSelect">
+      <widget class="QComboBox" name="userSelect">
        <property name="geometry">
         <rect>
          <x>370</x>
@@ -645,11 +645,6 @@
    <extends>QWidget</extends>
    <header>views.resources.custom_classes.eventlistview</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QModelComboBox</class>
-   <extends>QComboBox</extends>
-   <header>views.resources.custom_classes.qmodelcombobox</header>
   </customwidget>
  </customwidgets>
  <resources/>
