@@ -4,7 +4,7 @@ from PySide6.QtSql import QSqlRelationalTableModel, QSqlTableModel, QSqlQueryMod
 from PySide6.QtCore import Qt
 
 class QModelComboBox(QComboBox):
-    def __init__(self) -> None:
+    def __init__(self, parent) -> None:
         super().__init__()
         self._model = None
         self._column = 0
