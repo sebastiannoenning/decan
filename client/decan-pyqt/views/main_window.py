@@ -74,6 +74,7 @@ class MainWindow(QMainWindow):
         self._ui.table_user.setModel(self._user_model)
         self._ui.table_user_profile.setModel(self._user_profile_model)
         self._ui.table_events.setModel(self._event_model)
+        self._ui.userSelect.setModel(self._user_model, 1)
 
         self._ui.scrollAreaWidgetContents.resize(self._ui.upcomingevents.width(), self._ui.upcomingevents.height())
         self._ui.scrollAreaWidgetContents.setModel(self._event_model)
