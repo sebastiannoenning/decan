@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
 
     def setup_links_combo(self): #Temporary function for connecting userSelect to the 
-        self._ui.userSelect.currentTextChanged.connect(lambda x: self.changeEventFilter(x))
+        self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
 
     def setup_tables(self):
         print(self._database.tables())
@@ -99,9 +99,10 @@ class MainWindow(QMainWindow):
             print('connection failed')
             print(self._database.lastError().text())
 
-    def changeEventFilter(self, newID):
-        self._event_model.setFilter(f"UserID = '{newID}'")
-        self._event_model.select()
-        self._ui.table_events.setModel(self._event_model)
+    def changeEventFilter(self, user):
         print("changed")
+
+        """self._event_model.setFilter(f"UserID = '{user}'")
+        self._event_model.select()
+        self._ui.table_events.setModel(self._event_model)"""
             
