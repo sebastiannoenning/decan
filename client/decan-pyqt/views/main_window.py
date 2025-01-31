@@ -101,10 +101,10 @@ class MainWindow(QMainWindow):
 
     def changeEventFilter(self, currentText):
         try:
-            tempQuery = QSqlQuery(f"SELECT 'UP_UserID' FROM 'UserProfile' WHERE 'Forename' = '{currentText}'")
-            tempQuery.next()
+            print(currentText)
+            tempQuery = QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{currentText}'")
             print(tempQuery.value(0))
-            self._event_model.setFilter(f"UserID = '{user}'")
+            self._event_model.setFilter(f"UserID = '{userID}'")
             self._event_model.select()
             self._ui.table_events.setModel(self._event_model)
         except Exception as e:
