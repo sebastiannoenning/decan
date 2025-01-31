@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
 
         self._ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
+        self.setup_links_combo()
         self.setup_connection()
         self.setup_tables()
 
@@ -44,10 +45,9 @@ class MainWindow(QMainWindow):
         self._ui.b_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
         self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(3))
 
-        self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
-
     def setup_links_combo(self): #Temporary function for connecting userSelect to the 
-        self._ui.userSelect.currentIndexChanged.connect(lambda name: self.changeEventFilter(name))
+        self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
+        self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
 
     def setup_tables(self):
         print(self._database.tables())
@@ -100,9 +100,8 @@ class MainWindow(QMainWindow):
             print(self._database.lastError().text())
 
     def changeEventFilter(self, user):
-        print("changed")
-
-        """self._event_model.setFilter(f"UserID = '{user}'")
+        self._event_model.setFilter(f"UserID = '{user}'")
         self._event_model.select()
-        self._ui.table_events.setModel(self._event_model)"""
+        self._ui.table_events.setModel(self._event_model)
+        print("changed")
             
