@@ -105,6 +105,7 @@ class MainWindow(QMainWindow):
             print(tempText)
             tempQuery = QSqlQuery()
             tempQuery.exec(tempText)
+            tempQuery.next()
             print(tempQuery.value(0))
             self._event_model.setFilter(f"UserID = '{userID}'")
             self._event_model.select()
