@@ -102,4 +102,6 @@ class MainWindow(QMainWindow):
     def changeEventFilter(self, newID):
         self._event_model.setFilter(f"UserID = '{newID}'")
         self._event_model.select()
+        self._ui.table_events.setModel(self._event_model)
+        print("changed")
             
