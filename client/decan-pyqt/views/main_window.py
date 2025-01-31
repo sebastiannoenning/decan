@@ -46,8 +46,8 @@ class MainWindow(QMainWindow):
 
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
 
-    def setup_combo(self):
-        self.userSelect
+    def setup_links_combo(self): #Temporary function for connecting userSelect to the 
+        self._ui.userSelect.currentTextChanged.connect(lambda x: self.changeEventFilter(x))
 
     def setup_tables(self):
         print(self._database.tables())
@@ -55,14 +55,13 @@ class MainWindow(QMainWindow):
         #query.exec('SELECT * FROM Events')
         #print(query.size(), query.record().count())
         self._user_model = QSqlTableModel()
-        self._user_profile_model = QSqlRelationalTableModel()
+        self._user_profile_model = QSqlTableModel()
         self._event_model = QSqlRelationalTableModel()
         
         self._user_model.setTable("Users")
         self._user_profile_model.setTable("UserProfile")
         self._event_model.setTable("Events")
         
-        self._user_profile_model.setRelation(0, QSqlRelation("Users","UserID","Username"))
         #self._user_profile_model.setRelation(5, QSqlRelation("Address","AddressID","AddressID"))
         self._event_model.setRelation(7, QSqlRelation("Users","UserID","Username"))
         self._event_model.setFilter("UserID = '2'")
@@ -99,4 +98,8 @@ class MainWindow(QMainWindow):
         if not self._database.open():
             print('connection failed')
             print(self._database.lastError().text())
+
+    def changeEventFilter(self, newID):
+        self._event_model.setFilter(f"UserID = '{newID}'")
+        self._event_model.select()
             
