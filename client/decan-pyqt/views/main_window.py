@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
 
     def setup_links_combo(self): #Temporary function for connecting userSelect to the 
-        self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
+        self._ui.userSelect.currentIndexChanged.connect(lambda name: self.changeEventFilter(name))
 
     def setup_tables(self):
         print(self._database.tables())
