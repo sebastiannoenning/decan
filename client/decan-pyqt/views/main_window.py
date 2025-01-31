@@ -99,9 +99,13 @@ class MainWindow(QMainWindow):
             print('connection failed')
             print(self._database.lastError().text())
 
-    def changeEventFilter(self, user):
-        self._event_model.setFilter(f"UserID = '{user}'")
-        self._event_model.select()
-        self._ui.table_events.setModel(self._event_model)
-        print("changed")
+    def changeEventFilter(self, currentText):
+        try:
+            tempQuery = QSqlQuery(f"SELECT 'UP_UserID' FROM 'UserProfile' WHERE 'Forename' = '{currentText}'")
+            print(tempQuery.value(0))
+            self._event_model.setFilter(f"UserID = '{user}'")
+            self._event_model.select()
+            self._ui.table_events.setModel(self._event_model)
+        except Exception as e:
+            print("eventFilter change not possible:",e)
             
