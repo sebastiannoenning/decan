@@ -31,9 +31,9 @@ class MainWindow(QMainWindow):
 
         self._ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
-        self.setup_links_combo()
         self.setup_connection()
         self.setup_tables()
+        self.setup_links_combo()
 
         #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
