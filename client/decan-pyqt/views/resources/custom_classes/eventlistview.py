@@ -22,6 +22,7 @@ class EventListView(QWidget):
         self._list_container.setSpacing(0)
         self._list_container.setContentsMargins(0,0,0,0)
         self.setLayout(self._list_container)
+        print(self.width)
 
     def add_item(self, record: QSqlRecord):
         eventinfo = {
@@ -42,6 +43,7 @@ class EventListView(QWidget):
     def delete_item(self, EventID: int):
         try:
             self._list_container.removeWidget(self.items[EventID])
+            print("Current height:",self.height(),"/n↪ Predicted height:",(self.height()-self.items[EventID].height()))
             self.resize(self.width(), (self.height()-self.items[EventID].height()))
             self.items[EventID].deleteLater()
             del self.items[EventID]
@@ -53,6 +55,7 @@ class EventListView(QWidget):
             key, value = self.items.popitem()
             #print(value)
             try:
+                print("Current height:",self.height(),"/n↪ Predicted height:",(self.height()-value.height()))
                 self.resize(self.width(), (self.height()-value.height()))
                 self._list_container.removeWidget(value)
                 value.deleteLater()
