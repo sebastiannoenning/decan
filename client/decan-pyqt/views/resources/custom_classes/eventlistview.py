@@ -48,7 +48,7 @@ class EventListView(QWidget):
             print("No event passed:", Exception)
 
     def clear_items(self, condition):
-        while ((len(self.items) > 0) & (condition)):
+        while ((len(self.items) > 0) & (condition())):
             key, value = self.items.popitem()
             print(value)
             self._list_container.removeWidget(value)
