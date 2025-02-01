@@ -46,7 +46,13 @@ class EventListView(QWidget):
             del self.items[EventID]
         except Exception as e:
             print("No event passed:", Exception)
-            
+
+    def clear_items(self, condition):
+        while ((len(self.items) > 0) & (condition)):
+            key, value = self.items.popitem()
+            print(value)
+            self._list_container.removeWidget(value)
+            value.deleteLater()
 
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
         #print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
@@ -63,14 +69,17 @@ class EventListView(QWidget):
                         to systematically remove & clear widgets in the order they were added in a LIFO fashion
                         from the stack. this ensures all widgets are removed & no dictionary events are left unlinked.
         """
-        while ((len(self.items) > 0) & (model != self._model)):
+
+        self.clear_items(lambda: model != self._model)
+
+        """while ((len(self.items) > 0) & (model != self._model)):
             key, value = self.items.popitem()
             print(value)
             self._list_container.removeWidget(value)
-            value.deleteLater()
+            value.deleteLater()"""
 
         self._model = model
-        model_elements = model.rowCount()
+        model_elements = self._model.rowCount()
         for i in range (0, model_elements):
             record = self._model.record(i)
             self.add_item(record)
