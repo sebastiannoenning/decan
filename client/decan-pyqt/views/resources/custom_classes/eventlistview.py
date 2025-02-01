@@ -55,7 +55,6 @@ class EventListView(QWidget):
                 self.setMinimumWidth(self.width())
                 self._list_container.removeWidget(value)
                 value.deleteLater()
-                self.resize(self.width, self.height())
             except Exception as e:
                 print("Error deleting widget", e)
 
