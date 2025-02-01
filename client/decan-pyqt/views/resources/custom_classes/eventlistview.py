@@ -54,6 +54,13 @@ class EventListView(QWidget):
             self._list_container.removeWidget(value)
             value.deleteLater()
 
+    def refresh_items(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
+        self._model = model
+        model_elements = self._model.rowCount()
+        for i in range (0, model_elements):
+            record = self._model.record(i)
+            self.add_item(record)
+
     def setModel(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
         #print('Number of items currently in dict: ',len(self.items)) #Testing print // Schedule for removal at later date
 
@@ -78,12 +85,9 @@ class EventListView(QWidget):
             self._list_container.removeWidget(value)
             value.deleteLater()"""
 
-        self._model = model
-        model_elements = self._model.rowCount()
-        for i in range (0, model_elements):
-            record = self._model.record(i)
-            self.add_item(record)
+        self.refresh_items(model)
 
+        self._model.modelReset.connect(lambda: self.refreshModel())
         """self._model.beforeInsert.connect()
         #self._model.beforeUpdate.connect()
         #self._model.beforeDelete.connect()
@@ -91,6 +95,10 @@ class EventListView(QWidget):
         self._model.rowsInserted.connect()
         self._model.rowsRemoved.connect()
         self._model.dataChanged.connect()""" #Implement later
+
+    def refreshModel(self):
+        self.clear_items(lambda: True)
+        self.refresh_items(self._model)
 
     @Slot(EventItem)
     def setSelected(self, event: EventItem):
