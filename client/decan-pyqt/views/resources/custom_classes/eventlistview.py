@@ -37,14 +37,11 @@ class EventListView(QWidget):
         self.items[eventinfo['EventID']].mousePressed.connect(self.setSelected)
         self.items[eventinfo['EventID']].itemChanged.connect(self.setData)
         self._list_container.addWidget(self.items[eventinfo['EventID']])
-        print(self.width())
         self.resize(self.width(), (self.height()+self.items[eventinfo['EventID']].height()))
     
     def delete_item(self, EventID: int):
         try:
             self._list_container.removeWidget(self.items[EventID])
-            print("Current height:",self.height(),"/n↪ Predicted height:",(self.height()-self.items[EventID].height()))
-            self.resize(self.width(), (self.height()-self.items[EventID].height()))
             self.items[EventID].deleteLater()
             del self.items[EventID]
         except Exception as e:
@@ -55,10 +52,10 @@ class EventListView(QWidget):
             key, value = self.items.popitem()
             #print(value)
             try:
-                print("Current height:",self.height(),"/n↪ Predicted height:",(self.height()-value.height()))
-                self.resize(self.width(), (self.height()-value.height()))
+                self.setMinimumWidth(self.width())
                 self._list_container.removeWidget(value)
                 value.deleteLater()
+                self.resize(self.width, self.height())
             except Exception as e:
                 print("Error deleting widget", e)
 
