@@ -50,9 +50,12 @@ class EventListView(QWidget):
     def clear_items(self, condition):
         while ((len(self.items) > 0) & (condition())):
             key, value = self.items.popitem()
-            print(value)
-            self._list_container.removeWidget(value)
-            value.deleteLater()
+            #print(value)
+            try:
+                self._list_container.removeWidget(value)
+                value.deleteLater()
+            except Exception as e:
+                print("Error deleting widget", e)
 
     def refresh_items(self, model: Union[QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel]):
         self._model = model
