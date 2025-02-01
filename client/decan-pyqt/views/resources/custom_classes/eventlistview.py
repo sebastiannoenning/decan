@@ -42,6 +42,7 @@ class EventListView(QWidget):
     def delete_item(self, EventID: int):
         try:
             self._list_container.removeWidget(self.items[EventID])
+            self.resize(self.width(), (self.height()-self.items[EventID].height()))
             self.items[EventID].deleteLater()
             del self.items[EventID]
         except Exception as e:
@@ -52,6 +53,7 @@ class EventListView(QWidget):
             key, value = self.items.popitem()
             #print(value)
             try:
+                self.resize(self.width(), (self.height()-value.height()))
                 self._list_container.removeWidget(value)
                 value.deleteLater()
             except Exception as e:
