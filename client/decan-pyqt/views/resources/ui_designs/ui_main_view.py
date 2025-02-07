@@ -208,6 +208,7 @@ class Ui_MainWindow(object):
 
         self.startedit = QDateTimeEdit(self.verticalLayoutWidget)
         self.startedit.setObjectName(u"startedit")
+        self.startedit.setCalendarPopup(True)
 
         self.GenericSettings.setWidget(2, QFormLayout.FieldRole, self.startedit)
 
@@ -218,6 +219,7 @@ class Ui_MainWindow(object):
 
         self.endedit = QDateTimeEdit(self.verticalLayoutWidget)
         self.endedit.setObjectName(u"endedit")
+        self.endedit.setCalendarPopup(True)
 
         self.GenericSettings.setWidget(3, QFormLayout.FieldRole, self.endedit)
 

@@ -3,7 +3,7 @@ import sys
 
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QDate
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -34,9 +34,13 @@ class MainWindow(QMainWindow):
         self.setup_connection()
         self.setup_tables()
         self.setup_links_combo()
+        self.setup_add_event
 
         #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
+    def setup_add_event(self):
+        self._ui.startedit.setDate(QDate.currentDate())
+        self._ui.endedit.setDate(QDate.currentDate())
 
     def setup_links_nav(self):
         #defines all links for components in ui
