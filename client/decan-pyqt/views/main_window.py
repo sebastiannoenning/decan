@@ -41,6 +41,7 @@ class MainWindow(QMainWindow):
     def setup_add_event(self):
         self._ui.startedit.setDate(QDate.currentDate())
         self._ui.endedit.setDate(QDate.currentDate())
+        print(QDate.currentDate())
 
     def setup_links_nav(self):
         #defines all links for components in ui
