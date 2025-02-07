@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         self.setup_connection()
         self.setup_tables()
         self.setup_links_combo()
-        self.setup_add_event
+        self.setup_add_event()
 
         #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
