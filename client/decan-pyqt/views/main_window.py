@@ -112,10 +112,7 @@ class MainWindow(QMainWindow):
 
     def changeEventFilter(self, currentText):
         try:
-            tempQuery = QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{currentText}'")
-            tempQuery.exec()
-            tempQuery.next()
-            userID = tempQuery.value(0)
+            userID = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{currentText}'"))
             self._event_model.setFilter(f"UserID = '{userID}'")
             self._event_model.select()
             self._ui.table_events.setModel(self._event_model)
@@ -123,15 +120,21 @@ class MainWindow(QMainWindow):
             print("eventFilter change not possible:",e)
     
     def addEvent(self):
+        userID = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._ui.AE_CB_userSelect.currentText())}'"))
         print(self._ui.AE_LE_inputTitle.displayText())
         newEvent = {
             'ETitle'            :   self._ui.AE_LE_inputTitle.displayText(),
-            'EStart_Date'       :   self._ui.AE_DTE_startDTSelect.date(),
-            'EStart_Time'       :   self._ui.AE_DTE_startDTSelect.time(),
-            'EEnd_Date'         :   self._ui.AE_DTE_endDTSelect.date(),
-            'EEnd_Time'         :   self._ui.AE_DTE_endDTSelect.time(),
-            'E_CreatorUserID'   :   QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._ui.AE_CB_userSelect.currentText())}'"),
+            'EStart_Date'       :   (self._ui.AE_DTE_startDTSelect.date()).toPython(),
+            'EStart_Time'       :   (self._ui.AE_DTE_startDTSelect.time()).toPython(),
+            'EEnd_Date'         :   (self._ui.AE_DTE_endDTSelect.date()).toPython(),
+            'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython(),
+            'E_CreatorUserID'   :   userID,
         }
         print(newEvent)
+
+    def returnQuery(query: QSqlQuery):
+        query.exec()
+        query.next()
+        return query.value(0)
 
     #def clearEvent(self):
