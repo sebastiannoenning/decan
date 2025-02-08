@@ -133,10 +133,12 @@ class MainWindow(QMainWindow):
             'EStart_Time'       :   (self._ui.AE_DTE_startDTSelect.time()).toPython().strftime('%H:%M:%S'),
             'EEnd_Date'         :   (self._ui.AE_DTE_endDTSelect.date()).toPython().strftime('%Y-%m-%d'),
             'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
-            'E_CreatorUserID'   :   userID,
+            'E_CreatorUserID'   :   userID
         }
-        inputQuery = QSqlQuery(INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]','[value-8]','[value-9]'))
-
+        newEvent['ETitle']
+        inputQuery = QSqlQuery(f"INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES ('{(newEvent['ETitle'])}','{(newEvent['EStart_Date'])}','{(newEvent['EEnd_Date'])}','{(newEvent['EStart_Time'])}','{(newEvent['EEnd_Time'])}','{(newEvent['E_CreatorUserID'])}')")
+        inputQuery.exec()
+    
     def returnQuery(self, query: QSqlQuery):
         query.exec()
         query.next()
