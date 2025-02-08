@@ -136,7 +136,14 @@ class MainWindow(QMainWindow):
             'E_CreatorUserID'   :   userID
         }
         inputQuery = QSqlQuery()
-        inputQuery.prepare(f"INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES ('{(newEvent['ETitle'])}','{(newEvent['EStart_Date'])}','{(newEvent['EEnd_Date'])}','{(newEvent['EStart_Time'])}','{(newEvent['EEnd_Time'])}','{(newEvent['E_CreatorUserID'])}')")
+        inputQuery.prepare("INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES "
+                                            "(':ETitle', ':EStart_Date', ':EEnd_Date', ':EStart_Time', ':EEnd_Time', ':E_CreatorUserID')")
+        inputQuery.bindValue(":ETitle", newEvent['ETitle'])
+        inputQuery.bindValue(":EStart_Date", newEvent['EStart_Date'])
+        inputQuery.bindValue(":EStart_Time", newEvent['EStart_Time'])
+        inputQuery.bindValue(":EEnd_Date", newEvent['EEnd_Date'])
+        inputQuery.bindValue(":EEnd_Time", newEvent['EEnd_Time'])
+        inputQuery.bindValue(":E_CreatorUserID", newEvent['E_CreatorUserID'])
         inputQuery.exec()
     
     def returnQuery(self, query: QSqlQuery):
