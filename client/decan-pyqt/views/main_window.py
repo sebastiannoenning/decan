@@ -135,6 +135,7 @@ class MainWindow(QMainWindow):
             'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
             'E_CreatorUserID'   :   userID,
         }
+        inputQuery = QSqlQuery(INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]','[value-8]','[value-9]'))
 
     def returnQuery(self, query: QSqlQuery):
         query.exec()
