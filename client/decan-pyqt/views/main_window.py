@@ -38,11 +38,6 @@ class MainWindow(QMainWindow):
 
         #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
-    def setup_add_event(self):
-        self._ui.startedit.setDate(QDate.currentDate())
-        self._ui.endedit.setDate(QDate.currentDate())
-        print(QDate.currentDate())
-
     def setup_links_nav(self):
         #defines all links for components in ui
         self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
@@ -53,6 +48,17 @@ class MainWindow(QMainWindow):
     def setup_links_combo(self): #Temporary function for connecting userSelect to the 
         self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
+
+    def setup_add_event(self):
+        self._ui.AE_CB_userSelect.setModel(self._user_profile_model)
+        self._ui.AE_CB_userSelect.setModelColumn(2)
+
+        self._ui.AE_LE_inputTitle.editingFinished
+
+        self._ui.AE_DTE_startDTSelect.setDate(QDate.currentDate())
+        self._ui.AE_DTE_endDTSelect.setDate(QDate.currentDate())
+
+        self._ui.AE_PB_addEvent.clicked.connect(lambda: self.addEvent())
 
     def setup_tables(self):
         print(self._database.tables())
@@ -115,4 +121,17 @@ class MainWindow(QMainWindow):
             self._ui.table_events.setModel(self._event_model)
         except Exception as e:
             print("eventFilter change not possible:",e)
-            
+    
+    def addEvent(self):
+        print(self._ui.AE_LE_inputTitle.displayText())
+        newEvent = {
+            'ETitle'            :   self._ui.AE_LE_inputTitle.displayText(),
+            'EStart_Date'       :   self._ui.AE_DTE_startDTSelect.date(),
+            'EStart_Time'       :   self._ui.AE_DTE_startDTSelect.time(),
+            'EEnd_Date'         :   self._ui.AE_DTE_endDTSelect.date(),
+            'EEnd_Time'         :   self._ui.AE_DTE_endDTSelect.time(),
+            'E_CreatorUserID'   :   QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._ui.AE_CB_userSelect.currentText())}'"),
+        }
+        print(newEvent)
+
+    #def clearEvent(self):

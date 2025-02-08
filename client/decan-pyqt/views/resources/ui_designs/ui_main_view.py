@@ -181,67 +181,68 @@ class Ui_MainWindow(object):
         self.generalcontainer.setContentsMargins(0, 0, 0, 0)
         self.GenericSettings = QFormLayout()
         self.GenericSettings.setObjectName(u"GenericSettings")
-        self.label_user = QLabel(self.verticalLayoutWidget)
-        self.label_user.setObjectName(u"label_user")
+        self.AE_label_userSelectCB = QLabel(self.verticalLayoutWidget)
+        self.AE_label_userSelectCB.setObjectName(u"AE_label_userSelectCB")
 
-        self.GenericSettings.setWidget(0, QFormLayout.LabelRole, self.label_user)
+        self.GenericSettings.setWidget(0, QFormLayout.LabelRole, self.AE_label_userSelectCB)
 
-        self.selectuser = QComboBox(self.verticalLayoutWidget)
-        self.selectuser.setObjectName(u"selectuser")
+        self.AE_CB_userSelect = QComboBox(self.verticalLayoutWidget)
+        self.AE_CB_userSelect.setObjectName(u"AE_CB_userSelect")
 
-        self.GenericSettings.setWidget(0, QFormLayout.FieldRole, self.selectuser)
+        self.GenericSettings.setWidget(0, QFormLayout.FieldRole, self.AE_CB_userSelect)
 
-        self.label_title = QLabel(self.verticalLayoutWidget)
-        self.label_title.setObjectName(u"label_title")
+        self.AE_label_titleLE = QLabel(self.verticalLayoutWidget)
+        self.AE_label_titleLE.setObjectName(u"AE_label_titleLE")
 
-        self.GenericSettings.setWidget(1, QFormLayout.LabelRole, self.label_title)
+        self.GenericSettings.setWidget(1, QFormLayout.LabelRole, self.AE_label_titleLE)
 
-        self.lineEdit = QLineEdit(self.verticalLayoutWidget)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.AE_LE_inputTitle = QLineEdit(self.verticalLayoutWidget)
+        self.AE_LE_inputTitle.setObjectName(u"AE_LE_inputTitle")
 
-        self.GenericSettings.setWidget(1, QFormLayout.FieldRole, self.lineEdit)
+        self.GenericSettings.setWidget(1, QFormLayout.FieldRole, self.AE_LE_inputTitle)
 
-        self.label_st = QLabel(self.verticalLayoutWidget)
-        self.label_st.setObjectName(u"label_st")
+        self.AE_label_startDT = QLabel(self.verticalLayoutWidget)
+        self.AE_label_startDT.setObjectName(u"AE_label_startDT")
 
-        self.GenericSettings.setWidget(2, QFormLayout.LabelRole, self.label_st)
+        self.GenericSettings.setWidget(2, QFormLayout.LabelRole, self.AE_label_startDT)
 
-        self.startedit = QDateTimeEdit(self.verticalLayoutWidget)
-        self.startedit.setObjectName(u"startedit")
-        self.startedit.setCalendarPopup(True)
+        self.AE_DTE_startDTSelect = QDateTimeEdit(self.verticalLayoutWidget)
+        self.AE_DTE_startDTSelect.setObjectName(u"AE_DTE_startDTSelect")
+        self.AE_DTE_startDTSelect.setCurrentSection(QDateTimeEdit.Section.DaySection)
+        self.AE_DTE_startDTSelect.setCalendarPopup(True)
 
-        self.GenericSettings.setWidget(2, QFormLayout.FieldRole, self.startedit)
+        self.GenericSettings.setWidget(2, QFormLayout.FieldRole, self.AE_DTE_startDTSelect)
 
-        self.label_et = QLabel(self.verticalLayoutWidget)
-        self.label_et.setObjectName(u"label_et")
+        self.AE_label_endDT = QLabel(self.verticalLayoutWidget)
+        self.AE_label_endDT.setObjectName(u"AE_label_endDT")
 
-        self.GenericSettings.setWidget(3, QFormLayout.LabelRole, self.label_et)
+        self.GenericSettings.setWidget(3, QFormLayout.LabelRole, self.AE_label_endDT)
 
-        self.endedit = QDateTimeEdit(self.verticalLayoutWidget)
-        self.endedit.setObjectName(u"endedit")
-        self.endedit.setCalendarPopup(True)
+        self.AE_DTE_endDTSelect = QDateTimeEdit(self.verticalLayoutWidget)
+        self.AE_DTE_endDTSelect.setObjectName(u"AE_DTE_endDTSelect")
+        self.AE_DTE_endDTSelect.setCalendarPopup(True)
 
-        self.GenericSettings.setWidget(3, QFormLayout.FieldRole, self.endedit)
+        self.GenericSettings.setWidget(3, QFormLayout.FieldRole, self.AE_DTE_endDTSelect)
 
 
         self.generalcontainer.addLayout(self.GenericSettings)
 
-        self.expandusers = QPushButton(self.verticalLayoutWidget)
-        self.expandusers.setObjectName(u"expandusers")
+        self.AE_PB_expandUsers = QPushButton(self.verticalLayoutWidget)
+        self.AE_PB_expandUsers.setObjectName(u"AE_PB_expandUsers")
 
-        self.generalcontainer.addWidget(self.expandusers)
+        self.generalcontainer.addWidget(self.AE_PB_expandUsers)
 
-        self.userview = QListView(self.verticalLayoutWidget)
-        self.userview.setObjectName(u"userview")
+        self.AE_LV_addUsers = QListView(self.verticalLayoutWidget)
+        self.AE_LV_addUsers.setObjectName(u"AE_LV_addUsers")
 
-        self.generalcontainer.addWidget(self.userview)
+        self.generalcontainer.addWidget(self.AE_LV_addUsers)
 
-        self.componentsexpand = QVBoxLayout()
-        self.componentsexpand.setObjectName(u"componentsexpand")
+        self.AE_container_addJSON = QVBoxLayout()
+        self.AE_container_addJSON.setObjectName(u"AE_container_addJSON")
         self.expandcomponent = QPushButton(self.verticalLayoutWidget)
         self.expandcomponent.setObjectName(u"expandcomponent")
 
-        self.componentsexpand.addWidget(self.expandcomponent)
+        self.AE_container_addJSON.addWidget(self.expandcomponent)
 
         self.select_add = QHBoxLayout()
         self.select_add.setObjectName(u"select_add")
@@ -256,20 +257,20 @@ class Ui_MainWindow(object):
         self.select_add.addWidget(self.addcomponent)
 
 
-        self.componentsexpand.addLayout(self.select_add)
+        self.AE_container_addJSON.addLayout(self.select_add)
 
         self.dynamiccomponentsection = QVBoxLayout()
         self.dynamiccomponentsection.setObjectName(u"dynamiccomponentsection")
 
-        self.componentsexpand.addLayout(self.dynamiccomponentsection)
+        self.AE_container_addJSON.addLayout(self.dynamiccomponentsection)
 
 
-        self.generalcontainer.addLayout(self.componentsexpand)
+        self.generalcontainer.addLayout(self.AE_container_addJSON)
 
-        self.addeventbutton = QPushButton(self.verticalLayoutWidget)
-        self.addeventbutton.setObjectName(u"addeventbutton")
+        self.AE_PB_addEvent = QPushButton(self.verticalLayoutWidget)
+        self.AE_PB_addEvent.setObjectName(u"AE_PB_addEvent")
 
-        self.generalcontainer.addWidget(self.addeventbutton)
+        self.generalcontainer.addWidget(self.AE_PB_addEvent)
 
         self.eventform.setWidget(self.scrollAreaWidgetContents_2)
         self.pages.addWidget(self.page_addevent)
@@ -323,14 +324,14 @@ class Ui_MainWindow(object):
         self.Select.setText(QCoreApplication.translate("MainWindow", u"Select", None))
         self.b_delete.setText(QCoreApplication.translate("MainWindow", u"delete", None))
         self.userSelect.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Select User", None))
-        self.label_user.setText(QCoreApplication.translate("MainWindow", u"User", None))
-        self.label_title.setText(QCoreApplication.translate("MainWindow", u"Title", None))
-        self.lineEdit.setText(QCoreApplication.translate("MainWindow", u"Title", None))
-        self.label_st.setText(QCoreApplication.translate("MainWindow", u"StartDate", None))
-        self.label_et.setText(QCoreApplication.translate("MainWindow", u"EndDate", None))
-        self.expandusers.setText(QCoreApplication.translate("MainWindow", u"Add Users (Expand)", None))
+        self.AE_label_userSelectCB.setText(QCoreApplication.translate("MainWindow", u"User", None))
+        self.AE_label_titleLE.setText(QCoreApplication.translate("MainWindow", u"Title", None))
+        self.AE_LE_inputTitle.setText(QCoreApplication.translate("MainWindow", u"Title", None))
+        self.AE_label_startDT.setText(QCoreApplication.translate("MainWindow", u"StartDate", None))
+        self.AE_label_endDT.setText(QCoreApplication.translate("MainWindow", u"EndDate", None))
+        self.AE_PB_expandUsers.setText(QCoreApplication.translate("MainWindow", u"Add Users (Expand)", None))
         self.expandcomponent.setText(QCoreApplication.translate("MainWindow", u"Add Components", None))
         self.addcomponent.setText(QCoreApplication.translate("MainWindow", u"add", None))
-        self.addeventbutton.setText(QCoreApplication.translate("MainWindow", u"AddEvent", None))
+        self.AE_PB_addEvent.setText(QCoreApplication.translate("MainWindow", u"AddEvent", None))
     # retranslateUi
 

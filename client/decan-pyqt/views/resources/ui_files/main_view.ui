@@ -498,52 +498,55 @@
           <item>
            <layout class="QFormLayout" name="GenericSettings">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_user">
+             <widget class="QLabel" name="AE_label_userSelectCB">
               <property name="text">
                <string>User</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="selectuser"/>
+             <widget class="QComboBox" name="AE_CB_userSelect"/>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_title">
+             <widget class="QLabel" name="AE_label_titleLE">
               <property name="text">
                <string>Title</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="AE_LE_inputTitle">
               <property name="text">
                <string>Title</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_st">
+             <widget class="QLabel" name="AE_label_startDT">
               <property name="text">
                <string>StartDate</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QDateTimeEdit" name="startedit">
+             <widget class="QDateTimeEdit" name="AE_DTE_startDTSelect">
+              <property name="currentSection">
+               <enum>QDateTimeEdit::Section::DaySection</enum>
+              </property>
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item row="3" column="0">
-             <widget class="QLabel" name="label_et">
+             <widget class="QLabel" name="AE_label_endDT">
               <property name="text">
                <string>EndDate</string>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QDateTimeEdit" name="endedit">
+             <widget class="QDateTimeEdit" name="AE_DTE_endDTSelect">
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
@@ -552,17 +555,17 @@
            </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="expandusers">
+           <widget class="QPushButton" name="AE_PB_expandUsers">
             <property name="text">
              <string>Add Users (Expand)</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QListView" name="userview"/>
+           <widget class="QListView" name="AE_LV_addUsers"/>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="componentsexpand">
+           <layout class="QVBoxLayout" name="AE_container_addJSON">
             <item>
              <widget class="QPushButton" name="expandcomponent">
               <property name="text">
@@ -590,7 +593,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="addeventbutton">
+           <widget class="QPushButton" name="AE_PB_addEvent">
             <property name="text">
              <string>AddEvent</string>
             </property>
