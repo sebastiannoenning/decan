@@ -132,7 +132,7 @@ class MainWindow(QMainWindow):
         }
         print(newEvent)
 
-    def returnQuery(query: QSqlQuery):
+    def returnQuery(self, query: QSqlQuery):
         query.exec()
         query.next()
         return query.value(0)
