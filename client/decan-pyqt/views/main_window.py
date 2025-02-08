@@ -1,5 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import sys
+from datetime import datetime
 
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 from PySide6.QtWidgets import QApplication, QMainWindow
@@ -124,10 +125,10 @@ class MainWindow(QMainWindow):
         print(self._ui.AE_LE_inputTitle.displayText())
         newEvent = {
             'ETitle'            :   self._ui.AE_LE_inputTitle.displayText(),
-            'EStart_Date'       :   (self._ui.AE_DTE_startDTSelect.date()).toPython(),
-            'EStart_Time'       :   (self._ui.AE_DTE_startDTSelect.time()).toPython(),
-            'EEnd_Date'         :   (self._ui.AE_DTE_endDTSelect.date()).toPython(),
-            'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython(),
+            'EStart_Date'       :   (self._ui.AE_DTE_startDTSelect.date()).toPython().strftime('%Y-%m-%d'),
+            'EStart_Time'       :   (self._ui.AE_DTE_startDTSelect.time()).toPython().strftime('%H:%M:%S'),
+            'EEnd_Date'         :   (self._ui.AE_DTE_endDTSelect.date()).toPython().strftime('%Y-%m-%d'),
+            'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
             'E_CreatorUserID'   :   userID,
         }
         print(newEvent)
