@@ -135,15 +135,21 @@ class MainWindow(QMainWindow):
             'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
             'E_CreatorUserID'   :   userID
         }
-        inputQuery = QSqlQuery()
-        inputQuery.prepare("INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES (':ETitle', ':EStart_Date', ':EEnd_Date', ':EStart_Time', ':EEnd_Time', ':E_CreatorUserID')")
-        inputQuery.bindValue(":ETitle", newEvent['ETitle'])
-        inputQuery.bindValue(":EStart_Date", newEvent['EStart_Date'])
-        inputQuery.bindValue(":EStart_Time", newEvent['EStart_Time'])
-        inputQuery.bindValue(":EEnd_Date", newEvent['EEnd_Date'])
-        inputQuery.bindValue(":EEnd_Time", newEvent['EEnd_Time'])
-        inputQuery.bindValue(":E_CreatorUserID", newEvent['E_CreatorUserID'])
-        inputQuery.exec()
+        try:
+            inputQuery = QSqlQuery()
+            inputQuery.prepare("INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES (:ETitle, :EStart_Date, :EEnd_Date, :EStart_Time, :EEnd_Time, :E_CreatorUserID)")
+            inputQuery.bindValue(":ETitle", newEvent['ETitle'])
+            inputQuery.bindValue(":EStart_Date", newEvent['EStart_Date'])
+            inputQuery.bindValue(":EStart_Time", newEvent['EStart_Time'])
+            inputQuery.bindValue(":EEnd_Date", newEvent['EEnd_Date'])
+            inputQuery.bindValue(":EEnd_Time", newEvent['EEnd_Time'])
+            inputQuery.bindValue(":E_CreatorUserID", newEvent['E_CreatorUserID'])
+            if not inputQuery.exec():
+                print("Event inputting failed:", inputQuery.lastError().text())
+            else:
+                print("Event added successfully")
+        except Exception as e:
+            print("Error:", e)
     
     def returnQuery(self, query: QSqlQuery):
         query.exec()
