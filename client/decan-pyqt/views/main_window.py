@@ -136,8 +136,7 @@ class MainWindow(QMainWindow):
             'E_CreatorUserID'   :   userID
         }
         inputQuery = QSqlQuery()
-        inputQuery.prepare("INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES "
-                                            "(':ETitle', ':EStart_Date', ':EEnd_Date', ':EStart_Time', ':EEnd_Time', ':E_CreatorUserID')")
+        inputQuery.prepare("INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES (':ETitle', ':EStart_Date', ':EEnd_Date', ':EStart_Time', ':EEnd_Time', ':E_CreatorUserID')")
         inputQuery.bindValue(":ETitle", newEvent['ETitle'])
         inputQuery.bindValue(":EStart_Date", newEvent['EStart_Date'])
         inputQuery.bindValue(":EStart_Time", newEvent['EStart_Time'])
