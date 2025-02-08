@@ -54,7 +54,11 @@ class MainWindow(QMainWindow):
         self._ui.AE_CB_userSelect.setModel(self._user_profile_model)
         self._ui.AE_CB_userSelect.setModelColumn(2)
 
-        self._ui.AE_LE_inputTitle.editingFinished
+        #self._ui.AE_LE_inputTitle.editingFinished
+        self._ui.AE_DTE_startDTSelect.dateChanged.connect(lambda: 
+                                                          self._ui.AE_DTE_endDTSelect.setMinimumDateTime(
+                                                              self._ui.AE_DTE_startDTSelect.dateTime()
+                                                          ))
 
         self._ui.AE_DTE_startDTSelect.setDate(QDate.currentDate())
         self._ui.AE_DTE_endDTSelect.setDate(QDate.currentDate())
@@ -131,7 +135,6 @@ class MainWindow(QMainWindow):
             'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
             'E_CreatorUserID'   :   userID,
         }
-        print(newEvent)
 
     def returnQuery(self, query: QSqlQuery):
         query.exec()
