@@ -74,7 +74,7 @@ class EventItem(QWidget):
         side_scroll_props.setScrollMetric(                                      #      Implement strong AxisLock (prevents bi-directional scroll movements)
             QScrollerProperties.ScrollMetric.AxisLockThreshold, 1)              #       ↪ Value can be set between 0 & 1, with 1 indicating strong lock.
         
-        side_scroll.setScrollerProperties(side_scroll_props)    #set scroller properties to profile
+        side_scroll.setScrollerProperties(side_scroll_props)    #Set scroller properties to profile
         return side_scroll
     
     def _update_EAttribute(self, key, value):
@@ -98,8 +98,8 @@ class EventItem(QWidget):
         # Header Components
         self._header.setSpacing(10)
         self._header1_wrapper = QScrollArea()               #Scroll Area
-        self._header1_title = QLabel(self.ETitle)       # ↪ For nested QLabel, displaying ETITLE
-        self._header2_time = QLabel(self.EStart_Time[:5])                #QLabel, displaying ESTARTTIME
+        self._header1_title = QLabel(self.ETitle)           # ↪ For nested QLabel, displaying ETITLE
+        self._header2_time = QLabel(self.EStart_Time[:5])   #QLabel, displaying ESTARTTIME
 
         #self._header2_time.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         #   Header_1 wrapper settings 

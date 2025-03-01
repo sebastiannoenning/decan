@@ -12,6 +12,7 @@ from PySide6.QtCore import Qt, QDate
 #     pyside2-uic main_view.ui -o ui_main_view.py
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
 from views.resources.custom_classes.eventitem import EventItem#, Event
+from views.resources.custom_classes.timepickerpopup import TimePickerPopup#, Event
 from models.user_model import UserModel
 
 class MainWindow(QMainWindow):
@@ -49,6 +50,8 @@ class MainWindow(QMainWindow):
     def setup_links_combo(self): #Temporary function for connecting userSelect to the 
         self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
+
+        self._ui.timebutton.clicked.connect(self.createDialog)
 
     def setup_add_event(self):
         self._ui.AE_CB_userSelect.setModel(self._user_profile_model)
@@ -155,5 +158,8 @@ class MainWindow(QMainWindow):
         query.exec()
         query.next()
         return query.value(0)
-
+    
+    def createDialog(self):
+        NewDialog = TimePickerPopup(self)
+        NewDialog.show()
     #def clearEvent(self):

@@ -71,7 +71,7 @@ class EventListView(QWidget):
         #Clear current list items under the condtion that the model has changed
         """     setModel should *not be used to update the widget model list conveniently; 
                 that should be contingent w/ connections made via self._model.
-                 ↪  events need to be cleared both via dictionary & removed from the widget;
+                ↪   events need to be cleared both via dictionary & removed from the widget;
                         failure to do both will either result in memory leaks or unlinked dict entries
                         'delete_item()' is a simple implementation intended to be used in conjunction
                         with model.onEvent.connect()ions & specifies an eventID to delete.

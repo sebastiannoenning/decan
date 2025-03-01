@@ -113,7 +113,7 @@
        <height>460</height>
       </rect>
      </property>
-     <widget class="QWidget" name="page_usr">
+     <widget class="QWidget" name="page_selectUser">
       <widget class="QStackedWidget" name="userinfo">
        <property name="geometry">
         <rect>
@@ -408,8 +408,21 @@
        </property>
        <layout class="QGridLayout" name="gridLayout"/>
       </widget>
+      <widget class="QPushButton" name="timebutton">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>230</y>
+         <width>100</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Open TimeDia</string>
+       </property>
+      </widget>
      </widget>
-     <widget class="QWidget" name="page_cal">
+     <widget class="QWidget" name="page_calendarTab">
       <widget class="QScrollArea" name="upcomingevents">
        <property name="geometry">
         <rect>
@@ -463,7 +476,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_addevent">
+     <widget class="QWidget" name="pages_addEvent">
       <widget class="QScrollArea" name="eventform">
        <property name="geometry">
         <rect>
@@ -491,7 +504,7 @@
            <x>0</x>
            <y>0</y>
            <width>331</width>
-           <height>385</height>
+           <height>407</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="generalcontainer">
@@ -604,7 +617,7 @@
        </widget>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_set">
+     <widget class="QWidget" name="page_settingsTab">
       <widget class="QTableView" name="table_user">
        <property name="geometry">
         <rect>
