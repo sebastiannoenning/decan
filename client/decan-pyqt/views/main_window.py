@@ -11,8 +11,8 @@ from PySide6.QtCore import Qt, QDate
 #     pyside6-uic resources/ui_files/main_view.ui -o resources/ui_designs/ui_main_view.py, or
 #     pyside2-uic main_view.ui -o ui_main_view.py
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
-from views.resources.custom_classes.eventitem import EventItem#, Event
-from views.resources.custom_classes.timepickerpopup import TimePickerPopup#, Event
+from views.resources.custom_classes.eventitem import EventItem
+from views.resources.custom_classes.timepickerpopup import TimePickerPopup
 from models.user_model import UserModel
 
 class MainWindow(QMainWindow):
@@ -162,4 +162,5 @@ class MainWindow(QMainWindow):
     def createDialog(self):
         NewDialog = TimePickerPopup(self)
         NewDialog.show()
+        NewDialog.adjustSize()
     #def clearEvent(self):
