@@ -6,7 +6,6 @@ from PySide6.QtCore import Qt
 
 from views.main_window import MainWindow
 
-
 class App(QApplication):
     def __init__(self, sys_argv):
         super(App, self).__init__(sys_argv)

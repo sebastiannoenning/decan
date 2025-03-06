@@ -1,9 +1,10 @@
-import sys, math
+import sys, math, re
 from enum import Enum
 
 from PySide6 import QtCore
-from PySide6.QtCore import Qt, QDateTime, QEasingCurve, Slot, QPointF
-from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QLayout, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties, QDialogButtonBox, QFrame
+from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF
+from PySide6.QtWidgets import QFrame, QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QDialogButtonBox
+from PySide6.QtWidgets import QSizePolicy, QScroller, QScrollerProperties, QStyle
 from PySide6.QtGui import QFont, QMouseEvent, QPainter
 
 class TimeType(Enum):
@@ -51,13 +52,15 @@ class TimeSelect(QWidget):
 
         self.labelStyle = labelStyle
 
+        self.setObjectName(f"TimeSelect_{hex(id(self))}")
+
         self.__setup_ui()
 
     def __determineRepeats(self, A, O):
         """ Internal function for determining the number of sets needed on generation
             #   C is a value for deciding a 'central' value for the repeats to centre around
             #   C can be a constant, which could be an arbitrary number so long as it exceeds the maximum possible A.
-            #   However, infiniteScroll struggles with values under ~48, & setting C to 60 (max A) causes unnecessary
+            #   However, _infiniteScroll struggles with values under ~48, & setting C to 60 (max A) causes unnecessary
             #   labels to be created on both SimpleMinutes & Hours. Accounting for perfomance issues, C can now only
             #   be 48 or 60 with the following calculation & possible values for A.
 
@@ -76,7 +79,7 @@ class TimeSelect(QWidget):
         return R
 
     def __approxFunc(self, x, P, A, O=0):
-        """ A function for calculating the current finalTimeValue/entry of the infinite scroll area
+        """ A function for calculating the current stateHandler/entry of the infinite scroll area
             #   Based on function 'f(x) = (x mod P) ÷ (P ÷ A)' 
             #   Where P is Period, & A is Amplitude
             #   O is optional for removing early values from approximation (for instance, setting minimum time)
@@ -86,6 +89,9 @@ class TimeSelect(QWidget):
         """
         return ((x % P) / ( P / (A - O) )) + O
     
+    def Type(self):
+        return self.type
+    
     def returnCurrentVal(self, offset):
         """ Public access function for calculating the current value based on the position of the QScrollBar/QScroller
             #   Re-uses the __approxFunc function, with the period being substituted as the actual size of the container.
@@ -94,9 +100,6 @@ class TimeSelect(QWidget):
                 ↪   truncated so that the lowest possible representer of an area is selected
         """
         return self._mult * math.trunc(self.__approxFunc(offset, self.period, self._entries, self._locked))
-    
-    def Type(self):
-        return self.type
     
     def returnMinimumVal(self):
         return self._locked * self._mult
@@ -173,6 +176,15 @@ class TimeSelect(QWidget):
                 Rounded as pixels do not sit at float values.
         """
         return round(self.sizeHint().height() / len(self.labels))
+    
+    def changeMinVal(self, min_val, test_en=False):
+        if (math.ceil(min_val / self._mult) != self._locked):
+            self._locked = math.ceil(min_val / self._mult)
+            if (self._locked == self._entries): self._locked -= 1    #Shouldn't happen, but just in case
+            self._period = (self._entries - self._locked)
+            self._repeats = self.__determineRepeats(self._entries, self._locked)
+            self.__reconstruct_ui()
+        elif (test_en==True): print("Could not change min_val: Same as previous")
 
     def __setup_ui(self):
         """ Adds all labels to the interface.
@@ -189,7 +201,7 @@ class TimeSelect(QWidget):
                                           ) * self._mult
                                           )
             self.labels[x] = QLabel(f"{val:02}", parent=self)
-            self.labels[x].setObjectName(f"TM_{self.objectName}_Type_{self.type}_Pos_{x}_Val_{val:02}")
+            self.labels[x].setObjectName(f"{self.objectName()}_TSLabel_{x}_{val:02}")
             self.labels[x].setFont(self.labelStyle)
             self.labels[x].setAlignment(Qt.AlignmentFlag.AlignRight)
             self.labelContainer.addWidget(self.labels[x],40,self.labelAlignment)
@@ -197,19 +209,26 @@ class TimeSelect(QWidget):
         self.setLayout(self.labelContainer)
         self.period = round(self.sizeHint().height()/self._repeats)
 
-    def resizeEvent(self, event):
-        return super().resizeEvent(event)
+    def __reconstruct_ui(self):
+        try:
+            for x in range(len(self.labels)):
+                self.labelContainer.removeWidget(self.labels[x])
+                self.labels[x].deleteLater()
+            self.__setup_ui()
+        except Exception as e:
+            print(f"### Reconstruction of ui for object {str(self.objectName())} failed:",e)
 
 class TimePickerPopup(QDialog):
-    def __init__(self, parent):
+    def __init__(self, parent, cur_QDT: QDateTime, min_QDT=QDateTime(QDate(1970,1,1),QTime(12,30,0,0)), minuteType=TimeType.SimpleMinutes):
         super().__init__(parent)
-        self.minimumDateTime = QDateTime()
-        self.currentDateTime = QDateTime()
+        self.minimumDateTime = min_QDT
+        self.currentDateTime = cur_QDT
+        self.minuteType = minuteType
 
-        self.hours = 0
-        self.minutes = 0
-
-        self.function_lock = False
+        self._hours, self._minutes = 0, 0
+        self._function_lock = False
+        self.l1_mins_timeSelect_ACTIVE = dict()
+        self._active = 'default'
 
         self.__setup_ui()
         self.__set_styles()
@@ -218,45 +237,42 @@ class TimePickerPopup(QDialog):
     def __setup_ui(self):
         self.setWindowTitle("timePickerPopup")
 
-        self.layer0_base = QVBoxLayout()
-        self.setLayout(self.layer0_base)
+        self.layer0_base = QVBoxLayout(self)
 
-        self.layer1_times = QHBoxLayout()   #   Horizontal box layout for time selects
+        self.layer1_times = QHBoxLayout(self)   #   Horizontal box layout for time selects
+            
+        self.l1_hours_scrollArea = QScrollArea(self)
+        if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
+            and (self.minimumDateTime.time().hour() > 0)): 
+            self.l1_hours_timeSelect = TimeSelect(self, TimeType.Hours, self.minimumDateTime.time().hour())
+            self._active = 'alternate'
+        else: self.l1_hours_timeSelect = TimeSelect(self, TimeType.Hours)
+        self.l1_hours_scrollArea.setWidget(self.l1_hours_timeSelect)
+        self.l1_hours_timeScroller = self.__create_drag_scroller(self.l1_hours_scrollArea)
 
-        self.hours_scrollArea = QScrollArea(self)
-        self.hours_timeSelect = TimeSelect(self, TimeType.Hours)
-        self.hours_scrollArea.setWidget(self.hours_timeSelect)
-        self.hours_timeScroller = self.__create_drag_scroller(self.hours_scrollArea)
+        self.l1_mins_scrollArea = QScrollArea(self)
 
-        """if (self.minimumDateTime == None):"""
-        self.mins_scrollArea = QScrollArea(self)
-        self.mins_timeSelect = TimeSelect(self, TimeType.SimpleMinutes)
-        self.mins_scrollArea.setWidget(self.mins_timeSelect)
-        self.mins_timeScroller = self.__create_drag_scroller(self.mins_scrollArea)
-        """else:
-            self.mins_timeSelect_open = TimeSelect(self, TimeType.SimpleMinutes)
-            self.mins_timeSelect_min = TimeSelect(self, TimeType.SimpleMinutes)"""
+        self.l1_mins_timeSelect_ACTIVE['default'] = TimeSelect(self, self.minuteType)  
+        self.l1_mins_timeSelect_ACTIVE['alternate'] = TimeSelect(self, self.minuteType, self.minimumDateTime.time().minute())
+        self.l1_mins_scrollArea.setWidget(self.l1_mins_timeSelect_ACTIVE[self._active])
+        self.l1_mins_timeScroller = self.__create_drag_scroller(self.l1_mins_scrollArea)
 
-        self.layer1_times.addWidget(self.hours_scrollArea)
-        self.layer1_times.addWidget(self.mins_scrollArea)
+        self.layer1_times.addWidget(self.l1_hours_scrollArea)
+        self.layer1_times.addWidget(self.l1_mins_scrollArea)
         
-        self.confirm_pushButton = QPushButton(text="Confirm", parent=self)
-        self.cancel_pushButton = QPushButton(text="Cancel",parent=self)
-
-        self.footer_button_box = QDialogButtonBox(self, orientation=Qt.Orientation.Horizontal)
-        self.footer_button_box.setCenterButtons(True)
-        self.footer_button_box.addButton(self.cancel_pushButton, QDialogButtonBox.ButtonRole.DestructiveRole)
-        self.footer_button_box.addButton(self.confirm_pushButton, QDialogButtonBox.ButtonRole.AcceptRole)
+        self.l0_confirm_pushButton = QPushButton(text="Confirm", parent=self)
 
         self.layer0_base.addLayout(self.layer1_times)
-        self.layer0_base.addWidget(self.footer_button_box)
+        self.layer0_base.addWidget(self.l0_confirm_pushButton)
 
     def __set_styles(self):
-        #self.setWindowFlags(Qt.WindowType.FramelessWindowHint) #sets Window to clear
+        """self.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint | 
+            Qt.WindowType.WindowStaysOnTopHint) #sets Window to clear"""
         self.setWindowModality(Qt.WindowModality.ApplicationModal) #sets Dialog to override background application until closed
 
-        self.hours_scrollArea.setWidgetResizable(True)
-        self.mins_scrollArea.setWidgetResizable(True) 
+        self.l1_hours_scrollArea.setWidgetResizable(True)
+        self.l1_mins_scrollArea.setWidgetResizable(True) 
 
         self.setStyleSheet(""" 
             QDialog {
@@ -274,31 +290,41 @@ class TimePickerPopup(QDialog):
                 height: 0px;
             }""" """
             QPushButton {
-                height: 25px;
-            }""" """ 
-            QDialogButtonBox {
-                padding: 0px:
-                margin: 0px;
-            }
-            """
+                height: 20px;
+            }"""
         )
 
-        self.confirm_pushButton.setFont(QFont("Arial",21))
-        self.confirm_pushButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self.cancel_pushButton.setFont(QFont("Arial",21))
-        self.cancel_pushButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.l0_confirm_pushButton.setFont(QFont("Arial",16))
+        self.l0_confirm_pushButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self.layout().setSpacing(0)
         self.layer0_base.setSpacing(0)
         self.layer1_times.setSpacing(0)
-        self.footer_button_box.layout().setSpacing(0)
 
-        self.layout().setSpacing(0)
-        self.layer1_times.setContentsMargins(0,0,0,0)
-        self.layer0_base.setContentsMargins(0,30,0,0)
-        self.footer_button_box.layout().setContentsMargins(0,0,0,0)
-
-        pref_height = (5 * self.hours_timeSelect.returnInterval()) + self.confirm_pushButton.sizeHint().height()
+        self.setContentsMargins(
+            0,          #Left
+            0,          #Top
+            0,          #Right
+            0           #Bottom
+            )
+        self.layer1_times.setContentsMargins(
+            0,          #Left
+            0,          #Top
+            0,          #Right
+            0           #Bottom
+            )
+        self.layer0_base.setContentsMargins(
+            0,          #Left
+            0,          #Top
+            0,          #Right
+            0           #Bottom
+            )
+        
+        pref_height = (
+            (5 * self.l1_hours_timeSelect.returnInterval())
+            + self.l0_confirm_pushButton.sizeHint().height()
+            - 20
+            )
 
         self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Maximum)
 
@@ -307,46 +333,47 @@ class TimePickerPopup(QDialog):
         self.setMaximumHeight(pref_height)
 
         self.adjustSize()
-        self.confirm_pushButton.adjustSize()
-        self.cancel_pushButton.adjustSize()
+        self.l0_confirm_pushButton.adjustSize()
 
     def __setup_connections(self):
-        self.hours = self.hours_timeScroller.stateChanged.connect(
+        """self.l0_confirm_pushButton.clicked.connect(lambda: print("Placeholder"))"""
+
+        self.l1_hours_timeScroller.stateChanged.connect(
             lambda state: 
-            self.finalTimeValue(
+            self.stateHandler(
                 state,
-                self.hours_timeSelect,
+                self.l1_hours_timeSelect,
                 int(
-                    self.hours_timeScroller.finalPosition().y() + 
-                    (self.hours_scrollArea.verticalScrollBar().pageStep()/2)
+                    self.l1_hours_timeScroller.finalPosition().y() + 
+                    (self.l1_hours_scrollArea.verticalScrollBar().pageStep()/2)
                 )
                 ))
-        self.mins = self.mins_timeScroller.stateChanged.connect(
+        self.l1_mins_timeScroller.stateChanged.connect(
             lambda state: 
-            self.finalTimeValue(
+            self.stateHandler(
                 state,
-                self.mins_timeSelect,
+                self.l1_mins_timeSelect_ACTIVE[self._active],
                 int(
-                    self.mins_timeScroller.finalPosition().y() +
-                    (self.mins_scrollArea.verticalScrollBar().pageStep()/2)
+                    self.l1_mins_timeScroller.finalPosition().y() +
+                    (self.l1_mins_scrollArea.verticalScrollBar().pageStep()/2)
                 )
                 ))
         
-        self.hours_scrollArea.verticalScrollBar().valueChanged.connect(
+        self.l1_hours_scrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
-            self.infiniteScroll(
+            self._infiniteScroll(
                 value,
-                self.hours_scrollArea,
-                self.hours_timeScroller,
-                self.hours_timeSelect
+                self.l1_hours_scrollArea,
+                self.l1_hours_timeScroller,
+                self.l1_hours_timeSelect
                 ))
-        self.mins_scrollArea.verticalScrollBar().valueChanged.connect(
+        self.l1_mins_scrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
-            self.infiniteScroll(
+            self._infiniteScroll(
                 value,
-                self.mins_scrollArea,
-                self.mins_timeScroller,
-                self.mins_timeSelect
+                self.l1_mins_scrollArea,
+                self.l1_mins_timeScroller,
+                self.l1_mins_timeSelect_ACTIVE[self._active]
                 ))
         
     def __create_drag_scroller(self, viewport: QScrollArea):
@@ -393,55 +420,87 @@ class TimePickerPopup(QDialog):
         return new_scroll
 
     @Slot(QScroller.State)
-    #Calculate end-value of the timepicker
-    def finalTimeValue(self, state, timeSelect: TimeSelect, offset):
+    #Handle stateChanges triggered by timeSelect
+    def stateHandler(self, state, timeSelect: TimeSelect, pagestep):
         if (state == QScroller.State.Inactive):
-            final_val = timeSelect.returnCurrentVal(offset)
-            #print("Calculated central value: ", final_val)
-            #self.swapCheck(timeSelect, final_val)
-            return timeSelect.returnCurrentVal(offset)
-        else: 
-            return None
+            final_val = timeSelect.returnCurrentVal(pagestep)
+            self._updateCurrentVarsAndQTime(final_val, timeSelect)
         
-    def swapCheck(self, timeSelect: TimeSelect, f_val):
+    def _updateCurrentVarsAndQTime(self, f_val: int, timeSelect: TimeSelect):
         if (timeSelect.Type() == TimeType.Hours):
-            print()
+            self._hours = f_val
+            if ((self._hours == timeSelect.returnMinimumVal()) 
+                and (0 < self._hours)):
+                self._setActiveTimeSelect('alternate')
+            elif (self._hours > timeSelect.returnMinimumVal()):
+                self._setActiveTimeSelect('default')
+            else:
+                self._updateCurrentQTime(test_en=True)
+        else:
+            self._minutes = f_val
+            self._updateCurrentQTime(test_en=True)
+        
+    def _updateCurrentQTime(self, test_en=False):
+        self.currentDateTime.setTime(QTime(self._hours, self._minutes, 0, 0))
+        if (test_en == True): print(f"Current time: {self.currentDateTime.time()}")
 
+    def _setActiveTimeSelect(self, new: str):
+        if (new == self._active):
+            self._updateCurrentQTime(test_en=True)
+        else: 
+            self._swapActiveTimeSelect()
+
+    def _swapActiveTimeSelect(self):
+        if (self._active == 'default'):
+            self._active = 'alternate'
+            self._updateMinutesActiveTimeSelect()
+        elif (self._active == 'alternate'):
+            self._active = 'default'
+            self._updateMinutesActiveTimeSelect()
+        else: 
+            self._active = 'default'
+            self._updateMinutesActiveTimeSelect()
+
+    def _updateMinutesActiveTimeSelect(self):
+        self.l1_mins_scrollArea.takeWidget()
+        self.l1_mins_scrollArea.setWidget(self.l1_mins_timeSelect_ACTIVE[self._active])
+        self._updateMinutesPositions()
+        self._updateCurrentQTime(test_en=True)
 
     #Shift scrollArea().verticalScrollBar() to a new value if exceeding a bound
-    def infiniteScroll(self, value, qScrollArea: QScrollArea, qScroller: QScroller, timeSelect: TimeSelect):
+    def _infiniteScroll(self, value, qScrollArea: QScrollArea, qScroller: QScroller, timeSelect: TimeSelect):
         l_bound, u_bound = timeSelect.returnUpperLowerBounds(qScrollArea.verticalScrollBar().pageStep())
         interval = timeSelect.returnInterval()
         #Prevent repeated calls --> for instance, if Dragging hits a bound, it repeatedly calls which causes undesired behaviour
-        if ((l_bound - (2 * interval)) <= value) & (value <= (u_bound + (2 * interval))): self.function_lock = False
+        if ((l_bound - (2 * interval)) <= value) & (value <= (u_bound + (2 * interval))): self._function_lock = False
 
-        if (value < (l_bound - (2 * interval))) & (self.function_lock == False):
-            self.function_lock = True
+        if (value < (l_bound - (2 * interval))) & (self._function_lock == False):
+            self._function_lock = True
             try:
                 shift = u_bound - (2 * interval)
                 self._shiftScroll(shift, value, qScroller, qScrollArea, "lower")
-                self.function_lock = False
+                self._function_lock = False
             except Exception as e:
                 print("###Infinite Scroll Error: ",e)
-                self.function_lock = False
+                self._function_lock = False
 
-        if (value > (u_bound + (2 * interval))) & (self.function_lock == False):
-            self.function_lock = True
+        if (value > (u_bound + (2 * interval))) & (self._function_lock == False):
+            self._function_lock = True
             try:
                 shift = l_bound + (2 * interval)
                 self._shiftScroll(shift, value, qScroller, qScrollArea, "upper")
-                self.function_lock = False
+                self._function_lock = False
             except Exception as e:
                 print("### Shift Scroll Error: ",e)
-                self.function_lock = False
+                self._function_lock = False
 
     def _shiftScroll(self, shift, value, qScroller: QScroller, qScrollArea: QScrollArea, bound="undef", test_en=False):
-        """ Private access function for use with self.infiniteScroll()
+        """ Private access function for use with self._infiniteScroll()
             ↪   Takes all values passed to the valueChanged Slot & shifts it via the amount specified by the caller.
                 Additionally, handles all types of QScroller.States at the moment of shifting, ensuring continuation
                 of Dragging movements & seamless animations for those in motion/scrolling
 
-                Additional notes: Was initially packaged in self.infiniteScroll(), but migrated to a secondary func-
+                Additional notes: Was initially packaged in self._infiniteScroll(), but migrated to a secondary func-
                 -tion as both upper and lower bounds functioned identically outside of the value passed to the shift.
 
             Variable outline:
@@ -450,11 +509,11 @@ class TimePickerPopup(QDialog):
                             overlap with the 'real bound'. Bounds edges are 2 _entries outwards, and shifted values
                             are the opposite bound 2 _entries inwards.
 
-                'value':    The function calling this (infiniteScroll()) is linked to a signal slot connection for
+                'value':    The function calling this (_infiniteScroll()) is linked to a signal slot connection for
                             verticalScrollBar listed 'valueChanged'. The value in this instance is the value passed
                             from aforementioned signal slot connection. Despite this, this function is only called
-                            when the scrollbar has exceeded acceptible bounds (due to the function_lock variable and
-                            general design of infiniteScroll())
+                            when the scrollbar has exceeded acceptible bounds (due to the _function_lock variable and
+                            general design of _infiniteScroll())
 
                 'bound':    Str value containing a name for which bound called the function. 
                             Purely for testing purposes, and this function can be called without it.
@@ -512,21 +571,52 @@ class TimePickerPopup(QDialog):
             if test_en==True: print("# 3 | Inactive/Catch-all Pathway")
             qScrollArea.verticalScrollBar().setValue(shift)
 
-    def setPositions(self):
-        h_s, h_i = self.hours_timeSelect.returnStartValue(self.hours_scrollArea.verticalScrollBar().pageStep())
-        h_c = self.hours_timeSelect.returnCentralValue(self.hours_scrollArea.verticalScrollBar().pageStep())
-        self.hours_timeScroller.setSnapPositionsY(h_s, h_i)
-        self.hours_scrollArea.verticalScrollBar().setValue(h_c)
+    def _updatePositions(self, timeSelect: TimeSelect, scrollArea: QScrollArea, timeScroller: QScroller):
+        """ Private function for use with '_updateHoursPositions' & '_updateMinutesPositions' """
+        n_s, n_i = timeSelect.returnStartValue(scrollArea.verticalScrollBar().pageStep())
+        n_c = timeSelect.returnCentralValue(scrollArea.verticalScrollBar().pageStep())
+        timeScroller.setSnapPositionsY(n_s, n_i)
+        scrollArea.verticalScrollBar().setValue(n_c)
 
-        m_s, m_i = self.mins_timeSelect.returnStartValue(self.mins_scrollArea.verticalScrollBar().pageStep()) 
-        m_c = self.mins_timeSelect.returnCentralValue(self.mins_scrollArea.verticalScrollBar().pageStep())
-        self.mins_timeScroller.setSnapPositionsY(m_s, m_i)
-        self.mins_scrollArea.verticalScrollBar().setValue(m_c)
+        return timeSelect.returnCurrentVal(
+            scrollArea.verticalScrollBar().value() 
+            + (scrollArea.verticalScrollBar().pageStep() / 2)
+        )
+
+
+    def _updateHoursPositions(self):
+        self._hours = self._updatePositions(timeSelect    =self.l1_hours_timeSelect,
+                                            scrollArea    =self.l1_hours_scrollArea,
+                                            timeScroller  =self.l1_hours_timeScroller)
+    
+    def _updateMinutesPositions(self):
+        self._minutes = self._updatePositions(timeSelect    =self.l1_mins_timeSelect_ACTIVE[self._active],
+                                              scrollArea    =self.l1_mins_scrollArea,
+                                              timeScroller  =self.l1_mins_timeScroller)
+
+    def _setPositions(self):
+        self._updateHoursPositions()
+        self._updateMinutesPositions()
+
+    def changeDates(self, new_M_QDT: QDateTime, new_C_QDT: QDateTime):
+        """ Public access function for changing/updating the values in the TimepickerPopup
+            #   Requires both new values for reuse.
+            #   Uses 'changeMinVal' in TimeSelect to change ui features
+        """
+        self.minimumDateTime = new_M_QDT
+        self.currentDateTime = new_C_QDT
+
+        if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
+            and (self.minimumDateTime.time() > QTime(0,0,0,0))):
+            self.l1_hours_timeSelect.changeMinVal(self.minimumDateTime.time().hour())
+            self.l1_mins_timeSelect_ACTIVE['alternative'].changeMinVal(self.minimumDateTime.time().minute())
+        else:
+            self.l1_hours_timeSelect.changeMinVal(QTime(0,0,0,0).hour())
 
     def resizeEvent(self, event):
-        self.setPositions()
+        self._setPositions()
         super().resizeEvent(event)
 
     def showEvent(self, event):
-        self.setPositions()
+        self._setPositions()
         return super().showEvent(event)

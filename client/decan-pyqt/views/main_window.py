@@ -4,7 +4,7 @@ from datetime import datetime
 
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtCore import Qt, QDate
+from PySide6.QtCore import Qt, QDateTime, QDate, QTime
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -160,7 +160,6 @@ class MainWindow(QMainWindow):
         return query.value(0)
     
     def createDialog(self):
-        NewDialog = TimePickerPopup(self)
+        NewDialog = TimePickerPopup(self, QDateTime(QDate(1970,1,1), QTime(0,0,0)))
         NewDialog.show()
-        NewDialog.adjustSize()
     #def clearEvent(self):
