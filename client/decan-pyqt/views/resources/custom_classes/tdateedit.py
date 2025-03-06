@@ -3,7 +3,7 @@ from enum import Enum
 
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF
-from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QDialogButtonBox, QCalendarWidget
+from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QDialogButtonBox, QCalendarWidget, QSpinBox
 from PySide6.QtWidgets import QSizePolicy, QScroller, QScrollerProperties
 from PySide6.QtGui import QFont
 
