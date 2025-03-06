@@ -13,6 +13,7 @@ from PySide6.QtCore import Qt, QDateTime, QDate, QTime
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
 from views.resources.custom_classes.eventitem import EventItem
 from views.resources.custom_classes.ttimeedit import TTimeEditDialog
+from views.resources.custom_classes.tdatetimeedit import TDateTimeEdit
 from models.user_model import UserModel
 
 class MainWindow(QMainWindow):

@@ -127,7 +127,7 @@
         <bool>false</bool>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="p_user_login">
         <widget class="QLineEdit" name="tb_Username">
@@ -476,7 +476,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="pages_addEvent">
+     <widget class="QWidget" name="page_addEvent">
       <widget class="QScrollArea" name="eventform">
        <property name="geometry">
         <rect>
@@ -504,12 +504,15 @@
            <x>0</x>
            <y>0</y>
            <width>331</width>
-           <height>407</height>
+           <height>417</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="generalcontainer">
           <item>
            <layout class="QFormLayout" name="GenericSettings">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="AE_label_userSelectCB">
               <property name="text">
@@ -541,16 +544,6 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QDateTimeEdit" name="AE_DTE_startDTSelect">
-              <property name="currentSection">
-               <enum>QDateTimeEdit::Section::DaySection</enum>
-              </property>
-              <property name="calendarPopup">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="3" column="0">
              <widget class="QLabel" name="AE_label_endDT">
               <property name="text">
@@ -559,8 +552,15 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QDateTimeEdit" name="AE_DTE_endDTSelect">
-              <property name="calendarPopup">
+             <widget class="TDateTimeEdit" name="AE_DTE_endSelect" native="true">
+              <property name="autoFillBackground">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="TDateTimeEdit" name="AE_DTE_startSelect" native="true">
+              <property name="autoFillBackground">
                <bool>true</bool>
               </property>
              </widget>
@@ -616,6 +616,55 @@
         </widget>
        </widget>
       </widget>
+      <widget class="QDateTimeEdit" name="AE_DTE_endDTSelect">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>261</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QDateTimeEdit" name="AE_DTE_startDTSelect">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>100</y>
+         <width>261</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="currentSection">
+        <enum>QDateTimeEdit::Section::DaySection</enum>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="DateSelect" name="calendarWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>200</y>
+         <width>251</width>
+         <height>173</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>30</y>
+         <width>91</width>
+         <height>51</height>
+        </rect>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="page_settingsTab">
       <widget class="QTableView" name="table_user">
@@ -669,6 +718,17 @@
    <extends>QWidget</extends>
    <header>views.resources.custom_classes.eventlistview</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TDateTimeEdit</class>
+   <extends>QWidget</extends>
+   <header>views.resources.custom_classes.tdatetimeedit</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DateSelect</class>
+   <extends>QCalendarWidget</extends>
+   <header>views.resources.custom_classes.tdateedit</header>
   </customwidget>
  </customwidgets>
  <resources/>

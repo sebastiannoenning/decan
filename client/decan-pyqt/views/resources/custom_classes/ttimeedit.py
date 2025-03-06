@@ -8,9 +8,9 @@ from PySide6.QtWidgets import QSizePolicy, QScroller, QScrollerProperties
 from PySide6.QtGui import QFont
 
 class TimeType(Enum):
-    Hours = 1
-    SimpleMinutes = 2
-    DetailedMinutes = 3
+    Hours = 0
+    SimpleMinutes = 1
+    DetailedMinutes = 2
 
 class TimeSelect(QWidget):
     """A "TimeSelect" widget with a predetermined number of labels, signifying time.
@@ -28,11 +28,11 @@ class TimeSelect(QWidget):
 
     """
     def __init__(self, parent, 
-                 Type: TimeType, 
+                 type: TimeType, 
                  min_val=0, 
                  labelStyle=QFont("Arial",18)):
         super().__init__(parent)
-        self.type = Type
+        self.type = type
 
         #Adjust variables based on changes to TimeType
         if  (self.type == TimeType.Hours):

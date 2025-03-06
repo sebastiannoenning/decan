@@ -18,10 +18,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QDateTimeEdit, QFormLayout,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel,
     QLineEdit, QListView, QMainWindow, QPushButton,
-    QScrollArea, QSizePolicy, QStackedWidget, QTableView,
-    QVBoxLayout, QWidget)
+    QScrollArea, QSizePolicy, QSpinBox, QStackedWidget,
+    QTableView, QVBoxLayout, QWidget)
 
 from views.resources.custom_classes.eventlistview import EventListView
+from views.resources.custom_classes.tdateedit import DateSelect
+from views.resources.custom_classes.tdatetimeedit import TDateTimeEdit
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -167,9 +169,9 @@ class Ui_MainWindow(object):
         self.userSelect.setObjectName(u"userSelect")
         self.userSelect.setGeometry(QRect(370, 20, 181, 32))
         self.pages.addWidget(self.page_calendarTab)
-        self.pages_addEvent = QWidget()
-        self.pages_addEvent.setObjectName(u"pages_addEvent")
-        self.eventform = QScrollArea(self.pages_addEvent)
+        self.page_addEvent = QWidget()
+        self.page_addEvent.setObjectName(u"page_addEvent")
+        self.eventform = QScrollArea(self.page_addEvent)
         self.eventform.setObjectName(u"eventform")
         self.eventform.setGeometry(QRect(310, 0, 341, 461))
         self.eventform.setWidgetResizable(True)
@@ -178,12 +180,13 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 339, 459))
         self.verticalLayoutWidget = QWidget(self.scrollAreaWidgetContents_2)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayoutWidget.setGeometry(QRect(0, 0, 331, 407))
+        self.verticalLayoutWidget.setGeometry(QRect(0, 0, 331, 417))
         self.generalcontainer = QVBoxLayout(self.verticalLayoutWidget)
         self.generalcontainer.setObjectName(u"generalcontainer")
         self.generalcontainer.setContentsMargins(0, 0, 0, 0)
         self.GenericSettings = QFormLayout()
         self.GenericSettings.setObjectName(u"GenericSettings")
+        self.GenericSettings.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         self.AE_label_userSelectCB = QLabel(self.verticalLayoutWidget)
         self.AE_label_userSelectCB.setObjectName(u"AE_label_userSelectCB")
 
@@ -209,23 +212,22 @@ class Ui_MainWindow(object):
 
         self.GenericSettings.setWidget(2, QFormLayout.LabelRole, self.AE_label_startDT)
 
-        self.AE_DTE_startDTSelect = QDateTimeEdit(self.verticalLayoutWidget)
-        self.AE_DTE_startDTSelect.setObjectName(u"AE_DTE_startDTSelect")
-        self.AE_DTE_startDTSelect.setCurrentSection(QDateTimeEdit.Section.DaySection)
-        self.AE_DTE_startDTSelect.setCalendarPopup(True)
-
-        self.GenericSettings.setWidget(2, QFormLayout.FieldRole, self.AE_DTE_startDTSelect)
-
         self.AE_label_endDT = QLabel(self.verticalLayoutWidget)
         self.AE_label_endDT.setObjectName(u"AE_label_endDT")
 
         self.GenericSettings.setWidget(3, QFormLayout.LabelRole, self.AE_label_endDT)
 
-        self.AE_DTE_endDTSelect = QDateTimeEdit(self.verticalLayoutWidget)
-        self.AE_DTE_endDTSelect.setObjectName(u"AE_DTE_endDTSelect")
-        self.AE_DTE_endDTSelect.setCalendarPopup(True)
+        self.AE_DTE_endSelect = TDateTimeEdit(self.verticalLayoutWidget)
+        self.AE_DTE_endSelect.setObjectName(u"AE_DTE_endSelect")
+        self.AE_DTE_endSelect.setAutoFillBackground(True)
 
-        self.GenericSettings.setWidget(3, QFormLayout.FieldRole, self.AE_DTE_endDTSelect)
+        self.GenericSettings.setWidget(3, QFormLayout.FieldRole, self.AE_DTE_endSelect)
+
+        self.AE_DTE_startSelect = TDateTimeEdit(self.verticalLayoutWidget)
+        self.AE_DTE_startSelect.setObjectName(u"AE_DTE_startSelect")
+        self.AE_DTE_startSelect.setAutoFillBackground(True)
+
+        self.GenericSettings.setWidget(2, QFormLayout.FieldRole, self.AE_DTE_startSelect)
 
 
         self.generalcontainer.addLayout(self.GenericSettings)
@@ -276,7 +278,22 @@ class Ui_MainWindow(object):
         self.generalcontainer.addWidget(self.AE_PB_addEvent)
 
         self.eventform.setWidget(self.scrollAreaWidgetContents_2)
-        self.pages.addWidget(self.pages_addEvent)
+        self.AE_DTE_endDTSelect = QDateTimeEdit(self.page_addEvent)
+        self.AE_DTE_endDTSelect.setObjectName(u"AE_DTE_endDTSelect")
+        self.AE_DTE_endDTSelect.setGeometry(QRect(10, 140, 261, 32))
+        self.AE_DTE_endDTSelect.setCalendarPopup(True)
+        self.AE_DTE_startDTSelect = QDateTimeEdit(self.page_addEvent)
+        self.AE_DTE_startDTSelect.setObjectName(u"AE_DTE_startDTSelect")
+        self.AE_DTE_startDTSelect.setGeometry(QRect(10, 100, 261, 32))
+        self.AE_DTE_startDTSelect.setCurrentSection(QDateTimeEdit.Section.DaySection)
+        self.AE_DTE_startDTSelect.setCalendarPopup(True)
+        self.calendarWidget = DateSelect(self.page_addEvent)
+        self.calendarWidget.setObjectName(u"calendarWidget")
+        self.calendarWidget.setGeometry(QRect(10, 200, 251, 173))
+        self.spinBox = QSpinBox(self.page_addEvent)
+        self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setGeometry(QRect(80, 30, 91, 51))
+        self.pages.addWidget(self.page_addEvent)
         self.page_settingsTab = QWidget()
         self.page_settingsTab.setObjectName(u"page_settingsTab")
         self.table_user = QTableView(self.page_settingsTab)
@@ -296,7 +313,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.userinfo.setCurrentIndex(0)
+        self.userinfo.setCurrentIndex(1)
         self.b_showhidebutton.setDefault(False)
 
 
