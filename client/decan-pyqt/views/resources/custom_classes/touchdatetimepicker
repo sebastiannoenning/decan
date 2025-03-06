@@ -1,0 +1,23 @@
+import sys, math, re
+from enum import Enum
+
+from PySide6 import QtCore
+from PySide6.QtCore import Qt,QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF
+from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget
+
+from views.resources.custom_classes.ttimeedit import TTimeEditDialog
+
+class TDateTimeEdit(QWidget):
+    """ Base class for opening QCalendar & TDateTimeEdit
+    """
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.__setup_ui()
+
+    def __setup_ui(self):
+
+        self._button_container = QHBoxLayout(self)
+        self.setLayout(self._button_container)
+
+        self._dateEdit_pushButton = QPushButton(self)
+        self._timeEdit_pushButton = QPushButton(self)

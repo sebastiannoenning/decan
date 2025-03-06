@@ -12,7 +12,7 @@ from PySide6.QtCore import Qt, QDateTime, QDate, QTime
 #     pyside2-uic main_view.ui -o ui_main_view.py
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
 from views.resources.custom_classes.eventitem import EventItem
-from views.resources.custom_classes.timepickerpopup import TimePickerPopup
+from views.resources.custom_classes.ttimeedit import TTimeEditDialog
 from models.user_model import UserModel
 
 class MainWindow(QMainWindow):
@@ -160,6 +160,6 @@ class MainWindow(QMainWindow):
         return query.value(0)
     
     def createDialog(self):
-        NewDialog = TimePickerPopup(self, QDateTime(QDate(1970,1,1), QTime(0,0,0)))
+        NewDialog = TTimeEditDialog(self, QDateTime(QDate(1970,1,1), QTime(0,0,0)))
         NewDialog.show()
     #def clearEvent(self):

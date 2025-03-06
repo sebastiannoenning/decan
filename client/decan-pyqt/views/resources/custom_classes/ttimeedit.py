@@ -3,9 +3,9 @@ from enum import Enum
 
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF
-from PySide6.QtWidgets import QFrame, QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QDialogButtonBox
-from PySide6.QtWidgets import QSizePolicy, QScroller, QScrollerProperties, QStyle
-from PySide6.QtGui import QFont, QMouseEvent, QPainter
+from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QDialogButtonBox
+from PySide6.QtWidgets import QSizePolicy, QScroller, QScrollerProperties
+from PySide6.QtGui import QFont
 
 class TimeType(Enum):
     Hours = 1
@@ -27,7 +27,10 @@ class TimeSelect(QWidget):
     Functions:
 
     """
-    def __init__(self, parent, Type: TimeType, min_val=0, labelStyle=QFont("Arial",18)):
+    def __init__(self, parent, 
+                 Type: TimeType, 
+                 min_val=0, 
+                 labelStyle=QFont("Arial",18)):
         super().__init__(parent)
         self.type = Type
 
@@ -210,6 +213,10 @@ class TimeSelect(QWidget):
         self.period = round(self.sizeHint().height()/self._repeats)
 
     def __reconstruct_ui(self):
+        """ Internal function for that deletes the active labels in the TimeSelect object & reconstructs the new ui
+            on the assumption that the values present are no longer enforceable in the TimeSelect. Should only be
+            used when reusing TimeSelects.
+        """
         try:
             for x in range(len(self.labels)):
                 self.labelContainer.removeWidget(self.labels[x])
@@ -218,8 +225,15 @@ class TimeSelect(QWidget):
         except Exception as e:
             print(f"### Reconstruction of ui for object {str(self.objectName())} failed:",e)
 
-class TimePickerPopup(QDialog):
-    def __init__(self, parent, cur_QDT: QDateTime, min_QDT=QDateTime(QDate(1970,1,1),QTime(12,30,0,0)), minuteType=TimeType.SimpleMinutes):
+class TTimeEditDialog(QDialog):
+    """ A T(ouch)TimeEditDialog QDialog that implements seamless touch scrolling functionality in a base QDialogue,
+        based on design implementations that currently exist (for instance, via iPhone Calendars).
+    """
+    def __init__(self, 
+                 parent, 
+                 cur_QDT: QDateTime, 
+                 min_QDT=QDateTime(QDate(0000,0,0),QTime(0,0,0,0)), 
+                 minuteType=TimeType.SimpleMinutes):
         super().__init__(parent)
         self.minimumDateTime = min_QDT
         self.currentDateTime = cur_QDT
@@ -227,7 +241,7 @@ class TimePickerPopup(QDialog):
 
         self._hours, self._minutes = 0, 0
         self._function_lock = False
-        self.l1_mins_timeSelect_ACTIVE = dict()
+        self._l1_mins_TimeSelect_ACTIVE = dict()
         self._active = 'default'
 
         self.__setup_ui()
@@ -235,35 +249,35 @@ class TimePickerPopup(QDialog):
         self.__setup_connections()
 
     def __setup_ui(self):
-        self.setWindowTitle("timePickerPopup")
+        self.setWindowTitle("TTimeEditDialog")
 
-        self.layer0_base = QVBoxLayout(self)
+        self._layer0_base = QVBoxLayout(self)
 
-        self.layer1_times = QHBoxLayout(self)   #   Horizontal box layout for time selects
+        self._layer1_times = QHBoxLayout(self)   #   Horizontal box layout for time selects
             
-        self.l1_hours_scrollArea = QScrollArea(self)
+        self._l1_hours_scrollArea = QScrollArea(self)
         if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
             and (self.minimumDateTime.time().hour() > 0)): 
-            self.l1_hours_timeSelect = TimeSelect(self, TimeType.Hours, self.minimumDateTime.time().hour())
+            self._l1_hours_TimeSelect = TimeSelect(self, TimeType.Hours, self.minimumDateTime.time().hour())
             self._active = 'alternate'
-        else: self.l1_hours_timeSelect = TimeSelect(self, TimeType.Hours)
-        self.l1_hours_scrollArea.setWidget(self.l1_hours_timeSelect)
-        self.l1_hours_timeScroller = self.__create_drag_scroller(self.l1_hours_scrollArea)
+        else: self._l1_hours_TimeSelect = TimeSelect(self, TimeType.Hours)
+        self._l1_hours_scrollArea.setWidget(self._l1_hours_TimeSelect)
+        self._l1_hours_timeScroller = self.__create_drag_scroller(self._l1_hours_scrollArea)
 
-        self.l1_mins_scrollArea = QScrollArea(self)
+        self._l1_mins_scrollArea = QScrollArea(self)
 
-        self.l1_mins_timeSelect_ACTIVE['default'] = TimeSelect(self, self.minuteType)  
-        self.l1_mins_timeSelect_ACTIVE['alternate'] = TimeSelect(self, self.minuteType, self.minimumDateTime.time().minute())
-        self.l1_mins_scrollArea.setWidget(self.l1_mins_timeSelect_ACTIVE[self._active])
-        self.l1_mins_timeScroller = self.__create_drag_scroller(self.l1_mins_scrollArea)
+        self._l1_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self.minuteType)  
+        self._l1_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self.minuteType, self.minimumDateTime.time().minute())
+        self._l1_mins_scrollArea.setWidget(self._l1_mins_TimeSelect_ACTIVE[self._active])
+        self._l1_mins_timeScroller = self.__create_drag_scroller(self._l1_mins_scrollArea)
 
-        self.layer1_times.addWidget(self.l1_hours_scrollArea)
-        self.layer1_times.addWidget(self.l1_mins_scrollArea)
+        self._layer1_times.addWidget(self._l1_hours_scrollArea)
+        self._layer1_times.addWidget(self._l1_mins_scrollArea)
         
-        self.l0_confirm_pushButton = QPushButton(text="Confirm", parent=self)
+        self._l0_confirm_pushButton = QPushButton(text="Confirm", parent=self)
 
-        self.layer0_base.addLayout(self.layer1_times)
-        self.layer0_base.addWidget(self.l0_confirm_pushButton)
+        self._layer0_base.addLayout(self._layer1_times)
+        self._layer0_base.addWidget(self._l0_confirm_pushButton)
 
     def __set_styles(self):
         """self.setWindowFlags(
@@ -271,8 +285,8 @@ class TimePickerPopup(QDialog):
             Qt.WindowType.WindowStaysOnTopHint) #sets Window to clear"""
         self.setWindowModality(Qt.WindowModality.ApplicationModal) #sets Dialog to override background application until closed
 
-        self.l1_hours_scrollArea.setWidgetResizable(True)
-        self.l1_mins_scrollArea.setWidgetResizable(True) 
+        self._l1_hours_scrollArea.setWidgetResizable(True)
+        self._l1_mins_scrollArea.setWidgetResizable(True) 
 
         self.setStyleSheet(""" 
             QDialog {
@@ -294,12 +308,12 @@ class TimePickerPopup(QDialog):
             }"""
         )
 
-        self.l0_confirm_pushButton.setFont(QFont("Arial",16))
-        self.l0_confirm_pushButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self._l0_confirm_pushButton.setFont(QFont("Arial",16))
+        self._l0_confirm_pushButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self.layout().setSpacing(0)
-        self.layer0_base.setSpacing(0)
-        self.layer1_times.setSpacing(0)
+        self._layer0_base.setSpacing(0)
+        self._layer1_times.setSpacing(0)
 
         self.setContentsMargins(
             0,          #Left
@@ -307,13 +321,13 @@ class TimePickerPopup(QDialog):
             0,          #Right
             0           #Bottom
             )
-        self.layer1_times.setContentsMargins(
+        self._layer1_times.setContentsMargins(
             0,          #Left
             0,          #Top
             0,          #Right
             0           #Bottom
             )
-        self.layer0_base.setContentsMargins(
+        self._layer0_base.setContentsMargins(
             0,          #Left
             0,          #Top
             0,          #Right
@@ -321,8 +335,8 @@ class TimePickerPopup(QDialog):
             )
         
         pref_height = (
-            (5 * self.l1_hours_timeSelect.returnInterval())
-            + self.l0_confirm_pushButton.sizeHint().height()
+            (5 * self._l1_hours_TimeSelect.returnInterval())
+            + self._l0_confirm_pushButton.sizeHint().height()
             - 20
             )
 
@@ -333,47 +347,47 @@ class TimePickerPopup(QDialog):
         self.setMaximumHeight(pref_height)
 
         self.adjustSize()
-        self.l0_confirm_pushButton.adjustSize()
+        self._l0_confirm_pushButton.adjustSize()
 
     def __setup_connections(self):
-        """self.l0_confirm_pushButton.clicked.connect(lambda: print("Placeholder"))"""
+        """self._l0_confirm_pushButton.clicked.connect(lambda: print("Placeholder"))"""
 
-        self.l1_hours_timeScroller.stateChanged.connect(
+        self._l1_hours_timeScroller.stateChanged.connect(
             lambda state: 
             self.stateHandler(
                 state,
-                self.l1_hours_timeSelect,
+                self._l1_hours_TimeSelect,
                 int(
-                    self.l1_hours_timeScroller.finalPosition().y() + 
-                    (self.l1_hours_scrollArea.verticalScrollBar().pageStep()/2)
+                    self._l1_hours_timeScroller.finalPosition().y() + 
+                    (self._l1_hours_scrollArea.verticalScrollBar().pageStep()/2)
                 )
                 ))
-        self.l1_mins_timeScroller.stateChanged.connect(
+        self._l1_mins_timeScroller.stateChanged.connect(
             lambda state: 
             self.stateHandler(
                 state,
-                self.l1_mins_timeSelect_ACTIVE[self._active],
+                self._l1_mins_TimeSelect_ACTIVE[self._active],
                 int(
-                    self.l1_mins_timeScroller.finalPosition().y() +
-                    (self.l1_mins_scrollArea.verticalScrollBar().pageStep()/2)
+                    self._l1_mins_timeScroller.finalPosition().y() +
+                    (self._l1_mins_scrollArea.verticalScrollBar().pageStep()/2)
                 )
                 ))
         
-        self.l1_hours_scrollArea.verticalScrollBar().valueChanged.connect(
+        self._l1_hours_scrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
             self._infiniteScroll(
                 value,
-                self.l1_hours_scrollArea,
-                self.l1_hours_timeScroller,
-                self.l1_hours_timeSelect
+                self._l1_hours_scrollArea,
+                self._l1_hours_timeScroller,
+                self._l1_hours_TimeSelect
                 ))
-        self.l1_mins_scrollArea.verticalScrollBar().valueChanged.connect(
+        self._l1_mins_scrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
             self._infiniteScroll(
                 value,
-                self.l1_mins_scrollArea,
-                self.l1_mins_timeScroller,
-                self.l1_mins_timeSelect_ACTIVE[self._active]
+                self._l1_mins_scrollArea,
+                self._l1_mins_timeScroller,
+                self._l1_mins_TimeSelect_ACTIVE[self._active]
                 ))
         
     def __create_drag_scroller(self, viewport: QScrollArea):
@@ -420,19 +434,19 @@ class TimePickerPopup(QDialog):
         return new_scroll
 
     @Slot(QScroller.State)
-    #Handle stateChanges triggered by timeSelect
-    def stateHandler(self, state, timeSelect: TimeSelect, pagestep):
+    #Handle stateChanges triggered by TimeSelect
+    def stateHandler(self, state, TimeSelect: TimeSelect, pagestep):
         if (state == QScroller.State.Inactive):
-            final_val = timeSelect.returnCurrentVal(pagestep)
-            self._updateCurrentVarsAndQTime(final_val, timeSelect)
+            final_val = TimeSelect.returnCurrentVal(pagestep)
+            self._updateCurrentVarsAndQTime(final_val, TimeSelect)
         
-    def _updateCurrentVarsAndQTime(self, f_val: int, timeSelect: TimeSelect):
-        if (timeSelect.Type() == TimeType.Hours):
+    def _updateCurrentVarsAndQTime(self, f_val: int, TimeSelect: TimeSelect):
+        if (TimeSelect.Type() == TimeType.Hours):
             self._hours = f_val
-            if ((self._hours == timeSelect.returnMinimumVal()) 
+            if ((self._hours == TimeSelect.returnMinimumVal()) 
                 and (0 < self._hours)):
                 self._setActiveTimeSelect('alternate')
-            elif (self._hours > timeSelect.returnMinimumVal()):
+            elif (self._hours > TimeSelect.returnMinimumVal()):
                 self._setActiveTimeSelect('default')
             else:
                 self._updateCurrentQTime(test_en=True)
@@ -462,15 +476,15 @@ class TimePickerPopup(QDialog):
             self._updateMinutesActiveTimeSelect()
 
     def _updateMinutesActiveTimeSelect(self):
-        self.l1_mins_scrollArea.takeWidget()
-        self.l1_mins_scrollArea.setWidget(self.l1_mins_timeSelect_ACTIVE[self._active])
+        self._l1_mins_scrollArea.takeWidget()
+        self._l1_mins_scrollArea.setWidget(self._l1_mins_TimeSelect_ACTIVE[self._active])
         self._updateMinutesPositions()
         self._updateCurrentQTime(test_en=True)
 
     #Shift scrollArea().verticalScrollBar() to a new value if exceeding a bound
-    def _infiniteScroll(self, value, qScrollArea: QScrollArea, qScroller: QScroller, timeSelect: TimeSelect):
-        l_bound, u_bound = timeSelect.returnUpperLowerBounds(qScrollArea.verticalScrollBar().pageStep())
-        interval = timeSelect.returnInterval()
+    def _infiniteScroll(self, value, qScrollArea: QScrollArea, qScroller: QScroller, TimeSelect: TimeSelect):
+        l_bound, u_bound = TimeSelect.returnUpperLowerBounds(qScrollArea.verticalScrollBar().pageStep())
+        interval = TimeSelect.returnInterval()
         #Prevent repeated calls --> for instance, if Dragging hits a bound, it repeatedly calls which causes undesired behaviour
         if ((l_bound - (2 * interval)) <= value) & (value <= (u_bound + (2 * interval))): self._function_lock = False
 
@@ -571,35 +585,35 @@ class TimePickerPopup(QDialog):
             if test_en==True: print("# 3 | Inactive/Catch-all Pathway")
             qScrollArea.verticalScrollBar().setValue(shift)
 
-    def _updatePositions(self, timeSelect: TimeSelect, scrollArea: QScrollArea, timeScroller: QScroller):
+    def _updatePositions(self, TimeSelect: TimeSelect, scrollArea: QScrollArea, timeScroller: QScroller):
         """ Private function for use with '_updateHoursPositions' & '_updateMinutesPositions' """
-        n_s, n_i = timeSelect.returnStartValue(scrollArea.verticalScrollBar().pageStep())
-        n_c = timeSelect.returnCentralValue(scrollArea.verticalScrollBar().pageStep())
+        n_s, n_i = TimeSelect.returnStartValue(scrollArea.verticalScrollBar().pageStep())
+        n_c = TimeSelect.returnCentralValue(scrollArea.verticalScrollBar().pageStep())
         timeScroller.setSnapPositionsY(n_s, n_i)
         scrollArea.verticalScrollBar().setValue(n_c)
 
-        return timeSelect.returnCurrentVal(
+        return TimeSelect.returnCurrentVal(
             scrollArea.verticalScrollBar().value() 
             + (scrollArea.verticalScrollBar().pageStep() / 2)
         )
 
 
     def _updateHoursPositions(self):
-        self._hours = self._updatePositions(timeSelect    =self.l1_hours_timeSelect,
-                                            scrollArea    =self.l1_hours_scrollArea,
-                                            timeScroller  =self.l1_hours_timeScroller)
+        self._hours = self._updatePositions(TimeSelect    =self._l1_hours_TimeSelect,
+                                            scrollArea    =self._l1_hours_scrollArea,
+                                            timeScroller  =self._l1_hours_timeScroller)
     
     def _updateMinutesPositions(self):
-        self._minutes = self._updatePositions(timeSelect    =self.l1_mins_timeSelect_ACTIVE[self._active],
-                                              scrollArea    =self.l1_mins_scrollArea,
-                                              timeScroller  =self.l1_mins_timeScroller)
+        self._minutes = self._updatePositions(TimeSelect    =self._l1_mins_TimeSelect_ACTIVE[self._active],
+                                              scrollArea    =self._l1_mins_scrollArea,
+                                              timeScroller  =self._l1_mins_timeScroller)
 
     def _setPositions(self):
         self._updateHoursPositions()
         self._updateMinutesPositions()
 
     def changeDates(self, new_M_QDT: QDateTime, new_C_QDT: QDateTime):
-        """ Public access function for changing/updating the values in the TimepickerPopup
+        """ Public access function for changing/updating the values in the TTimeEditDialog
             #   Requires both new values for reuse.
             #   Uses 'changeMinVal' in TimeSelect to change ui features
         """
@@ -608,10 +622,10 @@ class TimePickerPopup(QDialog):
 
         if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
             and (self.minimumDateTime.time() > QTime(0,0,0,0))):
-            self.l1_hours_timeSelect.changeMinVal(self.minimumDateTime.time().hour())
-            self.l1_mins_timeSelect_ACTIVE['alternative'].changeMinVal(self.minimumDateTime.time().minute())
+            self._l1_hours_TimeSelect.changeMinVal(self.minimumDateTime.time().hour())
+            self._l1_mins_TimeSelect_ACTIVE['alternative'].changeMinVal(self.minimumDateTime.time().minute())
         else:
-            self.l1_hours_timeSelect.changeMinVal(QTime(0,0,0,0).hour())
+            self._l1_hours_TimeSelect.changeMinVal(QTime(0,0,0,0).hour())
 
     def resizeEvent(self, event):
         self._setPositions()
