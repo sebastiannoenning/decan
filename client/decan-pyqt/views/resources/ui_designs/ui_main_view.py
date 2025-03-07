@@ -18,8 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QDateTimeEdit, QFormLayout,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel,
     QLineEdit, QListView, QMainWindow, QPushButton,
-    QScrollArea, QSizePolicy, QSpinBox, QStackedWidget,
-    QTableView, QVBoxLayout, QWidget)
+    QScrollArea, QSizePolicy, QStackedWidget, QTableView,
+    QVBoxLayout, QWidget)
 
 from views.resources.custom_classes.eventlistview import EventListView
 from views.resources.custom_classes.tdateedit import DateSelect
@@ -289,10 +289,7 @@ class Ui_MainWindow(object):
         self.AE_DTE_startDTSelect.setCalendarPopup(True)
         self.calendarWidget = DateSelect(self.page_addEvent)
         self.calendarWidget.setObjectName(u"calendarWidget")
-        self.calendarWidget.setGeometry(QRect(10, 200, 251, 173))
-        self.spinBox = QSpinBox(self.page_addEvent)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setGeometry(QRect(80, 30, 91, 51))
+        self.calendarWidget.setGeometry(QRect(0, 190, 301, 231))
         self.pages.addWidget(self.page_addEvent)
         self.page_settingsTab = QWidget()
         self.page_settingsTab.setObjectName(u"page_settingsTab")

@@ -648,20 +648,10 @@
       <widget class="DateSelect" name="calendarWidget">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>251</width>
-         <height>173</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spinBox">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>30</y>
-         <width>91</width>
-         <height>51</height>
+         <x>0</x>
+         <y>190</y>
+         <width>301</width>
+         <height>231</height>
         </rect>
        </property>
       </widget>

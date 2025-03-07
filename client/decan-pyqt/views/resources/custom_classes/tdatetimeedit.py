@@ -7,8 +7,6 @@ from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPoi
 from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QSpacerItem, QSizePolicy, QStyleOption, QStyle, QCalendarWidget
 from PySide6.QtGui import QFont, QPainter
 
-from views.resources.custom_classes.ttimeedit import TTimeEditDialog
-
 class DateTime(Enum):
     Date = 0
     Time = 1
@@ -110,8 +108,8 @@ class TDateTimeEdit(QWidget):
         self.layout().addWidget(self._timeEdit_pushButton)
         self._button_container.addStretch(1)
 
-        self._timeEdit_editDialog = TTimeEditDialog(self, self._dateTime)
-        self._dateEdit_editDialog = TTimeEditDialog(self, self._dateTime)
+        self._timeEdit_editDialog = None
+        self._dateEdit_editDialog = None
 
         self.__set_styles()
 
