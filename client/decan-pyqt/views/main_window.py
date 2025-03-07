@@ -12,6 +12,7 @@ from PySide6.QtCore import Qt, QDateTime, QDate, QTime
 #     pyside2-uic main_view.ui -o ui_main_view.py
 from views.resources.ui_designs.ui_main_view import Ui_MainWindow
 from views.resources.custom_classes.eventitem import EventItem
+from views.resources.custom_classes.tdateedit import TDateEditDialog
 from views.resources.custom_classes.ttimeedit import TTimeEditDialog
 from views.resources.custom_classes.tdatetimeedit import TDateTimeEdit
 from models.user_model import UserModel
@@ -52,7 +53,8 @@ class MainWindow(QMainWindow):
         self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
 
-        self._ui.timebutton.clicked.connect(self.createDialog)
+        self._ui.timebutton.clicked.connect(self.createTimeDialog)
+        self._ui.dateButton.clicked.connect(self.createDateDialog)
 
     def setup_add_event(self):
         self._ui.AE_CB_userSelect.setModel(self._user_profile_model)
@@ -160,7 +162,11 @@ class MainWindow(QMainWindow):
         query.next()
         return query.value(0)
     
-    def createDialog(self):
-        NewDialog = TTimeEditDialog(self, QDateTime(QDate(1970,1,1), QTime(0,0,0)))
-        NewDialog.show()
+    def createDateDialog(self):
+        NewDialogDate = TDateEditDialog(self)
+        NewDialogDate.show()
+    
+    def createTimeDialog(self):
+        NewDialogTime = TTimeEditDialog(self, QDateTime(QDate(1970,1,1), QTime(0,0,0)))
+        NewDialogTime.show()
     #def clearEvent(self):

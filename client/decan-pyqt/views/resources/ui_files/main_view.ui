@@ -413,12 +413,25 @@
         <rect>
          <x>430</x>
          <y>230</y>
-         <width>100</width>
+         <width>111</width>
          <height>32</height>
         </rect>
        </property>
        <property name="text">
-        <string>Open TimeDia</string>
+        <string>Open TimeDialog</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="dateButton">
+       <property name="geometry">
+        <rect>
+         <x>429</x>
+         <y>280</y>
+         <width>111</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Open DateDialog</string>
        </property>
       </widget>
      </widget>

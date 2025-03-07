@@ -225,7 +225,7 @@ class TimeSelect(QWidget):
         except Exception as e:
             print(f"### Reconstruction of ui for object {str(self.objectName())} failed:",e)
 
-class TTimeEditDialog(QDialog):
+class  TTimeEditDialog(QDialog):
     """ A T(ouch)TimeEditDialog QDialog that implements seamless touch scrolling functionality in a base QDialogue,
         based on design implementations that currently exist (for instance, via iPhone Calendars).
     """

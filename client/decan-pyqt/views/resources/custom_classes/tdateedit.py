@@ -4,7 +4,7 @@ from enum import Enum
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF, Signal
 from PySide6.QtWidgets import QDialog, QPushButton, QHBoxLayout, QWidget, QLabel, QCalendarWidget, QSpinBox
-from PySide6.QtWidgets import QSizePolicy, QToolButton, QMenu
+from PySide6.QtWidgets import QSizePolicy, QToolButton, QMenu, QVBoxLayout
 from PySide6.QtGui import QFont, QIcon
 
 import views.resources.assets.rss 
@@ -15,6 +15,7 @@ class DateSelect(QCalendarWidget):
         super().__init__(parent)
         self.theme=theme
         self.__setup_ui()
+        self.__set_styles()
         self.__setup_connections()
 
     def __setup_ui(self):
@@ -23,7 +24,8 @@ class DateSelect(QCalendarWidget):
 
         self._header = self.findChild(QHBoxLayout) # Find _header
         self._nav = self.findChild(QWidget, "qt_calendar_navigationbar")
-        self._nav.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        self._nav.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        self._nav.setMaximumHeight(60)
         self._nav.setContentsMargins(0,0,0,0)
         self._header.setContentsMargins(0,0,0,0)
 
@@ -47,8 +49,19 @@ class DateSelect(QCalendarWidget):
         
         self._yearLabel = QLabel(self._nav, text=str(self._yearEdit.value()))
         self._yearUpButton = QPushButton(icon=QIcon(f":/icons/arrows/arrow_up_{self.theme}.svg"))
-        self._yearDownButton = QPushButton(icon=QIcon(f":/icons/arrows/arrow_down_{self.theme}.svg"))
+        self._yearDownButton = QPushButton(icon=QIcon(f":/icons/arrows/arrow_down_{self.theme}.svg")) 
 
+        self._header.addWidget(self._yearUpButton)
+        self._header.addWidget(self._yearDownButton)
+        self._header.addWidget(self._yearLabel)
+        self._monthButton.show(), self._header.addWidget(self._monthButton)
+        self._prevMonth.show(), self._header.addWidget(self._prevMonth)
+        self._nextMonth.show(), self._header.addWidget(self._nextMonth)
+
+    def __set_styles(self):
+        if (self.theme == 'dark'): c = 0
+        else: c = 255
+        b = 255 - c
         self._yearLabel.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
         self._yearUpButton.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
         self._yearDownButton.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
@@ -61,27 +74,61 @@ class DateSelect(QCalendarWidget):
         self._monthButton.setFont(fontStyle)
         self._monthButton.setContentsMargins(2,0,2,0)
 
-        self._nav.setStyleSheet("background-color: grey;"
-                                "border-radius: 4px;")
-        self._yearUpButton.setStyleSheet("background-color: rgba(0,0,0,0.5);"
-                                         "border-radius: 0px;"
-                                         "padding-left: 4px;"
-                                         "padding-right: 4px;"
-                                         "border-top-left-radius: 4px;"
-                                         "border-bottom-left-radius: 4px;")
-        self._yearDownButton.setStyleSheet("background-color: rgba(0,0,0,0.5);"
-                                           "border-radius: 0px;"
-                                           "padding-left: 4px;"
-                                           "padding-right: 4px;"
-                                           "border-left: 1px solid rgba(255, 255, 255, 0.5);")
-        self._yearLabel.setStyleSheet("background-color: rgba(0,0,0,0.5);"
-                                      "padding: 2px;"
-                                      "border-radius: 0px;"
-                                      "border-left: 1px solid rgba(255, 255, 255, 0.5);")
-        self._monthButton.setStyleSheet("background-color: rgba(0,0,0,0.5);"
-                                        "border-radius: 0px;"
-                                        "text-align: left;"
-                                        "border-left: 1px solid rgba(255, 255, 255, 0.5);")
+        self.setStyleSheet("background-color: transparent;")
+        self._nav.setStyleSheet(f"background-color: rgba({c}, {c}, {c}, 0.5);"
+                                "border-radius: 4px;"
+                                "padding-left: 4px;"
+                                "padding-right: 4px;"
+                                f"border-left: 1px solid rgba({b}, {b}, {b}, 0.5);")
+        self._yearUpButton.setStyleSheet(f"""
+QPushButton {{
+    /* Base state */
+    border-radius: 0px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-left: 0px solid rgba(0,0,0,0);
+}}
+
+/* Pressed state */
+QPushButton:pressed {{
+    background-color: rgba(122, 122, 122, 0.5);
+}}
+""")
+        self._yearDownButton.setStyleSheet(f"""
+QPushButton {{
+    border-radius: 0px;
+}}
+
+/* Pressed state */
+QPushButton:pressed {{
+    background-color: rgba(122, 122, 122, 0.5);
+}}
+""")
+        
+        self._yearLabel.setStyleSheet(f"""
+QLabel {{
+    border-radius: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
+    color: rgba({b},{b},{b}, 1);
+}}
+""")
+        self._monthButton.setStyleSheet(f"""
+QToolBox{{         
+    /* Base state */                     
+    border-radius: 0px;
+    color: rgba({b},{b},{b}, 1);
+}}
+
+QToolBox[popupMode="1"] {{                            
+    padding-left: 10px;
+}}
+
+/* Pressed state */
+QToolBox:pressed{{
+    background-color: rgba(122, 122, 122, 0.5);
+}}
+""")
         self._monthMenu.setStyleSheet("background-color: rgba(125, 125, 125, 0.8);"
                                       "border-left: 0px rgba(0,0,0,0);"
                                       "border-bottom-left-radius: 4px;"
@@ -100,14 +147,6 @@ class DateSelect(QCalendarWidget):
                                       "border-bottom-right-radius: 4px;"
                                       "border-left: 1px solid rgba(255, 255, 255, 0.5);"
                                       f"qproperty-icon: url(:/icons/arrows/arrow_right_{self.theme}.svg);")
-                                      
-
-        self._header.addWidget(self._yearUpButton)
-        self._header.addWidget(self._yearDownButton)
-        self._header.addWidget(self._yearLabel)
-        self._monthButton.show(), self._header.addWidget(self._monthButton)
-        self._prevMonth.show(), self._header.addWidget(self._prevMonth)
-        self._nextMonth.show(), self._header.addWidget(self._nextMonth)
 
     def __setup_connections(self):
         self._yearUpButton.clicked.connect(lambda: self._stepUpYearEdit())
@@ -148,8 +187,29 @@ class DateSelect(QCalendarWidget):
         self._yearEdit.hide(), self._yearButton.hide()
 
 class TDateEditDialog(QDialog):
-    def __init__(self, parent = ..., f = ...):
-        super().__init__(parent, f)
-        self._dateSelect = DateSelect
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.__setup_ui()
+        self.__setup_styles()
 
-    def dateSelect(self): return self._dateSelect
+    def __setup_ui(self):
+        self._layer_base = QVBoxLayout(self)
+        self._layer_base.setObjectName("Layout_base")
+        self._lb_dateSelect = DateSelect(self, theme='light')
+        self._layer_base.addWidget(self._lb_dateSelect)
+
+        self._layer1_footer = QHBoxLayout(self)
+        self._l1f_confirmPB = QPushButton(parent=self, text='Confirm')
+        self._l1f_cancelPB = QPushButton(parent=self, text='Cancel')
+        self._layer1_footer.addWidget(self._l1f_confirmPB)
+        self._layer1_footer.addWidget(self._l1f_cancelPB)
+        self._layer1_footer.setObjectName("Layout_footer")
+
+        self._layer_base.addLayout(self._layer1_footer)
+
+    def __setup_styles(self):
+        self.layout().setContentsMargins(0,0,0,0)
+        self.setMinimumSize(400, 300)
+        self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+
+    def dateSelect(self): return self._lb_dateSelect
