@@ -149,6 +149,11 @@ QToolButton#qt_calendar_monthbutton {{
     padding: 4px;
     background-color: rgba({c}, {c}, {c}, {a});
     color: rgba({b}, {b}, {b}, {a});
+    border: none;
+}}
+
+#qt_calendar_monthbutton * {{
+    border: none;
 }}
 
 QToolButton#qt_calendar_monthbutton::menu-indicator {{
@@ -163,36 +168,30 @@ QToolButton#qt_calendar_monthbutton::menu-indicator:pressed {{
     image: url(":/icons/arrows/arrow_down_red.svg");
 }}
 
-#qt_calendar_monthbutton *{{
-    border: 0px solid rgba(0,0,0,0)
-}}
-
 QMenu#qt_calendar_monthmenu {{
     background-color: rgba({c}, {c}, {c}, 0.5);
+    padding-top: 0px;
+    padding-bottom: 0px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    margin: 2px;
 }}
 
 QMenu#qt_calendar_monthmenu::item {{
-    background: transparent;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 4px;
     padding-bottom: 4px;
-    border-top: 1px solid rgba({b}, {b}, {b}, {a});
+    border-bottom: 1px solid rgba({b}, {b}, {b}, {a});
 }}
 
 QMenu#qt_calendar_monthmenu::item:selected {{
-    background: rgba(255, 80, 80, 0.9);
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+    background: rgba(255, 80, 80, 0.7);
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
 }}
 
 QMenu#qt_calendar_monthmenu::item:disabled {{
     color: rgba(90, 90, 90, 0.9);
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
 }}
 
 QToolButton#qt_calendar_prevmonth {{
@@ -273,6 +272,9 @@ QToolButton:pressed {{
         self._yearEdit.hide(), self._yearButton.hide()
 
     def _updateYearComponents(self, value):
+        """ Private access function. As _yearLabel is dependent on changes passed to the internal spinbox, 
+            and the _prev & _next year buttons need to not exceed date bounds, this function is ran everytime
+            the value is changed."""
         self._yearLabel.setText(str(value))
         if (value == self.minimumDate().year()): self._prevYear.setDisabled(True)
         elif (value == self.maximumDate().year()): self._nextYear.setDisabled(True)
