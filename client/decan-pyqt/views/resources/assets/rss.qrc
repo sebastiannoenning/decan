@@ -8,5 +8,9 @@
         <file>arrow_right_dark.svg</file>
         <file>arrow_up_dark.svg</file>
         <file>arrow_up_light.svg</file>
+        <file>arrow_left_red.svg</file>
+        <file>arrow_right_red.svg</file>
+        <file>arrow_down_red.svg</file>
+        <file>arrow_up_red.svg</file>
     </qresource>
 </RCC>

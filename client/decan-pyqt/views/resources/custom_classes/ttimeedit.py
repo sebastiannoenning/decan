@@ -227,13 +227,14 @@ class TimeSelect(QWidget):
 
 class  TTimeEditDialog(QDialog):
     """ A T(ouch)TimeEditDialog QDialog that implements seamless touch scrolling functionality in a base QDialogue,
-        based on design implementations that currently exist (for instance, via iPhone Calendars).
+        based on design implementations that currently exist (for instance, via iPhone Time SpinBoxes).
     """
     def __init__(self, 
                  parent, 
                  cur_QDT: QDateTime, 
                  min_QDT=QDateTime(QDate(0000,0,0),QTime(0,0,0,0)), 
-                 minuteType=TimeType.SimpleMinutes):
+                 minuteType=TimeType.SimpleMinutes,
+                 theme='light'):
         super().__init__(parent)
         self.minimumDateTime = min_QDT
         self.currentDateTime = cur_QDT
@@ -284,6 +285,9 @@ class  TTimeEditDialog(QDialog):
             Qt.WindowType.FramelessWindowHint | 
             Qt.WindowType.WindowStaysOnTopHint) #sets Window to clear"""
         self.setWindowModality(Qt.WindowModality.ApplicationModal) #sets Dialog to override background application until closed
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+
+        self.setWindowOpacity(0.9)
 
         self._l1_hours_scrollArea.setWidgetResizable(True)
         self._l1_mins_scrollArea.setWidgetResizable(True) 

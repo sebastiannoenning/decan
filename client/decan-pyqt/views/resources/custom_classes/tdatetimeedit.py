@@ -180,7 +180,7 @@ class TDateTimeEdit(QWidget):
     def time(self): return self._dateTime.time()
 
     # Reimplemented paintEvent for advanced styling
-    def paintEvent(self, event):
+    def paintEvent(self, pe):
         opt = QStyleOption()
         opt.initFrom(self)
         p = QPainter(self)
