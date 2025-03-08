@@ -64,9 +64,9 @@ class DateSelect(QCalendarWidget):
         self.__setup_calendar_style()
 
     def __set_header_style(self):
-        if (self.theme == 'light'): c = 255
-        else: c = 20
-        b, a = 255 - c, 1
+        if (self.theme == 'light'): c, b = 255, 30
+        else: c, b = 20, 255
+        a = 1
 
         self._nav.setMaximumHeight(60)
         self._nav.setContentsMargins(0,0,0,0)
@@ -211,27 +211,36 @@ QToolButton:pressed {{
 """)
         
     def __setup_calendar_style(self):
-        if (self.theme == 'light'): c = 30
-        else: c = 255
-        b, a = 255 - c, 1
+        if (self.theme == 'light'): c, b = 255, 30
+        else: c, b = 20, 255
+        a = 1
+
+        self.setFont(QFont('Arial', 15))
+
         self.setFirstDayOfWeek(Qt.DayOfWeek.Sunday)
         self.setHorizontalHeaderFormat(QCalendarWidget.HorizontalHeaderFormat.ShortDayNames)
 
         weekend_text = QTextCharFormat()
-        weekend_text.setFont(QFont('Arial',13))
+        weekend_text.setFont(QFont('Arial',15))
         weekend_text.setFontCapitalization(QFont.Capitalization.AllUppercase)
         weekend_text.setForeground(QColor(255, 80, 80, 255))
 
         weekday_text = QTextCharFormat(weekend_text)
-        weekday_text.setForeground(QColor(b, b, b, 255))
-        weekday_text.setBackground(QColor(c, c, c, 255))
+        weekday_text.setForeground(QColor(c, c, c, 255))
+        weekday_text.setBackground(QColor(b, b, b, 255))
 
         self.setHeaderTextFormat(weekday_text)
         self.setWeekdayTextFormat(Qt.DayOfWeek.Saturday, weekend_text)
         self.setWeekdayTextFormat(Qt.DayOfWeek.Sunday, weekend_text)
 
         palette = self.palette()
+        palette.setColor(QPalette.ColorRole.Base, QColor(c, c, c))
         palette.setColor(QPalette.ColorRole.Highlight, QColor(255, 80, 80))
+
+        palette.setColor(QPalette.ColorRole.Text, QColor(b, b, b))
+        palette.setColor(QPalette.ColorRole.HighlightedText, QColor(255, 255, 255))
+        palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text, QColor(100, 100, 100))
+
         self.setPalette(palette)
 
     def __setup_connections(self):
@@ -240,11 +249,11 @@ QToolButton:pressed {{
         self._yearEdit.valueChanged.connect(lambda value: self._updateYearComponents(value))
 
     def setMinimumDate(self, date):
-        if (self.selectedDate().year() < date.year()): self._yearLabel.setText(date.year())
+        if (self.selectedDate().year() < date.year()): self._yearEdit.valueChanged.emit()
         super().setMinimumDate(date)
     
     def setMaximumDate(self, date):
-        if (self.selectedDate().year() > date.year()): self._yearLabel.setText(date.year())
+        if (self.selectedDate().year() > date.year()): self._yearEdit.valueChanged.emit()
         super().setMaximumDate(date)
 
     """ QCalendarWidget has a private model & signal/slot connections it uses to update the view with.
@@ -291,7 +300,7 @@ class TDateEditDialog(QDialog):
     def __setup_ui(self):
         self._layer_base = QVBoxLayout(self)
         self._layer_base.setObjectName("Layout_base")
-        self._lb_dateSelect = DateSelect(self, theme='light')
+        self._lb_dateSelect = DateSelect(self, theme='dark')
         self._layer_base.addWidget(self._lb_dateSelect)
 
         self._layer1_footer = QHBoxLayout(self)
@@ -303,15 +312,23 @@ class TDateEditDialog(QDialog):
 
         self._layer_base.addLayout(self._layer1_footer)
 
-        self._lb_dateSelect.setMinimumDate(QDate(2024,12,15))
-
     def __setup_styles(self):
-        self.layout().setContentsMargins(0,0,0,0)
-        self.setMinimumSize(400, 300)
-        self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
-
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowOpacity(0.9)
+        self.setMinimumSize(500, 400)
+
+        self.layout().setContentsMargins(0,0,0,0)
+        self._layer1_footer.setContentsMargins(0,0,0,0)
+    
+        self.layout().setSpacing(0)
+        self._layer1_footer.setSpacing(0)
+
+        self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        self._l1f_confirmPB.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        self._l1f_cancelPB.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        
+        self._l1f_confirmPB.setMaximumHeight(40)
+        self._l1f_cancelPB.setMaximumHeight(40)
 
 
     def dateSelect(self): return self._lb_dateSelect
