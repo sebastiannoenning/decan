@@ -154,6 +154,7 @@ QToolButton#qt_calendar_monthbutton {{
 
 #qt_calendar_monthbutton * {{
     border: none;
+    color: rgba({b}, {b}, {b}, {a});
 }}
 
 QToolButton#qt_calendar_monthbutton::menu-indicator {{
