@@ -2,10 +2,10 @@ import sys, math, re
 from enum import Enum
 
 from PySide6 import QtCore
-from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF
+from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF, Signal
 from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QDialogButtonBox
 from PySide6.QtWidgets import QSizePolicy, QScroller, QScrollerProperties
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QPalette, QColor
 
 class TimeType(Enum):
     Hours = 0
@@ -30,7 +30,7 @@ class TimeSelect(QWidget):
     def __init__(self, parent, 
                  type: TimeType, 
                  min_val=0, 
-                 labelStyle=QFont("Arial",18)):
+                 labelStyle=QFont("Arial",20)):
         super().__init__(parent)
         self.type = type
 
@@ -54,6 +54,8 @@ class TimeSelect(QWidget):
         self.labelContainer = QVBoxLayout(self)
 
         self.labelStyle = labelStyle
+
+        self._selected = None
 
         self.setObjectName(f"TimeSelect_{hex(id(self))}")
 
@@ -82,7 +84,7 @@ class TimeSelect(QWidget):
         return R
 
     def __approxFunc(self, x, P, A, O=0):
-        """ A function for calculating the current stateHandler/entry of the infinite scroll area
+        """ A function for calculating the current _stateHandler/entry of the infinite scroll area
             #   Based on function 'f(x) = (x mod P) ÷ (P ÷ A)' 
             #   Where P is Period, & A is Amplitude
             #   O is optional for removing early values from approximation (for instance, setting minimum time)
@@ -102,7 +104,30 @@ class TimeSelect(QWidget):
                         and the offset (the middle of the visible scrollArea portion) together.
                 ↪   truncated so that the lowest possible representer of an area is selected
         """
+        self._clearSelected()
+        self._setSelected(math.trunc(offset / self.returnInterval()))
         return self._mult * math.trunc(self.__approxFunc(offset, self.period, self._entries, self._locked))
+    
+    def _setSelected(self, val):
+        self._selected = val
+        palette, font = QPalette(self.labels[self._selected].palette()), QFont(self.labels[self._selected].font())
+        palette.setColor(QPalette.ColorRole.WindowText, QColor(255,80,80))
+        font.setBold(True)
+        self.labels[self._selected].setPalette(palette)
+        self.labels[self._selected].setFont(font)
+
+    def _clearSelected(self):
+        if (self._selected != None):
+            palette, font = QPalette(self.labels[self._selected].palette()), QFont(self.labels[self._selected].font())
+            palette.setColor(QPalette.ColorRole.WindowText, QColor(255,255,255))
+            font.setBold(False)
+            self.labels[self._selected].setPalette(palette)
+            self.labels[self._selected].setFont(font)
+            self._selected = None
+
+    def clearSelected(self):
+        """ Public access for clearSelected """
+        self._clearSelected()
     
     def returnMinimumVal(self):
         return self._locked * self._mult
@@ -151,6 +176,7 @@ class TimeSelect(QWidget):
         """
             Public access function, returns exact middle label from the offset
         """
+        self._clearSelected()
         m_label, offset = (round(len(self.labels) / 2)), (pagestep / 2) # Middle Label & Offset
         return (
             self.labels[m_label].pos().y()
@@ -229,6 +255,8 @@ class  TTimeEditDialog(QDialog):
     """ A T(ouch)TimeEditDialog QDialog that implements seamless touch scrolling functionality in a base QDialogue,
         based on design implementations that currently exist (for instance, via iPhone Time SpinBoxes).
     """
+    timeSelected = Signal(QTime)
+
     def __init__(self, 
                  parent, 
                  cur_QDT: QDateTime, 
@@ -242,7 +270,7 @@ class  TTimeEditDialog(QDialog):
 
         self._hours, self._minutes = 0, 0
         self._function_lock = False
-        self._l1_mins_TimeSelect_ACTIVE = dict()
+        self._l1t_mins_TimeSelect_ACTIVE = dict()
         self._active = 'default'
 
         self.__setup_ui()
@@ -254,31 +282,38 @@ class  TTimeEditDialog(QDialog):
 
         self._layer0_base = QVBoxLayout(self)
 
-        self._layer1_times = QHBoxLayout(self)   #   Horizontal box layout for time selects
-            
-        self._l1_hours_scrollArea = QScrollArea(self)
-        if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
-            and (self.minimumDateTime.time().hour() > 0)): 
-            self._l1_hours_TimeSelect = TimeSelect(self, TimeType.Hours, self.minimumDateTime.time().hour())
-            self._active = 'alternate'
-        else: self._l1_hours_TimeSelect = TimeSelect(self, TimeType.Hours)
-        self._l1_hours_scrollArea.setWidget(self._l1_hours_TimeSelect)
-        self._l1_hours_timeScroller = self.__create_drag_scroller(self._l1_hours_scrollArea)
-
-        self._l1_mins_scrollArea = QScrollArea(self)
-
-        self._l1_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self.minuteType)  
-        self._l1_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self.minuteType, self.minimumDateTime.time().minute())
-        self._l1_mins_scrollArea.setWidget(self._l1_mins_TimeSelect_ACTIVE[self._active])
-        self._l1_mins_timeScroller = self.__create_drag_scroller(self._l1_mins_scrollArea)
-
-        self._layer1_times.addWidget(self._l1_hours_scrollArea)
-        self._layer1_times.addWidget(self._l1_mins_scrollArea)
-        
-        self._l0_confirm_pushButton = QPushButton(text="Confirm", parent=self)
+        self._layer1_times = QHBoxLayout()   #   Horizontal box layout for time selects
+        self._layer1_buttons = QHBoxLayout()
 
         self._layer0_base.addLayout(self._layer1_times)
-        self._layer0_base.addWidget(self._l0_confirm_pushButton)
+        self._layer0_base.addLayout(self._layer1_buttons)
+            
+        self._l1t_hours_scrollArea = QScrollArea(self)
+        if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
+            and (self.minimumDateTime.time().hour() > 0)): 
+            self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours, self.minimumDateTime.time().hour())
+            self._active = 'alternate'
+        else: self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours)
+        self._l1t_hours_scrollArea.setWidget(self._l1t_hours_TimeSelect)
+        self._l1t_hours_timeScroller = self.__create_drag_scroller(self._l1t_hours_scrollArea)
+
+        self._l1t_mins_scrollArea = QScrollArea(self)
+
+        self._l1t_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self.minuteType)  
+        self._l1t_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self.minuteType, self.minimumDateTime.time().minute())
+        self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
+        self._l1t_mins_timeScroller = self.__create_drag_scroller(self._l1t_mins_scrollArea)
+
+        self._layer1_times.addWidget(self._l1t_hours_scrollArea)
+        self._layer1_times.addWidget(self._l1t_mins_scrollArea)
+        
+        self._l1b_confirm_pushButton = QPushButton(text="Confirm", parent=self)
+        self._l1b_cancel_pushButton = QPushButton(text="Cancel", parent=self)
+        self._layer1_buttons.addWidget(self._l1b_confirm_pushButton)
+        self._layer1_buttons.addWidget(self._l1b_cancel_pushButton)
+
+        self._l1b_confirm_pushButton.setObjectName("datetime_dialog_confirm_pushbutton")
+        self._l1b_cancel_pushButton.setObjectName("datetime_dialog_cancel_pushbutton")
 
     def __set_styles(self):
         """self.setWindowFlags(
@@ -289,35 +324,66 @@ class  TTimeEditDialog(QDialog):
 
         self.setWindowOpacity(0.9)
 
-        self._l1_hours_scrollArea.setWidgetResizable(True)
-        self._l1_mins_scrollArea.setWidgetResizable(True) 
+        self._l1t_hours_scrollArea.setWidgetResizable(True)
+        self._l1t_mins_scrollArea.setWidgetResizable(True) 
 
-        self.setStyleSheet(""" 
-            QDialog {
-                border: 1px;
-                border-radius: 5px;
-                padding: 0px;
-                margin: 0px;
-            }""" """
-            QScrollArea {
-                background : transparent;
-                border: 0px;
-            }""" """
-            QScrollBar {
-                width: 0px;
-                height: 0px;
-            }""" """
-            QPushButton {
-                height: 20px;
-            }"""
-        )
+        self.setStyleSheet(f"""
+QScrollArea {{
+    background: transparent;
+    border: 0px;
+}}
+QScrollBar {{
+    width: 0px;
+    height: 0px;
+}}          
+    
+#datetime_dialog {{
+    border-radius: 4px
+}}  
 
-        self._l0_confirm_pushButton.setFont(QFont("Arial",16))
-        self._l0_confirm_pushButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+/*#################### DIALOG BUTTONS ####################*/
+                           
+QPushButton#datetime_dialog_confirm_pushbutton, QPushButton#datetime_dialog_cancel_pushbutton {{
+    background-color: rgba(30, 30, 30, 1);
+    border: none;
+    border-radius: 0px;
+    padding: 8px;
+}}
+
+QPushButton#datetime_dialog_confirm_pushbutton {{
+    border-bottom-left-radius: 4px;
+    border: none;
+}}
+
+QPushButton#datetime_dialog_cancel_pushbutton {{
+    border-bottom-right-radius: 4px;
+    border-left: 1px solid rgba(100,100,100,1)
+}}
+                           
+QPushButton#datetime_dialog_confirm_pushbutton:pressed {{
+    /* Pressed state */
+    background: rgba(140, 255, 140, 1);
+}}
+                           
+QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
+    /* Pressed state */
+    background: rgba(255, 80, 80, 1);
+}}
+""")
+        
+        self._l1b_confirm_pushButton.setFont(QFont("Arial",18))
+        self._l1b_cancel_pushButton.setFont(QFont("Arial",18))
+
+        self._l1b_confirm_pushButton.setMaximumHeight(40)
+        self._l1b_cancel_pushButton.setMaximumHeight(40)
+
+        self._l1b_confirm_pushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        self._l1b_cancel_pushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
 
         self.layout().setSpacing(0)
         self._layer0_base.setSpacing(0)
         self._layer1_times.setSpacing(0)
+        self._layer1_buttons.setSpacing(0)
 
         self.setContentsMargins(
             0,          #Left
@@ -339,8 +405,8 @@ class  TTimeEditDialog(QDialog):
             )
         
         pref_height = (
-            (5 * self._l1_hours_TimeSelect.returnInterval())
-            + self._l0_confirm_pushButton.sizeHint().height()
+            (5 * self._l1t_hours_TimeSelect.returnInterval())
+            + self._l1b_confirm_pushButton.sizeHint().height()
             - 20
             )
 
@@ -351,47 +417,48 @@ class  TTimeEditDialog(QDialog):
         self.setMaximumHeight(pref_height)
 
         self.adjustSize()
-        self._l0_confirm_pushButton.adjustSize()
+        self._l1b_confirm_pushButton.adjustSize()
 
     def __setup_connections(self):
-        """self._l0_confirm_pushButton.clicked.connect(lambda: print("Placeholder"))"""
+        self._l1b_confirm_pushButton.clicked.connect(lambda: self.dialogueAccepted())
+        self._l1b_cancel_pushButton.clicked.connect(lambda: self.dialogueRejected())
 
-        self._l1_hours_timeScroller.stateChanged.connect(
+        self._l1t_hours_timeScroller.stateChanged.connect(
             lambda state: 
-            self.stateHandler(
+            self._stateHandler(
                 state,
-                self._l1_hours_TimeSelect,
+                self._l1t_hours_TimeSelect,
                 int(
-                    self._l1_hours_timeScroller.finalPosition().y() + 
-                    (self._l1_hours_scrollArea.verticalScrollBar().pageStep()/2)
+                    self._l1t_hours_timeScroller.finalPosition().y() + 
+                    (self._l1t_hours_scrollArea.verticalScrollBar().pageStep()/2)
                 )
                 ))
-        self._l1_mins_timeScroller.stateChanged.connect(
+        self._l1t_mins_timeScroller.stateChanged.connect(
             lambda state: 
-            self.stateHandler(
+            self._stateHandler(
                 state,
-                self._l1_mins_TimeSelect_ACTIVE[self._active],
+                self._l1t_mins_TimeSelect_ACTIVE[self._active],
                 int(
-                    self._l1_mins_timeScroller.finalPosition().y() +
-                    (self._l1_mins_scrollArea.verticalScrollBar().pageStep()/2)
+                    self._l1t_mins_timeScroller.finalPosition().y() +
+                    (self._l1t_mins_scrollArea.verticalScrollBar().pageStep()/2)
                 )
                 ))
         
-        self._l1_hours_scrollArea.verticalScrollBar().valueChanged.connect(
+        self._l1t_hours_scrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
             self._infiniteScroll(
                 value,
-                self._l1_hours_scrollArea,
-                self._l1_hours_timeScroller,
-                self._l1_hours_TimeSelect
+                self._l1t_hours_scrollArea,
+                self._l1t_hours_timeScroller,
+                self._l1t_hours_TimeSelect
                 ))
-        self._l1_mins_scrollArea.verticalScrollBar().valueChanged.connect(
+        self._l1t_mins_scrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
             self._infiniteScroll(
                 value,
-                self._l1_mins_scrollArea,
-                self._l1_mins_timeScroller,
-                self._l1_mins_TimeSelect_ACTIVE[self._active]
+                self._l1t_mins_scrollArea,
+                self._l1t_mins_timeScroller,
+                self._l1t_mins_TimeSelect_ACTIVE[self._active]
                 ))
         
     def __create_drag_scroller(self, viewport: QScrollArea):
@@ -415,7 +482,7 @@ class  TTimeEditDialog(QDialog):
         new_properties.setScrollMetric(
             QScrollerProperties.ScrollMetric.ScrollingCurve, QEasingCurve(QEasingCurve.Type.OutExpo))
         new_properties.setScrollMetric( #DecelerationFactor is a percentage decrease of velocity every frame
-            QScrollerProperties.ScrollMetric.DecelerationFactor, 0.01) #I.e, around 1% each frame
+            QScrollerProperties.ScrollMetric.DecelerationFactor, 0.01) #I.e, around 0.5% each frame
         new_properties.setScrollMetric( # at 60 frames per second
             QScrollerProperties.ScrollMetric.FrameRate, QScrollerProperties.FrameRates.Fps60)
         new_properties.setScrollMetric(
@@ -439,10 +506,14 @@ class  TTimeEditDialog(QDialog):
 
     @Slot(QScroller.State)
     #Handle stateChanges triggered by TimeSelect
-    def stateHandler(self, state, TimeSelect: TimeSelect, pagestep):
+    def _stateHandler(self, state, TimeSelect: TimeSelect, pagestep):
         if (state == QScroller.State.Inactive):
             final_val = TimeSelect.returnCurrentVal(pagestep)
             self._updateCurrentVarsAndQTime(final_val, TimeSelect)
+            self._l1b_confirm_pushButton.setEnabled(True)
+        else:
+            if (self._l1b_confirm_pushButton.isEnabled()): self._l1b_confirm_pushButton.setDisabled(True)
+            TimeSelect.clearSelected()
         
     def _updateCurrentVarsAndQTime(self, f_val: int, TimeSelect: TimeSelect):
         if (TimeSelect.Type() == TimeType.Hours):
@@ -480,8 +551,8 @@ class  TTimeEditDialog(QDialog):
             self._updateMinutesActiveTimeSelect()
 
     def _updateMinutesActiveTimeSelect(self):
-        self._l1_mins_scrollArea.takeWidget()
-        self._l1_mins_scrollArea.setWidget(self._l1_mins_TimeSelect_ACTIVE[self._active])
+        self._l1t_mins_scrollArea.takeWidget()
+        self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
         self._updateMinutesPositions()
         self._updateCurrentQTime(test_en=True)
 
@@ -601,16 +672,15 @@ class  TTimeEditDialog(QDialog):
             + (scrollArea.verticalScrollBar().pageStep() / 2)
         )
 
-
     def _updateHoursPositions(self):
-        self._hours = self._updatePositions(TimeSelect    =self._l1_hours_TimeSelect,
-                                            scrollArea    =self._l1_hours_scrollArea,
-                                            timeScroller  =self._l1_hours_timeScroller)
+        self._hours = self._updatePositions(TimeSelect    =self._l1t_hours_TimeSelect,
+                                            scrollArea    =self._l1t_hours_scrollArea,
+                                            timeScroller  =self._l1t_hours_timeScroller)
     
     def _updateMinutesPositions(self):
-        self._minutes = self._updatePositions(TimeSelect    =self._l1_mins_TimeSelect_ACTIVE[self._active],
-                                              scrollArea    =self._l1_mins_scrollArea,
-                                              timeScroller  =self._l1_mins_timeScroller)
+        self._minutes = self._updatePositions(TimeSelect    =self._l1t_mins_TimeSelect_ACTIVE[self._active],
+                                              scrollArea    =self._l1t_mins_scrollArea,
+                                              timeScroller  =self._l1t_mins_timeScroller)
 
     def _setPositions(self):
         self._updateHoursPositions()
@@ -626,10 +696,10 @@ class  TTimeEditDialog(QDialog):
 
         if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
             and (self.minimumDateTime.time() > QTime(0,0,0,0))):
-            self._l1_hours_TimeSelect.changeMinVal(self.minimumDateTime.time().hour())
-            self._l1_mins_TimeSelect_ACTIVE['alternative'].changeMinVal(self.minimumDateTime.time().minute())
+            self._l1t_hours_TimeSelect.changeMinVal(self.minimumDateTime.time().hour())
+            self._l1t_mins_TimeSelect_ACTIVE['alternative'].changeMinVal(self.minimumDateTime.time().minute())
         else:
-            self._l1_hours_TimeSelect.changeMinVal(QTime(0,0,0,0).hour())
+            self._l1t_hours_TimeSelect.changeMinVal(QTime(0,0,0,0).hour())
 
     def resizeEvent(self, event):
         self._setPositions()
@@ -638,3 +708,6 @@ class  TTimeEditDialog(QDialog):
     def showEvent(self, event):
         self._setPositions()
         return super().showEvent(event)
+    
+    def dialogueAccepted(self): self.timeSelected.emit(self.currentDateTime.time()), self.accept()
+    def dialogueRejected(self): self.reject()

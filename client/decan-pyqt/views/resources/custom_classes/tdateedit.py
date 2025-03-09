@@ -85,12 +85,13 @@ class DateSelect(QCalendarWidget):
         self._nextMonth.setMaximumWidth(50)
         self._prevMonth.setMaximumWidth(50)
 
-        fontStyle = QFont('Arial', 18)
-        self._yearLabel.setFont(fontStyle)
+        date_font, month_font = QFont('Arial', 18), QFont('Arial', 16)
+        self._yearLabel.setFont(date_font)
         self._yearLabel.setContentsMargins(2,0,2,0)
         self._yearLabel.setAutoFillBackground(True)
-        self._monthButton.setFont(fontStyle)
+        self._monthButton.setFont(date_font)
         self._monthButton.setContentsMargins(2,0,2,0)
+        self._monthMenu.setFont(month_font)
 
         left_arrow, right_arrow, up_arrow, down_arrow = QIcon(), QIcon(), QIcon(), QIcon()
         left_arrow.addFile(f":/icons/arrows/arrow_left_{self.theme}.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
@@ -293,25 +294,37 @@ QToolButton:pressed {{
             if (self._nextYear.isEnabled() != True): self._nextYear.setDisabled(False)
 
 class TDateEditDialog(QDialog):
+
+    dateSelected = Signal(QDate)
+
     def __init__(self, parent):
         super().__init__(parent)
         self.__setup_ui()
         self.__setup_styles()
+        self.__setup_connections()
 
     def __setup_ui(self):
-        self._layer_base = QVBoxLayout(self)
-        self._layer_base.setObjectName("Layout_base")
+        self.setObjectName("datetime_dialog")
+        self._layer_base = QVBoxLayout(self)          
         self._lb_dateSelect = DateSelect(self, theme='dark')
         self._layer_base.addWidget(self._lb_dateSelect)
 
-        self._layer1_footer = QHBoxLayout(self)
-        self._l1f_confirmPB = QPushButton(parent=self, text='Confirm')
-        self._l1f_cancelPB = QPushButton(parent=self, text='Cancel')
+        self._footer_container = QWidget(self)
+        self._layer1_footer = QHBoxLayout(self._footer_container)                            
+        
+        
+        self._l1f_confirmPB = QPushButton(parent=self, text='Confirm') 
+        self._l1f_cancelPB = QPushButton(parent=self, text='Cancel')       
         self._layer1_footer.addWidget(self._l1f_confirmPB)
         self._layer1_footer.addWidget(self._l1f_cancelPB)
-        self._layer1_footer.setObjectName("Layout_footer")
 
-        self._layer_base.addLayout(self._layer1_footer)
+        self._layer_base.addWidget(self._footer_container)
+
+        self._layer_base.setObjectName("datetime_dialog_layout_base")
+        self._lb_dateSelect.setObjectName("datetime_dialog_dateselect")
+        self._layer1_footer.setObjectName("datetime_dialog_layout_footer")
+        self._l1f_confirmPB.setObjectName("datetime_dialog_confirm_pushbutton")
+        self._l1f_cancelPB.setObjectName("datetime_dialog_cancel_pushbutton")
 
     def __setup_styles(self):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -330,6 +343,57 @@ class TDateEditDialog(QDialog):
         
         self._l1f_confirmPB.setMaximumHeight(40)
         self._l1f_cancelPB.setMaximumHeight(40)
+        self._footer_container.setMaximumHeight(40)
 
+        self._footer_container.setStyleSheet(f"""
 
+#datetime_dialog {{
+    border-radius: 4px
+}}  
+
+/*#################### DIALOG BUTTONS ####################*/
+                           
+QPushButton#datetime_dialog_confirm_pushbutton, QPushButton#datetime_dialog_cancel_pushbutton {{
+    background-color: rgba(30, 30, 30, 1);
+    border: none;
+    border-radius: 0px;
+}}
+
+QPushButton#datetime_dialog_confirm_pushbutton {{
+    border-bottom-left-radius: 4px;
+    border: none;
+}}
+
+QPushButton#datetime_dialog_cancel_pushbutton {{
+    border-bottom-right-radius: 4px;
+    border-left: 1px solid rgba(100,100,100,1)
+}}
+                           
+QPushButton#datetime_dialog_confirm_pushbutton:pressed {{
+    /* Pressed state */
+    background: rgba(140, 255, 140, 1);
+}}
+                           
+QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
+    /* Pressed state */
+    background: rgba(255, 80, 80, 1);
+}}
+""")
+        
+    def __setup_connections(self):
+        self._l1f_confirmPB.clicked.connect(lambda: self.dialogueAccepted())
+        self._l1f_cancelPB.clicked.connect(lambda: self.dialogueRejected())
+
+    def dialogueAccepted(self): self.dateSelected.emit(self._lb_dateSelect.selectedDate), self.accept()
+    def dialogueRejected(self): self.reject()
+
+    def setMinimumDate(self, date: QDate): self._lb_dateSelect.setMinimumDate(date)
+    def setMaximumDate(self, date: QDate): self._lb_dateSelect.setMaximumDate(date)
+    def setSelectedDate(self, date: QDate): self._lb_dateSelect.setSelectedDate(date)
+    def clearMinimumDate(self): self._lb_dateSelect.clearMinimumDate()
+    def clearMaximumDate(self): self._lb_dateSelect.clearMaximumDate()
+    def minimumDate(self): return self._lb_dateSelect.minimumDate()
+    def maximumDate(self): return self._lb_dateSelect.maximumDate()
+    def selectedDate(self): return self._lb_dateSelect.selectedDate()
+    def yearShown(self): return self._lb_dateSelect.yearShown()
     def dateSelect(self): return self._lb_dateSelect
