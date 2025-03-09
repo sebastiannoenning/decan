@@ -345,6 +345,9 @@ class TDateEditDialog(QDialog):
         self._l1f_cancelPB.setMaximumHeight(40)
         self._footer_container.setMaximumHeight(40)
 
+        self._l1f_confirmPB.setFont(QFont("Arial",18))
+        self._l1f_cancelPB.setFont(QFont("Arial",18))
+
         self._footer_container.setStyleSheet(f"""
 
 #datetime_dialog {{
