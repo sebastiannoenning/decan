@@ -118,9 +118,7 @@ class TimeSelect(QWidget):
 
     def _clearSelected(self):
         if (self._selected != None):
-            palette, font = QPalette(self.labels[self._selected].palette()), QFont(self.labels[0].font())
-            palette.setColor(QPalette.ColorRole.WindowText, QColor(255,255,255))
-            font.setBold(False)
+            palette, font = QPalette(self.labels[0].palette()), QFont(self.labels[0].font())
             self.labels[self._selected].setPalette(palette)
             self.labels[self._selected].setFont(font)
             self._selected = None
