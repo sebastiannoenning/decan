@@ -1,1 +1,0 @@
-//format 'select * from './(filename)'

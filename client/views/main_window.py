@@ -33,16 +33,16 @@ class MainWindow(QMainWindow):
         #remove title bar
         #self.setWindowFlag(Qt.FramelessWindowHint)
 
-        self._ui.pages.setCurrentIndex(0)
+        """self._ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
         self.setup_connection()
         self.setup_tables()
         self.setup_links_combo()
-        self.setup_add_event()
+        self.setup_add_event()"""
 
         #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
-    def setup_links_nav(self):
+    """def setup_links_nav(self):
         #defines all links for components in ui
         self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
         self._ui.b_calendar.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
@@ -103,12 +103,12 @@ class MainWindow(QMainWindow):
         self._ui.scrollAreaWidgetContents.setModel(self._event_model)
         #print(self._user_model.rowCount())
         # 
-        """self._event_model2 =  QSqlRelationalTableModel()
+        self._event_model2 =  QSqlRelationalTableModel()
         self._event_model2.setTable("Events") 
         self._event_model2.setRelation(7, QSqlRelation("Users","UserID","Username"))
         self._event_model2.setFilter("UserID = '3'")
         self._event_model2.select()
-        self._ui.scrollAreaWidgetContents.setModel(self._event_model2)"""
+        self._ui.scrollAreaWidgetContents.setModel(self._event_model2)
         
     def setup_connection(self):
         self._database = QSqlDatabase.addDatabase('QMYSQL')
@@ -162,4 +162,4 @@ class MainWindow(QMainWindow):
         query.next()
         return query.value(0)
 
-    #def clearEvent(self):
+    #def clearEvent(self):"""
