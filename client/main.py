@@ -18,4 +18,3 @@ class decan(QApplication):
 if __name__ == "__main__":
     app = decan(sys.argv)
     sys.exit(app.exec())
-ß
