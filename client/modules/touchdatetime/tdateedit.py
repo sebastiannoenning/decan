@@ -7,8 +7,6 @@ from PySide6.QtWidgets import QDialog, QPushButton, QHBoxLayout, QWidget, QLabel
 from PySide6.QtWidgets import QSizePolicy, QToolButton, QMenu, QVBoxLayout, QStyleOption
 from PySide6.QtGui import QFont, QIcon, QColor, QPainter, QTextCharFormat, QPalette, QPixmap
 
-import views.resources.assets.rss
-
 class DateSelect(QCalendarWidget):
     """
         More touch friendly variation of the QCalendarWidget. 'Replaces' year_QSpinBox with Prev & Next Year buttons
