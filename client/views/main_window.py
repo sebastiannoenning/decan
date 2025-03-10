@@ -11,13 +11,14 @@ from PySide6.QtWidgets import QMainWindow
 #     pyside6-uic resources/ui_files/main_view.ui -o resources/ui_designs/ui_main_view.py, or
 #     pyside2-uic main_view.ui -o ui_main_view.py
 
-from models.user_model import UserModel
+from resources.ui.ui_main_window import Ui_main_window
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        """self._ui = Ui_main_window
-        self._ui.setupUi(self)"""
+        self._ui = Ui_main_window()
+        self._ui.setupUi(self)
 
 """class MainWindow(QMainWindow):
     def __init__(self, parent=None):#, model, controller):
