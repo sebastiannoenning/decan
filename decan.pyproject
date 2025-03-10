@@ -2,6 +2,7 @@
     "files": [
         "README.md",
         "client/controllers/services/generate_json.py",
+        "client/main.py",
         "client/models/user_model.py",
         "client/modules/custom_classes/comqt.py",
         "client/modules/custom_classes/editablequerymodel.py",
@@ -14,8 +15,6 @@
         "client/modules/custom_classes/tdatetimeedit.py",
         "client/modules/custom_classes/ttimeedit.py",
         "client/views/main_window.py",
-        "client/views/ui_main_view.py",
-        "main.py",
         "resources/assets/rss.py",
         "resources/assets/rss.qrc",
         "resources/ui/main_window.ui"

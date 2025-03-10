@@ -10,11 +10,7 @@ from PySide6.QtCore import Qt, QDateTime, QDate, QTime
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic resources/ui_files/main_view.ui -o resources/ui_designs/ui_main_view.py, or
 #     pyside2-uic main_view.ui -o ui_main_view.py
-from views.resources.ui_designs.ui_main_view import Ui_MainWindow
-from views.resources.custom_classes.eventitem import EventItem
-from views.resources.custom_classes.tdateedit import TDateEditDialog
-from views.resources.custom_classes.ttimeedit import TTimeEditDialog
-from views.resources.custom_classes.tdatetimeedit import TDateTimeEdit
+from modules
 from models.user_model import UserModel
 
 class MainWindow(QMainWindow):
