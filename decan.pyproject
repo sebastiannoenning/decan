@@ -1,6 +1,6 @@
 {
     "files": [
         "main.py",
-        "form.ui"
+        "main_window.ui"
     ]
 }
