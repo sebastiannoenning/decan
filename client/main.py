@@ -5,19 +5,17 @@ from PySide6.QtWidgets import QApplication, QMainWindow
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
-#     pyside6-uic form.ui -o ui_form.py, or
-#     pyside2-uic form.ui -o ui_form.py
-from ui_form import Ui_main
+#     pyside6-uic main_window.ui -o ui_main_window.py, or
+#     pyside2-uic main_window.ui -o ui_main_window.py
+from views.main_window import MainWindow
 
-class main(QMainWindow):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.ui = Ui_main()
-        self.ui.setupUi(self)
-
+class decan(QApplication):
+    def __init__(self, sys_arg):
+        super(decan, self).__init__(sys_arg)
+        self.main_view = MainWindow()
+        self.main_view.show()
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    widget = main()
-    widget.show()
+    app = decan(sys.argv)
     sys.exit(app.exec())
+ß

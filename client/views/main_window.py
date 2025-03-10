@@ -1,19 +1,25 @@
 # This Python file uses the following encoding: utf-8
 import sys
+
 from datetime import datetime
 
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
-from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtCore import Qt, QDateTime, QDate, QTime
+from PySide6.QtWidgets import QMainWindow
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic resources/ui_files/main_view.ui -o resources/ui_designs/ui_main_view.py, or
 #     pyside2-uic main_view.ui -o ui_main_view.py
-from modules
+
 from models.user_model import UserModel
 
 class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        """self._ui = Ui_main_window
+        self._ui.setupUi(self)"""
+
+"""class MainWindow(QMainWindow):
     def __init__(self, parent=None):#, model, controller):
         super().__init__(parent)
 
@@ -29,16 +35,16 @@ class MainWindow(QMainWindow):
         #remove title bar
         #self.setWindowFlag(Qt.FramelessWindowHint)
 
-        """self._ui.pages.setCurrentIndex(0)
+        self._ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
         self.setup_connection()
         self.setup_tables()
         self.setup_links_combo()
-        self.setup_add_event()"""
+        self.setup_add_event()
 
         #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
-    """def setup_links_nav(self):
+    def setup_links_nav(self):
         #defines all links for components in ui
         self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
         self._ui.b_calendar.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))

@@ -1,22 +1,17 @@
 {
     "files": [
         "README.md",
-        "client/controllers/services/generate_json.py",
         "client/main.py",
         "client/models/user_model.py",
-        "client/modules/custom_classes/comqt.py",
-        "client/modules/custom_classes/editablequerymodel.py",
-        "client/modules/custom_classes/eventitem.py",
-        "client/modules/custom_classes/eventlistview.py",
-        "client/modules/custom_classes/eventlistwrapper.py",
-        "client/modules/custom_classes/eventmodel.py",
-        "client/modules/custom_classes/form.py",
-        "client/modules/custom_classes/tdateedit.py",
-        "client/modules/custom_classes/tdatetimeedit.py",
-        "client/modules/custom_classes/ttimeedit.py",
+        "client/modules/eventlist/eventlistview.py",
+        "client/modules/eventlist/eventlistwrapper.py",
+        "client/modules/touchdatetime/tdateedit.py",
+        "client/modules/touchdatetime/tdatetimeedit.py",
+        "client/modules/touchdatetime/ttimeedit.py",
         "client/views/main_window.py",
         "resources/assets/rss.py",
         "resources/assets/rss.qrc",
-        "resources/ui/main_window.ui"
+        "resources/ui/main_window.ui",
+        "resources/ui/pages/events.ui"
     ]
 }
