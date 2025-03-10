@@ -1,5 +1,6 @@
 import sys, math, re
 from enum import Enum
+from shiboken6 import Shiboken
 
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF, Signal
@@ -210,10 +211,11 @@ class TimeSelect(QWidget):
             if (self._locked == self._entries): self._locked -= 1    #Shouldn't happen, but just in case
             self._period = (self._entries - self._locked)
             self._repeats = self.__determineRepeats(self._entries, self._locked)
+            self._clearSelected()
             self.__reconstruct_ui()
         elif (test_en==True): print("Could not change min_val: Same as previous")
 
-    def __setup_ui(self):
+    def __setup_ui(self, test_en=False):
         """ Adds all labels to the interface.
             #   Uses __approxFunc to fill list with 2 sets of the value range
             #   ↪   i.e, for Hours: fills labelContainer with 0-23 twice
@@ -232,19 +234,24 @@ class TimeSelect(QWidget):
             self.labels[x].setFont(self.labelStyle)
             self.labels[x].setAlignment(Qt.AlignmentFlag.AlignRight)
             self.labelContainer.addWidget(self.labels[x],40,self.labelAlignment)
-        print(f"Total values: {self._period} Repeated: {self._repeats} \nTotal in list: {len(self.labels)}")
+        if (test_en): print(f"Total values: {self._period} Repeated: {self._repeats} \nTotal in list: {len(self.labels)}")
         self.setLayout(self.labelContainer)
         self.period = round(self.sizeHint().height()/self._repeats)
 
-    def __reconstruct_ui(self):
+    def __reconstruct_ui(self, test_en=False):
         """ Internal function for that deletes the active labels in the TimeSelect object & reconstructs the new ui
             on the assumption that the values present are no longer enforceable in the TimeSelect. Should only be
             used when reusing TimeSelects.
         """
         try:
             for x in range(len(self.labels)):
-                self.labelContainer.removeWidget(self.labels[x])
-                self.labels[x].deleteLater()
+                t_label = self.findChild(QLabel, (self.labels[x]).objectName())
+                if (test_en): print(t_label.objectName())
+                self.labelContainer.removeWidget(t_label)
+                t_label.deleteLater()
+                if (test_en): print(Shiboken.isValid(self.labels[x]))
+            if (test_en): print(len(self.labels))
+            self.labels.clear() # Delete all key references (otherwise will break functions reliant on len(labels))
             self.__setup_ui()
         except Exception as e:
             print(f"### Reconstruction of ui for object {str(self.objectName())} failed:",e)
@@ -255,19 +262,18 @@ class  TTimeEditDialog(QDialog):
     """
     timeSelected = Signal(QTime)
 
-    def __init__(self, 
-                 parent, 
-                 cur_QDT: QDateTime, 
-                 min_QDT=QDateTime(QDate(0000,0,0),QTime(0,0,0,0)), 
-                 minuteType=TimeType.SimpleMinutes,
+    def __init__(self, parent, 
+                 cur_QDT    :   QDateTime, 
+                 min_QDT    =   QDateTime(QDate(0000,0,0),QTime(0,0,0,0)), 
+                 minuteType =   TimeType.SimpleMinutes,
                  theme='light'):
         super().__init__(parent)
-        self.minimumDateTime = min_QDT
-        self.currentDateTime = cur_QDT
-        self.minuteType = minuteType
+        self._minimumDateTime = min_QDT
+        self._dateTime = cur_QDT
+        self._minuteType = minuteType
 
         self._hours, self._minutes = 0, 0
-        self._function_lock = False
+        self._function_lock = False         # Flag for locking infinite scroll
         self._l1t_mins_TimeSelect_ACTIVE = dict()
         self._active = 'default'
 
@@ -287,9 +293,9 @@ class  TTimeEditDialog(QDialog):
         self._layer0_base.addLayout(self._layer1_buttons)
             
         self._l1t_hours_scrollArea = QScrollArea(self)
-        if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
-            and (self.minimumDateTime.time().hour() > 0)): 
-            self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours, self.minimumDateTime.time().hour())
+        if ((self._minimumDateTime.date() == self._dateTime.date()) 
+            and (self._minimumDateTime.time().hour() > 0)): 
+            self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours, self._minimumDateTime.time().hour())
             self._active = 'alternate'
         else: self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours)
         self._l1t_hours_scrollArea.setWidget(self._l1t_hours_TimeSelect)
@@ -297,8 +303,8 @@ class  TTimeEditDialog(QDialog):
 
         self._l1t_mins_scrollArea = QScrollArea(self)
 
-        self._l1t_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self.minuteType)  
-        self._l1t_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self.minuteType, self.minimumDateTime.time().minute())
+        self._l1t_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self._minuteType)  
+        self._l1t_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self._minuteType, self._minimumDateTime.time().minute())
         self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
         self._l1t_mins_timeScroller = self.__create_drag_scroller(self._l1t_mins_scrollArea)
 
@@ -528,8 +534,8 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
             self._updateCurrentQTime(test_en=True)
         
     def _updateCurrentQTime(self, test_en=False):
-        self.currentDateTime.setTime(QTime(self._hours, self._minutes, 0, 0))
-        if (test_en == True): print(f"Current time: {self.currentDateTime.time()}")
+        self._dateTime.setTime(QTime(self._hours, self._minutes, 0, 0))
+        if (test_en == True): print(f"Current time: {self._dateTime.time()}")
 
     def _setActiveTimeSelect(self, new: str):
         if (new == self._active):
@@ -689,15 +695,22 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
             #   Requires both new values for reuse.
             #   Uses 'changeMinVal' in TimeSelect to change ui features
         """
-        self.minimumDateTime = new_M_QDT
-        self.currentDateTime = new_C_QDT
+        self._minimumDateTime = new_M_QDT
+        self._dateTime = new_C_QDT
 
-        if ((self.minimumDateTime.date() == self.currentDateTime.date()) 
-            and (self.minimumDateTime.time() > QTime(0,0,0,0))):
-            self._l1t_hours_TimeSelect.changeMinVal(self.minimumDateTime.time().hour())
-            self._l1t_mins_TimeSelect_ACTIVE['alternative'].changeMinVal(self.minimumDateTime.time().minute())
+        print(self._minimumDateTime)
+        print(self._dateTime)
+
+        if ((self._minimumDateTime.date() == self._dateTime.date()) 
+            and (self._minimumDateTime.time() > QTime(0,0,0,0))):
+            self._l1t_hours_TimeSelect.changeMinVal(self._minimumDateTime.time().hour())
+            self._l1t_mins_TimeSelect_ACTIVE['alternate'].changeMinVal(self._minimumDateTime.time().minute())
+            self._setActiveTimeSelect('alternate')
         else:
             self._l1t_hours_TimeSelect.changeMinVal(QTime(0,0,0,0).hour())
+    
+    def setMinimumDateTime(self, new_min: QDateTime): self.changeDates(new_min, self._dateTime)
+    def setCurrentDateTime(self, new_cur: QDateTime): self.changeDates(self._minimumDateTime, new_cur)
 
     def resizeEvent(self, event):
         self._setPositions()
@@ -707,5 +720,5 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
         self._setPositions()
         return super().showEvent(event)
     
-    def dialogueAccepted(self): self.timeSelected.emit(self.currentDateTime.time()), self.accept()
-    def dialogueRejected(self): self.reject()
+    def dialogueAccepted(self): self.timeSelected.emit(self._dateTime.time()), self.accept()
+    def dialogueRejected(self): self.reject(), self.rejected.emit()

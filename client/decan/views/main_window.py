@@ -53,9 +53,6 @@ class MainWindow(QMainWindow):
         self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
         self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
 
-        self._ui.timebutton.clicked.connect(self.createTimeDialog)
-        self._ui.dateButton.clicked.connect(self.createDateDialog)
-
     def setup_add_event(self):
         self._ui.AE_CB_userSelect.setModel(self._user_profile_model)
         self._ui.AE_CB_userSelect.setModelColumn(2)
@@ -65,6 +62,9 @@ class MainWindow(QMainWindow):
                                                           self._ui.AE_DTE_endDTSelect.setMinimumDateTime(
                                                               self._ui.AE_DTE_startDTSelect.dateTime()
                                                           ))
+        
+        self._ui.AE_DTE_startSelect.dateTimeChanged.connect(lambda datetime:
+                                                      self._ui.AE_DTE_endSelect.setMinimumDateTime(datetime))
 
         self._ui.AE_DTE_startDTSelect.setDate(QDate.currentDate())
         self._ui.AE_DTE_endDTSelect.setDate(QDate.currentDate())
@@ -161,12 +161,5 @@ class MainWindow(QMainWindow):
         query.exec()
         query.next()
         return query.value(0)
-    
-    def createDateDialog(self):
-        NewDialogDate = TDateEditDialog(self)
-        NewDialogDate.show()
-    
-    def createTimeDialog(self):
-        NewDialogTime = TTimeEditDialog(self, QDateTime(QDate(1970,1,1), QTime(0,0,0)))
-        NewDialogTime.show()
+
     #def clearEvent(self):

@@ -297,8 +297,10 @@ class TDateEditDialog(QDialog):
 
     dateSelected = Signal(QDate)
 
-    def __init__(self, parent):
+    def __init__(self, parent, 
+                 cur_QDT: QDateTime):
         super().__init__(parent)
+        self._dateTime = cur_QDT
         self.__setup_ui()
         self.__setup_styles()
         self.__setup_connections()
@@ -307,6 +309,7 @@ class TDateEditDialog(QDialog):
         self.setObjectName("datetime_dialog")
         self._layer_base = QVBoxLayout(self)          
         self._lb_dateSelect = DateSelect(self, theme='dark')
+        self._lb_dateSelect.setSelectedDate(self._dateTime.date())
         self._layer_base.addWidget(self._lb_dateSelect)
 
         self._footer_container = QWidget(self)
@@ -387,8 +390,8 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
         self._l1f_confirmPB.clicked.connect(lambda: self.dialogueAccepted())
         self._l1f_cancelPB.clicked.connect(lambda: self.dialogueRejected())
 
-    def dialogueAccepted(self): self.dateSelected.emit(self._lb_dateSelect.selectedDate), self.accept()
-    def dialogueRejected(self): self.reject()
+    def dialogueAccepted(self): self.dateSelected.emit(self._lb_dateSelect.selectedDate()), self.accept()
+    def dialogueRejected(self): self.reject(), self.rejected.emit()
 
     def setMinimumDate(self, date: QDate): self._lb_dateSelect.setMinimumDate(date)
     def setMaximumDate(self, date: QDate): self._lb_dateSelect.setMaximumDate(date)
