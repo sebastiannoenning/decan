@@ -1,11 +1,11 @@
 from typing import Union
 import json
 
-from PySide6.QtWidgets import QFrame, QWidget, QVBoxLayout, QSizePolicy
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from PySide6.QtSql import QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel, QSqlRecord
-from PySide6.QtCore import Qt, QByteArray, Slot
+from PySide6.QtCore import Qt, Slot
 
-from views.resources.custom_classes.eventitem import EventItem
+from eventlist.eventitem import EventItem
 
 class EventListView(QWidget):
     def __init__(self) -> None:

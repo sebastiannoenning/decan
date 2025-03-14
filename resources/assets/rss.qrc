@@ -1,16 +1,63 @@
 <RCC>
     <qresource prefix="/icons/arrows">
-        <file>arrow_left_dark.svg</file>
-        <file>arrow_left_light.svg</file>
-        <file>arrow_down_dark.svg</file>
-        <file>arrow_down_light.svg</file>
+        <file>arrow_up_red.svg</file>
+        <file>arrow_up_light.svg</file>
+        <file>arrow_up_dark.svg</file>
+        <file>arrow_right_red.svg</file>
         <file>arrow_right_light.svg</file>
         <file>arrow_right_dark.svg</file>
-        <file>arrow_up_dark.svg</file>
-        <file>arrow_up_light.svg</file>
         <file>arrow_left_red.svg</file>
-        <file>arrow_right_red.svg</file>
+        <file>arrow_left_light.svg</file>
+        <file>arrow_left_dark.svg</file>
         <file>arrow_down_red.svg</file>
-        <file>arrow_up_red.svg</file>
+        <file>arrow_down_light.svg</file>
+        <file>arrow_down_dark.svg</file>
+    </qresource>
+    <qresource prefix="/icons/user">
+        <file>user_add_red.svg</file>
+        <file>user_add_light.svg</file>
+        <file>user_add_dark.svg</file>
+        <file>profile_2_red.svg</file>
+        <file>profile_2_light.svg</file>
+        <file>profile_2_dark.svg</file>
+    </qresource>
+    <qresource prefix="/icons/nav">
+        <file>setting_red.svg</file>
+        <file>setting_light.svg</file>
+        <file>setting_grey.svg</file>
+        <file>setting_dark.svg</file>
+        <file>menu_board_red.svg</file>
+        <file>menu_board_light.svg</file>
+        <file>menu_board_grey.svg</file>
+        <file>menu_board_dark.svg</file>
+        <file>calendar_red.svg</file>
+        <file>calendar_light.svg</file>
+        <file>calendar_dark.svg</file>
+        <file>burger_red.svg</file>
+        <file>burger_light.svg</file>
+        <file>burger_grey.svg</file>
+        <file>burger_dark.svg</file>
+    </qresource>
+    <qresource prefix="/icons/util">
+        <file>element_red.svg</file>
+        <file>element_light.svg</file>
+        <file>element_dark.svg</file>
+        <file>barcode_red.svg</file>
+        <file>barcode_light.svg</file>
+        <file>barcode_dark.svg</file>
+        <file>add_2_red.svg</file>
+        <file>add_2_light.svg</file>
+        <file>add_2_dark.svg</file>
+        <file>add_1_red.svg</file>
+        <file>add_1_light.svg</file>
+        <file>add_1_dark.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar">
+        <file>calendar_search_red.svg</file>
+        <file>calendar_search_light.svg</file>
+        <file>calendar_search_dark.svg</file>
+        <file>calendar_edit_red.svg</file>
+        <file>calendar_edit_light.svg</file>
+        <file>calendar_edit_dark.svg</file>
     </qresource>
 </RCC>

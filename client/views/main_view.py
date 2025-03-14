@@ -8,17 +8,33 @@ from PySide6.QtWidgets import QMainWindow
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
-#     pyside6-uic resources/ui_files/main_view.ui -o resources/ui_designs/ui_main_view.py, or
-#     pyside2-uic main_view.ui -o ui_main_view.py
+#     pyside6-uic --from-imports resources/ui/main_view.ui -o client/views/main_view_ui.py
 
-from resources.ui.ui_main_window import Ui_main_window
+from .main_view_ui import Ui_main_view
+from .pages.user_view import UserView
 
-
-class MainWindow(QMainWindow):
+class MainView(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._ui = Ui_main_window()
+        self._ui = Ui_main_view()
         self._ui.setupUi(self)
+        self._ui.collapsed.hide()
+        self.setupConnections()
+
+        self._ui.pages.addWidget(UserView(self))
+
+    def setupConnections(self):
+        self._ui.col_toggle.clicked.connect(lambda: self.toggle_nav())
+        self._ui.exp_toggle.clicked.connect(lambda: self.toggle_nav())
+
+    def toggle_nav(self):
+        if (self._ui.collapsed.isVisible()):
+            self._ui.expanded.show()
+            self._ui.collapsed.hide()
+        else: 
+            self._ui.collapsed.show()
+            self._ui.expanded.hide()
+
 
 """class MainWindow(QMainWindow):
     def __init__(self, parent=None):#, model, controller):

@@ -8,10 +8,11 @@
         "client/modules/touchdatetime/tdateedit.py",
         "client/modules/touchdatetime/tdatetimeedit.py",
         "client/modules/touchdatetime/ttimeedit.py",
-        "client/views/main_window.py",
+        "client/views/main_view.py",
         "resources/assets/rss.py",
         "resources/assets/rss.qrc",
-        "resources/ui/main_window.ui",
-        "resources/ui/pages/events.ui"
+        "resources/ui/main_view.ui",
+        "resources/ui/pages/event_view.ui",
+        "resources/ui/pages/user_view.ui"
     ]
 }

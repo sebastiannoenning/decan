@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>main_view</class>
+ <widget class="QMainWindow" name="main_view">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>main</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="central_layout">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="nav" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	padding: 10px; 
+	font-size: 20px;
+}</string>
+      </property>
+      <layout class="QHBoxLayout" name="nav_layout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="collapsed" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="collapsed_layout">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="col_toggle">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/nav/burger_dark.svg</normaloff>
+              <selectedoff>:/icons/nav/burger_red.svg</selectedoff>:/icons/nav/burger_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="col_page_1">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/user/profile_2_dark.svg</normaloff>
+              <selectedoff>:/icons/user/profile_2_red.svg</selectedoff>:/icons/user/profile_2_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="col_page_2">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/nav/calendar_dark.svg</normaloff>
+              <selectedoff>:/icons/nav/calendar_red.svg</selectedoff>:/icons/nav/calendar_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="col_page_3">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/calendar/calendar_edit_dark.svg</normaloff>
+              <selectedoff>:/icons/calendar/calendar_edit_red.svg</selectedoff>:/icons/calendar/calendar_edit_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="col_page_4">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/nav/setting_dark.svg</normaloff>
+              <selectedoff>:/icons/nav/setting_red.svg</selectedoff>:/icons/nav/setting_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="expanded" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>130</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+	text-align: left;
+}</string>
+         </property>
+         <layout class="QVBoxLayout" name="expanded_layout">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="exp_toggle">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Menu</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/nav/burger_dark.svg</normaloff>
+              <selectedoff>:/icons/nav/burger_red.svg</selectedoff>:/icons/nav/burger_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="exp_page_1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>95</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Users</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/user/profile_2_dark.svg</normaloff>
+              <selectedoff>:/icons/user/profile_2_red.svg</selectedoff>:/icons/user/profile_2_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="exp_page_2">
+            <property name="minimumSize">
+             <size>
+              <width>95</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Calendar</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/nav/calendar_dark.svg</normaloff>
+              <selectedoff>:/icons/nav/calendar_red.svg</selectedoff>:/icons/nav/calendar_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="exp_page_3">
+            <property name="minimumSize">
+             <size>
+              <width>95</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Events</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/calendar/calendar_edit_dark.svg</normaloff>
+              <selectedoff>:/icons/calendar/calendar_edit_red.svg</selectedoff>:/icons/calendar/calendar_edit_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="exp_page_4">
+            <property name="minimumSize">
+             <size>
+              <width>95</width>
+              <height>95</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Settings</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../assets/rss.qrc">
+              <normaloff>:/icons/nav/setting_dark.svg</normaloff>
+              <selectedoff>:/icons/nav/setting_red.svg</selectedoff>:/icons/nav/setting_dark.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="pages">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255)</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../assets/rss.qrc"/>
+ </resources>
+ <connections/>
+</ui>
