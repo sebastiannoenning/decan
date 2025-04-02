@@ -20,7 +20,40 @@ class EventUserModel(QSqlTableModel):
 
 
         # Change view Query
-        
+        """CREATE ALGORITHM = MERGE VIEW `EU_FilteredEvents` AS SELECT
+    `E`.*
+FROM
+    (
+        `Events` `E`
+    JOIN `Events_Users` `EU` ON
+        (`E`.`EventID` = `EU`.`EU_EventID`)
+    )
+WHERE
+    `EU`.`EU_UserID` = 1;
+
+DROP TABLE IF EXISTS `EU_layer1_FilteredEvents`;
+DROP TABLE IF EXISTS `EU_layer2_FilteredEvents`;
+    
+CREATE ALGORITHM = MERGE VIEW `EU_layer1_FilteredEvents` AS SELECT
+    `Events_Users`.`EU_EventID` AS `EU_EventID`
+FROM
+    `Events_Users`
+WHERE
+    `Events_Users`.`EU_UserID` = 3;
+
+CREATE ALGORITHM = MERGE VIEW `EU_layer2_FilteredEvents` AS SELECT
+    `E`.*
+FROM
+    (
+        `Events` `E`
+    JOIN `EU_layer1_FilteredEvents` `EU` ON
+        (`E`.`EventID` = `EU`.`EU_EventID`)
+    );
+
+ALTER VIEW `EU_layer1_FilteredEvents` AS 
+SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = 2;
+
+SELECT * FROM `Users` WHERE `UserID` = 1"""
 
 
 class UserFilterModel(QSortFilterProxyModel):
