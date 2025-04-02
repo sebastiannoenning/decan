@@ -187,7 +187,7 @@ class Ui_main_view(object):
         sizePolicy3.setHeightForWidth(self.pages.sizePolicy().hasHeightForWidth())
         self.pages.setSizePolicy(sizePolicy3)
         self.pages.setAutoFillBackground(False)
-        self.pages.setStyleSheet(u"background-color: rgb(255, 255, 255)")
+        self.pages.setStyleSheet(u"")
 
         self.central_layout.addWidget(self.pages)
 

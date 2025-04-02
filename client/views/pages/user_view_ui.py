@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QSizePolicy, QWidget)
+from PySide6.QtWidgets import (QApplication, QCalendarWidget, QSizePolicy, QWidget)
 
 from modules.touchdatetime.tdateedit import DateSelect
 
@@ -26,7 +26,10 @@ class Ui_user_view(object):
         user_view.resize(710, 460)
         self.calendarWidget = DateSelect(user_view)
         self.calendarWidget.setObjectName(u"calendarWidget")
-        self.calendarWidget.setGeometry(QRect(90, 20, 591, 391))
+        self.calendarWidget.setGeometry(QRect(0, 0, 461, 291))
+        self.calendarWidget_2 = QCalendarWidget(user_view)
+        self.calendarWidget_2.setObjectName(u"calendarWidget_2")
+        self.calendarWidget_2.setGeometry(QRect(0, 300, 331, 161))
 
         self.retranslateUi(user_view)
 
