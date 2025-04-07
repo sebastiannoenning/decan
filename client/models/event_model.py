@@ -21,7 +21,7 @@ class EventUserModel(QSqlTableModel):
         self.userValidate = QSqlQuery("SELECT 1 FROM `Users` WHERE `UserID` = :user")
         self.userChange = QSqlQuery("ALTER VIEW `EU_layer1_FilteredEvents` AS SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user ;")
 
-    def changeUser(self, uid, test_en = False):
+    def changeUser(self, uid, test_en = True):
         # Validate userID
         self.userValidate.bindValue(":user", uid)
         if not (execnext(self.userValidate).isValid()): 
