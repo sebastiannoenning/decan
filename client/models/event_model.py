@@ -25,7 +25,7 @@ class EventUserModel(QSqlTableModel):
     def changeUser(self, uid, test_en = True):
         # Validate userID
         self.userValidate.bindValue(":user", uid)
-        execnext(self.userValidate)
+        self.userValidate = execnext(self.userValidate)
         print(self.userValidate.value(0))
         if not (self.userValidate.isValid()):
             if (test_en): print("###EUModel UserID does not exist")
