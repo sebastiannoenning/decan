@@ -19,8 +19,10 @@ class EventUserModel(QSqlTableModel):
         self.setTable('EU_layer2_FilteredEvents')
         self.select()
 
-        self.userValidate = QSqlQuery("SELECT * FROM `Users` WHERE `UserID` = :user ;")
-        self.userChange = QSqlQuery("ALTER VIEW `EU_layer1_FilteredEvents` AS SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user ;")
+        self.userValidate = QSqlQuery()
+        self.userValidate.prepare("SELECT * FROM `Users` WHERE `UserID` = :user ;")
+        self.userChange = QSqlQuery()
+        self.userChange.prepare("ALTER VIEW `EU_layer1_FilteredEvents` AS SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user ;")
 
     def changeUser(self, uid, test_en = True):
         # Validate userID
