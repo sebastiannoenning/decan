@@ -8,5 +8,5 @@ from PySide6.QtSql import QSqlQuery
 def execnext(query: QSqlQuery):
     query.exec()
     query.next()
-    return query
+    return query.record()
     

@@ -35,6 +35,6 @@ class EventView(QWidget):
 
         self._ui.event_table.setModel(self.eventmodel)
 
-        self._ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(0))
-        self._ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(1))
-        self._ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(2))
+        self._ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
+        self._ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
+        self._ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))
