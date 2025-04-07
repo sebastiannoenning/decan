@@ -27,6 +27,7 @@ class EventUserModel(QSqlTableModel):
         self.userValidate.bindValue(":user", uid)
         self.userValidate = execnext(self.userValidate)
         print(self.userValidate.value(0))
+        print(self.userValidate.size())
         if not (self.userValidate.isValid()):
             if (test_en): print("###EUModel UserID does not exist")
             return
