@@ -12,6 +12,7 @@ from PySide6.QtWidgets import QMainWindow
 
 from .main_view_ui import Ui_main_view
 from .pages.user_view import UserView
+from .pages.event_view import EventView
 
 class MainView(QMainWindow):
     def __init__(self, parent=None):
@@ -22,10 +23,17 @@ class MainView(QMainWindow):
         self.setupConnections()
 
         self._ui.pages.addWidget(UserView(self))
+        self._ui.pages.addWidget(EventView(self))
 
     def setupConnections(self):
         self._ui.col_toggle.clicked.connect(lambda: self.toggle_nav())
         self._ui.exp_toggle.clicked.connect(lambda: self.toggle_nav())
+
+        self._ui.exp_p1_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
+        self._ui.exp_p3_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
+
+        self._ui.col_p1_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
+        self._ui.col_p3_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
 
     def toggle_nav(self):
         if (self._ui.collapsed.isVisible()):

@@ -118,7 +118,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="col_page_1">
+           <widget class="QPushButton" name="col_p1_user">
             <property name="minimumSize">
              <size>
               <width>60</width>
@@ -142,7 +142,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="col_page_2">
+           <widget class="QPushButton" name="col_p2_cal">
             <property name="minimumSize">
              <size>
               <width>60</width>
@@ -166,7 +166,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="col_page_3">
+           <widget class="QPushButton" name="col_p3_events">
             <property name="minimumSize">
              <size>
               <width>60</width>
@@ -190,7 +190,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="col_page_4">
+           <widget class="QPushButton" name="col_p4_pref">
             <property name="minimumSize">
              <size>
               <width>60</width>
@@ -276,7 +276,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="exp_page_1">
+           <widget class="QPushButton" name="exp_p1_user">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -306,7 +306,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="exp_page_2">
+           <widget class="QPushButton" name="exp_p2_cal">
             <property name="minimumSize">
              <size>
               <width>95</width>
@@ -330,7 +330,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="exp_page_3">
+           <widget class="QPushButton" name="exp_p3_events">
             <property name="minimumSize">
              <size>
               <width>95</width>
@@ -354,7 +354,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="exp_page_4">
+           <widget class="QPushButton" name="exp_p4_pref">
             <property name="minimumSize">
              <size>
               <width>95</width>
