@@ -70,7 +70,7 @@ class EventUserModel(QSqlTableModel):
             self.select()
             self.intersectingRowCount.bindValue(':user', cur_id)
             same_rows = execnext(self.intersectingRowCount).value(0)
-            if (test_en): print('###EUModel: User changed\n#### Total number of matching rows: ',same_rows,'\n#### New rows: ',self.rowCount()-same_rows)
+            if (test_en): print('###EUModel: User changed\n#### Matching rows: ',same_rows,'\n#### New rows: ',self.rowCount()-same_rows,'\n#### Total rows: ',self.rowCount())
         """CREATE ALGORITHM = MERGE VIEW `EU_FilteredEvents` AS SELECT
     `E`.*
 FROM
