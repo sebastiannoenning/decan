@@ -26,6 +26,7 @@ class EventUserModel(QSqlTableModel):
         if (uid_check): self.user_id, msg = uid_check.group(1),                                                         'Successfully managed to'
         else:           self.user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),  'Failed to'
         if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
+        print(uid_check.group(1))
         if ((msg) == 'Failed to'): self.alterViewUser(uid=self._user_id)
 
         self.userValidate = QSqlQuery() #Query for validating the user_id passed to the 
