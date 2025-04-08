@@ -21,6 +21,7 @@ class EventUserModel(QSqlTableModel):
 
         self.initialUser = QSqlQuery("SHOW CREATE VIEW `EU_layer1_FilteredEvents`")
         self.initialUser.exec()
+        self.initialUser.next()
         print(self.initialUser.value(1))
 
         self.userValidate = QSqlQuery() #Query for validating the user_id passed to the 
