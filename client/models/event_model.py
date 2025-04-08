@@ -21,12 +21,11 @@ class EventUserModel(QSqlTableModel):
         self.select()
 
         initialUser = QSqlQuery("SHOW CREATE VIEW `EU_layer1_FilteredEvents`")
-        initialUser = execnext(initialUser)                                                           # Error messages to be passed to terminal
-        uid_check, msg = re.search('`EU_UserID`\s*=\s*(\d+)',initialUser.value(1)),                                     'N/A'
-        if (uid_check): self.user_id, msg = uid_check.group(1),                                                         'Successfully managed to'
-        else:           self.user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),  'Failed to'
+        initialUser = execnext(initialUser)                                                                 # Error messages to be passed to terminal
+        uid_check, msg = re.search('`EU_UserID`\s*=\s*(\d+)',initialUser.value(1)),                                         'N/A'
+        if (uid_check): self._user_id, msg = uid_check.group(1),                                                            'Successfully managed to'
+        else:           self._user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
         if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
-        print(uid_check.group(1))
         if ((msg) == 'Failed to'): self.alterViewUser(uid=self._user_id)
 
         self.userValidate = QSqlQuery() #Query for validating the user_id passed to the 
