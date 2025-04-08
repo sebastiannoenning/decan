@@ -72,7 +72,12 @@ FROM
 ALTER VIEW `EU_layer1_FilteredEvents` AS 
 SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = 2;
 
-SELECT * FROM `Users` WHERE `UserID` = 1"""
+SELECT * FROM `Users` WHERE `UserID` = 1
+
+
+SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = 3 
+INTERSECT
+SELECT * FROM `EU_layer1_FilteredEvents`"""
 
 
 """class UserFilterModel(QSortFilterProxyModel):
