@@ -31,7 +31,7 @@ class EventUserModel(QSqlTableModel):
         
         self.intersectingRowCheck = QSqlQuery() #Query for checking common rows between the predicted & current dataset
         self.intersectingRowCheck.prepare("""
-                                  SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = :user 
+                                  SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user 
                                   INTERSECT
                                   SELECT * FROM `EU_layer1_FilteredEvents`""")
         
@@ -39,7 +39,7 @@ class EventUserModel(QSqlTableModel):
         self.intersectingRowCount.prepare("""
                                     SELECT COUNT(*) AS intersection_count
                                     FROM (
-                                        SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = :user 
+                                        SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user 
                                         INTERSECT
                                         SELECT * FROM `EU_layer1_FilteredEvents`
                                     ) AS intersecting_rows""")
@@ -74,7 +74,7 @@ class EventUserModel(QSqlTableModel):
             self.userChange.bindValue(":user", uid)
             self.userChange.exec()
             self.select()
-            if (test_en): print("###EUModel New rows:", self.rowCount())
+            if (test_en): print("###EUModel: New rows:", self.rowCount())
         """CREATE ALGORITHM = MERGE VIEW `EU_FilteredEvents` AS SELECT
     `E`.*
 FROM
