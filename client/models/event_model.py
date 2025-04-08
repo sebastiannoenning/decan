@@ -20,15 +20,11 @@ class EventUserModel(QSqlTableModel):
         self.setTable('EU_layer2_FilteredEvents')
         self.select()
 
-        initialUser = QSqlQuery("SHOW CREATE VIEW `EU_layer1_FilteredEvents`")
-        initialUser = execnext(initialUser)                                                                 # Error messages to be passed to terminal
-        uid_check, msg = re.search('`EU_UserID`\s*=\s*(\d+)',initialUser.value(1)),                                         'N/A'
-        if (uid_check): self._user_id, msg = uid_check.group(1),                                                            'Successfully managed to'
-        else:           self._user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
-        if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
-        if ((msg) == 'Failed to'): self.alterViewUser(uid=self._user_id)
+        # Query ran once to check current user in table
+        self.pullUser = QSqlQuery("SHOW CREATE VIEW `EU_layer1_FilteredEvents`")
+        self.currentUser()
 
-        self.userValidate = QSqlQuery() #Query for validating the user_id passed to the 
+        self.userValidate = QSqlQuery() #Query for validating the _user_id passed to the 
         self.userValidate.prepare("SELECT * FROM `Users` WHERE `UserID` = :user ;")
         self.userChange = QSqlQuery() #Query for changing the view's current user
         self.userChange.prepare("ALTER VIEW `EU_layer1_FilteredEvents` AS SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user ;")
@@ -47,20 +43,33 @@ class EventUserModel(QSqlTableModel):
                                         INTERSECT
                                         SELECT * FROM `EU_layer1_FilteredEvents`
                                     ) AS intersecting_rows""")
+        
+    def currentUser(self, test_en=True):
+        self.pullUser = execnext(self.pullUser)                                                           # Error messages to be passed to terminal
+        uid_check, msg = re.search('`EU_UserID`\s*=\s*(\d+)',self.pullUser.value(1)),                                       'N/A'
+        if (uid_check): self._user_id, msg = uid_check.group(1),                                                            'Successfully managed to'
+        else:           self._user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
+        # Above code checks if a match was found in the view's initial query; if not, it defaults to another user. 
+        if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
+        if ((msg) == 'Failed to'): self.alterViewUser(uid=self._user_id)
 
-    def changeUser(self, new_uid):
+    def changeUser(self, new_uid: int, test_en=True):
+        cur_rows, cur_id = 0, self._user_id
+        if (self.rowCount() != 0): cur_rows = self.rowCount()
         self.alterViewUser(new_uid)
+        self.intersectingRowCount.bindValue(':user', cur_id)
+        if (test_en): print('###EUModel: User changed\nTotal number of matching rows: ',execnext(self.intersectingRowCount).value(0))
     
-    def alterViewUser(self, uid: int, test_en = True):
-        if (uid == self.user_id): return #Exit early if user_id already matches the current
+    def alterViewUser(self, uid: int, test_en=True):
+        if (uid == self._user_id): return #Exit early if _user_id already matches the current
         else:
             # Validate userID
             self.userValidate.bindValue(":user", uid)
             self.userValidate = execnext(self.userValidate)
             if not (self.userValidate.isValid()):
                 if (test_en): print("###EUModel Validate Error: ",self.userValidate.lastError())
-                return #Exit early if user_id does not exist
-            else: self.user_id = uid 
+                return #Exit early if _user_id does not exist
+            else: self._user_id = uid 
             # Change view Query
             self.userChange.bindValue(":user", uid)
             self.userChange.exec()
