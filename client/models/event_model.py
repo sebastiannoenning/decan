@@ -19,26 +19,45 @@ class EventUserModel(QSqlTableModel):
         self.setTable('EU_layer2_FilteredEvents')
         self.select()
 
-        self.userValidate = QSqlQuery()
+        self.initialUser = QSqlQuery("SHOW CREATE VIEW `EU_layer1_FilteredEvents`")
+        self.initialUser.exec()
+        print(self.initialUser.value(1))
+
+        self.userValidate = QSqlQuery() #Query for validating the user_id passed to the 
         self.userValidate.prepare("SELECT * FROM `Users` WHERE `UserID` = :user ;")
-        self.userChange = QSqlQuery()
+        self.userChange = QSqlQuery() #Query for changing the view's current user
         self.userChange.prepare("ALTER VIEW `EU_layer1_FilteredEvents` AS SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user ;")
+        
+        self.intersectingRowCheck = QSqlQuery() #Query for checking common rows between the predicted & current dataset
+        self.intersectingRowCheck.prepare("""
+                                  SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = :user 
+                                  INTERSECT
+                                  SELECT * FROM `EU_layer1_FilteredEvents`""")
+        
+        self.intersectingRowCount = QSqlQuery() #Query for number of checking common rows
+        self.intersectingRowCount.prepare("""
+                                    SELECT COUNT(*) AS intersection_count
+                                    FROM (
+                                        SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = :user 
+                                        INTERSECT
+                                        SELECT * FROM `EU_layer1_FilteredEvents`
+                                    ) AS intersecting_rows""")
 
     def changeUser(self, uid: int, test_en = True):
-        if (uid == self.user_id): return
+        if (uid == self.user_id): return #Exit early if user_id already matches the current
         else:
             # Validate userID
             self.userValidate.bindValue(":user", uid)
             self.userValidate = execnext(self.userValidate)
             if not (self.userValidate.isValid()):
                 if (test_en): print("###EUModel Validate Error: ",self.userValidate.lastError())
-                return
-            else: self.user_id = uid
+                return #Exit early if user_id does not exist
+            else: self.user_id = uid 
             # Change view Query
             self.userChange.bindValue(":user", uid)
             self.userChange.exec()
             self.select()
-            if (test_en): print("###EUModel New rows:", self.rowCount)
+            if (test_en): print("###EUModel New rows:", self.rowCount())
         """CREATE ALGORITHM = MERGE VIEW `EU_FilteredEvents` AS SELECT
     `E`.*
 FROM
