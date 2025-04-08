@@ -14,7 +14,7 @@ class EventModel(QSqlTableModel):
 class EventUserModel(QSqlTableModel):
     def __init__(self, /, parent = ..., db = ...):
         super().__init__(parent, db)
-        cur_user = 1
+        self.user_id = 1
 
         self.setTable('EU_layer2_FilteredEvents')
         self.select()
@@ -24,23 +24,21 @@ class EventUserModel(QSqlTableModel):
         self.userChange = QSqlQuery()
         self.userChange.prepare("ALTER VIEW `EU_layer1_FilteredEvents` AS SELECT `EU_EventID` FROM `Events_Users` WHERE `EU_UserID` = :user ;")
 
-    def changeUser(self, uid, test_en = True):
-        # Validate userID
-        self.userValidate.bindValue(":user", uid)
-        self.userValidate = execnext(self.userValidate)
-        print(self.userValidate.value(0))
-        print(self.userValidate.size())
-        print(self.userValidate.lastError())
-        if not (self.userValidate.isValid()):
-            if (test_en): print("###EUModel UserID does not exist")
-            return
-
-        # Change view Query
-        self.userChange.bindValue(":user", uid)
-        self.userChange.exec()
-        self.select()
-        self.rowCount()
-        if (test_en): print("###EUModel New Rows:", self.rowCount)
+    def changeUser(self, uid: int, test_en = True):
+        if (uid == self.user_id): return
+        else:
+            # Validate userID
+            self.userValidate.bindValue(":user", uid)
+            self.userValidate = execnext(self.userValidate)
+            if not (self.userValidate.isValid()):
+                if (test_en): print("###EUModel Validate Error: ",self.userValidate.lastError())
+                return
+            else: self.user_id = uid
+            # Change view Query
+            self.userChange.bindValue(":user", uid)
+            self.userChange.exec()
+            self.select()
+            if (test_en): print("###EUModel New rows:", self.rowCount)
         """CREATE ALGORITHM = MERGE VIEW `EU_FilteredEvents` AS SELECT
     `E`.*
 FROM
