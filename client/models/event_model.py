@@ -1,4 +1,4 @@
-import sys
+import sys, re
 from PySide6.QtCore import QObject, QSortFilterProxyModel, QConcatenateTablesProxyModel
 from PySide6 import QtSql
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQueryModel, QSqlQuery
@@ -14,15 +14,19 @@ class EventModel(QSqlTableModel):
 class EventUserModel(QSqlTableModel):
     def __init__(self, /, parent = ..., db = ...):
         super().__init__(parent, db)
-        self.user_id = 1
+        test_en = True
+        self._user_id = 1
 
         self.setTable('EU_layer2_FilteredEvents')
         self.select()
 
-        self.initialUser = QSqlQuery("SHOW CREATE VIEW `EU_layer1_FilteredEvents`")
-        self.initialUser.exec()
-        self.initialUser.next()
-        print(self.initialUser.value(1))
+        initialUser = QSqlQuery("SHOW CREATE VIEW `EU_layer1_FilteredEvents`")
+        initialUser = execnext(initialUser)                                                           # Error messages to be passed to terminal
+        uid_check, msg = re.search('`EU_UserID`\s*=\s*(\d+)',initialUser.value(1)),                                     'N/A'
+        if (uid_check): self.user_id, msg = uid_check.group(1),                                                         'Successfully managed to'
+        else:           self.user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),  'Failed to'
+        if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
+        if ((msg) == 'Failed to'): self.alterViewUser(uid=self._user_id)
 
         self.userValidate = QSqlQuery() #Query for validating the user_id passed to the 
         self.userValidate.prepare("SELECT * FROM `Users` WHERE `UserID` = :user ;")
@@ -44,7 +48,10 @@ class EventUserModel(QSqlTableModel):
                                         SELECT * FROM `EU_layer1_FilteredEvents`
                                     ) AS intersecting_rows""")
 
-    def changeUser(self, uid: int, test_en = True):
+    def changeUser(self, new_uid):
+        self.alterViewUser(new_uid)
+    
+    def alterViewUser(self, uid: int, test_en = True):
         if (uid == self.user_id): return #Exit early if user_id already matches the current
         else:
             # Validate userID
