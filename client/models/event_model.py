@@ -51,19 +51,13 @@ class EventUserModel(QSqlTableModel):
         else:           self._user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
         # Above code checks if a match was found in the view's initial query; if not, it defaults to another user. 
         if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
-        if ((msg) == 'Failed to'): self.alterViewUser(uid=self._user_id)
-
-    def changeUser(self, new_uid: int, test_en=True):
-        cur_rows, cur_id = 0, self._user_id
-        if (self.rowCount() != 0): cur_rows = self.rowCount()
-        self.alterViewUser(new_uid)
-        self.intersectingRowCount.bindValue(':user', cur_id)
-        if (test_en): print('###EUModel: User changed\nTotal number of matching rows: ',execnext(self.intersectingRowCount).value(0))
+        if ((msg) == 'Failed to'): self.changeUser(uid=self._user_id)
     
-    def alterViewUser(self, uid: int, test_en=True):
+    def changeUser(self, uid: int, test_en=True):
         if (uid == self._user_id): return #Exit early if _user_id already matches the current
         else:
             # Validate userID
+            cur_id = self._user_id
             self.userValidate.bindValue(":user", uid)
             self.userValidate = execnext(self.userValidate)
             if not (self.userValidate.isValid()):
@@ -74,7 +68,9 @@ class EventUserModel(QSqlTableModel):
             self.userChange.bindValue(":user", uid)
             self.userChange.exec()
             self.select()
-            if (test_en): print("###EUModel: New rows:", self.rowCount())
+            self.intersectingRowCount.bindValue(':user', cur_id)
+            same_rows = execnext(self.intersectingRowCount).value(0)
+            if (test_en): print('###EUModel: User changed\n#### Total number of matching rows: ',same_rows,'\n#### New rows: ',self.rowCount()-same_rows)
         """CREATE ALGORITHM = MERGE VIEW `EU_FilteredEvents` AS SELECT
     `E`.*
 FROM
