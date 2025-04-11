@@ -163,10 +163,14 @@ class EventModel(QSortFilterProxyModel):
             if (test_en): print(f'{uid} is already current; exiting early')
             return
         else:            
-            self._Filters.EventUserModel.clearUserFilter()  # As EventUserModel pulls in tagged* events; it should always remain clear
+            self._Filters.EventUserModel.clearUserFilter()      # As EventUserModel pulls in tagged* events; it should always remain clear
 
-            if uid is None:     self._Filters.EventModel.clearUserFilter(),     real_id = -1    # -1 Creates an empty set on the alterView
-            else:               self._Filters.EventModel.addUserFilter(uid),    real_id = uid   # Sets real_id to the actual ID 
+            if uid is None:     
+                self._Filters.EventModel.clearUserFilter()     
+                real_id = -1                                    # -1 Creates an empty set on the alterView
+            else:               
+                self._Filters.EventModel.addUserFilter(uid)
+                real_id = uid                                   # Sets real_id to the actual ID 
         
         try:
             self._Queries.EventsUsersView.alterView(real_id, id_check=True)
