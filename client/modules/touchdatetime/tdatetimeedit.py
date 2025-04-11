@@ -7,24 +7,22 @@ from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPoi
 from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QSpacerItem, QSizePolicy, QStyleOption, QStyle, QCalendarWidget
 from PySide6.QtGui import QFont, QPainter
 
-from views.resources.custom_classes.tdateedit import TDateEditDialog
-from views.resources.custom_classes.ttimeedit import TTimeEditDialog
+from modules.touchdatetime.tdateedit import TDateEditDialog
+from modules.touchdatetime.ttimeedit import TTimeEditDialog
 
-class DateTime(Enum):
-    Date = 0
-    Time = 1
+from modules.datetime_qt import DateTime
+from modules import datetime_qt
 
 class DTPushButton(QLabel):
     clicked = Signal()
 
     def __init__(self, parent, 
-                 type = DateTime.Date,
-                 dateTime = QDateTime(QDate(0,0,0),QTime(0,0)),
-                 format = 'd MMM yyyy'):
+                 type: DateTime,
+                 dateTime = QDateTime(QDate(0,0,0),QTime(0,0))):
         super().__init__(parent)
         self._eventPressed = False # Flag
         self._dateTime = dateTime
-        self._format = format
+        if (type == DateTime.DateTime): type = DateTime.Date # Reject DateTime.DateTime
         self._type = type
         self._opacity = 0.3
 
@@ -57,11 +55,9 @@ class DTPushButton(QLabel):
         self.adjustSize()
 
     def setText(self, dateTime: QDateTime):
-        self._dateTime = QDateTime(dateTime)
-        if (self._type == DateTime.Date): string = self._dateTime.date().toString(self._format)
-        else: string = self._dateTime.time().toString("HH:mm") #"HH:mm a")
-        self.adjustSize()
-        super().setText(string)
+        self._dateTime = dateTime
+        super().setText(datetime_qt.QDateTimeToFS(self._dateTime, self._type))
+        self.adjustSize()       # CHECK FOR ERROR LATER; DOES ADJUST SIZE CALL AFTER THE SET TEXT CALL?
 
     def setFont(self, arg):
         self.__set_styles('white')

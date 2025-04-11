@@ -1,4 +1,7 @@
+from typing import List
+
 from PySide6 import QtCore
+from PySide6.QtCore import Qt, QDateTime, QDate, QTime
 from PySide6.QtWidgets import QWidget
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 
@@ -13,7 +16,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationa
 
 from .event_view_ui import Ui_event_view
 from modules.touchdatetime.tdateedit import DateSelect
-from models.event_model import EventUserModel
+from models.event_model import EventModel, EventFilter, DateRange
 
 class EventView(QWidget):
     def __init__(self, parent=None):
@@ -31,7 +34,50 @@ class EventView(QWidget):
             print('connection failed')
             print(self._database.lastError().text())
 
-        self.eventmodel = EventUserModel(self, self._database)
+        self._event_filter = EventFilter()
+        self._date_range_list: List[DateRange] = []
+        self._date_range_list.append(
+            DateRange(
+                QDateTime(
+                    QDate(2022, 3, 2),
+                    QTime(19, 32, 21))
+                    ,
+                QDateTime(
+                    QDate(2022, 4, 14),
+                    QTime(23, 59, 59))
+                      )
+                      )
+        
+        self._date_range_list.append(
+            DateRange(
+                QDateTime(
+                    QDate(2023, 8, 5),
+                    QTime(10, 0, 0))
+                    ,
+                QDateTime(
+                    QDate(2023, 11, 10),
+                    QTime(14, 0, 0))
+                      )
+                      )
+        
+        self._date_range_list.append(
+            DateRange(
+                QDateTime(
+                    QDate(2022, 3, 2),
+                    QTime(19, 32, 21))
+                    ,
+                QDateTime(
+                    QDate(2023, 11, 10),
+                    QTime(14, 0, 0))
+                      )
+                      )
+        
+        self._event_filter.addManyDateRangeFilters(self._date_range_list)
+        self._event_filter.addUserFilter(2)
+        print(self._event_filter.constructFilter())
+                    
+
+        self.eventmodel = EventModel(self, self._database)
 
         self._ui.event_table.setModel(self.eventmodel)
 
