@@ -127,14 +127,33 @@ class EventFilter():
         return filter
 
 class EventModel(QSortFilterProxyModel):
-    def __init__(self, database: QSqlDatabase, /, parent = ..., *, filterRegularExpression = ..., filterKeyColumn = ..., dynamicSortFilter = ..., filterCaseSensitivity = ..., sortCaseSensitivity = ..., isSortLocaleAware = ..., sortRole = ..., filterRole = ..., recursiveFilteringEnabled = ..., autoAcceptChildRows = ...):
-        super().__init__(database, parent, filterRegularExpression=filterRegularExpression, filterKeyColumn=filterKeyColumn, dynamicSortFilter=dynamicSortFilter, filterCaseSensitivity=filterCaseSensitivity, sortCaseSensitivity=sortCaseSensitivity, isSortLocaleAware=isSortLocaleAware, sortRole=sortRole, filterRole=filterRole, recursiveFilteringEnabled=recursiveFilteringEnabled, autoAcceptChildRows=autoAcceptChildRows)
+    def __init__(self, /, parent = ..., *, 
+                 filterRegularExpression = ..., 
+                 filterKeyColumn = ..., 
+                 dynamicSortFilter = ..., 
+                 filterCaseSensitivity = ..., 
+                 sortCaseSensitivity = ..., 
+                 isSortLocaleAware = ..., 
+                 sortRole = ..., 
+                 filterRole = ..., 
+                 recursiveFilteringEnabled = ..., 
+                 autoAcceptChildRows = ...,
+                 database: QSqlDatabase = ...):
+        super().__init__(parent, 
+                         filterRegularExpression=filterRegularExpression, 
+                         filterKeyColumn=filterKeyColumn, 
+                         dynamicSortFilter=dynamicSortFilter, 
+                         filterCaseSensitivity=filterCaseSensitivity, 
+                         sortCaseSensitivity=sortCaseSensitivity, isSortLocaleAware=isSortLocaleAware, 
+                         sortRole=sortRole, filterRole=filterRole, 
+                         recursiveFilteringEnabled=recursiveFilteringEnabled, 
+                         autoAcceptChildRows=autoAcceptChildRows)
         self._userID: Optional[int] = None
 
         self._Queries = self.queries()
         self._Filters = self.filters()
 
-        self._database = database
+        self._database: Optional[QSqlDatabase] = database
 
         #Bottom-most models; direct connections to the database
         self._eventModel = QSqlTableModel()                                         #Bottom-most layer      (1.1)
