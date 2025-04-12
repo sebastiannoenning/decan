@@ -166,6 +166,7 @@ class EventModel(QSortFilterProxyModel):
 
     def changeUser(self, uid: int):
         # Will validate userID and act as padding before running on the view program
+        self._setUserIDFilter(uid, test_en=True)
         pass
 
     def clearUser(self):
