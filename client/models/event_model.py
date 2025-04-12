@@ -1,7 +1,7 @@
 import sys, re, datetime
 from typing import List, Optional
 from PySide6 import QtCore
-from PySide6.QtCore import QObject, QSortFilterProxyModel, QConcatenateTablesProxyModel, QDate, QDateTime
+from PySide6.QtCore import Qt, QObject, QSortFilterProxyModel, QConcatenateTablesProxyModel, QDate, QDateTime
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQueryModel, QSqlQuery
 
 from modules.sql_qt import execnext
@@ -127,39 +127,31 @@ class EventFilter():
         return filter
 
 class EventModel(QSortFilterProxyModel):
-    def __init__(self, /, parent = ..., *, 
-                 filterRegularExpression = ..., 
-                 filterKeyColumn = ..., 
-                 dynamicSortFilter = ..., 
-                 filterCaseSensitivity = ..., 
-                 sortCaseSensitivity = ..., 
-                 isSortLocaleAware = ..., 
-                 sortRole = ..., 
-                 filterRole = ..., 
-                 recursiveFilteringEnabled = ..., 
-                 autoAcceptChildRows = ...,
-                 database: QSqlDatabase = ...):
-        super().__init__(parent, 
-                         filterRegularExpression=filterRegularExpression, 
-                         filterKeyColumn=filterKeyColumn, 
-                         dynamicSortFilter=dynamicSortFilter, 
-                         filterCaseSensitivity=filterCaseSensitivity, 
-                         sortCaseSensitivity=sortCaseSensitivity, isSortLocaleAware=isSortLocaleAware, 
-                         sortRole=sortRole, filterRole=filterRole, 
-                         recursiveFilteringEnabled=recursiveFilteringEnabled, 
-                         autoAcceptChildRows=autoAcceptChildRows)
+    def __init__(self, /, parent=None, *, 
+                 db: QSqlDatabase=None,
+                 filterRegularExpression=None, 
+                 filterKeyColumn=-1, 
+                 dynamicSortFilter=False, 
+                 filterCaseSensitivity=Qt.CaseSensitivity.CaseSensitive, 
+                 sortCaseSensitivity=Qt.CaseSensitivity.CaseSensitive, 
+                 isSortLocaleAware=False, 
+                 sortRole=Qt.ItemDataRole.UserRole, 
+                 filterRole=Qt.ItemDataRole.DisplayRole, 
+                 recursiveFilteringEnabled=False, 
+                 autoAcceptChildRows=False):
+        super().__init__(parent)
         self._userID: Optional[int] = None
 
         self._Queries = self.queries()
         self._Filters = self.filters()
 
-        self._database: Optional[QSqlDatabase] = database
+        self._database: Optional[QSqlDatabase] = db
 
         #Bottom-most models; direct connections to the database
-        self._eventModel = QSqlTableModel()                                         #Bottom-most layer      (1.1)
-        self._eventsUsersModel = CEventUserModel()                                  #Bottom-most layer      (1.2) 
+        self._eventModel = QSqlTableModel(self, db=self._database)                      #Bottom-most layer      (1.1)
+        self._eventsUsersModel = QSqlTableModel(self, db=self._database)                #Bottom-most layer      (1.2) 
 
-        self._eventConcatanationProxyModel = QConcatenateTablesProxyModel()         #Concatanation layer    (2)
+        self._eventConcatanationProxyModel = QConcatenateTablesProxyModel(self)         #Concatanation layer    (2)
 
 
     def setupLayers(self):

@@ -77,7 +77,7 @@ class EventView(QWidget):
         print(self._event_filter.constructFilter())
                     
 
-        self.eventmodel = EventModel(parent=self, database=self._database)
+        self.eventmodel = EventModel(self, db=self._database)
 
         self._ui.event_table.setModel(self.eventmodel)
 
