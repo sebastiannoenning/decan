@@ -3,9 +3,11 @@ import json
 
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtCore
-from PySide6.QtCore import Qt, QObject, Signal, QJsonDocument, QByteArray
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties, QCheckBox, QStyleOption, QStyle
+from PySide6.QtCore import Qt, QObject, Signal, QJsonDocument, QByteArray, QModelIndex
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QSizePolicy, QScroller, QScrollerProperties, QCheckBox, QStyleOption, QStyle, QDataWidgetMapper
 from PySide6.QtGui import QFont, QMouseEvent, QPainter
+
+from models.event_model import EventModel
 
 class EventItem(QWidget):
 
@@ -25,18 +27,28 @@ class EventItem(QWidget):
     mousePressed = Signal(QObject)
     itemChanged = Signal(QObject)
         
-    def __init__(self, parent: QWidget, EID: int, ETitle: str, EStartTime, EAttributes: QByteArray):
+    def __init__(self,
+                 parent: QObject=None, 
+                 model: EventModel=None, 
+                 row: QModelIndex=None):
         super().__init__(parent)
 
-        self.EID = EID
-        self.ETitle = ETitle
-        self.EStart_Time, EEnd_Time = EStartTime, None
-        self.EAttributes = EAttributes
-        
+        self._mapper = QDataWidgetMapper(parent=self)
+        if (model is not None): self._mapper.setModel(model)
+        self._index = row
+
         self._EJSON = QJsonDocument.fromJson(self.EAttributes).object()
 
         self.__setup_ui()
 
+    def setModel(self, model: EventModel): self._mapper.setModel(model)
+
+    def setRow(self, index: QModelIndex): self._mapper.setRootIndex(index)
+
+    def _setMappings(self): # Sets mappings to each ui object generated via the _setup_ui
+        pass
+
+    def setModelRow(self, model: EventModel, index: QModelIndex): pass
 
     def mousePressEvent(self, event):
         # Check if the left mouse button was pressed

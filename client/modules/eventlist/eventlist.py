@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt, Slot
 
 from eventlist.eventitem import EventItem
 
-class EventListView(QWidget):
+class EventList(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.items = dict()
