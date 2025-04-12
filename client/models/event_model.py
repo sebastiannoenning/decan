@@ -342,7 +342,30 @@ SELECT * FROM `Users` WHERE `UserID` = 1
 
 SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = 3 
 INTERSECT
-SELECT * FROM `EU_layer1_FilteredEvents`"""
+SELECT * FROM `EU_layer1_FilteredEvents`
+
+DELIMITER //
+CREATE TRIGGER AUTO_Event_Add_Attribute_Index
+	BEFORE INSERT 
+	ON `Events` FOR EACH ROW 
+	BEGIN
+		IF (NEW.EAttributes IS Null OR NEW.Eattributes ='') THEN
+        		SET NEW.EAttributes = JSON_OBJECT("object_index", 0);
+		ELSE
+        		IF (JSON_VALUE(NEW.EAttributes, "$.object_index") IS NULL) THEN
+            			SET @existing_attribute_count = JSON_LENGTH(JSON_KEYS(NEW.EAttributes));
+                		SET NEW.EAttributes = JSON_MERGE_PRESERVE(
+                    			JSON_OBJECT("object_index", CAST(@existing_attribute_count AS UNSIGNED)),
+                    			NEW.EAttributes
+                		);
+            		END IF;
+        	END IF;
+	END;//
+DELIMITER ;
+
+{"EDescription_3":"Check if there is any baby carriers as well","EToDo_1":{"EBool":false,"ETaskDescription":"Buy eggs"},"EToDo_2":{"EBool":false,"ETaskDescription":"Buy milk"},"object_index":3}
+
+"""
         
 class CEventUserModel(QSqlTableModel): #Access model for view in database
     def __init__(self, /, parent = ..., db = ...):
