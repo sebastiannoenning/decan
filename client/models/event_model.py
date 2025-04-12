@@ -153,6 +153,8 @@ class EventModel(QSortFilterProxyModel):
 
         self._eventConcatanationProxyModel = QConcatenateTablesProxyModel(self)         #Concatanation layer    (2)
 
+        self.setupLayers()
+
 
     def setupLayers(self):
         #Setup bottom-most layers

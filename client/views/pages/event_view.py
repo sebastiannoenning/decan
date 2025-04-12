@@ -75,7 +75,6 @@ class EventView(QWidget):
         self._event_filter.addManyDateRangeFilters(self._date_range_list)
         self._event_filter.addUserFilter(2)
         print(self._event_filter.constructFilter())
-                    
 
         self.eventmodel = EventModel(self, db=self._database)
 
