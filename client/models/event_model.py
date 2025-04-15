@@ -342,7 +342,77 @@ SELECT * FROM `Users` WHERE `UserID` = 1
 
 SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = 3 
 INTERSECT
-SELECT * FROM `EU_layer1_FilteredEvents`"""
+SELECT * FROM `EU_layer1_FilteredEvents`
+
+--
+-- Triggers `Events`
+--
+DELIMITER $$
+CREATE TRIGGER `AUTO_Event_Initial_JSON_Format` BEFORE INSERT ON `Events` FOR EACH ROW BEGIN
+	DECLARE object_index INT DEFAULT 0;
+	DECLARE event_type INT DEFAULT 0;
+	DECLARE info JSON DEFAULT JSON_OBJECT('object_index', 0, 'event_type', 0);
+    	DECLARE objects JSON DEFAULT JSON_OBJECT();
+		-- If none specified, generate a default value --
+		IF (NEW.EAttributes IS Null OR NEW.Eattributes ='') THEN
+        		SET NEW.EAttributes = JSON_OBJECT("info", info);
+		ELSE
+            -- Extract any $.info attributes & set to local variables -- 
+          	IF JSON_EXTRACT(NEW.EAttributes, "$.info") IS Null THEN
+              	IF (JSON_EXISTS(NEW.EAttributes, "$.object_index") IS NOT Null) THEN
+					SET object_index = CAST(JSON_VALUE(NEW.EAttributes, "$.object_index") AS UNSIGNED);
+                    SET info = JSON_SET(info, "object_index", object_index);
+					SET NEW.EAttributes = JSON_REMOVE(NEW.EAttributes, "$.object_index");
+				END IF;
+				IF (JSON_EXISTS(NEW.EAttributes, "$.event_type") IS NOT Null) THEN
+					SET event_type = JSON_VALUE(NEW.EAttributes, "$.event_type");
+                    SET info = JSON_SET(info, "event_type", event_type);
+					SET NEW.EAttributes = JSON_REMOVE(NEW.EAttributes, "$.event_type");
+				END IF;
+            -- Otherwise, if info provided --
+          	ELSE
+            	-- Local store --
+            	SET object_index = CAST(JSON_VALUE(NEW.EAttributes, "$info.object_index") AS UNSIGNED);
+            	SET event_type = JSON_VALUE(NEW.EAttributes, "$info.event_type");
+                
+                SET info = JSON_EXTRACT(NEW.EAttributes, "$.info");
+                SET NEW.EAttributes = JSON_REMOVE(NEW.EAttributes, "$.info");
+            END IF;
+            -- After that if-else execution, any info values should be safely contained in $.info with their individual values in object_index & event_type -- 
+        	-- Check then for existence of keys in absence of objects -- 
+        	IF JSON_EXTRACT(NEW.EAttributes, "$.objects") IS Null THEN
+                -- Post processing existing keys, check if the attributes leftover are still equal to 0
+                IF JSON_LENGTH(JSON_KEYS(NEW.EAttributes)) > 0 THEN
+                	SET objects = NEW.EAttributes;
+                END IF;
+            -- However, if $.objects is there -- 
+		ELSE
+                -- Extract objects as standalone JSON_OBJECT --
+                SET objects = JSON_EXTRACT(NEW.EAttributes, "$.objects");
+            END IF;
+                
+            -- Quickly update the object_index if there's a mismatch between the predicted lengths --     
+            IF (JSON_LENGTH(JSON_KEYS(objects)) != object_index) THEN
+                -- Take the count of objects & update the index --
+                SET object_index = CAST(JSON_LENGTH(JSON_KEYS(objects)) AS UNSIGNED)
+                SET info = JSON_SET(info, "object_index", object_index);
+            END IF;
+            
+            -- If object_index is still 0, only add info tab --
+            IF (object_index == 0) THEN
+                SET NEW.EAttributes = JSON_OBJECT(
+                 	'info', info
+                );
+            ELSE
+                SET NEW.EAttributes = JSON_OBJECT(
+                  	'info', info,
+                    'objects', objects
+                ); 
+            END IF;
+        END IF;
+	END
+$$
+DELIMITER ;"""
         
 class CEventUserModel(QSqlTableModel): #Access model for view in database
     def __init__(self, /, parent = ..., db = ...):
