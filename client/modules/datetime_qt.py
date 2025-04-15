@@ -19,12 +19,12 @@ def dateTimeToFS(dateTime: QDateTime,
     if (cnvrt == EDateTime.Time): return timeToFS(dateTime.time())
     return dateTime.toString('d/MMM/yyyy HH:mm a')
 def dateTimeToISO(dateTime: QDateTime, 
-                   cnvrt: DateTime):
+                   cnvrt: EDateTime):
     if (cnvrt == EDateTime.Date): return dateToISO(dateTime.date())
     if (cnvrt == EDateTime.Time): return timeToISO(dateTime.time())
     return dateTime.toString(format=Qt.DateFormat.ISODate)
 def QDateTimeToPy(dateTime: QDateTime,
-                      cnvrt: DateTime):
+                      cnvrt: EDateTime):
     if (cnvrt == EDateTime.Date): return dateToPy(dateTime.date())
     if (cnvrt == EDateTime.Time): return timeToPy(dateTime.time())
     return dateTime.toPython()
