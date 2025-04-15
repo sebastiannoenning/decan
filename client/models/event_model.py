@@ -4,8 +4,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import Qt, QObject, QSortFilterProxyModel, QConcatenateTablesProxyModel, QDate, QDateTime
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQueryModel, QSqlQuery
 
-from modules.sql_qt import execnext
-from modules.datetime_qt import DateTime, QDateTimeToFS, QDateTimeToISO, QDateTimeToPy
+import modules.sql_qt as sqlFuncs
+import modules.datetime_qt as dtFuncs
 
 class DateRange():
     def __init__ (self, startDate: QDateTime, endDate: QDateTime):
@@ -54,7 +54,7 @@ class EventFilter():
                 if (test_en): print(f'addManyDateRangeFilters()->{e}')
     def addDateRangeFilter(self, n_sDate: QDateTime, n_eDate: QDateTime, test_en=False):
         """ Function for adding a DateRange to the DateRanges list """
-        format = DateTime.Date  #Format for error printing
+        format = dtFuncs.EDateTime.Date  #Format for error printing
         i = 0                   #Insertion index
 
         if len(self._date_ranges) == 0: # Exits program early if list is empty & adds the new DateRange to the list
@@ -64,8 +64,8 @@ class EventFilter():
         for index, dr in enumerate(self._date_ranges, start=1):
             i_sDate, i_eDate = dr.startDate(), dr.endDate()     #Index start & end dates
             if (dr.overlap(n_sDate, n_eDate)): raise Exception(f"""addDateRange() error: New date range overlaps with existing filter
-                                                               [{QDateTimeToFS(i_sDate, format)}< (...) <{QDateTimeToFS(i_eDate, format)}]:[Filter @ {index}]
-                                                               [{QDateTimeToFS(n_sDate, format)}< (...) <{QDateTimeToFS(n_eDate, format)}]:[Proposed Filter]""")
+                                                               [{dtFuncs.dateTimeToFS(i_sDate, format)}< (...) <{dtFuncs.dateTimeToFS(i_eDate, format)}]:[Filter @ {index}]
+                                                               [{dtFuncs.dateTimeToFS(n_sDate, format)}< (...) <{dtFuncs.dateTimeToFS(n_eDate, format)}]:[Proposed Filter]""")
             else: 
                 if (test_en): print(f"Cleared [{index}/{len(self._date_ranges)}] of date_ranges")
 
@@ -107,14 +107,14 @@ class EventFilter():
 
     def constructFilter(self):
         """ Function that builds a SQL WHERE filter from the stored information """
-        format: DateTime = DateTime.Date
+        format: dtFuncs.EDateTime = dtFuncs.EDateTime.Date
         filter: str = ''
         generic_filters: List[str] = []
         date_filters: List[str] = []
 
         if not (len(self._date_ranges) == 0):
             for dr in self._date_ranges:
-                t_sDate, t_eDate = QDateTimeToPy(dr.startDate(), format), QDateTimeToPy(dr.endDate(), format)
+                t_sDate, t_eDate = dtFuncs.dateTimeToPy(dr.startDate(), format), dtFuncs.dateTimeToPy(dr.endDate(), format)
                 date_filters.append(('(EStart_Date <= {} AND COALESCE(EEnd_Date, EStart_Date) >= {})').format(t_eDate, t_sDate))
             d_f = ' OR '.join(date_filters)
             generic_filters.append(f'({d_f})')
@@ -153,7 +153,7 @@ class EventModel(QSortFilterProxyModel):
 
         self._eventConcatanationProxyModel = QConcatenateTablesProxyModel(self)         #Concatanation layer    (2)
 
-        self.setupLayers()
+        self.setupLayers
 
 
     def setupLayers(self):
@@ -276,7 +276,7 @@ class EventModel(QSortFilterProxyModel):
                     on the event model; using the formerly saved view id as a way of storing the previously accessed user.
                     Provides some small degree of error handling & due to its intention of directly 
                 """
-                self._exposeViewSchema = execnext(self._exposeViewSchema)                                                           
+                self._exposeViewSchema = sqlFuncs.execnext(self._exposeViewSchema)                                                           
                 uid_check = re.search('`EU_UserID`\s*=\s*(\d+)',self._exposeViewSchema.value(1))                              
                 if (uid_check): 
                     if ((uid_check.group(1)) != -1):    return uid_check.group(1)   # uid_check.group(1) should return the current users digit
@@ -285,7 +285,7 @@ class EventModel(QSortFilterProxyModel):
 
             def alterView(self, uid: int, test_en=True, id_check=False):
                 """ Convenience function for changing the userID via the changeEditViewCondition QSqlQuery.
-                    execnext would not function here as its a DDL statement & thus will not return a result set.
+                    sqlFuncs.execnext would not function here as its a DDL statement & thus will not return a result set.
                 """
                 # Optional clause that performs a id_check first
                 if (id_check):
@@ -342,30 +342,7 @@ SELECT * FROM `Users` WHERE `UserID` = 1
 
 SELECT `EU_UserID` FROM `Events_Users` WHERE `EU_UserID` = 3 
 INTERSECT
-SELECT * FROM `EU_layer1_FilteredEvents`
-
-DELIMITER //
-CREATE TRIGGER AUTO_Event_Add_Attribute_Index
-	BEFORE INSERT 
-	ON `Events` FOR EACH ROW 
-	BEGIN
-		IF (NEW.EAttributes IS Null OR NEW.Eattributes ='') THEN
-        		SET NEW.EAttributes = JSON_OBJECT("object_index", 0);
-		ELSE
-        		IF (JSON_VALUE(NEW.EAttributes, "$.object_index") IS NULL) THEN
-            			SET @existing_attribute_count = JSON_LENGTH(JSON_KEYS(NEW.EAttributes));
-                		SET NEW.EAttributes = JSON_MERGE_PRESERVE(
-                    			JSON_OBJECT("object_index", CAST(@existing_attribute_count AS UNSIGNED)),
-                    			NEW.EAttributes
-                		);
-            		END IF;
-        	END IF;
-	END;//
-DELIMITER ;
-
-{"EDescription_3":"Check if there is any baby carriers as well","EToDo_1":{"EBool":false,"ETaskDescription":"Buy eggs"},"EToDo_2":{"EBool":false,"ETaskDescription":"Buy milk"},"object_index":3}
-
-"""
+SELECT * FROM `EU_layer1_FilteredEvents`"""
         
 class CEventUserModel(QSqlTableModel): #Access model for view in database
     def __init__(self, /, parent = ..., db = ...):
@@ -401,10 +378,10 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
                                     ) AS intersecting_rows""")
         
     def currentUser(self, test_en=True):
-        self.pullUser = execnext(self.pullUser)                                                           # Error messages to be passed to terminal
+        self.pullUser = sqlFuncs.execnext(self.pullUser)                                                           # Error messages to be passed to terminal
         uid_check, msg = re.search('`EU_UserID`\s*=\s*(\d+)',self.pullUser.value(1)),                                       'N/A'
         if (uid_check): self._user_id, msg = uid_check.group(1),                                                            'Successfully managed to'
-        else:           self._user_id, msg = int(execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
+        else:           self._user_id, msg = int(sqlFuncs.execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
         # Above code checks if a match was found in the view's initial query; if not, it defaults to another user. 
         if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
         if ((msg) == 'Failed to'): self.changeUser(uid=self._user_id)
@@ -415,7 +392,7 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
             # Validate userID
             cur_id = self._user_id
             self.userValidate.bindValue(":user", uid)
-            self.userValidate = execnext(self.userValidate)
+            self.userValidate = sqlFuncs.execnext(self.userValidate)
             if not (self.userValidate.isValid()):
                 if (test_en): print(f"###EUModel Validate Error: {self.userValidate.lastError()}")
                 return #Exit early if _user_id does not exist
@@ -425,7 +402,7 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
             self.userChange.exec()
             self.select()
             self.intersectingRowCount.bindValue(':user', cur_id)
-            same_rows = execnext(self.intersectingRowCount).value(0)
+            same_rows = sqlFuncs.execnext(self.intersectingRowCount).value(0)
             if (test_en): print('###EUModel: User changed\n#### (Overall) Matching:New Rows: (',self.rowCount(),') ',same_rows,':',self.rowCount()-same_rows)
     
 

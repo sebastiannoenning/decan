@@ -10,19 +10,18 @@ from PySide6.QtGui import QFont, QPainter
 from modules.touchdatetime.tdateedit import TDateEditDialog
 from modules.touchdatetime.ttimeedit import TTimeEditDialog
 
-from modules.datetime_qt import DateTime
-from modules import datetime_qt
+from modules import datetime_qt as dt_qt
 
 class DTPushButton(QLabel):
     clicked = Signal()
 
     def __init__(self, parent, 
-                 type: DateTime,
+                 type: dt_qt.EDateTime=None,
                  dateTime = QDateTime(QDate(0,0,0),QTime(0,0))):
         super().__init__(parent)
         self._eventPressed = False # Flag
         self._dateTime = dateTime
-        if (type == DateTime.DateTime): type = DateTime.Date # Reject DateTime.DateTime
+        if (type == None): type = dt_qt.EDateTime.Date # Reject Edt_qt.EDateTime.DateTime
         self._type = type
         self._opacity = 0.3
 
@@ -56,7 +55,7 @@ class DTPushButton(QLabel):
 
     def setText(self, dateTime: QDateTime):
         self._dateTime = dateTime
-        super().setText(datetime_qt.QDateTimeToFS(self._dateTime, self._type))
+        super().setText(dt_qt.dateTimeToFS(self._dateTime, self._type))
         self.adjustSize()       # CHECK FOR ERROR LATER; DOES ADJUST SIZE CALL AFTER THE SET TEXT CALL?
 
     def setFont(self, arg):
@@ -102,8 +101,8 @@ class TDateTimeEdit(QWidget):
         self._button_container = QHBoxLayout(self)
         self._button_container.addStretch(1)
 
-        self._dateEdit_pushButton = DTPushButton(self, DateTime.Date, self._dateTime)
-        self._timeEdit_pushButton = DTPushButton(self, DateTime.Time, self._dateTime)
+        self._dateEdit_pushButton = DTPushButton(self, dt_qt.EDateTime.Date, self._dateTime)
+        self._timeEdit_pushButton = DTPushButton(self, dt_qt.EDateTime.Time, self._dateTime)
 
         self.layout().addWidget(self._dateEdit_pushButton)
         self.layout().addWidget(self._timeEdit_pushButton)
@@ -156,8 +155,8 @@ class TDateTimeEdit(QWidget):
                        new_time = QTime(),
                        test_en=True):
         if (new_date != QDate()):
-            if (new_date > self._dateTime.date()): self._dateTime = QDateTime(self._dateTime.date(),(QTime(0,0,0,0)))
-            self._dateTime = QDateTime(new_date, self._dateTime.time())
+            if (new_date > self._dt_qt.EdateTime.date()): self._dateTime = QDateTime(self._dt_qt.EdateTime.date(),(QTime(0,0,0,0)))
+            self._dateTime = QDateTime(new_date, self._dt_qt.EdateTime.time())
         if (new_time != QTime()):   self._dateTime = QDateTime(self._dateTime, (new_time))
 
         if (test_en): print(f"TDE_:{hex(id(self))}############\nCLOSED DIA; NEW DTE {self._dateTime}")
@@ -186,7 +185,7 @@ class TDateTimeEdit(QWidget):
 
     def _updateMinimumDateTime(self, test_en=True):
         self._timeEdit_editDialog.setMinimumDateTime(self._minimumDateTime)
-        self._dateEdit_editDialog.setMinimumDate(self._minimumDateTime.date())
+        self._dateEdit_editDialog.setMinimumDate(self._minimumDateTime.EDateTime.date())
 
         if (test_en): print(f"TDE_:{hex(id(self))}############\nUPDATE MIN DT; NEW MIN DT {self._minimumDateTime}\nCUR DT: {self._dateTime}")
         self._autoUpdateButton()
