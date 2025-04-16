@@ -153,7 +153,7 @@ class EventModel(QSortFilterProxyModel):
 
         self._eventConcatanationProxyModel = QConcatenateTablesProxyModel(self)         #Concatanation layer    (2)
 
-        self.setupLayers
+        self.setupLayers()
 
 
     def setupLayers(self):
@@ -165,6 +165,7 @@ class EventModel(QSortFilterProxyModel):
         self._eventConcatanationProxyModel.addSourceModel(self._eventsUsersModel)
 
         self.setSourceModel(self._eventConcatanationProxyModel)
+        self.setDynamicSortFilter(True) # Sorts model automatically if sort_proxy 
 
     def changeUser(self, uid: int):
         # Will validate userID and act as padding before running on the view program
@@ -685,13 +686,3 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
             self.intersectingRowCount.bindValue(':user', cur_id)
             same_rows = sqlFuncs.execnext(self.intersectingRowCount).value(0)
             if (test_en): print('###EUModel: User changed\n#### (Overall) Matching:New Rows: (',self.rowCount(),') ',same_rows,':',self.rowCount()-same_rows)
-    
-
-
-"""class UserFilterModel(QSortFilterProxyModel):
-
-class EventUserModel(QSqlQueryModel):
-
-class EventModelMapper(QConcatenateTablesProxyModel):
-
-class EventFilterModel(QSortFilterProxyModel):"""

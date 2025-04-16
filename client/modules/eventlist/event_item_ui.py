@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScrollArea, QAbstractScrollArea, QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-from modules.eventlist.eventitem import EventItem, EDescription, EToDo, EventType
+from modules.eventlist.eventitem import EventItem, EDescription, EToDo, EBody, EventType
 import modules.scrollers_qt as scrollFuncs
 
 class Ui_event_item(object):
@@ -75,18 +75,9 @@ class Ui_event_item(object):
         Font2.setFamilies([u"Arial"])
         Font2.setPointSize(24)
         self.event_location.setFont(Font2)
-
-        self.body = QWidget(event_item)
-        self.body.setObjectName(u"body")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-        sizePolicy1.setHorizontalStretch(0) #etc
-        self.body.setSizePolicy(sizePolicy)
-        self.body.setMinimumSize(QSize(0,0))
-        self.body.setStyleSheet(u"")
-        self.body_layout = QVBoxLayout(self.header)
-        self.body_layout.setSpacing(4)
-        self.body_layout.setObjectName(u"body_layout")
-        self.body_layout.setContentsMargins(0, 0, 0, 0)
+        # Event Body
+        self.event_body = EBody(self)
+        self.event_body.setObjectName("event_body")
 
         self.footer = QWidget(event_item)
         self.footer.setObjectName(u"footer")
@@ -102,9 +93,32 @@ class Ui_event_item(object):
         if (Type == EventType.Simple):
             self.header_layout.addWidget(self.event_title_wrapper)
             self.header_layout.addWidget(self.event_time)
+            self.layout.addWidget(self.header)
+            self.layout.addWidget(self.event_body)
 
     def retranslateUi(self, event_item: EventItem):
         event_item.setWindowTitle(QCoreApplication.translate("event_item", u"Form", None))
+    # retranslateUi
+
+class Ui_event_body(object):
+    def setupUi(self, event_body: EBody):
+        if not event_body.objectName():
+            event_body.setObjectName(u"event_body")
+        event_body.resize(0, 0)
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum))
+        
+        self.container = QVBoxLayout(event_body)
+        self.container.setObjectName(u"event_body_container")
+        self.container.setSpacing(4)
+        self.container.setContentsMargins(0,0,0,0)
+
+        event_body.setLayout(self.container)
+
+        QMetaObject.connectSlotsByName(event_body)
+    # setupUi
+    
+    def retranslateUi(self, event_body: EBody):
+        event_body.setWindowTitle(QCoreApplication.translate("event_body", u"Form", None))
     # retranslateUi
 
 class Ui_event_description(object):
