@@ -55,7 +55,7 @@ class DTPushButton(QLabel):
 
     def setText(self, dateTime: QDateTime):
         self._dateTime = dateTime
-        super().setText(dt_qt.dateTimeToFS(self._dateTime, self._type))
+        super().setText(dt_qt.DateTimeToFS(self._dateTime, self._type))
         self.adjustSize()       # CHECK FOR ERROR LATER; DOES ADJUST SIZE CALL AFTER THE SET TEXT CALL?
 
     def setFont(self, arg):

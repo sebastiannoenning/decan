@@ -64,8 +64,8 @@ class EventFilter():
         for index, dr in enumerate(self._date_ranges, start=1):
             i_sDate, i_eDate = dr.startDate(), dr.endDate()     #Index start & end dates
             if (dr.overlap(n_sDate, n_eDate)): raise Exception(f"""addDateRange() error: New date range overlaps with existing filter
-                                                               [{dtFuncs.dateTimeToFS(i_sDate, format)}< (...) <{dtFuncs.dateTimeToFS(i_eDate, format)}]:[Filter @ {index}]
-                                                               [{dtFuncs.dateTimeToFS(n_sDate, format)}< (...) <{dtFuncs.dateTimeToFS(n_eDate, format)}]:[Proposed Filter]""")
+                                                               [{dtFuncs.DateTimeToFS(i_sDate, format)}< (...) <{dtFuncs.DateTimeToFS(i_eDate, format)}]:[Filter @ {index}]
+                                                               [{dtFuncs.DateTimeToFS(n_sDate, format)}< (...) <{dtFuncs.DateTimeToFS(n_eDate, format)}]:[Proposed Filter]""")
             else: 
                 if (test_en): print(f"Cleared [{index}/{len(self._date_ranges)}] of date_ranges")
 
@@ -114,7 +114,7 @@ class EventFilter():
 
         if not (len(self._date_ranges) == 0):
             for dr in self._date_ranges:
-                t_sDate, t_eDate = dtFuncs.dateTimeToPy(dr.startDate(), format), dtFuncs.dateTimeToPy(dr.endDate(), format)
+                t_sDate, t_eDate = dtFuncs.DateTimeToPy(dr.startDate(), format), dtFuncs.DateTimeToPy(dr.endDate(), format)
                 date_filters.append(('(EStart_Date <= {} AND COALESCE(EEnd_Date, EStart_Date) >= {})').format(t_eDate, t_sDate))
             d_f = ' OR '.join(date_filters)
             generic_filters.append(f'({d_f})')

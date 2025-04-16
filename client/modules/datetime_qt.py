@@ -13,28 +13,28 @@ class EDateTime(Enum):
     Time = 1
 
 # Turns QDateTime into a formatted string, or into QTime/QDate equivalents based on user input
-def dateTimeToFS(dateTime: QDateTime, 
+def DateTimeToFS(dateTime: QDateTime, 
                   cnvrt: EDateTime):     
-    if (cnvrt == EDateTime.Date): return dateToFS(dateTime.date())
-    if (cnvrt == EDateTime.Time): return timeToFS(dateTime.time())
+    if (cnvrt == EDateTime.Date): return DateToFS(dateTime.date())
+    if (cnvrt == EDateTime.Time): return TimeToFS(dateTime.time())
     return dateTime.toString('d/MMM/yyyy HH:mm a')
-def dateTimeToISO(dateTime: QDateTime, 
+def DateTimeToISO(dateTime: QDateTime, 
                    cnvrt: EDateTime):
-    if (cnvrt == EDateTime.Date): return dateToISO(dateTime.date())
-    if (cnvrt == EDateTime.Time): return timeToISO(dateTime.time())
+    if (cnvrt == EDateTime.Date): return DateToISO(dateTime.date())
+    if (cnvrt == EDateTime.Time): return TimeToISO(dateTime.time())
     return dateTime.toString(format=Qt.DateFormat.ISODate)
-def QDateTimeToPy(dateTime: QDateTime,
+def DateTimeToPy(dateTime: QDateTime,
                       cnvrt: EDateTime):
-    if (cnvrt == EDateTime.Date): return dateToPy(dateTime.date())
-    if (cnvrt == EDateTime.Time): return timeToPy(dateTime.time())
+    if (cnvrt == EDateTime.Date): return DateToPy(dateTime.date())
+    if (cnvrt == EDateTime.Time): return TimeToPy(dateTime.time())
     return dateTime.toPython()
 
 # Turns QDate into a formatted string or datetime object
-def dateToFS(date: QDate): return date.toString('d MMM yyyy')
-def dateToISO(date: QDate): return date.toString(format=Qt.DateFormat.ISODate)
-def dateToPy(date: QDate): return date.toPython()
+def DateToFS(date: QDate): return date.toString('d MMM yyyy')
+def DateToISO(date: QDate): return date.toString(format=Qt.DateFormat.ISODate)
+def DateToPy(date: QDate): return date.toPython()
 
 # Turns QTime into a formatted string or datetime object
-def timeToFS(time: QTime): return time.toString('HH:mm')
-def timeToISO(time: QTime): return time.toString(format=Qt.DateFormat.ISODate)
-def timeToPy(time: QTime): return time.toPython()
+def TimeToFS(time: QTime): return time.toString('HH:mm')
+def TimeToISO(time: QTime): return time.toString(format=Qt.DateFormat.ISODate)
+def TimeToPy(time: QTime): return time.toPython()
