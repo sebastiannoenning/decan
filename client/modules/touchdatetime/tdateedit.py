@@ -23,39 +23,42 @@ class DateSelect(QCalendarWidget):
         self.setVerticalHeaderFormat(QCalendarWidget.VerticalHeaderFormat.NoVerticalHeader)
         self.setGridVisible(False)
 
-        self._nav = self.findChild(QWidget, "qt_calendar_navigationbar")    # Underlying widget
-        self._header = self.findChild(QHBoxLayout)                          # Header layout
+        self._nav           : QWidget       = self.findChild(QWidget, "qt_calendar_navigationbar")    # Underlying widget
+        self._header        : QHBoxLayout   = self.findChild(QHBoxLayout)                          # Header layout
 
         # All header buttons/subsets
-        self._prevMonth = self._nav.findChild(QToolButton,"qt_calendar_prevmonth")
-        self._nextMonth = self._nav.findChild(QToolButton,"qt_calendar_nextmonth")
-        self._monthButton = self._nav.findChild(QToolButton, "qt_calendar_monthbutton")
-        self._yearButton = self._nav.findChild(QToolButton, "qt_calendar_yearbutton")
-        self._yearEdit = self._nav.findChild(QSpinBox, "qt_calendar_yearedit")
-        self._monthMenu = self._monthButton.findChild(QMenu)
+        self._prevMonth     : QToolButton   = self._nav.findChild(QToolButton,"qt_calendar_prevmonth")
+        self._nextMonth     : QToolButton   = self._nav.findChild(QToolButton,"qt_calendar_nextmonth")
+        self._monthButton   : QToolButton   = self._nav.findChild(QToolButton, "qt_calendar_monthbutton")
+        self._yearButton    : QToolButton   = self._nav.findChild(QToolButton, "qt_calendar_yearbutton")
+        self._yearEdit      : QSpinBox      = self._nav.findChild(QSpinBox, "qt_calendar_yearedit")
+        self._monthMenu     : QMenu         = self._monthButton.findChild(QMenu)
         self._monthMenu.setObjectName("qt_calendar_monthmenu")
 
         # Remove & hide all widgets from layout
-        self._header.removeWidget(self._prevMonth), self._prevMonth.hide()
-        self._header.removeWidget(self._nextMonth), self._nextMonth.hide()
-        self._header.removeWidget(self._monthButton), self._monthButton.hide()
-        self._header.removeWidget(self._yearButton), self._yearButton.hide()
-        self._header.removeWidget(self._yearEdit), self._yearEdit.hide()
+        self._header.removeWidget(self._prevMonth),     self._prevMonth.hide()
+        self._header.removeWidget(self._nextMonth),     self._nextMonth.hide()
+        self._header.removeWidget(self._monthButton),   self._monthButton.hide()
+        self._header.removeWidget(self._yearButton),    self._yearButton.hide()
+        self._header.removeWidget(self._yearEdit),      self._yearEdit.hide()
+
         # Remove excess/unimportant spacers from layout
         for x in range(self._header.count()-1, -1, -1):
             spacer = self._header.takeAt(x)
             del spacer
         
-        self._yearLabel = QLabel(self._nav, text=str(self._yearEdit.value()))
-        self._nextYear = QPushButton(icon=QIcon(f":/icons/arrows/arrow_up_{self.theme}.svg"))
-        self._prevYear = QPushButton(icon=QIcon(f":/icons/arrows/arrow_down_{self.theme}.svg")) 
+        self._yearLabel                     = QLabel(self._nav, text=str(self._yearEdit.value()))
+        self._nextYear                      = QPushButton(icon=QIcon(f":/icons/arrows/arrow_up_{self.theme}.svg"))
+        self._prevYear                      = QPushButton(icon=QIcon(f":/icons/arrows/arrow_down_{self.theme}.svg")) 
 
-        self._header.addWidget(self._nextYear), self._nextYear.setObjectName("qt_calendar_nextyear")
-        self._header.addWidget(self._prevYear), self._prevYear.setObjectName("qt_calendar_prevyear")
-        self._header.addWidget(self._yearLabel), self._yearLabel.setObjectName("qt_calendar_yearlabel")
-        self._monthButton.show(), self._header.addWidget(self._monthButton)
-        self._prevMonth.show(), self._header.addWidget(self._prevMonth)
-        self._nextMonth.show(), self._header.addWidget(self._nextMonth)
+        # Add new controls
+        self._header.addWidget(self._nextYear),     self._nextYear.setObjectName("qt_calendar_nextyear")
+        self._header.addWidget(self._prevYear),     self._prevYear.setObjectName("qt_calendar_prevyear")
+        self._header.addWidget(self._yearLabel),    self._yearLabel.setObjectName("qt_calendar_yearlabel")
+        # Re-add old controls
+        self._monthButton.show(),                   self._header.addWidget(self._monthButton)
+        self._prevMonth.show(),                     self._header.addWidget(self._prevMonth)
+        self._nextMonth.show(),                     self._header.addWidget(self._nextMonth)
 
     def __set_styles(self):
         self.__set_header_style()
@@ -101,10 +104,10 @@ class DateSelect(QCalendarWidget):
         down_arrow.addFile(f":/icons/arrows/arrow_down_{self.theme}.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         down_arrow.addFile(f":/icons/arrows/arrow_down_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
 
-        self._nextMonth.setIcon(right_arrow), self._nextMonth.setIconSize(QSize(23,23))
-        self._prevMonth.setIcon(left_arrow), self._prevMonth.setIconSize(QSize(23,23))
-        self._nextYear.setIcon(up_arrow), self._nextYear.setIconSize(QSize(23,23))
-        self._prevYear.setIcon(down_arrow), self._prevYear.setIconSize(QSize(23,23))
+        self._nextMonth.setIcon(right_arrow),       self._nextMonth.setIconSize(QSize(23,23))
+        self._prevMonth.setIcon(left_arrow),        self._prevMonth.setIconSize(QSize(23,23))
+        self._nextYear.setIcon(up_arrow),           self._nextYear.setIconSize(QSize(23,23))
+        self._prevYear.setIcon(down_arrow),         self._prevYear.setIconSize(QSize(23,23))
 
         self._nav.setStyleSheet(f"""
 
@@ -391,13 +394,15 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
     def dialogueAccepted(self): self.dateSelected.emit(self._lb_dateSelect.selectedDate()), self.accept()
     def dialogueRejected(self): self.reject(), self.rejected.emit()
 
-    def setMinimumDate(self, date: QDate): self._lb_dateSelect.setMinimumDate(date)
-    def setMaximumDate(self, date: QDate): self._lb_dateSelect.setMaximumDate(date)
-    def setSelectedDate(self, date: QDate): self._lb_dateSelect.setSelectedDate(date)
-    def clearMinimumDate(self): self._lb_dateSelect.clearMinimumDate()
-    def clearMaximumDate(self): self._lb_dateSelect.clearMaximumDate()
-    def minimumDate(self): return self._lb_dateSelect.minimumDate()
-    def maximumDate(self): return self._lb_dateSelect.maximumDate()
-    def selectedDate(self): return self._lb_dateSelect.selectedDate()
-    def yearShown(self): return self._lb_dateSelect.yearShown()
-    def dateSelect(self): return self._lb_dateSelect
+    # Setters for DateSelect Object values
+    def setMinimumDate(self, date: QDate):      self._lb_dateSelect.setMinimumDate(date)
+    def setMaximumDate(self, date: QDate):      self._lb_dateSelect.setMaximumDate(date)
+    def setSelectedDate(self, date: QDate):     self._lb_dateSelect.setSelectedDate(date)
+    def clearMinimumDate(self):                 self._lb_dateSelect.clearMinimumDate()
+    def clearMaximumDate(self):                 self._lb_dateSelect.clearMaximumDate()
+    # Getters for DateSelect Object values
+    def minimumDate(self):                      return self._lb_dateSelect.minimumDate()
+    def maximumDate(self):                      return self._lb_dateSelect.maximumDate()
+    def selectedDate(self):                     return self._lb_dateSelect.selectedDate()
+    def yearShown(self):                        return self._lb_dateSelect.yearShown()
+    def dateSelect(self):                       return self._lb_dateSelect

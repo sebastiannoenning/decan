@@ -1,11 +1,19 @@
 import sys, math, re
 from enum import Enum
+from typing import Dict, Tuple
 from shiboken6 import Shiboken
 
 from PySide6 import QtCore
-from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF, Signal
-from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, QDialogButtonBox
-from PySide6.QtWidgets import QSizePolicy, QScroller, QScrollerProperties
+from PySide6.QtCore import (Qt, 
+                            QDateTime, QDate, QTime, 
+                            QEasingCurve, 
+                            Slot, Signal,
+                            QPointF)
+from PySide6.QtWidgets import (QWidget, QScrollArea, QLabel, QPushButton, 
+                               QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, 
+                               QDialog, QDialogButtonBox)
+from PySide6.QtWidgets import (QSizePolicy, 
+                               QScroller, QScrollerProperties)
 from PySide6.QtGui import QFont, QPalette, QColor
 
 class TimeType(Enum):
@@ -33,30 +41,28 @@ class TimeSelect(QWidget):
                  min_val=0, 
                  labelStyle=QFont("Arial",20)):
         super().__init__(parent)
-        self.type = type
+        self.type, self.labelStyle              = type, labelStyle
 
         #Adjust variables based on changes to TimeType
         if  (self.type == TimeType.Hours):
-            self.labelAlignment = Qt.AlignmentFlag.AlignRight
-            self._entries, self._mult = 24, 1
+            self.labelAlignment                 = Qt.AlignmentFlag.AlignRight
+            self._entries, self._mult           = 24, 1
         elif(self.type == TimeType.SimpleMinutes):
-            self.labelAlignment = Qt.AlignmentFlag.AlignLeft
-            self._entries, self._mult = 12, 5
+            self.labelAlignment                 = Qt.AlignmentFlag.AlignLeft
+            self._entries, self._mult           = 12, 5
         elif(self.type == TimeType.DetailedMinutes):
-            self.labelAlignment = Qt.AlignmentFlag.AlignLeft
-            self._entries, self._mult = 60, 1
+            self.labelAlignment                 = Qt.AlignmentFlag.AlignLeft
+            self._entries, self._mult           = 60, 1
         
-        self._locked = math.ceil(min_val / self._mult)
+        self._locked                                = math.ceil(min_val / self._mult)
         if (self._locked == self._entries): self._locked -= 1    #Shouldn't happen, but just in case
-        self._period = (self._entries - self._locked)
-        self._repeats = self.__determineRepeats(self._entries, self._locked)
+        self._period                                = (self._entries - self._locked)
+        self._repeats                               = self.__determineRepeats(self._entries, self._locked)
 
-        self.labels = dict()
-        self.labelContainer = QVBoxLayout(self)
+        self.labels: Dict[int, Tuple[QLabel, bool]] = []
+        self.labelContainer                         = QVBoxLayout(self)
 
-        self.labelStyle = labelStyle
-
-        self._selected = None
+        self._selected: bool                        = None
 
         self.setObjectName(f"TimeSelect_{hex(id(self))}")
 
@@ -110,18 +116,29 @@ class TimeSelect(QWidget):
         return self._mult * math.trunc(self.__approxFunc(offset, self.period, self._entries, self._locked))
     
     def _setSelected(self, val):
-        self._selected = val
-        palette, font = QPalette(self.labels[self._selected].palette()), QFont(self.labels[self._selected].font())
+        self._selected  = val
+        palette, font   = (QPalette(self.labels[self._selected][0].palette()), 
+                           QFont(self.labels[self._selected][0].font())
+                           )
         palette.setColor(QPalette.ColorRole.WindowText, QColor(255,80,80))
         font.setBold(True)
-        self.labels[self._selected].setPalette(palette)
-        self.labels[self._selected].setFont(font)
+        self.labels[self._selected][1] = True
+        self.labels[self._selected][0].setPalette(palette)
+        self.labels[self._selected][0].setFont(font)
 
     def _clearSelected(self):
+        # Should be outside of scroll range, so serves as a default palette value
+        palette, font = QPalette(self.labels[0][0].palette()), QFont(self.labels[0][0].font())
+        # Clear any selected labels (excluding the selected)
+        for label in self.labels.items():
+            if self.labels[label][1] == True:
+                self.labels[label][0].setPalette(palette)
+                self.labels[label][0].setFont(font)
+                self.labels[self._selected][1] = False
         if (self._selected != None):
-            palette, font = QPalette(self.labels[0].palette()), QFont(self.labels[0].font())
-            self.labels[self._selected].setPalette(palette)
-            self.labels[self._selected].setFont(font)
+            self.labels[self._selected][0].setPalette(palette)
+            self.labels[self._selected][0].setFont(font)
+            self.labels[self._selected][1] = False
             self._selected = None
 
     def clearSelected(self):
@@ -154,7 +171,7 @@ class TimeSelect(QWidget):
             #                       distance between labels. Rounded as pixels are absolute values and decimals cause misalign-
             #                       -ment between values if kept in the interval
             #       'f_label':  Value for dictating the initial snappable label in the container. 
-            #                   ↪   Labels are stored via a dictionary 'self.labels[]', so can be passed along knowing the first
+            #                   ↪   Labels are stored via a dictionary 'self.labels[][0]', so can be passed along knowing the first
             #                       valid label without manually calculating it via a while-loop. Rounds upwards.
             #       'st_val':   Value for use with setSnapPositionsY()
             #                   ↪   Uses the y position of the f_label (in relation to the TimeSelect QWidget's own space),
@@ -165,8 +182,8 @@ class TimeSelect(QWidget):
         interval = math.floor(self.sizeHint().height() / len(self.labels))
         f_label = math.ceil(offset / interval) #No. for self.labels[n] indicating first snappable label in container
         st_val = (
-            (self.labels[f_label].pos().y()) 
-            + (self.labels[f_label].sizeHint().height() / 2)
+            (self.labels[f_label][0].pos().y()) 
+            + (self.labels[f_label][0].sizeHint().height() / 2)
             - (offset)
         )
         return st_val, interval
@@ -178,8 +195,8 @@ class TimeSelect(QWidget):
         self._clearSelected()
         m_label, offset = (round(len(self.labels) / 2)), (pagestep / 2) # Middle Label & Offset
         return (
-            self.labels[m_label].pos().y()
-            + (self.labels[m_label].sizeHint().height() / 2)
+            self.labels[m_label][0].pos().y()
+            + (self.labels[m_label][0].sizeHint().height() / 2)
             - (offset)
             )
     
@@ -189,12 +206,12 @@ class TimeSelect(QWidget):
         """
         b_label, t_label, offset = (round(len(self.labels) / 4)), 3*(round(len(self.labels) / 4)), (pagestep/2)
         return (
-            self.labels[b_label].pos().y()
-            + (self.labels[b_label].sizeHint().height() / 2)
+            self.labels[b_label][0].pos().y()
+            + (self.labels[b_label][0].sizeHint().height() / 2)
             - (offset)
             ),(
-            self.labels[t_label].pos().y()
-            + (self.labels[t_label].sizeHint().height() / 2)
+            self.labels[t_label][0].pos().y()
+            + (self.labels[t_label][0].sizeHint().height() / 2)
             - (offset)
             )
     
@@ -207,10 +224,10 @@ class TimeSelect(QWidget):
     
     def changeMinVal(self, min_val, test_en=False):
         if (math.ceil(min_val / self._mult) != self._locked):
-            self._locked = math.ceil(min_val / self._mult)
+            self._locked        = math.ceil(min_val / self._mult)
             if (self._locked == self._entries): self._locked -= 1    #Shouldn't happen, but just in case
-            self._period = (self._entries - self._locked)
-            self._repeats = self.__determineRepeats(self._entries, self._locked)
+            self._period        = self._entries - self._locked
+            self._repeats       = self.__determineRepeats(self._entries, self._locked)
             self._clearSelected()
             self.__reconstruct_ui()
         elif (test_en==True): print("Could not change min_val: Same as previous")
@@ -229,11 +246,14 @@ class TimeSelect(QWidget):
                                           O=(self._locked)
                                           ) * self._mult
                                           )
-            self.labels[x] = QLabel(f"{val:02}", parent=self)
-            self.labels[x].setObjectName(f"{self.objectName()}_TSLabel_{x}_{val:02}")
-            self.labels[x].setFont(self.labelStyle)
-            self.labels[x].setAlignment(Qt.AlignmentFlag.AlignRight)
-            self.labelContainer.addWidget(self.labels[x],40,self.labelAlignment)
+            self.labels[x][0] = QLabel(f"{val:02}", parent=self)
+            self.labels[x][1] = False
+            self.labels[x][0].setObjectName(f"{self.objectName()}_TSLabel_{x}_{val:02}")
+            self.labels[x][0].setFont(self.labelStyle)
+            self.labels[x][0].setAlignment(Qt.AlignmentFlag.AlignRight)
+            self.labelContainer.addWidget(self.labels[x][0],
+                                          40,
+                                          self.labelAlignment)
         if (test_en): print(f"Total values: {self._period} Repeated: {self._repeats} \nTotal in list: {len(self.labels)}")
         self.setLayout(self.labelContainer)
         self.period = round(self.sizeHint().height()/self._repeats)
@@ -245,11 +265,12 @@ class TimeSelect(QWidget):
         """
         try:
             for x in range(len(self.labels)):
-                t_label = self.findChild(QLabel, (self.labels[x]).objectName())
+                t_label: QLabel = self.findChild(QLabel, (self.labels[x][0]).objectName())
                 if (test_en): print(t_label.objectName())
                 self.labelContainer.removeWidget(t_label)
                 t_label.deleteLater()
-                if (test_en): print(Shiboken.isValid(self.labels[x]))
+                if (test_en): print(Shiboken.isValid(self.labels[x][0]))
+            
             if (test_en): print(len(self.labels))
             self.labels.clear() # Delete all key references (otherwise will break functions reliant on len(labels))
             self.__setup_ui()
