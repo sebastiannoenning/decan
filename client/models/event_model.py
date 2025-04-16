@@ -153,6 +153,9 @@ class EventModel(QSortFilterProxyModel):
 
         self._eventConcatanationProxyModel = QConcatenateTablesProxyModel(self)         #Concatanation layer    (2)
 
+
+        self._eventLookupModel = QSortFilterProxyModel(self)
+
         self.setupLayers()
 
 
@@ -233,6 +236,10 @@ class EventModel(QSortFilterProxyModel):
                 self.validateID = QSqlQuery() 
                 self.validateID.prepare("SELECT * FROM `Users` WHERE `UserID` = :user ;")
                 pass
+        
+        class _EventQueries():
+            def __init__(self):
+                pass
 
         class _EventViewQueries(): # Inner class for running operatings on the EU_Events views
             """     DB Structure: 
@@ -298,9 +305,6 @@ class EventModel(QSortFilterProxyModel):
                 self.changeEditViewCondition.bindValue(':user', uid)
                 exec_check = self.changeEditViewCondition.exec()
                 if not (exec_check): raise Exception("alterView() error: ALTER VIEW Statement did not exec, SQL Error Msg: ",self.changeEditViewCondition.lastError())
-
-
-
 
 # Function just to cascade some SQL queries passed        
 def empty_proc():

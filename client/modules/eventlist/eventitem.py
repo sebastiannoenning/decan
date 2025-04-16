@@ -1,7 +1,7 @@
 import datetime
 import json
 from enum import Enum
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Union
 
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtCore
@@ -17,10 +17,10 @@ from models.event_model import EventModel
 from modules.eventlist.event_item_ui import Ui_event_item, Ui_event_description, Ui_event_todo, Ui_event_body
 
 class EventType(Enum):
-    Complex = 0
-    Simple = 1
-    Description = 2
-    ToDo = 3
+    Description = 0
+    ToDo = 1
+    Complex = 2
+    Simple = 3
 
 class EventItem(QWidget):
 
@@ -60,7 +60,7 @@ class EventItem(QWidget):
     def setModel(self, model: EventModel): 
         self._mapper.setModel(model)
 
-    def setRow(self, index: QModelIndex): self._mapper.setRootIndex(index)
+    def setModelIndex(self, index: QModelIndex): self._mapper.setRootIndex(index)
 
     def _setupMappings(self): # Sets mappings to each ui object generated via the _setup_Ui
         self._mapper(self._Ui.event_title, 1)
@@ -99,8 +99,10 @@ class EBody(QWidget):
     def __init__(self, parent, Attributes: QByteArray = None):
         super().__init__(parent)
         self._Attributes = Attributes
-        self._Json : Dict[str, QJsonValue] = None
+        self._Json          : Dict[str, QJsonValue] = None
 
+        # Experimental internal data list for pulling key associated with object, to provide ease of use on moving or changing the values inside.
+        self._Items         : Dict[str, Union[EToDo, EDescription]] = None
         self._Ui = Ui_event_body(self)
         self._Ui.setupUi()
 
@@ -123,7 +125,7 @@ class EBody(QWidget):
         if (new_Json == self._Json): return
         elif self._Json is not None: self.reformatUi(n_Json=new_Json)
         else: self.generateUi(n_Json = new_Json)
-
+    
     def generateUi(self, n_Json: Dict[str, QJsonValue]):
         self._Json = n_Json
         objects: Dict[str, QJsonValue] = self._Json.get('objects')

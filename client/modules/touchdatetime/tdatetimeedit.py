@@ -185,7 +185,7 @@ class TDateTimeEdit(QWidget):
 
     def _updateMinimumDateTime(self, test_en=True):
         self._timeEdit_editDialog.setMinimumDateTime(self._minimumDateTime)
-        self._dateEdit_editDialog.setMinimumDate(self._minimumDateTime.EDateTime.date())
+        self._dateEdit_editDialog.setMinimumDate(self._minimumDateTime.date())
 
         if (test_en): print(f"TDE_:{hex(id(self))}############\nUPDATE MIN DT; NEW MIN DT {self._minimumDateTime}\nCUR DT: {self._dateTime}")
         self._autoUpdateButton()
@@ -197,37 +197,37 @@ class TDateTimeEdit(QWidget):
         if (test_en): print(f"TDE_:{hex(id(self))}############\nUPDATE CUR DT; NEW CUR DT {self._dateTime}")
 
     # Setters for both minimumDateTime & maximumDateTime
-    def setDateRange(self, min: QDate, max: QDate): self._minimumDateTime.setDate(min); self._maximumDateTime.setDate(max)
+    def setDateRange(self, min: QDate, max: QDate):             self._minimumDateTime.setDate(min); self._maximumDateTime.setDate(max)
     def setDateTimeRange(self, min: QDateTime, max: QDateTime): self._minimumDateTime, self._maximumDateTime = min, max
 
     # Setters for _minimumDateTime
-    def setMinimumDateTime(self, datetime: QDateTime): self._minimumDateTime = datetime; self._updateMinimumDateTime()
-    def setMinimumDate(self, date: QDate): self._minimumDateTime.setDate(date); self._updateMinimumDateTime()
-    def setMinimumTime(self, time: QTime): self._minimumDateTime.setTime(time); self._updateMinimumDateTime()
+    def setMinimumDateTime(self, datetime: QDateTime):  self._minimumDateTime = datetime;       self._updateMinimumDateTime()
+    def setMinimumDate(self, date: QDate):              self._minimumDateTime.setDate(date);    self._updateMinimumDateTime()
+    def setMinimumTime(self, time: QTime):              self._minimumDateTime.setTime(time);    self._updateMinimumDateTime()
     # Functions for clearing _minimumDateTime
-    def clearMinimumDateTime(self): self._minimumDateTime = QDateTime(); self._updateMinimumDateTime()
-    def clearMinimumDate(self): self._minimumDateTime.setDate(QDate()); self._updateMinimumDateTime()
-    def clearMinimumTime(self): self._minimumDateTime.setTime(QTime()); self._updateMinimumDateTime()
+    def clearMinimumDateTime(self): self._minimumDateTime = QDateTime();                        self._updateMinimumDateTime()
+    def clearMinimumDate(self):     self._minimumDateTime.setDate(QDate());                     self._updateMinimumDateTime()
+    def clearMinimumTime(self):     self._minimumDateTime.setTime(QTime());                     self._updateMinimumDateTime()
     # Getters for _minimumDateTime
-    def minimumDateTime(self): return self._minimumDateTime
-    def minimumDate(self): return self._minimumDateTime.date()
-    def minimumTime(self): return self._minimumDateTime.time()
+    def minimumDateTime(self):      return self._minimumDateTime
+    def minimumDate(self):          return self._minimumDateTime.date()
+    def minimumTime(self):          return self._minimumDateTime.time()
 
     # Setters for _maximumDateTime
-    def setMaximumDateTime(self, datetime: QDateTime): self._maximumDateTime = datetime; self._updateMaximumDateTime()
-    def setMaximumDate(self, date: QDate): self._maximumDateTime.setDate(date); self._updateMaximumDateTime()
-    def setMaximumTime(self, time: QTime): self._maximumDateTime.setTime(time); self._updateMaximumDateTime()
+    def setMaximumDateTime(self, datetime: QDateTime):  self._maximumDateTime = datetime;       self._updateMaximumDateTime()
+    def setMaximumDate(self, date: QDate):              self._maximumDateTime.setDate(date);    self._updateMaximumDateTime()
+    def setMaximumTime(self, time: QTime):              self._maximumDateTime.setTime(time);    self._updateMaximumDateTime()
     # Functions for clearing _maximumDateTime
-    def clearMaximumDateTime(self): self._maximumDateTime = QDateTime(); self._updateMaximumDateTime()
-    def clearMaximumDate(self): self._maximumDateTime.setDate(QDate()); self._updateMaximumDateTime()
-    def clearMaximumTime(self): self._maximumDateTime.setTime(QTime()); self._updateMaximumDateTime()
+    def clearMaximumDateTime(self): self._maximumDateTime = QDateTime();                        self._updateMaximumDateTime()
+    def clearMaximumDate(self):     self._maximumDateTime.setDate(QDate());                     self._updateMaximumDateTime()
+    def clearMaximumTime(self):     self._maximumDateTime.setTime(QTime());                     self._updateMaximumDateTime()
     # Getters for _maximumDateTime
-    def maximumDateTime(self): return self._maximumDateTime()
-    def maximumDate(self): return self._maximumDateTime.date()
-    def maximumTime(self): return self._maximumDateTime.time()
+    def maximumDateTime(self):      return self._maximumDateTime()
+    def maximumDate(self):          return self._maximumDateTime.date()
+    def maximumTime(self):          return self._maximumDateTime.time()
 
     # Functions for returning dateTime
-    def dateTime(self): return self._dateTime
+    def dateTime(self):             return self._dateTime
 
     # Reimplemented paintEvent for advanced styling
     def paintEvent(self, pe):

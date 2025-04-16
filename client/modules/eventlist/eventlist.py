@@ -23,22 +23,45 @@ class EventList(QWidget):
         self._model     : EventModel                                    = None
         self._current   : Optional[int]                                 = None
 
-    def setModel(self, model: EventModel):
+    
+    def tryExcept(func: function, message: str = 'Generic error message', test_en: bool = False):
+        try: func()
+        except Exception as e: print(message, e)
+
+    def reset(self):
+        self.clearList(self)
+        self.populateList(self)
+
+    def setModel(self, model: EventModel, test_en: bool = True):
+        if self._model is not None:
+            msg = 'eventList->setModel()->eventModel->disconnect() error:'
+            self.tryExcept(self._model.rowsMoved.disconnect(),                      f'{msg} Could not disconnect rowsMoved',            test_en)
+            self.tryExcept(self._model.rowsInserted.disconnect(),                   f'{msg} Could not disconnect rowsInserted',         test_en)
+            self.tryExcept(self._model.rowsRemoved.disconnect(),                    f'{msg} Could not disconnect rowsRemoved',          test_en)
+            self.tryExcept(self._model.rowsAboutToBeMoved.disconnect(),             f'{msg} Could not disconnect rowsAboutToBeMoved',   test_en)
+            self.tryExcept(self._model.rowsAboutToBeInserted.disconnect(),          f'{msg} Could not disconnect rowsAboutToBeInserted',test_en)
+            self.tryExcept(self._model.rowsAboutToBeRemoved.disconnect(),           f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
+
+            self.tryExcept(self._model.modelReset.disconnect(),                     f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
+            self.tryExcept(self._model.modelAboutToBeReset.disconnect(),            f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
+        
         self._model = model
         if (self._Ui.container.count() > 0): self.clearList()
+
+    def deleteRow(self, index: QModelIndex):
+        eventItem: EventItem = self._items[index]
+
+        if eventItem is None: return
+        
+
+    def moveRow(self, index: QModelIndex):
+        eventItem: EventItem = self._items[index]
 
     def clearList(self): pass
 
     def populateList(self):
         # Only called when a models values have been completely changed. 
         pass
-
-    def addItem(self, modelIndex: QModelIndex): pass
-    
-    def deleteItem(self, modelIndex: QModelIndex):
-        try:
-            self._items[modelIndex][0]
-        except Exception as e: print(f"error msg: {e}")
 
     def clear_items(self, condition):
         while ((len(self.items) > 0) & (condition())):
@@ -62,17 +85,5 @@ class EventList(QWidget):
     def refreshModel(self):
         self.clear_items(lambda: True)
 
-    @Slot(EventItem)
-    def setSelected(self, event: EventItem): pass
-
-    @Slot(EventItem) 
-    def setData(self, event: EventItem): pass
-
-    def deleteSelected(self):
-        if self.current is not None:
-            print(self.current)
-            self.delete_item(self.current)
-            self.current = None
-        else:
-            print('No item selected!')
+    def deleteSelected(self): pass
 
