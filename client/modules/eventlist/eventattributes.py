@@ -24,13 +24,14 @@ class EBody(QWidget):
 
     def __init__(self, parent, Attributes: QByteArray = None):
         super().__init__(parent)
+        self._Ui = Ui_event_body()
+        self._Ui.setupUi(self)
+
         self._Attributes = Attributes
         self._Json          : Dict[str, QJsonValue] = None
 
         # Experimental internal data list for pulling key associated with object, to provide ease of use on moving or changing the values inside.
         self._Items         : Dict[str, Union[EToDo, EDescription]] = None
-        self._Ui = Ui_event_body(self)
-        self._Ui.setupUi()
 
     # Getters for _Json attributes
     def returnEventType(self): return self._Json['info']['event_type']

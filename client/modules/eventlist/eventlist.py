@@ -14,8 +14,8 @@ class EventList(QWidget):
     """
     def __init__(self) -> None:
         super().__init__()
-        self._Ui = Ui_event_list(self)
-        self._Ui.setupUi()
+        self._Ui = Ui_event_list()
+        self._Ui.setupUi(self)
 
         # Internal Dictionary for quick lookup of EventItems via their QModelIndex
         self._items     : Dict[QModelIndex, EventItem]                  = []
