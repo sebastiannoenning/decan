@@ -19,7 +19,7 @@ from modules.eventlist.eventlist import EventList
 import modules.scrollers_qt as scrollFuncs
 
 class Ui_event_list(object):
-    def setupUi(self, event_list: EventList):
+    def setupUi(self, event_list):
         if not event_list.objectName():
             event_list.setObjectName(u"event_list")
         event_list.resize(0, 0)
@@ -37,6 +37,6 @@ class Ui_event_list(object):
         QMetaObject.connectSlotsByName(event_list)
     # setupUi
 
-    def retranslateUi(self, event_list: EventList):
+    def retranslateUi(self, event_list):
         event_list.setWindowTitle(QCoreApplication.translate("event_list", u"Form", None))
     # retranslateUi
