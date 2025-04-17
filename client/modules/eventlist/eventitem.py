@@ -59,7 +59,7 @@ class EventItem(QWidget):
     def _setupMappings(self): # Sets mappings to each ui object generated via the _setup_Ui
         self._mapper.addMapping(self._Ui.event_title, 1)
         self._mapper.addMapping(self._Ui.event_time, 2)
-        self._mapper.addMapping(self._Ui.event_body, 4, "Attributes")
+        self._mapper.addMapping(self._Ui.event_body, 4, QByteArray("Attributes"))
         self._mapper.addMapping(self._Ui.event_location, 6)
 
         self._mapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)
