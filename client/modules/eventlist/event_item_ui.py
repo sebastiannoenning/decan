@@ -87,7 +87,7 @@ class Ui_event_item(object):
         QMetaObject.connectSlotsByName(event_item)
     # setupUi
 
-    def formatUi(self, Type: EventType):
+    def formatUi(self, Type: EventType = EventType.Simple):
         if (Type == self.format): return
         self.format = Type
         if (Type == EventType.Simple):
