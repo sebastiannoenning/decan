@@ -1,9 +1,15 @@
 import sys, re, datetime
 from typing import List, Optional
 from PySide6 import QtCore
-from PySide6.QtCore import Qt, QObject, QSortFilterProxyModel, QConcatenateTablesProxyModel, QDate, QDateTime
-from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQueryModel, QSqlQuery
+from PySide6.QtCore import (Qt, QObject, 
+                            QSortFilterProxyModel, QConcatenateTablesProxyModel, 
+                            QDate, QDateTime, QTime,
+                            QRegularExpression)
+from PySide6.QtSql import (QSqlDatabase, 
+                           QSqlTableModel, QSqlQueryModel, 
+                           QSqlQuery)
 
+from .user_model import UserModel
 import modules.sql_qt as sqlFuncs
 import modules.datetime_qt as dtFuncs
 
@@ -128,24 +134,35 @@ class EventFilter():
 
 class EventModel(QSortFilterProxyModel):
     def __init__(self, /, parent=None, *, 
-                 db: QSqlDatabase=None,
-                 filterRegularExpression=None, 
-                 filterKeyColumn=-1, 
-                 dynamicSortFilter=False, 
-                 filterCaseSensitivity=Qt.CaseSensitivity.CaseSensitive, 
-                 sortCaseSensitivity=Qt.CaseSensitivity.CaseSensitive, 
-                 isSortLocaleAware=False, 
-                 sortRole=Qt.ItemDataRole.UserRole, 
-                 filterRole=Qt.ItemDataRole.DisplayRole, 
-                 recursiveFilteringEnabled=False, 
-                 autoAcceptChildRows=False):
-        super().__init__(parent)
-        self._userID: Optional[int] = None
-
+                 db                         :QSqlDatabase       =None,
+                 userModel                  :UserModel          =None,
+                 filterRegularExpression    :QRegularExpression =None, 
+                 filterKeyColumn            :int                =-1, 
+                 dynamicSortFilter          :bool               =True, 
+                 filterCaseSensitivity      :Qt.CaseSensitivity =Qt.CaseSensitivity.CaseSensitive, 
+                 sortCaseSensitivity        :Qt.CaseSensitivity =Qt.CaseSensitivity.CaseSensitive, 
+                 isSortLocaleAware          :bool               =False, 
+                 sortRole                   :Qt.ItemDataRole    =Qt.ItemDataRole.UserRole, 
+                 filterRole                 :Qt.ItemDataRole    =Qt.ItemDataRole.DisplayRole, 
+                 recursiveFilteringEnabled  :bool               =False, 
+                 autoAcceptChildRows        :bool               =False):
+        super().__init__(parent, 
+                         filterRegularExpression    =filterRegularExpression, 
+                         filterKeyColumn            =filterKeyColumn, 
+                         dynamicSortFilter          =dynamicSortFilter, 
+                         filterCaseSensitivity      =filterCaseSensitivity, 
+                         sortCaseSensitivity        =sortCaseSensitivity, 
+                         isSortLocaleAware          =isSortLocaleAware, 
+                         sortRole                   =sortRole, 
+                         filterRole                 =filterRole, 
+                         recursiveFilteringEnabled  =recursiveFilteringEnabled, 
+                         autoAcceptChildRows        =autoAcceptChildRows)
         self._Queries = self.queries()
         self._Filters = self.filters()
 
+        self._userID: Optional[int] = None
         self._database: Optional[QSqlDatabase] = db
+        self._userModel: Optional[UserModel] = userModel
 
         #Bottom-most models; direct connections to the database
         self._eventModel = QSqlTableModel(self, db=self._database)                      #Bottom-most layer      (1.1)
@@ -169,9 +186,9 @@ class EventModel(QSortFilterProxyModel):
         self._eventLookupModel.setSourceModel(self._eventConcatanationProxyModel)
 
         self.setSourceModel(self._eventConcatanationProxyModel)
-        self.setDynamicSortFilter(True) # Sorts model automatically if sort_proxy
+        self.setDynamicSortFilter(True)
         self.setSortRole(Qt.ItemDataRole.UserRole)
-        self.sort(0, Qt.SortOrder.AscendingOrder)
+        self.sort(3, Qt.SortOrder.AscendingOrder)
 
     def changeUser(self, uid: int):
         # Will validate userID and act as padding before running on the view program
