@@ -15,12 +15,7 @@ from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
 from models.event_model import EventModel
 from modules.eventlist.event_item_ui import Ui_event_item
-
-class EventType(Enum):
-    Description = 0
-    ToDo = 1
-    Complex = 2
-    Simple = 3
+from eventtype import EventType
 
 class EventItem(QWidget):
 
