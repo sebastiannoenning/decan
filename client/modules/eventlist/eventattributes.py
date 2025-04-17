@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-from modules.eventlist.eventitem import EventType
+from modules.eventlist.eventtype import EventType
 from modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event_todo, Ui_event_body
 
 class EBody(QWidget):
