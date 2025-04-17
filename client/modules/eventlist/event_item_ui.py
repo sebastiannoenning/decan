@@ -76,7 +76,7 @@ class Ui_event_item(object):
         Font2.setPointSize(24)
         self.event_location.setFont(Font2)
         # Event Body
-        self.event_body = EBody(self)
+        self.event_body = EBody(event_item)
         self.event_body.setObjectName("event_body")
 
         self.footer = QWidget(event_item)
