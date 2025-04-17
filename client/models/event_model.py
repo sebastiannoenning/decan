@@ -187,7 +187,7 @@ class EventModel(QSortFilterProxyModel):
 
         self.setSourceModel(self._eventConcatanationProxyModel)
         self.setDynamicSortFilter(True)
-        self.setSortRole(Qt.ItemDataRole.UserRole)
+        self.setSortRole(Qt.ItemDataRole.EditRole)
         self.sort(3, Qt.SortOrder.AscendingOrder)
 
     def changeUser(self, uid: int):
