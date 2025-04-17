@@ -23,7 +23,7 @@ class Ui_event_item(object):
         if not event_item.objectName():
             event_item.setObjectName(u"event_item")
         event_item.resize(0, 0)
-        self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        event_item.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
         self.format = EventType.Simple
 
         # Central Container

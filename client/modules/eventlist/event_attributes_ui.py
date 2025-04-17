@@ -22,7 +22,7 @@ class Ui_event_body(object):
         if not event_body.objectName():
             event_body.setObjectName(u"event_body")
         event_body.resize(0, 0)
-        self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum))
+        event_body.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum))
         
         self.container = QVBoxLayout(event_body)
         self.container.setObjectName(u"event_body_container")
