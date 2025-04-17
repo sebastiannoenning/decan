@@ -171,7 +171,7 @@ class EventModel(QSortFilterProxyModel):
         self.setSourceModel(self._eventConcatanationProxyModel)
         self.setDynamicSortFilter(True) # Sorts model automatically if sort_proxy
         self.setSortRole(Qt.ItemDataRole.UserRole)
-        self.sort(3, Qt.SortOrder.AscendingOrder)
+        self.sort(0, Qt.SortOrder.AscendingOrder)
 
     def changeUser(self, uid: int):
         # Will validate userID and act as padding before running on the view program
