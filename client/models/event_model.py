@@ -184,6 +184,9 @@ class EventModel(QSortFilterProxyModel):
         self._eventConcatanationProxyModel.addSourceModel(self._eventsUsersModel)
 
         self._eventLookupModel.setSourceModel(self._eventConcatanationProxyModel)
+        self._eventLookupModel.setDynamicSortFilter(True)
+        self._eventLookupModel.setSortRole(Qt.ItemDataRole.DisplayRole)
+        self._eventLookupModel.sort(0, Qt.SortOrder.AscendingOrder)
 
         self.setSourceModel(self._eventConcatanationProxyModel)
         self.setDynamicSortFilter(True)
