@@ -43,10 +43,11 @@ class EventItem(QWidget):
         self._Ui = Ui_event_item()
         self._Ui.setupUi(self)
         self._Ui.formatUi(Type=EventType.Simple)
+        self._map:
 
-        self._mapper    = QDataWidgetMapper(parent=self)
+        self._mapper    :QDataWidgetMapper      = QDataWidgetMapper(parent=self)
         if (model is not None): self._mapper.setModel(model)
-        self._index     = row
+        self._index     :QModelIndex           = row
         if (row is not None): self._mapper.setRootIndex(row)
 
         self._setupMappings()
@@ -57,10 +58,10 @@ class EventItem(QWidget):
     def setModelIndex(self, index: QModelIndex): self._mapper.setRootIndex(index)
 
     def _setupMappings(self): # Sets mappings to each ui object generated via the _setup_Ui
-        self._mapper(self._Ui.event_title, 1)
-        self._mapper(self._Ui.event_time, 2)
-        self._mapper(self._Ui.event_body, 4, "Attributes")
-        self._mapper(self._Ui.event_location, 6)
+        self._mapper.addMapping(self._Ui.event_title, 1)
+        self._mapper.addMapping(self._Ui.event_time, 2)
+        self._mapper.addMapping(self._Ui.event_body, 4, "Attributes")
+        self._mapper.addMapping(self._Ui.event_location, 6)
 
         self._mapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)
 
