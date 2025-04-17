@@ -21,8 +21,8 @@ from models.event_model import EventModel, EventFilter, DateRange
 class EventView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._ui = Ui_event_view()
-        self._ui.setupUi(self)
+        self._Ui = Ui_event_view()
+        self._Ui.setupUi(self)
 
         self._database = QSqlDatabase.addDatabase('QMYSQL')
         self._database.setHostName('localhost')
@@ -78,8 +78,8 @@ class EventView(QWidget):
 
         self.eventmodel = EventModel(self, db=self._database)
 
-        self._ui.event_table.setModel(self.eventmodel)
+        self._Ui.event_table.setModel(self.eventmodel)
 
-        self._ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
-        self._ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
-        self._ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))
+        self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
+        self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
+        self._Ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))

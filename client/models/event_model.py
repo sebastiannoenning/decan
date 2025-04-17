@@ -153,8 +153,7 @@ class EventModel(QSortFilterProxyModel):
 
         self._eventConcatanationProxyModel = QConcatenateTablesProxyModel(self)         #Concatanation layer    (2)
 
-
-        self._eventLookupModel = QSortFilterProxyModel(self)
+        self._eventLookupModel = QSortFilterProxyModel(self)                            #Look-up access, sits 'parallel' to this one
 
         self.setupLayers()
 
@@ -167,8 +166,12 @@ class EventModel(QSortFilterProxyModel):
         self._eventConcatanationProxyModel.addSourceModel(self._eventModel)
         self._eventConcatanationProxyModel.addSourceModel(self._eventsUsersModel)
 
+        self._eventLookupModel.setSourceModel(self._eventConcatanationProxyModel)
+
         self.setSourceModel(self._eventConcatanationProxyModel)
-        self.setDynamicSortFilter(True) # Sorts model automatically if sort_proxy 
+        self.setDynamicSortFilter(True) # Sorts model automatically if sort_proxy
+        self.setSortRole(Qt.ItemDataRole.UserRole)
+        self.sort(3, Qt.SortOrder.AscendingOrder)
 
     def changeUser(self, uid: int):
         # Will validate userID and act as padding before running on the view program
