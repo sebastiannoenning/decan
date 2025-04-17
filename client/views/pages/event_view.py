@@ -1,7 +1,7 @@
 from typing import List
 
 from PySide6 import QtCore
-from PySide6.QtCore import Qt, QDateTime, QDate, QTime
+from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QModelIndex
 from PySide6.QtWidgets import QWidget
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 
@@ -81,7 +81,7 @@ class EventView(QWidget):
         self._Ui.event_table.setModel(self.eventmodel)
 
         self._Ui.TestItem.setModel(self.eventmodel)
-        self._Ui.TestItem.setModelIndex(1)
+        self._Ui.TestItem.setModelIndex(self.eventmodel.index(0,0,QModelIndex()))
 
         self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
         self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
