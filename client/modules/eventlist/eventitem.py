@@ -43,7 +43,6 @@ class EventItem(QWidget):
         self._Ui = Ui_event_item()
         self._Ui.setupUi(self)
         self._Ui.formatUi(Type=EventType.Simple)
-        self._map:
 
         self._mapper    :QDataWidgetMapper      = QDataWidgetMapper(parent=self)
         if (model is not None): self._mapper.setModel(model)
