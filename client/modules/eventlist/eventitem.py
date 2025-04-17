@@ -66,8 +66,6 @@ class EventItem(QWidget):
 
     def _formatUi(self, Type: EventType=EventType.Simple): pass
 
-    def setModelRow(self, model: EventModel, index: QModelIndex): pass
-
     def mousePressEvent(self, event):
         # Check if the left mouse button was pressed
         if event.button() == Qt.MouseButton.LeftButton:
