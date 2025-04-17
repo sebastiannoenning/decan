@@ -15,7 +15,7 @@ from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
 from models.event_model import EventModel
 from modules.eventlist.event_item_ui import Ui_event_item
-from eventtype import EventType
+from modules.eventlist.eventtype import EventType
 
 class EventItem(QWidget):
 
