@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHeaderView, QPushButton, QSizePolicy,
-    QTableView, QWidget)
+from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QHeaderView, QPushButton,
+    QScrollArea, QSizePolicy, QTableView, QWidget)
 
-from modules.eventlist.eventitem import EventItem
+from modules.eventlist.eventlist import EventList
 
 class Ui_event_view(object):
     def setupUi(self, event_view):
@@ -39,10 +39,18 @@ class Ui_event_view(object):
         self.user3.setGeometry(QRect(280, 320, 100, 32))
         self.pushButton = QPushButton(event_view)
         self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setGeometry(QRect(550, 20, 100, 32))
-        self.TestItem = EventItem(event_view)
-        self.TestItem.setObjectName(u"TestItem")
-        self.TestItem.setGeometry(QRect(450, 80, 331, 311))
+        self.pushButton.setGeometry(QRect(110, 390, 100, 32))
+        self.eventListScroll = QScrollArea(event_view)
+        self.eventListScroll.setObjectName(u"eventListScroll")
+        self.eventListScroll.setGeometry(QRect(440, 10, 341, 451))
+        self.eventListScroll.setLineWidth(0)
+        self.eventListScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.eventListScroll.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.eventListScroll.setWidgetResizable(True)
+        self.eventList = EventList()
+        self.eventList.setObjectName(u"eventList")
+        self.eventList.setGeometry(QRect(0, 0, 339, 449))
+        self.eventListScroll.setWidget(self.eventList)
 
         self.retranslateUi(event_view)
 

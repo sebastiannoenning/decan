@@ -13,8 +13,9 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-from modules.eventlist.eventtype import EventType
 from modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event_todo, Ui_event_body
+
+from modules.eventlist.eventtype import EventType
 
 class EBody(QWidget):
     """ Provides JSON Parsing of the Attributes column & constructs the internal body to be placed in Body & Dynamic 
@@ -81,6 +82,8 @@ class EBody(QWidget):
                 widget._Ui.checkbox.checkStateChanged.connect(lambda: self._updateChecked(key)) # Updating _Attributes will call a connection to the DB via the dataWidgetMapper
             
             self._Ui.container.addWidget(widget)
+            
+            self.setMaximumHeight(self._Ui.container.sizeHint().height())
 
     def reformatUi(self, n_Json: Dict[str, QJsonValue]):
         for key, val in n_Json.get('objects',{}).items():

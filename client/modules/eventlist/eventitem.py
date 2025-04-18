@@ -7,14 +7,17 @@ from typing import List, Dict, Tuple, Union
 from PySide6 import QtCore
 from PySide6.QtCore import (Qt, QObject, Signal, 
                             QJsonDocument, QJsonValue,
-                            QByteArray, QModelIndex, Property)
+                            QByteArray, QModelIndex, Property, QPersistentModelIndex)
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, 
                                QWidget, QScrollArea, QLabel, QCheckBox, QSizePolicy, QDataWidgetMapper,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
 from models.event_model import EventModel
+
 from modules.eventlist.event_item_ui import Ui_event_item
+
+from modules.eventlist.eventattributes import EBody
 from modules.eventlist.eventtype import EventType
 
 class EventItem(QWidget):
@@ -38,7 +41,7 @@ class EventItem(QWidget):
     def __init__(self,
                  parent     : QObject       = None, 
                  model      : EventModel    = None, 
-                 row        : QModelIndex   = None):
+                 index        : QModelIndex   = None):
         super().__init__(parent)
         self._Ui = Ui_event_item()
         self._Ui.setupUi(self)
@@ -46,15 +49,19 @@ class EventItem(QWidget):
 
         self._mapper    :QDataWidgetMapper      = QDataWidgetMapper(parent=self)
         if (model is not None): self._mapper.setModel(model)
-        self._index     :QModelIndex           = row
-        if (row is not None): self._mapper.setRootIndex(row)
+        self._index     :QModelIndex           = index
+        if (index is not None): self._mapper.setCurrentIndex(index)
+
 
         self._setupMappings()
 
-    def setModel(self, model: EventModel): 
-        self._mapper.setModel(model)
+    def setupConnections(self):
+        self._Ui.event_body.attributesChanged.connect(self._mapper.submit())
 
-    def setModelIndex(self, index: QModelIndex): self._mapper.setRootIndex(index)
+    def setModel(self, model: EventModel):              self._mapper.setModel(model)
+    def setCurrentIndex(self, index: QModelIndex):      self._mapper.setCurrentIndex(index)
+    def currentIndex(self):                             self._mapper.currentIndex()
+    def remapIndex(self, index: QModelIndex):           pass
 
     def _setupMappings(self): # Sets mappings to each ui object generated via the _setup_Ui
         self._mapper.addMapping(self._Ui.event_title, 1)

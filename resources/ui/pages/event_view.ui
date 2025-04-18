@@ -65,8 +65,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>20</y>
+     <x>110</x>
+     <y>390</y>
      <width>100</width>
      <height>32</height>
     </rect>
@@ -75,22 +75,44 @@
     <string>proposedSQL</string>
    </property>
   </widget>
-  <widget class="EventItem" name="TestItem" native="true">
+  <widget class="QScrollArea" name="eventListScroll">
    <property name="geometry">
     <rect>
-     <x>450</x>
-     <y>80</y>
-     <width>331</width>
-     <height>311</height>
+     <x>440</x>
+     <y>10</y>
+     <width>341</width>
+     <height>451</height>
     </rect>
    </property>
+   <property name="lineWidth">
+    <number>0</number>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="EventList" name="eventList">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>339</width>
+      <height>449</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>EventItem</class>
+   <class>EventList</class>
    <extends>QWidget</extends>
-   <header location="global">modules.eventlist.eventitem</header>
+   <header location="global">modules.eventlist.eventlist</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

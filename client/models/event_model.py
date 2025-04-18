@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import (Qt, QObject, 
                             QSortFilterProxyModel, QConcatenateTablesProxyModel, 
                             QDate, QDateTime, QTime,
-                            QRegularExpression)
+                            QRegularExpression, Signal)
 from PySide6.QtSql import (QSqlDatabase, 
                            QSqlTableModel, QSqlQueryModel, 
                            QSqlQuery)
@@ -133,6 +133,7 @@ class EventFilter():
         return filter
 
 class EventModel(QSortFilterProxyModel):
+
     def __init__(self, /, parent=None, *, 
                  db                         :QSqlDatabase       =None,
                  userModel                  :UserModel          =None,
@@ -173,7 +174,6 @@ class EventModel(QSortFilterProxyModel):
         self._eventLookupModel = QSortFilterProxyModel(self)                            #Look-up access, sits 'parallel' to this one
 
         self.setupLayers()
-
 
     def setupLayers(self):
         #Setup bottom-most layers
@@ -235,6 +235,10 @@ class EventModel(QSortFilterProxyModel):
     def _alterView(self, uid):
         if (uid == None):
             pass
+
+    def refresh(self):
+        self._eventModel.select()
+        self._eventsUsersModel.select()
 
     class filters():
         """ Inner class for bundling EventFilters together under a common namespace

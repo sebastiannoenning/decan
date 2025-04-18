@@ -1,8 +1,9 @@
 from typing import Dict, Tuple, Optional
+from shiboken6 import Shiboken
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from PySide6.QtSql import QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel, QSqlRecord
-from PySide6.QtCore import Qt, Slot, Signal, QModelIndex
+from PySide6.QtCore import Qt, Slot, Signal, QModelIndex, QSize
 
 from models.event_model import EventModel
 from modules.eventlist.event_list_ui import Ui_event_list
@@ -18,17 +19,16 @@ class EventList(QWidget):
         self._Ui.setupUi(self)
 
         # Internal Dictionary for quick lookup of EventItems via their QModelIndex
-        self._items     : Dict[QModelIndex, EventItem]                  = []
+        self._Items     : Dict[int, EventItem]                          = []
         # Internal Model, passed to all children
         self._model     : EventModel                                    = None
         self._current   : Optional[int]                                 = None
-
     
     def tryExcept(func: function, message: str = 'Generic error message', test_en: bool = False):
         try: func()
         except Exception as e: print(message, e)
 
-    def reset(self):
+    def resetList(self):
         self.clearList(self)
         self.populateList(self)
 
@@ -46,44 +46,79 @@ class EventList(QWidget):
             self.tryExcept(self._model.modelAboutToBeReset.disconnect(),            f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
         
         self._model = model
-        if (self._Ui.container.count() > 0): self.clearList()
+        self._model.modelReset.connect(self.resetList())
+        self._model.modelAboutToBeReset.connect()
+
+        self.resetList()
 
     def deleteRow(self, index: QModelIndex):
-        eventItem: EventItem = self._items[index]
-
+        eventItem: EventItem = self._Items[index]
         if eventItem is None: return
-        
 
     def moveRow(self, index: QModelIndex):
-        eventItem: EventItem = self._items[index]
+        eventItem: EventItem = self._Items[index]
 
-    def clearList(self): pass
+    def minimumHeight(self):
+        """ Absolute minimum height for the QScrollArea wrapper holding this """
+        spacing = (self._Ui.container.spacing() * len(self._Items))
 
-    def populateList(self):
-        # Only called when a models values have been completely changed. 
-        pass
+        item_dimensions: Tuple[int] = tuple(event_item.sizeHint().height() for event_item in self._Items.values())
+        max_dimension = max(item_dimensions)
+        return max_dimension
+    
+    def layoutWidth(self): 
+        return (self._Ui.container.sizeHint().width() - (self._Ui.container.contentsMargins().left() + self._Ui.container.contentsMargins().right()))
 
-    def clear_items(self, condition):
-        while ((len(self.items) > 0) & (condition())):
-            key, value = self.items.popitem()
-            #print(value)
-            try:
-                self.setMinimumWidth(self.width())
-                self._list_container.removeWidget(value)
-                value.deleteLater()
-            except Exception as e:
-                print("Error deleting widget", e)
+    def addItem(self, item: EventItem, index: QModelIndex, 
+                test_en:bool=False):
+        item.setMaximumWidth(self.layoutWidth())
 
-        """self._model.beforeInsert.connect()
-        #self._model.beforeUpdate.connect()
-        #self._model.beforeDelete.connect()
-        #self._model.destroyed.connect()
-        self._model.rowsInserted.connect()
-        self._model.rowsRemoved.connect()
-        self._model.dataChanged.connect()"""
+        self._Ui.container.addWidget(item)
+        self._Items.update({index.row():item}) #Row in model used as index 
 
-    def refreshModel(self):
-        self.clear_items(lambda: True)
+        self.setMinimumHeight(self._Ui.container.sizeHint().height())
 
-    def deleteSelected(self): pass
+    def takeItem(self, item: EventItem,
+                   test_en:bool=False):
+        item: EventItem = self.findChild(EventItem, item.objectName())
+        key_of_item: Optional[int] = None
+        for key, value in self._Items.items():
+            if (value == item): key_of_item = key
+        
+        if key_of_item is not None:
+            index = self._Ui.container.indexOf(item)
+            taken_item: EventItem = self._Ui.container.takeAt(index).widget()
+            self._Items.pop[key_of_item]
+            return taken_item
+         
+        return None
+
+    def removeItem(self, item: EventItem, 
+                   test_en:bool=False):
+        item: EventItem = self.findChild(EventItem, item.objectName())
+        try: self._Ui.container.removeWidget(item)
+        except Exception as e: 
+            if (test_en): print(f"removeItem() error: {e}")
+        item.deleteLater()
+
+    def populateList(self, test_en):
+        if len(self._Items) > 0: self.clearList(test_en=test_en)
+        if self._model is None: return
+
+        for i in (self._model.rowCount()):
+            model_index : QModelIndex   = self._model.index(i, 0, QModelIndex)
+            new_item    : EventItem     = EventItem(self, self._model, model_index)
+            self.addItem(new_item, i)
+
+    def clearList(self, test_en=False):
+        for key, value in self._Items.items():
+            self.removeItem(value, test_en=test_en)
+            if (test_en): print(Shiboken.isValid(self._Items[key]))
+        
+        for key in self._Items:
+            if Shiboken.isValid(self._Items[key]): 
+                self.removeItem(self._Items[key])
+            self._Items.pop[key]
+        
+        if len(self._Items) != 0: self._Items.clear()
 

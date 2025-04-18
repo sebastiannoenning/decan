@@ -15,7 +15,8 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScrollArea, QAbstractScrollArea, QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-from modules.eventlist.eventattributes import EBody, EventType
+from modules.eventlist.eventtype import EventType
+from modules.eventlist.eventattributes import EBody
 import modules.scrollers_qt as scrollFuncs
 
 class Ui_event_item(object):
@@ -23,7 +24,7 @@ class Ui_event_item(object):
         if not event_item.objectName():
             event_item.setObjectName(u"event_item")
         event_item.resize(0, 0)
-        event_item.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        event_item.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         self.format = EventType.Simple
 
         # Central Container
