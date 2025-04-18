@@ -49,10 +49,11 @@ class EventItem(QWidget):
 
         self._mapper    :QDataWidgetMapper      = QDataWidgetMapper(parent=self)
         if (model is not None): self._mapper.setModel(model)
-        self._index     :QModelIndex           = index
-        if (index is not None): self._mapper.setCurrentModelIndex(index)
 
         self._setupMappings()
+
+        self._index     :QModelIndex           = index
+        if (index is not None): self._mapper.setCurrentModelIndex(index)
 
     def setupConnections(self):
         self._Ui.event_body.attributesChanged.connect(self._mapper.submit())
