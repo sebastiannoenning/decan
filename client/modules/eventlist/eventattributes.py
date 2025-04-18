@@ -85,7 +85,7 @@ class EBody(QWidget):
             self.setMaximumHeight(self._Ui.container.sizeHint().height())
 
     def reformatUi(self, n_Json: Dict[str, QJsonValue]):
-        for key, val in n_Json.get('objects',{}).toObject().items():
+        for key, val in n_Json.get('objects',{}).items():
             component_type, index = str(key).rsplit('_', 1)
 
             # If a key exists in self._Json
@@ -96,9 +96,9 @@ class EBody(QWidget):
                 
                     if  (component_type == 'EDescription'): 
                         widget: EDescription            = self._Ui.container.findChild(EDescription, key)
-                        n_val: str                      = val.toString()
+                        n_val: str                      = val.toObject().toString()
 
-                        if ((widget.text()) != n_val):          widget.setText(str(val))
+                        if ((widget.text()) != n_val):          widget.setText(str(n_val))
 
                     elif(component_type == 'EToDo'):        
                         widget: EToDo                   = self._Ui.container.findChild(EToDo, key)
