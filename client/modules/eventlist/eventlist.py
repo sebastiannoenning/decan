@@ -109,7 +109,7 @@ class EventList(QWidget):
         for i in range(self._model.rowCount()):
             model_index : QModelIndex   = self._model.index(i, 0)
             new_item    : EventItem     = EventItem(self, self._model, model_index)
-            self.addItem(new_item, i)
+            self.addItem(new_item, model_index)
 
     def clearList(self, test_en=False):
         for key, value in self._Items.items():
