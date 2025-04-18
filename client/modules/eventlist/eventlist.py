@@ -105,7 +105,7 @@ class EventList(QWidget):
         if len(self._Items) > 0: self.clearList(test_en=test_en)
         if self._model is None: return
 
-        for i in (self._model.rowCount()):
+        for i in range(self._model.rowCount()):
             model_index : QModelIndex   = self._model.index(i, 0, QModelIndex)
             new_item    : EventItem     = EventItem(self, self._model, model_index)
             self.addItem(new_item, i)
