@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Callable, Any
 from shiboken6 import Shiboken
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
@@ -24,7 +24,7 @@ class EventList(QWidget):
         self._model     : EventModel                                    = None
         self._current   : Optional[int]                                 = None
     
-    def tryExcept(func: function, message: str = 'Generic error message', test_en: bool = False):
+    def tryExcept(func: Callable[[], Any], message: str = 'Generic error message', test_en: bool = False):
         try: func()
         except Exception as e: print(message, e)
 
@@ -35,15 +35,15 @@ class EventList(QWidget):
     def setModel(self, model: EventModel, test_en: bool = True):
         if self._model is not None:
             msg = 'eventList->setModel()->eventModel->disconnect() error:'
-            self.tryExcept(self._model.rowsMoved.disconnect(),                      f'{msg} Could not disconnect rowsMoved',            test_en)
-            self.tryExcept(self._model.rowsInserted.disconnect(),                   f'{msg} Could not disconnect rowsInserted',         test_en)
-            self.tryExcept(self._model.rowsRemoved.disconnect(),                    f'{msg} Could not disconnect rowsRemoved',          test_en)
-            self.tryExcept(self._model.rowsAboutToBeMoved.disconnect(),             f'{msg} Could not disconnect rowsAboutToBeMoved',   test_en)
-            self.tryExcept(self._model.rowsAboutToBeInserted.disconnect(),          f'{msg} Could not disconnect rowsAboutToBeInserted',test_en)
-            self.tryExcept(self._model.rowsAboutToBeRemoved.disconnect(),           f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
+            self.tryExcept(self._model.rowsMoved.disconnect,                      f'{msg} Could not disconnect rowsMoved',            test_en)
+            self.tryExcept(self._model.rowsInserted.disconnect,                   f'{msg} Could not disconnect rowsInserted',         test_en)
+            self.tryExcept(self._model.rowsRemoved.disconnect,                    f'{msg} Could not disconnect rowsRemoved',          test_en)
+            self.tryExcept(self._model.rowsAboutToBeMoved.disconnect,             f'{msg} Could not disconnect rowsAboutToBeMoved',   test_en)
+            self.tryExcept(self._model.rowsAboutToBeInserted.disconnect,          f'{msg} Could not disconnect rowsAboutToBeInserted',test_en)
+            self.tryExcept(self._model.rowsAboutToBeRemoved.disconnect,           f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
 
-            self.tryExcept(self._model.modelReset.disconnect(),                     f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
-            self.tryExcept(self._model.modelAboutToBeReset.disconnect(),            f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
+            self.tryExcept(self._model.modelReset.disconnect,                     f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
+            self.tryExcept(self._model.modelAboutToBeReset.disconnect,            f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
         
         self._model = model
         self._model.modelReset.connect(self.resetList())
