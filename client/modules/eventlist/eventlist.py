@@ -19,7 +19,7 @@ class EventList(QWidget):
         self._Ui.setupUi(self)
 
         # Internal Dictionary for quick lookup of EventItems via their QModelIndex
-        self._Items     : Dict[int, EventItem]                          = []
+        self._Items     : Dict[int, EventItem]                          = {}
         # Internal Model, passed to all children
         self._model     : EventModel                                    = None
         self._current   : Optional[int]                                 = None

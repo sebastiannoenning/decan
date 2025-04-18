@@ -61,7 +61,7 @@ class TimeSelect(QWidget):
         self._period                                = (self._entries - self._locked)
         self._repeats                               = self.__determineRepeats(self._entries, self._locked)
 
-        self.labels: Dict[int, Tuple[QLabel, bool]] = []
+        self.labels: Dict[int, Tuple[QLabel, bool]] = {}
         self.labelContainer                         = QVBoxLayout(self)
 
         self._selected: bool                        = None

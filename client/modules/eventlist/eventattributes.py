@@ -29,10 +29,10 @@ class EBody(QWidget):
         self._Ui.setupUi(self)
 
         self._Attributes = Attributes
-        self._Json          : Dict[str, QJsonValue] = None
+        self._Json          : Dict[str, QJsonValue] = {}
 
         # Experimental internal data list for pulling key associated with object, to provide ease of use on moving or changing the values inside.
-        self._Items         : Dict[str, Union[EToDo, EDescription]] = None
+        self._Items         : Dict[str, Union[EToDo, EDescription]] = {}
 
     # Getters for _Json attributes
     def returnEventType(self): return self._Json['info']['event_type']
