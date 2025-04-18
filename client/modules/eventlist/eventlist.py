@@ -107,7 +107,7 @@ class EventList(QWidget):
         if self._model is None: return
 
         for i in range(self._model.rowCount()):
-            model_index : QModelIndex   = self._model.index(i, 0, QModelIndex)
+            model_index : QModelIndex   = self._model.index(i, 0)
             new_item    : EventItem     = EventItem(self, self._model, model_index)
             self.addItem(new_item, i)
 
