@@ -115,11 +115,10 @@ class EventList(QWidget):
         for key, value in self._Items.items():
             self.removeItem(value, test_en=test_en)
             if (test_en): print(Shiboken.isValid(self._Items[key]))
-        
+        """
         for key in self._Items:
             if Shiboken.isValid(self._Items[key]): 
-                self.removeItem(self._Items[key])
-            self._Items.pop[key]
+                self.removeItem(self._Items[key])"""
         
         if len(self._Items) != 0: self._Items.clear()
 
