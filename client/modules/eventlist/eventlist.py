@@ -47,7 +47,7 @@ class EventList(QWidget):
         
         self._model = model
         self._model.modelReset.connect(self.resetList())
-        self._model.modelAboutToBeReset.connect()
+        #self._model.modelAboutToBeReset.connect()  Add caching here
 
         self.resetList()
 
