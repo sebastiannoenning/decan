@@ -56,7 +56,8 @@ class EventItem(QWidget):
         if (index is not None): self._mapper.setCurrentModelIndex(index)
 
     def setupConnections(self):
-        self._Ui.event_body.attributesChanged.connect(self._mapper.submit())
+        #self._Ui.event_body.attributesChanged.connect(self._mapper.submit())
+        pass
 
     def setModel(self, model: EventModel):              self._mapper.setModel(model)
     def setCurrentModelIndex(self, index: QModelIndex): self._mapper.setCurrentModelIndex(index)
@@ -65,9 +66,9 @@ class EventItem(QWidget):
     def remapIndex(self, index: QModelIndex):           pass
 
     def _setupMappings(self): # Sets mappings to each ui object generated via the _setup_Ui
-        self._mapper.addMapping(self._Ui.event_title, 1)
-        self._mapper.addMapping(self._Ui.event_time, 2)
-        self._mapper.addMapping(self._Ui.event_body, 4, QByteArray("Attributes"))
+        self._mapper.addMapping(self._Ui.event_title, 1, QByteArray("text"))
+        self._mapper.addMapping(self._Ui.event_time, 2, QByteArray("text"))
+        #self._mapper.addMapping(self._Ui.event_body, 4, QByteArray("Attributes"))
         self._mapper.addMapping(self._Ui.event_location, 6)
 
         self._mapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)

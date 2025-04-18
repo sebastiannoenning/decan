@@ -46,9 +46,8 @@ class EBody(QWidget):
         try: self.checkJDoc(QJsonDocument.fromJson(self._Attributes))
         except Exception as e: print(f"_updateJson()->{e}")
 
-        new_Json = QJsonDocument.fromJson(self._Attributes).object()
+        new_Json = (QJsonDocument.fromJson(self._Attributes)).object()
             
-        
         if (new_Json == self._Json): return
         elif self._Json is not None: self.reformatUi(n_Json=new_Json)
         else: self.generateUi(n_Json = new_Json)

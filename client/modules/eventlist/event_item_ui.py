@@ -78,8 +78,8 @@ class Ui_event_item(object):
         Font2.setPointSize(24)
         self.event_location.setFont(Font2)
         # Event Body
-        self.event_body = EBody(event_item)
-        self.event_body.setObjectName("event_body")
+        #self.event_body = EBody(event_item)
+        #self.event_body.setObjectName("event_body")
 
         self.footer = QWidget(event_item)
         self.footer.setObjectName(u"footer")
@@ -96,7 +96,7 @@ class Ui_event_item(object):
             self.header_layout.addWidget(self.event_title_wrapper)
             self.header_layout.addWidget(self.event_time)
             self.layout.addWidget(self.header)
-            self.layout.addWidget(self.event_body)
+            #self.layout.addWidget(self.event_body)
 
     def retranslateUi(self, event_item):
         event_item.setWindowTitle(QCoreApplication.translate("event_item", u"Form", None))
