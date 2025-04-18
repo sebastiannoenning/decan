@@ -75,7 +75,7 @@ class EventList(QWidget):
 
     def addItem(self, item: EventItem, index: QModelIndex, 
                 test_en:Tuple[bool,str]=[False,'']):
-        item.setMaximumWidth(self.layoutWidth())
+        item.setMaximumWidth(self.realWidth())
         item.setObjectName(f'EventItem_{index.row()}')
         if (test_en[0]): print(f'{test_en[1]}addItem()->item.objectName(): {item.objectName()}')
 
