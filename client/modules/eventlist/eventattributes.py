@@ -1,7 +1,7 @@
 import datetime
 import json
 from enum import Enum
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Tuple, Union, Any
 
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtCore
@@ -86,7 +86,7 @@ class EBody(QWidget):
             self.setMaximumHeight(self._Ui.container.sizeHint().height())
 
     def reformatUi(self, n_Json: Dict[str, QJsonValue]):
-        for key, val in n_Json.get('objects',{}).items():
+        for key, val in n_Json.get('objects',{}).toObject().items():
             component_type, index = str(key).rsplit('_', 1)
 
             # If a key exists in self._Json
@@ -97,14 +97,14 @@ class EBody(QWidget):
                 
                     if  (component_type == 'EDescription'): 
                         widget: EDescription            = self._Ui.container.findChild(EDescription, key)
-                        n_val: str                      = val
+                        n_val: str                      = val.toString()
 
                         if ((widget.text()) != n_val):          widget.setText(str(val))
 
                     elif(component_type == 'EToDo'):        
                         widget: EToDo                   = self._Ui.container.findChild(EToDo, key)
-                        n_val:  Dict[str, QJsonValue]   = val
-                        val_bool, val_label             = bool(n_val.get('EBool')), str(n_val.get('EDescription'))
+                        n_val:  Dict[str, QJsonValue]   = val.toObject()
+                        val_bool, val_label             = bool(n_val.get('EBool').toBool()), str(n_val.get('EDescription').toString())
 
                         if (widget.isChecked() != val_bool):    widget.setChecked(val_bool)
                         if (widget.text() != val_label):        widget.setText(val_label)
@@ -115,7 +115,7 @@ class EBody(QWidget):
             # If a key does not already exist in self._Json
             else:
                 if  (component_type == 'EDescription'):
-                    txt:  str                       = str(val)
+                    txt:  str                       = str(val.toString())
 
                     widget = EDescription(self, key)
                     widget.setObjectName(key)
@@ -123,9 +123,8 @@ class EBody(QWidget):
                     widget.adjustSize()
 
                 elif(component_type == 'EToDo'):
-                    n_val:  Dict[str, QJsonValue]   = val
-                    val_bool, val_label             = bool(n_val.get('EBool')), str(n_val.get('EDescription'))
-                    checked, txt                    = bool(n_val.get('EBool')), str(n_val.get('EDescription'))
+                    n_val:  Dict[str, QJsonValue]   = val.toObject()
+                    checked, txt                    = bool(n_val.get('EBool').toBool()), str(n_val.get('EDescription').toString())
 
                     widget = EToDo(self, key)
                     widget.setObjectName(key)
@@ -169,16 +168,18 @@ class EBody(QWidget):
         """ Checks the Json Structure of a passed dict & checks its conformity against the expected structure; otherwise formats it """
         def formatTabInfo(info_Json: Dict[str, QJsonValue] = []):
             """ Formats an info tab"""
-            object_index, event_type = info_Json.get('object_index'), info_Json.get('event_type')
+            object_index, event_type = info_Json.get('object_index').toInt(), info_Json.get('event_type').toInt()
             if (object_index is None): info_Json.update('object_index',0)
-            if (event_type is None): info_Json.update('event_type',EventType.Complex.value)        
+            if (event_type is None): info_Json.update('event_type',EventType.Complex.value)
+
+            return info_Json
+               
         def formatTabObject(objects_Json: Dict[str, QJsonValue] = []):
             """ Formats an objects tab """
-
             def formatEToDo(p_Json: Dict[str, QJsonValue]):
                 """ Remove non whitelisted keys, and if values don't pre-exist generate them """
                 EToDo: Dict[str, QJsonValue] = self.removeNonWhiteListedKeys(p_Json, ['EBool','ETaskDescription'])
-                EBool, ETaskDescription = EToDo.get('EBool'), p_Json.get('ETaskDescription')
+                EBool, ETaskDescription = EToDo.get('EBool').toBool(), p_Json.get('ETaskDescription').toString()
                 if (EBool is None): EToDo.update({'EBool':False})
                 if (ETaskDescription is None): EToDo.update({'ETaskDescription':'Task'})
                 return EToDo
@@ -219,11 +220,11 @@ class EBody(QWidget):
             return n_objects_Json
 
         # Extract info & objects
-        tab_Info: Dict[str, QJsonValue] = formatTabInfo(t_Json.get('info'))
-        tab_Objects: Dict[str, QJsonValue] = t_Json.get('objects')
+        tab_Info: Dict[str, QJsonValue] = formatTabInfo(t_Json.get('info').toObject())
+        tab_Objects: Dict[str, QJsonValue] = t_Json.get('objects').toObject()
 
         # Should be fine, but adds a layer of precaution pre-reading it
-        Index: int = tab_Info.get('object_index')
+        Index: int = tab_Info.get('object_index').toInt()
         if tab_Objects is not None:
             # First ensure the object branch is clear of any invalid keys
             tab_Objects = self.removeAllBlackListedKeys(tab_Objects,['object_index','event_type','info','objects'])
