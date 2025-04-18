@@ -22,7 +22,7 @@ class Ui_event_list(object):
         if not event_list.objectName():
             event_list.setObjectName(u"event_list")
         event_list.resize(0, 0)
-        self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        event_list.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
         # Central Container
         self.container = QVBoxLayout(event_list)
