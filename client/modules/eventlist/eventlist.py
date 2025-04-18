@@ -29,7 +29,7 @@ class EventList(QWidget):
         except Exception as e: print(message, e)
 
     def resetList(self, 
-                  test_en:Tuple[bool,str]=[False,'']):
+                  test_en:Tuple[bool,str]=[True,'']):
         if self._model is None: return
         self.clearList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
         self.populateList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
