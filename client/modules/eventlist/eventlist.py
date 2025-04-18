@@ -78,7 +78,8 @@ class EventList(QWidget):
 
         self._Ui.container.addWidget(item)
         self._Items.update({index.row():item}) #Row in model used as index 
-        if (test_en[0]): print(f'{test_en[1]}addItem() self._Items item added')
+        item.setObjectName(f'EventItem_{index.row()}')
+        if (test_en[0]): print(f'{test_en[1]}addItem() event added')
 
         self.setMinimumHeight(self._Ui.container.sizeHint().height())
 
@@ -100,11 +101,12 @@ class EventList(QWidget):
     def removeItem(self, item: EventItem, 
                    test_en:Tuple[bool,str]=[False,'']):
         item: EventItem = self.findChild(EventItem, item.objectName())
+        if (test_en[0]): print(f'{test_en[1]}removeItem()->item.objectName(){item.objectName()}')
         try: self._Ui.container.removeWidget(item)
         except Exception as e: 
             if (test_en[0]): print(f'{test_en[1]}removeItem() error: {e}')
         item.deleteLater()
-        if (test_en[0]): print(f'{test_en[1]}removeItem() Shiboken check: {Shiboken.isValid(item)}')
+        if (test_en[0]): print(f'{test_en[1]}removeItem() event({item.objectName()}) removed, shiboken check: {Shiboken.isValid(item)}')
 
     def populateList(self, 
                      test_en:Tuple[bool,str]=[False,'']):
@@ -123,7 +125,7 @@ class EventList(QWidget):
         for key in self._Items:
             if Shiboken.isValid(self._Items[key]): 
                 self.removeItem(self._Items[key])"""
-        
+        if (test_en[0]): print(f'{test_en[1]}clearList() len(items)[{len(self._Items)}]:len(container)[{self._Ui.container.count()}]')
+
         if len(self._Items) != 0: self._Items.clear()
-        if (test_en[0]): print(f'{test_en[1]}clearList() length of self._Items={len(self._Items)}')
 
