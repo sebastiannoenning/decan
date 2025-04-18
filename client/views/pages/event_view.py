@@ -80,8 +80,7 @@ class EventView(QWidget):
 
         self._Ui.event_table.setModel(self.eventmodel)
 
-        self._Ui.TestItem.setModel(self.eventmodel)
-        self._Ui.TestItem.setModelIndex(self.eventmodel.index(0,0,QModelIndex()))
+        self._Ui.eventList.setModel(self.eventmodel)
 
         self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
         self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))

@@ -226,9 +226,9 @@ class EventModel(QSortFilterProxyModel):
 
         self._userID = uid
 
-        self._selectall()
+        self.select()
 
-    def _selectall(self):
+    def select(self):
         self._eventModel.select()
         self._eventsUsersModel.select()
 
