@@ -34,7 +34,8 @@ class EventList(QWidget):
         self.clearList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
         self.populateList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
 
-    def setModel(self, model: EventModel, test_en: bool = True):
+    def setModel(self, model: EventModel, 
+                 test_en:bool=True):
         if self._model is not None:
             msg = 'eventList->setModel()->eventModel->disconnect() error:'
             self.tryExcept(self._model.rowsMoved.disconnect,                      f'{msg} Could not disconnect rowsMoved',            test_en)
@@ -48,11 +49,10 @@ class EventList(QWidget):
             self.tryExcept(self._model.modelAboutToBeReset.disconnect,            f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
         
         self._model = model
-        self._model.modelReset.connect(lambda: self.resetList())
+        self._model.modelAboutToBeReset.connect(lambda: self.clearList(test_en=[test_en,'modelAboutToBeReset()->']))
+        self._model.modelReset.connect(lambda: self.populateList(test_en=[test_en,'modelReset()->']))
         #self._model.layoutChanged.connect(lambda *a: self.resetList())
         #self._model.modelAboutToBeReset.connect()  Add caching here
-
-        self.resetList()
 
     def deleteRow(self, index: QModelIndex):
         eventItem: EventItem = self._Items[index]
@@ -69,8 +69,9 @@ class EventList(QWidget):
         max_dimension = max(item_dimensions)
         return max_dimension
     
-    def layoutWidth(self): 
-        return (self._Ui.container.sizeHint().width() - (self._Ui.container.contentsMargins().left() + self._Ui.container.contentsMargins().right()))
+    def realWidth(self): 
+        width = max(self.minimumWidth,(self._Ui.container.sizeHint().width() - (self._Ui.container.contentsMargins().left() + self._Ui.container.contentsMargins().right())))
+        return width
 
     def addItem(self, item: EventItem, index: QModelIndex, 
                 test_en:Tuple[bool,str]=[False,'']):
@@ -109,7 +110,6 @@ class EventList(QWidget):
 
         if event_item is not None: 
             event_item.deleteLater()
-            if (test_en[0]): print(f'{test_en[1]}removeItem() event({event_item.objectName()}) removed, shiboken check: {Shiboken.isValid(event_item)}')
 
     def populateList(self, 
                      test_en:Tuple[bool,str]=[False,'']):
@@ -124,6 +124,7 @@ class EventList(QWidget):
                   test_en:Tuple[bool,str]=[False,'']):
         for event_item in self._Items.values():
             self.removeItem(event_item, test_en=[test_en[0],f'{test_en[1]}clearList()->'])
+            if (test_en[0]): print(f'{test_en[1]}clearList() event({event_item.objectName()}) removed, shiboken check: {Shiboken.isValid(event_item)}')
         """
         for key in self._Items:
             if Shiboken.isValid(self._Items[key]): 
