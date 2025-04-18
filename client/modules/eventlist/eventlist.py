@@ -46,7 +46,8 @@ class EventList(QWidget):
             self.tryExcept(self._model.modelAboutToBeReset.disconnect,            f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
         
         self._model = model
-        self._model.modelReset.connect(self.resetList())
+        self._model.modelReset.connect(lambda: self.resetList())
+        self._model.layoutChanged.connect(lambda *a: self.resetList())
         #self._model.modelAboutToBeReset.connect()  Add caching here
 
         self.resetList()
