@@ -1,7 +1,7 @@
 from typing import Dict, Tuple, Optional, Callable, Any
 from shiboken6 import Shiboken
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QLayoutItem
 from PySide6.QtSql import QSqlRelationalTableModel, QSqlTableModel, QSqlQueryModel, QSqlRecord
 from PySide6.QtCore import Qt, Slot, Signal, QModelIndex, QSize
 
@@ -49,7 +49,7 @@ class EventList(QWidget):
         
         self._model = model
         self._model.modelReset.connect(lambda: self.resetList())
-        self._model.layoutChanged.connect(lambda *a: self.resetList())
+        #self._model.layoutChanged.connect(lambda *a: self.resetList())
         #self._model.modelAboutToBeReset.connect()  Add caching here
 
         self.resetList()
@@ -75,12 +75,12 @@ class EventList(QWidget):
     def addItem(self, item: EventItem, index: QModelIndex, 
                 test_en:Tuple[bool,str]=[False,'']):
         item.setMaximumWidth(self.layoutWidth())
+        item.setObjectName(f'EventItem_{index.row()}')
+        if (test_en[0]): print(f'{test_en[1]}addItem()->item.objectName(): {item.objectName()}')
 
         self._Ui.container.addWidget(item)
         self._Items.update({index.row():item}) #Row in model used as index 
-        item.setObjectName(f'EventItem_{index.row()}')
-        if (test_en[0]): print(f'{test_en[1]}addItem()->item.objectName(): {item.objectName()}')
-        if (test_en[0]): print(f'{test_en[1]}addItem() event added')
+        if (test_en[0]): print(f'{test_en[1]}addItem() event added({item.objectName()}) added')
 
         self.setMinimumHeight(self._Ui.container.sizeHint().height())
 
@@ -101,13 +101,15 @@ class EventList(QWidget):
 
     def removeItem(self, item: EventItem, 
                    test_en:Tuple[bool,str]=[False,'']):
-        item: EventItem = self.findChild(EventItem, item.objectName())
-        if (test_en[0]): print(f'{test_en[1]}removeItem()->item.objectName(): {item.objectName()}')
-        try: self._Ui.container.removeWidget(item)
-        except Exception as e: 
-            if (test_en[0]): print(f'{test_en[1]}removeItem() error: {e}')
-        item.deleteLater()
-        if (test_en[0]): print(f'{test_en[1]}removeItem() event({item.objectName()}) removed, shiboken check: {Shiboken.isValid(item)}')
+        index = self._Ui.container.indexOf(item)
+        layout_item : QLayoutItem  = self._Ui.container.takeAt(index)
+
+        event_item  : EventItem    = layout_item.widget()
+        if (test_en[0]): print(f'{test_en[1]}removeItem()->item.objectName(): {event_item.objectName()}')
+
+        if event_item is not None: 
+            event_item.deleteLater()
+            if (test_en[0]): print(f'{test_en[1]}removeItem() event({event_item.objectName()}) removed, shiboken check: {Shiboken.isValid(event_item)}')
 
     def populateList(self, 
                      test_en:Tuple[bool,str]=[False,'']):
