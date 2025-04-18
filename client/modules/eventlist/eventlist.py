@@ -70,7 +70,7 @@ class EventList(QWidget):
         return max_dimension
     
     def realWidth(self): 
-        width = max(self.minimumWidth,(self._Ui.container.sizeHint().width() - (self._Ui.container.contentsMargins().left() + self._Ui.container.contentsMargins().right())))
+        width = max(self.minimumWidth(),(self._Ui.container.sizeHint().width() - (self._Ui.container.contentsMargins().left() + self._Ui.container.contentsMargins().right())))
         return width
 
     def addItem(self, item: EventItem, index: QModelIndex, 
