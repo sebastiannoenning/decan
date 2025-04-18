@@ -50,7 +50,7 @@ class EventItem(QWidget):
         self._mapper    :QDataWidgetMapper      = QDataWidgetMapper(parent=self)
         if (model is not None): self._mapper.setModel(model)
         self._index     :QModelIndex           = index
-        if (index is not None): self._mapper.setCurrentIndex(index)
+        if (index is not None): self._mapper.setCurrentModelIndex(index)
 
 
         self._setupMappings()
@@ -59,7 +59,8 @@ class EventItem(QWidget):
         self._Ui.event_body.attributesChanged.connect(self._mapper.submit())
 
     def setModel(self, model: EventModel):              self._mapper.setModel(model)
-    def setCurrentIndex(self, index: QModelIndex):      self._mapper.setCurrentIndex(index)
+    def setCurrentModelIndex(self, index: QModelIndex): self._mapper.setCurrentModelIndex(index)
+    def setCurrentIndex(self, row: int):                self._mapper.setCurrentIndex(row)
     def currentIndex(self):                             self._mapper.currentIndex()
     def remapIndex(self, index: QModelIndex):           pass
 
