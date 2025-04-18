@@ -60,6 +60,7 @@ class Ui_event_item(object):
         self.event_title_wrapper.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
         self.event_title_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.event_title_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.event_title_wrapper.setWidgetResizable(True)
         self.event_title_wrapper_scroller = scrollFuncs.returnUniScroller(self.event_title_wrapper)
         self.event_title_wrapper_scroller.setObjectName(u"event_title_wrapper_scroller")
         # Event Time
