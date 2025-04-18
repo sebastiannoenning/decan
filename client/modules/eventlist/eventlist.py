@@ -28,9 +28,11 @@ class EventList(QWidget):
         try: func()
         except Exception as e: print(message, e)
 
-    def resetList(self):
-        self.clearList(self)
-        self.populateList(self)
+    def resetList(self, 
+                  test_en:Tuple[bool,str]=[False,'']):
+        if self._model is None: return
+        self.clearList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
+        self.populateList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
 
     def setModel(self, model: EventModel, test_en: bool = True):
         if self._model is not None:
@@ -71,16 +73,17 @@ class EventList(QWidget):
         return (self._Ui.container.sizeHint().width() - (self._Ui.container.contentsMargins().left() + self._Ui.container.contentsMargins().right()))
 
     def addItem(self, item: EventItem, index: QModelIndex, 
-                test_en:bool=False):
+                test_en:Tuple[bool,str]=[False,'']):
         item.setMaximumWidth(self.layoutWidth())
 
         self._Ui.container.addWidget(item)
         self._Items.update({index.row():item}) #Row in model used as index 
+        if (test_en[0]): print(f'{test_en[1]}addItem() self._Items item added')
 
         self.setMinimumHeight(self._Ui.container.sizeHint().height())
 
     def takeItem(self, item: EventItem,
-                   test_en:bool=False):
+                   test_en:Tuple[bool,str]=[False,'']):
         item: EventItem = self.findChild(EventItem, item.objectName())
         key_of_item: Optional[int] = None
         for key, value in self._Items.items():
@@ -95,30 +98,32 @@ class EventList(QWidget):
         return None
 
     def removeItem(self, item: EventItem, 
-                   test_en:bool=False):
+                   test_en:Tuple[bool,str]=[False,'']):
         item: EventItem = self.findChild(EventItem, item.objectName())
         try: self._Ui.container.removeWidget(item)
         except Exception as e: 
-            if (test_en): print(f"removeItem() error: {e}")
+            if (test_en[0]): print(f'{test_en[1]}removeItem() error: {e}')
         item.deleteLater()
+        if (test_en[0]): print(f'{test_en[1]}removeItem() Shiboken check: {Shiboken.isValid(item)}')
 
-    def populateList(self, test_en):
-        if len(self._Items) > 0: self.clearList(test_en=test_en)
-        if self._model is None: return
-
+    def populateList(self, 
+                     test_en:Tuple[bool,str]=[False,'']):
         for i in range(self._model.rowCount()):
             model_index : QModelIndex   = self._model.index(i, 0)
             new_item    : EventItem     = EventItem(self, self._model, model_index)
-            self.addItem(new_item, model_index)
+            self.addItem(new_item, model_index, test_en=[test_en[0],f'{test_en[1]}populateList()->'])
 
-    def clearList(self, test_en=False):
-        for key, value in self._Items.items():
-            self.removeItem(value, test_en=test_en)
-            if (test_en): print(Shiboken.isValid(self._Items[key]))
+        if (test_en[0]): print(f'{test_en[1]}populateList() ui container length: {self._Ui.container.count()}')
+
+    def clearList(self, 
+                  test_en:Tuple[bool,str]=[False,'']):
+        for event_item in self._Items.values():
+            self.removeItem(event_item, test_en=[test_en[0],f'{test_en[1]}clearList()->'])
         """
         for key in self._Items:
             if Shiboken.isValid(self._Items[key]): 
                 self.removeItem(self._Items[key])"""
         
         if len(self._Items) != 0: self._Items.clear()
+        if (test_en[0]): print(f'{test_en[1]}clearList() length of self._Items={len(self._Items)}')
 

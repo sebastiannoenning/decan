@@ -52,7 +52,6 @@ class EventItem(QWidget):
         self._index     :QModelIndex           = index
         if (index is not None): self._mapper.setCurrentModelIndex(index)
 
-
         self._setupMappings()
 
     def setupConnections(self):
