@@ -3,7 +3,7 @@ from enum import Enum
 
 from PySide6 import QtCore
 from PySide6.QtCore import QObject, Signal
-from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF
+from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QEasingCurve, Slot, QPointF, Property
 from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QSpacerItem, QSizePolicy, QStyleOption, QStyle, QCalendarWidget
 from PySide6.QtGui import QFont, QPainter
 
@@ -91,7 +91,7 @@ class TDateTimeSelect(QWidget):
                  dateTime = QDateTime.currentDateTime()):
         super().__init__(parent)
         self._minimumDateTime       = QDateTime()
-        self._dateTime  :QDateTime  = dateTime
+        self._DateTime  :QDateTime  = dateTime
         self._maximumDateTime       = QDateTime()
 
         self._allday    :bool       = False
@@ -104,14 +104,14 @@ class TDateTimeSelect(QWidget):
         self._button_container = QHBoxLayout(self)
         self._button_container.addStretch(1)
 
-        self.dateEdit_button = DTPushButton(self, dt_qt.EDateTime.Date, self._dateTime)
-        self.timeEdit_button = DTPushButton(self, dt_qt.EDateTime.Time, self._dateTime)
+        self.dateEdit_button = DTPushButton(self, dt_qt.EDateTime.Date, self._DateTime)
+        self.timeEdit_button = DTPushButton(self, dt_qt.EDateTime.Time, self._DateTime)
 
         self.layout().addWidget(self.dateEdit_button)
         self.layout().addWidget(self.timeEdit_button)
 
-        self._timeEdit_editDialog = TTimeEditDialog(self, self._dateTime)
-        self._dateEdit_editDialog = TDateEditDialog(self, self._dateTime)
+        self._timeEdit_editDialog = TTimeEditDialog(self, self._DateTime)
+        self._dateEdit_editDialog = TDateEditDialog(self, self._DateTime)
 
     def __set_styles(self):
         self.layout().setContentsMargins(
@@ -158,29 +158,28 @@ class TDateTimeSelect(QWidget):
                        new_time = QTime(),
                        test_en=True):
         if (new_date != QDate()):
-            if (new_date > self._dt_qt.EdateTime.date()): self._dateTime = QDateTime(self._dt_qt.EdateTime.date(),(QTime(0,0,0,0)))
-            self._dateTime = QDateTime(new_date, self._dt_qt.EdateTime.time())
-        if (new_time != QTime()):   self._dateTime = QDateTime(self._dateTime, (new_time))
+            if (new_date > self._dt_qt.EdateTime.date()): self._DateTime = QDateTime(self._dt_qt.EdateTime.date(),(QTime(0,0,0,0)))
+            self._DateTime = QDateTime(new_date, self._dt_qt.EdateTime.time())
+        if (new_time != QTime()):   self._DateTime = QDateTime(self._DateTime, (new_time))
 
-        if (test_en): print(f"TDE_:{hex(id(self))}############\nCLOSED DIA; NEW DTE {self._dateTime}")
+        if (test_en): print(f"TDE_:{hex(id(self))}############\nCLOSED DIA; NEW DTE {self._DateTime}")
 
         self._updateButton(self.dateEdit_button)
         self._updateButton(self.timeEdit_button)
         
-        self.dateTimeChanged.emit(self._dateTime)
+        self.dateTimeChanged.emit(self._DateTime)
 
     def _updateButton(self,
                       button: DTPushButton):
-        button.setText(self._dateTime)
+        button.setText(self._DateTime)
         button.setInactiveStyle()
         button.update()
-
     
     def _autoUpdateButton(self, test_en=True):
         if (test_en): print(self.dateEdit_button.date())
 
-        if (self.dateEdit_button.date() < self._dateTime): self._updateButton(self.dateEdit_button)
-        if (self.timeEdit_button.date() < self._dateTime): self._updateButton(self.timeEdit_button)  
+        if (self.dateEdit_button.date() < self._DateTime): self._updateButton(self.dateEdit_button)
+        if (self.timeEdit_button.date() < self._DateTime): self._updateButton(self.timeEdit_button)  
 
     def _updateMaximumDateTime(self):
         #self._timeEdit_editDialog
@@ -190,14 +189,14 @@ class TDateTimeSelect(QWidget):
         self._timeEdit_editDialog.setMinimumDateTime(self._minimumDateTime)
         self._dateEdit_editDialog.setMinimumDate(self._minimumDateTime.date())
 
-        if (test_en): print(f"TDE_:{hex(id(self))}############\nUPDATE MIN DT; NEW MIN DT {self._minimumDateTime}\nCUR DT: {self._dateTime}")
+        if (test_en): print(f"TDE_:{hex(id(self))}############\nUPDATE MIN DT; NEW MIN DT {self._minimumDateTime}\nCUR DT: {self._DateTime}")
         self._autoUpdateButton()
 
     def _updateDateTime(self, test_en=True):
-        self._timeEdit_editDialog.setCurrentDateTime(self._dateTime);           self._updateButton(self.timeEdit_button)
-        self._dateEdit_editDialog.setSelectedDate(self._dateTime.date());       self._updateButton(self.dateEdit_button)
+        self._timeEdit_editDialog.setCurrentDateTime(self._DateTime);           self._updateButton(self.timeEdit_button)
+        self._dateEdit_editDialog.setSelectedDate(self._DateTime.date());       self._updateButton(self.dateEdit_button)
 
-        if (test_en): print(f"TDE_:{hex(id(self))}############\nUPDATE CUR DT; NEW CUR DT {self._dateTime}")
+        if (test_en): print(f"TDE_:{hex(id(self))}############\nUPDATE CUR DT; NEW CUR DT {self._DateTime}")
 
     # Setters for both minimumDateTime & maximumDateTime
     def setDateRange(self, min: QDate, max: QDate):             self._minimumDateTime.setDate(min); self._maximumDateTime.setDate(max)
@@ -230,7 +229,15 @@ class TDateTimeSelect(QWidget):
     def maximumTime(self):          return self._maximumDateTime.time()
 
     # Functions for returning dateTime
-    def dateTime(self):             return self._dateTime
+    @Property(QDateTime)
+    def DateTime(self): return self._DateTime
+        
+    @DateTime.setter
+    def DateTime(self, DateTime: QDate):
+            if (self._DateTime != DateTime):
+                self._DateTime = DateTime
+                self._autoUpdateButton()
+                self.dateTimeChanged.emit()
 
     # Reimplemented paintEvent for advanced styling
     def paintEvent(self, pe):

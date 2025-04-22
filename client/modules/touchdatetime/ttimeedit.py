@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (QSizePolicy,
                                QScroller, QScrollerProperties)
 from PySide6.QtGui import QFont, QPalette, QColor
 
-import modules.scrollers_qt as s
+import modules.scrollers_qt as scrQt
 
 class TimeType(Enum):
     Hours = 0
@@ -323,14 +323,14 @@ class  TTimeEditDialog(QDialog):
             self._active = 'alternate'
         else: self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours)
         self._l1t_hours_scrollArea.setWidget(self._l1t_hours_TimeSelect)
-        self._l1t_hours_timeScroller = s.returnDragScroller(self._l1t_hours_scrollArea)
+        self._l1t_hours_timeScroller = scrQt.returnDragScroller(self._l1t_hours_scrollArea)
 
         self._l1t_mins_scrollArea = QScrollArea(self)
 
         self._l1t_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self._minuteType)  
         self._l1t_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self._minuteType, self._minimumDateTime.time().minute())
         self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
-        self._l1t_mins_timeScroller = s.returnDragScroller(self._l1t_mins_scrollArea)
+        self._l1t_mins_timeScroller = scrQt.returnDragScroller(self._l1t_mins_scrollArea)
 
         self._layer1_times.addWidget(self._l1t_hours_scrollArea)
         self._layer1_times.addWidget(self._l1t_mins_scrollArea)

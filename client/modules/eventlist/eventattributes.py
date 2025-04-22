@@ -415,10 +415,12 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
     def addMappings(self, mapper: QDataWidgetMapper, col_start: int, col_end: int):
         self._startColumn = col_start
         self._endColumn = col_end
-        mapper.addMapping()
+        mapper.addMapping(self._startLabel, self._startColumn, QByteArray('DateTime'))
+        mapper.addMapping(self._endLabel, self._endColumn, QByteArray('DateTime'))
 
     def removeMappings(self, mapper: QDataWidgetMapper):
-        mapper.removeMapping()
+        mapper.removeMapping(self._startLabel)
+        mapper.removeMapping(self._endLabel)
 
     class ELabel(QLabel):
         dateTimeChanged = Signal()

@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScrollArea, QAbstractScrollArea, QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-import modules.scrollers_qt as scrollFuncs
+import modules.scrollers_qt as scrQt
 
 class Ui_event_body(object):
     def setupUi(self, event_body):
@@ -60,7 +60,7 @@ class Ui_event_description(object):
                                    QSizePolicy.Policy.MinimumExpanding)
         self.wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.wrapper_scroller = scrollFuncs.returnUniScroller(self.wrapper)
+        self.wrapper_scroller = scrQt.returnUniScroller(self.wrapper)
         self.wrapper_scroller.setObjectName(u"event_description_wrapper_scroller")
 
         self.wrapper.setWidget(self.label)
@@ -100,7 +100,7 @@ class Ui_event_todo(object):
         self.label_wrapper.setMaximumHeight(self.label.height()+2)
         self.label_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.label_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.label_wrapper_scroller = scrollFuncs.returnUniScroller(self.label_wrapper)
+        self.label_wrapper_scroller = scrQt.returnUniScroller(self.label_wrapper)
 
         self.layout.addWidget(self.label_wrapper)
 

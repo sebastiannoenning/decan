@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScrollArea, QAbstractScrollArea, QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-import modules.scrollers_qt as scrollFuncs
+import modules.scrollers_qt as scrQt
 
 class Ui_event_list(object):
     def setupUi(self, event_list):

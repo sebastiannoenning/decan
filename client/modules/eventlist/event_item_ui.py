@@ -17,7 +17,7 @@ from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
 from modules.eventlist.eventtype import EventType
 from modules.eventlist.eventattributes import EBody
-import modules.scrollers_qt as scrollFuncs
+import modules.scrollers_qt as scrQt
 
 class Ui_event_item(object):
     def setupUi(self, event_item):
@@ -61,7 +61,7 @@ class Ui_event_item(object):
         self.event_title_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.event_title_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.event_title_wrapper.setWidgetResizable(True)
-        self.event_title_wrapper_scroller = scrollFuncs.returnUniScroller(self.event_title_wrapper)
+        self.event_title_wrapper_scroller = scrQt.returnUniScroller(self.event_title_wrapper)
         self.event_title_wrapper_scroller.setObjectName(u"event_title_wrapper_scroller")
         # Event Time
         self.event_time = QLabel(event_item)

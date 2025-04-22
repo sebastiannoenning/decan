@@ -10,6 +10,7 @@ from PySide6.QtSql import (QSqlDatabase,
                            QSqlQuery)
 
 from .user_model import UserModel
+from .location_model import LocationModel
 import modules.sql_qt as sqlFuncs
 import modules.datetime_qt as dtFuncs
 
@@ -137,6 +138,7 @@ class EventModel(QSortFilterProxyModel):
     def __init__(self, /, parent=None, *, 
                  db                         :QSqlDatabase       =None,
                  userModel                  :UserModel          =None,
+                 locationModel              :LocationModel      =None,
                  filterRegularExpression    :QRegularExpression =None, 
                  filterKeyColumn            :int                =-1, 
                  dynamicSortFilter          :bool               =True, 
@@ -164,6 +166,7 @@ class EventModel(QSortFilterProxyModel):
         self._userID: Optional[int] = None
         self._database: Optional[QSqlDatabase] = db
         self._userModel: Optional[UserModel] = userModel
+        self._locationModel: Optional[LocationModel] = locationModel
 
         #Bottom-most models; direct connections to the database
         self._eventModel = QSqlTableModel(self, db=self._database)                      #Bottom-most layer      (1.1)
@@ -192,6 +195,9 @@ class EventModel(QSortFilterProxyModel):
         self.setDynamicSortFilter(True)
         self.setSortRole(Qt.ItemDataRole.EditRole)
         self.sort(3, Qt.SortOrder.AscendingOrder)
+
+    def data(self, index, /, role = ...):
+        return super().data(index, role)
 
     def changeUser(self, uid: int):
         # Will validate userID and act as padding before running on the view program
