@@ -80,6 +80,8 @@ class EventView(QWidget):
 
         self.eventmodel = EventModel(self, db=self._database)
         self._Ui.event_view_table.setModel(self.eventmodel)
+        
+        self.connections()
 
     def connections(self):
         self._Ui.time_schedule_label_button.clicked.connect(lambda: print(f"""
@@ -93,6 +95,25 @@ class EventView(QWidget):
         self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
         self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
         self._Ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))
+
+        self._Ui.prev_day.clicked.connect(lambda checked: self.prev_page())
+        self._Ui.next_day.clicked.connect(lambda checked: self.next_page())
+
+    def prev_page(self):
+        index = self._Ui.details_container.currentIndex()
+        print('Current page: ', index)
+        index = (index - 1) % self._Ui.details_container.count()
+        print(index, self._Ui.details_container.count())
+        print('New page: ', index)
+        self._Ui.details_container.setCurrentIndex(index)
+
+    def next_page(self):
+        index = self._Ui.details_container.currentIndex()
+        print('Current page: ', index)
+        index = (index + 1) % self._Ui.details_container.count()
+        print(index, self._Ui.details_container.count())
+        print('New page: ', index)
+        self._Ui.details_container.setCurrentIndex(index)
     
     def additionalUiSettings(self):
         # Remove perpendicular scroll ability from all scroll-areas & place a touch scroller on all of them
