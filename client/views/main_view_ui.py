@@ -31,23 +31,22 @@ class Ui_main_view(object):
         main_view.setSizePolicy(sizePolicy)
         main_view.setMinimumSize(QSize(800, 480))
         main_view.setMaximumSize(QSize(800, 480))
+        palette = QPalette()
+        brush = QBrush(QColor(255, 255, 255, 255))
+        brush.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Text, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.Text, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.ButtonText, brush)
+        brush1 = QBrush(QColor(255, 255, 255, 63))
+        brush1.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Disabled, QPalette.Text, brush1)
+        main_view.setPalette(palette)
         main_view.setStyleSheet(u"#nav * QPushButton{\n"
 "background-color: rgba(20, 20, 20, 1);\n"
 "border-radius: 8px;\n"
 "}\n"
 "#nav * QPushButton:pressed{\n"
 "background-color: rgba(120,120,120,1);\n"
-"}\n"
-"\n"
-"ETime {\n"
-"	background-color: rgba(20,20,20,1);\n"
-"	border-radius: 5px;\n"
-"}\n"
-"ELabel#event_time_label {\n"
-"	background-color: None;\n"
-"	border-radius: 0px;\n"
-"	padding-left: 5px;\n"
-"	border: 0px solid transparent;\n"
 "}")
         self.main_container = QWidget(main_view)
         self.main_container.setObjectName(u"main_container")

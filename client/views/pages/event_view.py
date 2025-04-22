@@ -79,6 +79,7 @@ class EventView(QWidget):
         print(self._event_filter.constructFilter())
 
         self.eventmodel = EventModel(self, db=self._database)
+        self._Ui.event_view_table.setModel(self.eventmodel)
 
     def connections(self):
         self._Ui.time_schedule_label_button.clicked.connect(lambda: print(f"""
