@@ -35,6 +35,14 @@ class MainView(QMainWindow):
         self._ui.col_p1_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
         self._ui.col_p3_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
 
+        self._ui.col_p4_pref.clicked.connect(lambda: print(f"""
+            Family: {self._ui.col_p4_pref.fontInfo().family()}
+            PixelSize: {self._ui.col_p4_pref.fontInfo().pixelSize()}
+            PointSize: {self._ui.col_p4_pref.fontInfo().pointSize()}
+            WidgetSize: {self._ui.col_p4_pref.size()}
+            """)
+            )
+
     def toggle_nav(self):
         if (self._ui.collapsed.isVisible()):
             self._ui.expanded.show()

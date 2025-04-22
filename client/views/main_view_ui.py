@@ -37,6 +37,17 @@ class Ui_main_view(object):
 "}\n"
 "#nav * QPushButton:pressed{\n"
 "background-color: rgba(120,120,120,1);\n"
+"}\n"
+"\n"
+"ETime {\n"
+"	background-color: rgba(20,20,20,1);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"ELabel#event_time_label {\n"
+"	background-color: None;\n"
+"	border-radius: 0px;\n"
+"	padding-left: 5px;\n"
+"	border: 0px solid transparent;\n"
 "}")
         self.main_container = QWidget(main_view)
         self.main_container.setObjectName(u"main_container")

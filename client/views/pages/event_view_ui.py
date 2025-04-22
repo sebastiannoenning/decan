@@ -176,6 +176,18 @@ class Ui_event_view(object):
 "	background: rgba(20,20,20,1);\n"
 "	border-bottom: 2px solid rgba(180,220,140, 1);\n"
 "	border-right: 1px solid white;\n"
+"}\n"
+"\n"
+"ETime {\n"
+"	background-color: rgba(20,20,20,1);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"ELabel{\n"
+"	background-co"
+                        "lor: None;\n"
+"	border-radius: 0px;\n"
+"	padding-left: 5px;\n"
+"	border: 0px solid transparent;\n"
 "}")
         self.event_view_container = QHBoxLayout(event_view)
         self.event_view_container.setSpacing(10)
@@ -557,6 +569,7 @@ class Ui_event_view(object):
         icon1.addFile(u":/icons/util/close_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
         self.cancel_button.setIcon(icon1)
         self.cancel_button.setIconSize(QSize(30, 30))
+        self.cancel_button.setCheckable(False)
 
         self.details_form_container.setWidget(0, QFormLayout.LabelRole, self.cancel_button)
 
@@ -723,8 +736,8 @@ class Ui_event_view(object):
         icon4.addFile(u":/icons/calendar/events/flash_yellow.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
         self.preset_button.setIcon(icon4)
         self.preset_button.setIconSize(QSize(30, 30))
-        self.preset_button.setCheckable(True)
-        self.preset_button.setChecked(True)
+        self.preset_button.setCheckable(False)
+        self.preset_button.setChecked(False)
         self.preset_button.setAutoDefault(False)
 
         self.details_form_container.setWidget(1, QFormLayout.LabelRole, self.preset_button)
@@ -894,8 +907,8 @@ class Ui_event_view(object):
         icon9.addFile(u":/icons/calendar/clock_orange.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
         self.time_button.setIcon(icon9)
         self.time_button.setIconSize(QSize(30, 30))
-        self.time_button.setCheckable(True)
-        self.time_button.setChecked(True)
+        self.time_button.setCheckable(False)
+        self.time_button.setChecked(False)
 
         self.details_form_container.setWidget(2, QFormLayout.LabelRole, self.time_button)
 
@@ -919,6 +932,10 @@ class Ui_event_view(object):
         self.time_view.setSizePolicy(sizePolicy10)
         self.time_view.setMinimumSize(QSize(247, 30))
         self.time_view.setMaximumSize(QSize(288, 30))
+        font3 = QFont()
+        font3.setFamilies([u"Arial"])
+        font3.setPointSize(18)
+        self.time_view.setFont(font3)
 
         self.time_viewedit_container.addWidget(self.time_view)
 
@@ -989,13 +1006,13 @@ class Ui_event_view(object):
 
         self.time_edit_form.setWidget(4, QFormLayout.LabelRole, self.schedule_label)
 
-        self.schedule_button_label = QPushButton(self.time_edit)
-        self.schedule_button_label.setObjectName(u"schedule_button_label")
-        self.schedule_button_label.setMinimumSize(QSize(20, 30))
-        self.schedule_button_label.setFont(font2)
-        self.schedule_button_label.setCheckable(False)
+        self.schedule_label_button = QPushButton(self.time_edit)
+        self.schedule_label_button.setObjectName(u"schedule_label_button")
+        self.schedule_label_button.setMinimumSize(QSize(20, 30))
+        self.schedule_label_button.setFont(font2)
+        self.schedule_label_button.setCheckable(False)
 
-        self.time_edit_form.setWidget(4, QFormLayout.FieldRole, self.schedule_button_label)
+        self.time_edit_form.setWidget(4, QFormLayout.FieldRole, self.schedule_label_button)
 
 
         self.time_viewedit_container.addWidget(self.time_edit)
@@ -1020,8 +1037,8 @@ class Ui_event_view(object):
         icon10.addFile(u":/icons/calendar/events/layer_blue1.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
         self.attributes_button.setIcon(icon10)
         self.attributes_button.setIconSize(QSize(30, 30))
-        self.attributes_button.setCheckable(True)
-        self.attributes_button.setChecked(True)
+        self.attributes_button.setCheckable(False)
+        self.attributes_button.setChecked(False)
 
         self.details_form_container.setWidget(3, QFormLayout.LabelRole, self.attributes_button)
 
@@ -1094,10 +1111,10 @@ class Ui_event_view(object):
         self.save_button = QPushButton(self.details_form)
         self.save_button.setObjectName(u"save_button")
         self.save_button.setMinimumSize(QSize(100, 40))
-        font3 = QFont()
-        font3.setFamilies([u"Arial"])
-        font3.setPointSize(20)
-        self.save_button.setFont(font3)
+        font4 = QFont()
+        font4.setFamilies([u"Arial"])
+        font4.setPointSize(20)
+        self.save_button.setFont(font4)
         icon14 = QIcon()
         icon14.addFile(u":/icons/util/alert_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         icon14.addFile(u":/icons/util/add_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
@@ -1137,7 +1154,7 @@ class Ui_event_view(object):
         self.location_view_col_wrapper.setSizePolicy(sizePolicy5)
         self.location_view_col_wrapper.setMinimumSize(QSize(212, 40))
         self.location_view_col_wrapper.setMaximumSize(QSize(250, 40))
-        self.location_view_col_wrapper.setFont(font3)
+        self.location_view_col_wrapper.setFont(font4)
         self.location_view_col_wrapper.setFrameShape(QFrame.Shape.NoFrame)
         self.location_view_col_wrapper.setFrameShadow(QFrame.Shadow.Plain)
         self.location_view_col_wrapper.setLineWidth(0)
@@ -1164,7 +1181,7 @@ class Ui_event_view(object):
         self.address_view_col_label.setSizePolicy(sizePolicy11)
         self.address_view_col_label.setMinimumSize(QSize(211, 40))
         self.address_view_col_label.setMaximumSize(QSize(800, 40))
-        self.address_view_col_label.setFont(font3)
+        self.address_view_col_label.setFont(font4)
 
         self.location_view_col_container.addWidget(self.address_view_col_label)
 
@@ -1219,42 +1236,42 @@ class Ui_event_view(object):
         self.location_view_exp_labels_container.setContentsMargins(0, 0, 0, 0)
         self.address_line_1_label = QLabel(self.location_view_exp_labels)
         self.address_line_1_label.setObjectName(u"address_line_1_label")
-        self.address_line_1_label.setFont(font3)
+        self.address_line_1_label.setFont(font4)
         self.address_line_1_label.setWordWrap(True)
 
         self.location_view_exp_labels_container.addWidget(self.address_line_1_label)
 
         self.address_line_2_label = QLabel(self.location_view_exp_labels)
         self.address_line_2_label.setObjectName(u"address_line_2_label")
-        self.address_line_2_label.setFont(font3)
+        self.address_line_2_label.setFont(font4)
         self.address_line_2_label.setWordWrap(True)
 
         self.location_view_exp_labels_container.addWidget(self.address_line_2_label)
 
         self.address_line_3_label = QLabel(self.location_view_exp_labels)
         self.address_line_3_label.setObjectName(u"address_line_3_label")
-        self.address_line_3_label.setFont(font3)
+        self.address_line_3_label.setFont(font4)
         self.address_line_3_label.setWordWrap(True)
 
         self.location_view_exp_labels_container.addWidget(self.address_line_3_label)
 
         self.county_label = QLabel(self.location_view_exp_labels)
         self.county_label.setObjectName(u"county_label")
-        self.county_label.setFont(font3)
+        self.county_label.setFont(font4)
         self.county_label.setWordWrap(True)
 
         self.location_view_exp_labels_container.addWidget(self.county_label)
 
         self.city_label = QLabel(self.location_view_exp_labels)
         self.city_label.setObjectName(u"city_label")
-        self.city_label.setFont(font3)
+        self.city_label.setFont(font4)
         self.city_label.setWordWrap(True)
 
         self.location_view_exp_labels_container.addWidget(self.city_label)
 
         self.postcode_label = QLabel(self.location_view_exp_labels)
         self.postcode_label.setObjectName(u"postcode_label")
-        self.postcode_label.setFont(font3)
+        self.postcode_label.setFont(font4)
         self.postcode_label.setWordWrap(True)
 
         self.location_view_exp_labels_container.addWidget(self.postcode_label)
@@ -1296,6 +1313,10 @@ class Ui_event_view(object):
 
         self.location_view_exp_options_container.addWidget(self.location_finish_button)
 
+        self.location_view_exp_options_spacer = QSpacerItem(10, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+
+        self.location_view_exp_options_container.addItem(self.location_view_exp_options_spacer)
+
         self.location_edit_button = QPushButton(self.location_view_exp_options)
         self.location_edit_button.setObjectName(u"location_edit_button")
         sizePolicy12.setHeightForWidth(self.location_edit_button.sizePolicy().hasHeightForWidth())
@@ -1315,10 +1336,6 @@ class Ui_event_view(object):
 
         self.location_view_exp_options_container.addWidget(self.location_edit_button)
 
-        self.location_view_exp_options_spacer = QSpacerItem(10, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-
-        self.location_view_exp_options_container.addItem(self.location_view_exp_options_spacer)
-
 
         self.location_view_expanded_container.addWidget(self.location_view_exp_options)
 
@@ -1334,7 +1351,7 @@ class Ui_event_view(object):
         self.location_edit_combobox.setSizePolicy(sizePolicy5)
         self.location_edit_combobox.setMinimumSize(QSize(252, 40))
         self.location_edit_combobox.setMaximumSize(QSize(290, 40))
-        self.location_edit_combobox.setFont(font3)
+        self.location_edit_combobox.setFont(font4)
         self.location_edit_combobox.setEditable(True)
         self.location_edit_combobox.setIconSize(QSize(30, 30))
 
@@ -1404,7 +1421,7 @@ class Ui_event_view(object):
         self.layer_view_list_container.setContentsMargins(0, 0, 0, 0)
         self.empty_label = QLabel(self.layer_view_list)
         self.empty_label.setObjectName(u"empty_label")
-        self.empty_label.setFont(font3)
+        self.empty_label.setFont(font4)
 
         self.layer_view_list_container.addWidget(self.empty_label)
 
@@ -1765,11 +1782,11 @@ class Ui_event_view(object):
         sizePolicy.setHeightForWidth(self.layer_current_label.sizePolicy().hasHeightForWidth())
         self.layer_current_label.setSizePolicy(sizePolicy)
         self.layer_current_label.setMinimumSize(QSize(248, 30))
-        font4 = QFont()
-        font4.setFamilies([u"Arial"])
-        font4.setPointSize(15)
-        font4.setBold(False)
-        self.layer_current_label.setFont(font4)
+        font5 = QFont()
+        font5.setFamilies([u"Arial"])
+        font5.setPointSize(15)
+        font5.setBold(False)
+        self.layer_current_label.setFont(font5)
 
         self.layer_object_edit_container.addWidget(self.layer_current_label)
 
@@ -2145,7 +2162,7 @@ class Ui_event_view(object):
         self.start_label.setText(QCoreApplication.translate("event_view", u"Starts", None))
         self.end_label.setText(QCoreApplication.translate("event_view", u"Ends", None))
         self.schedule_label.setText(QCoreApplication.translate("event_view", u"Schedule", None))
-        self.schedule_button_label.setText(QCoreApplication.translate("event_view", u"Add schedule", None))
+        self.schedule_label_button.setText(QCoreApplication.translate("event_view", u"Add schedule", None))
         self.attributes_button.setText("")
         self.location_button.setText("")
         self.invitees_button.setText("")

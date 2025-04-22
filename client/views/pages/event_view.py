@@ -81,6 +81,14 @@ class EventView(QWidget):
         self._Ui.form_wrapper.horizontalScrollBar().setEnabled(False)
         self._Ui.title_view_wrapper.verticalScrollBar().setEnabled(False)
 
+        self._Ui.schedule_label_button.clicked.connect(lambda: print(f"""
+            Family: {self._Ui.schedule_label_button.fontInfo().family()}
+            PixelSize: {self._Ui.schedule_label_button.fontInfo().pixelSize()}
+            PointSize: {self._Ui.schedule_label_button.fontInfo().pointSize()}
+            WidgetSize: {self._Ui.schedule_label_button.size()}
+            """)
+            )
+
         self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
         self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
         self._Ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))

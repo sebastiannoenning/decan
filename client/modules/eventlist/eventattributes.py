@@ -8,9 +8,12 @@ from PySide6 import QtCore
 from PySide6.QtCore import (Qt, QObject, Signal, 
                             QJsonDocument, QJsonValue,
                             QByteArray, QModelIndex, Property,
-                            QDateTime, QDate, QTime)
+                            QDateTime, QDate, QTime, 
+                            QSize)
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, 
-                               QWidget, QScrollArea, QLabel, QCheckBox, QSizePolicy, QDataWidgetMapper,
+                               QWidget, QScrollArea, QLabel, QCheckBox, 
+                               QSizePolicy,
+                               QDataWidgetMapper,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
@@ -342,12 +345,27 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
         self._allDay        :bool       = False
         self._multiDay      :bool       = False
 
+        if not self.objectName():
+            self.setObjectName(u"event_time")
+
         self.setupUi()
 
         self._startLabel.dateTimeChanged.connect(self.updateFormat())
         self._endLabel.dateTimeChanged.connect(self.updateFormat())
 
+    def setMinimumHeight(self, minw):
+        minw : int = max(minw, self._b_height)
+        return super().setMinimumWidth(minw)
+
+    def sizeHint(self):
+        return QSize(self._b_height, self._b_width)
+
     def setupUi(self):
+        self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+
+        self._b_height       :int        = 50    # Base height
+        self._b_width        :int        = 150   # Base width
+
         self.label_container = QVBoxLayout()
         self.label_container.setContentsMargins(0,0,0,0)
         self.label_container.setSpacing(4)
@@ -355,6 +373,8 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
 
         self._startLabel                = self.ELabel(self)
         self._endLabel                  = self.ELabel(self)
+        self._startLabel.setObjectName("event_time_label")
+        self._endLabel.setObjectName("event_time_label")
 
         self._startLabel.setText('Not connected')
         self._endLabel.setText('Not connected')
@@ -366,7 +386,7 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
         self._startLabel.setFont(font)
         self._endLabel.setFont(font)
 
-        self.resize()
+        self.resize(self.label_container.minimumSize())
 
     def updateFormat(self):
         alldaytxt: str = '<span style="color: #ff5050; font-weight: bold;">All day</span>'
