@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
+
+<svg
+   width="800px"
+   height="800px"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="move_square_ (3) copy.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="0.295"
+     inkscape:cx="257.62712"
+     inkscape:cy="352.54237"
+     inkscape:window-width="1312"
+     inkscape:window-height="449"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg5" />
+  <g
+     id="SVGRepo_bgCarrier"
+     stroke-width="0" />
+  <g
+     id="SVGRepo_tracerCarrier"
+     stroke-linecap="round"
+     stroke-linejoin="round" />
+  <g
+     id="SVGRepo_iconCarrier"
+     style="stroke-width:1.5;stroke-dasharray:none">
+    <path
+       d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+       stroke="#8c96b4"
+       stroke-width="1.5"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       id="path1"
+       style="stroke-width:1.5;stroke-dasharray:none" />
+    <g
+       opacity="0.4"
+       id="g5"
+       style="opacity:1;stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none">
+      <path
+         d="M10.1806 17.1504L7.14062 14.1104"
+         stroke="#8c96b4"
+         stroke-width="1.5"
+         stroke-miterlimit="10"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         id="path2"
+         style="stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none" />
+      <path
+         d="M10.1797 6.8501V17.1501"
+         stroke="#8c96b4"
+         stroke-width="1.5"
+         stroke-miterlimit="10"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         id="path3"
+         style="stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none" />
+      <path
+         d="M13.8203 6.8501L16.8603 9.8901"
+         stroke="#8c96b4"
+         stroke-width="1.5"
+         stroke-miterlimit="10"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         id="path4"
+         style="stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none" />
+      <path
+         d="M13.8203 17.1501V6.8501"
+         stroke="#8c96b4"
+         stroke-width="1.5"
+         stroke-miterlimit="10"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         id="path5"
+         style="stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none" />
+    </g>
+  </g>
+</svg>

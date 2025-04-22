@@ -24,21 +24,35 @@ class Ui_main_view(object):
         if not main_view.objectName():
             main_view.setObjectName(u"main_view")
         main_view.resize(800, 480)
-        main_view.setStyleSheet(u"")
-        self.centralwidget = QWidget(main_view)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.central_layout = QHBoxLayout(self.centralwidget)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(main_view.sizePolicy().hasHeightForWidth())
+        main_view.setSizePolicy(sizePolicy)
+        main_view.setMinimumSize(QSize(800, 480))
+        main_view.setMaximumSize(QSize(800, 480))
+        main_view.setStyleSheet(u"#nav * QPushButton{\n"
+"background-color: rgba(20, 20, 20, 1);\n"
+"border-radius: 8px;\n"
+"}\n"
+"#nav * QPushButton:pressed{\n"
+"background-color: rgba(120,120,120,1);\n"
+"}")
+        self.main_container = QWidget(main_view)
+        self.main_container.setObjectName(u"main_container")
+        self.central_layout = QHBoxLayout(self.main_container)
         self.central_layout.setSpacing(10)
         self.central_layout.setObjectName(u"central_layout")
         self.central_layout.setContentsMargins(10, 10, 10, 10)
-        self.nav = QWidget(self.centralwidget)
+        self.nav = QWidget(self.main_container)
         self.nav.setObjectName(u"nav")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.nav.sizePolicy().hasHeightForWidth())
-        self.nav.setSizePolicy(sizePolicy)
-        self.nav.setMinimumSize(QSize(0, 0))
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.nav.sizePolicy().hasHeightForWidth())
+        self.nav.setSizePolicy(sizePolicy1)
+        self.nav.setMinimumSize(QSize(60, 0))
+        self.nav.setMaximumSize(QSize(135, 16777215))
         self.nav.setStyleSheet(u"QPushButton {\n"
 "	padding: 10px; \n"
 "	font-size: 20px;\n"
@@ -49,11 +63,13 @@ class Ui_main_view(object):
         self.nav_layout.setContentsMargins(0, 0, 0, 0)
         self.collapsed = QWidget(self.nav)
         self.collapsed.setObjectName(u"collapsed")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.MinimumExpanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.collapsed.sizePolicy().hasHeightForWidth())
-        self.collapsed.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.collapsed.sizePolicy().hasHeightForWidth())
+        self.collapsed.setSizePolicy(sizePolicy2)
+        self.collapsed.setMinimumSize(QSize(60, 0))
+        self.collapsed.setMaximumSize(QSize(60, 16777215))
         self.collapsed_layout = QVBoxLayout(self.collapsed)
         self.collapsed_layout.setSpacing(10)
         self.collapsed_layout.setObjectName(u"collapsed_layout")
@@ -71,7 +87,7 @@ class Ui_main_view(object):
 
         self.col_p1_user = QPushButton(self.collapsed)
         self.col_p1_user.setObjectName(u"col_p1_user")
-        self.col_p1_user.setMinimumSize(QSize(60, 95))
+        self.col_p1_user.setMinimumSize(QSize(60, 90))
         icon1 = QIcon()
         icon1.addFile(u":/icons/user/profile_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         icon1.addFile(u":/icons/user/profile_2_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
@@ -82,7 +98,8 @@ class Ui_main_view(object):
 
         self.col_p2_cal = QPushButton(self.collapsed)
         self.col_p2_cal.setObjectName(u"col_p2_cal")
-        self.col_p2_cal.setMinimumSize(QSize(60, 95))
+        self.col_p2_cal.setMinimumSize(QSize(60, 90))
+        self.col_p2_cal.setStyleSheet(u"")
         icon2 = QIcon()
         icon2.addFile(u":/icons/nav/calendar_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         icon2.addFile(u":/icons/nav/calendar_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
@@ -93,7 +110,7 @@ class Ui_main_view(object):
 
         self.col_p3_events = QPushButton(self.collapsed)
         self.col_p3_events.setObjectName(u"col_p3_events")
-        self.col_p3_events.setMinimumSize(QSize(60, 95))
+        self.col_p3_events.setMinimumSize(QSize(60, 90))
         icon3 = QIcon()
         icon3.addFile(u":/icons/calendar/calendar_edit_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         icon3.addFile(u":/icons/calendar/calendar_edit_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
@@ -104,7 +121,7 @@ class Ui_main_view(object):
 
         self.col_p4_pref = QPushButton(self.collapsed)
         self.col_p4_pref.setObjectName(u"col_p4_pref")
-        self.col_p4_pref.setMinimumSize(QSize(60, 95))
+        self.col_p4_pref.setMinimumSize(QSize(60, 90))
         icon4 = QIcon()
         icon4.addFile(u":/icons/nav/setting_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         icon4.addFile(u":/icons/nav/setting_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
@@ -118,9 +135,10 @@ class Ui_main_view(object):
 
         self.expanded = QWidget(self.nav)
         self.expanded.setObjectName(u"expanded")
-        sizePolicy.setHeightForWidth(self.expanded.sizePolicy().hasHeightForWidth())
-        self.expanded.setSizePolicy(sizePolicy)
-        self.expanded.setMaximumSize(QSize(300, 16777215))
+        sizePolicy2.setHeightForWidth(self.expanded.sizePolicy().hasHeightForWidth())
+        self.expanded.setSizePolicy(sizePolicy2)
+        self.expanded.setMinimumSize(QSize(135, 0))
+        self.expanded.setMaximumSize(QSize(135, 16777215))
         self.expanded.setStyleSheet(u"QPushButton {\n"
 "	text-align: left;\n"
 "}")
@@ -130,7 +148,10 @@ class Ui_main_view(object):
         self.expanded_layout.setContentsMargins(0, 0, 0, 0)
         self.exp_toggle = QPushButton(self.expanded)
         self.exp_toggle.setObjectName(u"exp_toggle")
-        self.exp_toggle.setMinimumSize(QSize(0, 60))
+        self.exp_toggle.setMinimumSize(QSize(135, 60))
+        font = QFont()
+        font.setFamilies([u"Arial"])
+        self.exp_toggle.setFont(font)
         self.exp_toggle.setIcon(icon)
         self.exp_toggle.setIconSize(QSize(30, 30))
 
@@ -138,12 +159,13 @@ class Ui_main_view(object):
 
         self.exp_p1_user = QPushButton(self.expanded)
         self.exp_p1_user.setObjectName(u"exp_p1_user")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.exp_p1_user.sizePolicy().hasHeightForWidth())
-        self.exp_p1_user.setSizePolicy(sizePolicy2)
-        self.exp_p1_user.setMinimumSize(QSize(95, 95))
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.exp_p1_user.sizePolicy().hasHeightForWidth())
+        self.exp_p1_user.setSizePolicy(sizePolicy3)
+        self.exp_p1_user.setMinimumSize(QSize(135, 90))
+        self.exp_p1_user.setFont(font)
         self.exp_p1_user.setIcon(icon1)
         self.exp_p1_user.setIconSize(QSize(30, 30))
 
@@ -151,7 +173,8 @@ class Ui_main_view(object):
 
         self.exp_p2_cal = QPushButton(self.expanded)
         self.exp_p2_cal.setObjectName(u"exp_p2_cal")
-        self.exp_p2_cal.setMinimumSize(QSize(95, 95))
+        self.exp_p2_cal.setMinimumSize(QSize(135, 90))
+        self.exp_p2_cal.setFont(font)
         self.exp_p2_cal.setIcon(icon2)
         self.exp_p2_cal.setIconSize(QSize(30, 30))
 
@@ -159,7 +182,8 @@ class Ui_main_view(object):
 
         self.exp_p3_events = QPushButton(self.expanded)
         self.exp_p3_events.setObjectName(u"exp_p3_events")
-        self.exp_p3_events.setMinimumSize(QSize(95, 95))
+        self.exp_p3_events.setMinimumSize(QSize(135, 90))
+        self.exp_p3_events.setFont(font)
         self.exp_p3_events.setIcon(icon3)
         self.exp_p3_events.setIconSize(QSize(30, 30))
 
@@ -167,7 +191,8 @@ class Ui_main_view(object):
 
         self.exp_p4_pref = QPushButton(self.expanded)
         self.exp_p4_pref.setObjectName(u"exp_p4_pref")
-        self.exp_p4_pref.setMinimumSize(QSize(95, 95))
+        self.exp_p4_pref.setMinimumSize(QSize(135, 90))
+        self.exp_p4_pref.setFont(font)
         self.exp_p4_pref.setIcon(icon4)
         self.exp_p4_pref.setIconSize(QSize(30, 30))
 
@@ -179,19 +204,21 @@ class Ui_main_view(object):
 
         self.central_layout.addWidget(self.nav)
 
-        self.pages = QStackedWidget(self.centralwidget)
+        self.pages = QStackedWidget(self.main_container)
         self.pages.setObjectName(u"pages")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.pages.sizePolicy().hasHeightForWidth())
-        self.pages.setSizePolicy(sizePolicy3)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.pages.sizePolicy().hasHeightForWidth())
+        self.pages.setSizePolicy(sizePolicy4)
+        self.pages.setMinimumSize(QSize(635, 460))
+        self.pages.setMaximumSize(QSize(710, 460))
         self.pages.setAutoFillBackground(False)
         self.pages.setStyleSheet(u"")
 
         self.central_layout.addWidget(self.pages)
 
-        main_view.setCentralWidget(self.centralwidget)
+        main_view.setCentralWidget(self.main_container)
 
         self.retranslateUi(main_view)
 

@@ -1,6 +1,6 @@
 import sys, math, re
 from enum import Enum
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List, Optional
 from shiboken6 import Shiboken
 
 from PySide6 import QtCore
@@ -56,15 +56,15 @@ class TimeSelect(QWidget):
             self.labelAlignment                 = Qt.AlignmentFlag.AlignLeft
             self._entries, self._mult           = 60, 1
         
-        self._locked                                = math.ceil(min_val / self._mult)
-        if (self._locked == self._entries): self._locked -= 1    #Shouldn't happen, but just in case
-        self._period                                = (self._entries - self._locked)
-        self._repeats                               = self.__determineRepeats(self._entries, self._locked)
+        self._locked                                        = math.ceil(min_val / self._mult)
+        if (self._locked == self._entries): self._locked    -= 1    #Shouldn't happen, but just in case
+        self._period                                        = (self._entries - self._locked)
+        self._repeats                                       = self.__determineRepeats(self._entries, self._locked)
 
-        self.labels: Dict[int, Tuple[QLabel, bool]] = {}
-        self.labelContainer                         = QVBoxLayout(self)
+        self.labels: Dict[int, List[Optional[QLabel],bool]] = {}
+        self.labelContainer                                 = QVBoxLayout(self)
 
-        self._selected: bool                        = None
+        self._selected: bool                                = None
 
         self.setObjectName(f"TimeSelect_{hex(id(self))}")
 
@@ -248,6 +248,7 @@ class TimeSelect(QWidget):
                                           O=(self._locked)
                                           ) * self._mult
                                           )
+            self.labels[x] = [None, False]
             self.labels[x][0] = QLabel(f"{val:02}", parent=self)
             self.labels[x][1] = False
             self.labels[x][0].setObjectName(f"{self.objectName()}_TSLabel_{x}_{val:02}")

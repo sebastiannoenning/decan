@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
+
+<svg
+   width="800px"
+   height="800px"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="layer_red.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="0.29554272"
+     inkscape:cx="-76.131125"
+     inkscape:cy="389.11464"
+     inkscape:window-width="1312"
+     inkscape:window-height="449"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3" />
+  <g
+     id="SVGRepo_bgCarrier"
+     stroke-width="0" />
+  <g
+     id="SVGRepo_tracerCarrier"
+     stroke-linecap="round"
+     stroke-linejoin="round" />
+  <g
+     id="SVGRepo_iconCarrier"
+     style="stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none">
+    <g
+       id="g14"
+       inkscape:label="left"
+       style="stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none">
+      <path
+         id="path1"
+         d="M 13.790381,10.553039 C 16.406608,9.1724988 13.0095,10.8998 13.0095,10.8998 c -0.669999,0.3 -1.770001,0.3 -2.44,0 L 4.66953,8.27982 c -1.6999983,-0.7499992 -1.6999983,-1.9900007 0,-2.74 l 5.89997,-2.62 c 0.669999,-0.2999997 1.770001,-0.2999997 2.44,0 v 0 l 5.826689,2.5874448"
+         style="fill:none;fill-opacity:0.4;stroke:#4b96ff;stroke-width:1.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:nodetypes="ccccccscc"
+         inkscape:label="top" />
+      <path
+         id="path9"
+         d="M 3 11 C 3 11.839999 3.6300008 12.81 4.4 13.15 L 9.0582382 15.221853 "
+         style="fill:none;stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none;stroke-linecap:round"
+         inkscape:label="middle" />
+      <path
+         id="path10"
+         d="m 3,16 c 0,0.929999 0.5500008,1.77 1.4,2.15 l 1.1992335,0.533385"
+         style="fill:none;stroke:#4b96ff;stroke-width:1.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:label="bottom" />
+      <path
+         style="fill:#000000;fill-opacity:0.4;stroke:#4b96ff;stroke-width:1.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+         d="M 2.5827259,22.351835 C 22.19379,2.7407712 22.035211,2.5821914 22.035211,2.5821914"
+         id="path5-8"
+         inkscape:label="slash" />
+    </g>
+    <g
+       id="g15"
+       inkscape:label="right"
+       style="opacity:0.403;stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none">
+      <path
+         id="path3"
+         style="fill:none;stroke:#4b96ff;stroke-width:1.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+         d="M 8.2186527,19.848429 11.19,21.17 c 0.519998,0.23 1.110002,0.23 1.62,0 L 19.6,18.15 C 20.449998,17.77 21,16.929998 21,16"
+         inkscape:label="bottom" />
+      <path
+         id="path2"
+         style="fill:none;stroke:#4b96ff;stroke-opacity:1;stroke-width:1.5;stroke-dasharray:none;stroke-linecap:round"
+         d="M 11.72085 16.322355 C 12.089711 16.375084 12.467859 16.324299 12.81 16.17 L 19.6 13.15 C 20.369998 12.81 21 11.839998 21 11 "
+         inkscape:label="middle" />
+    </g>
+  </g>
+</svg>

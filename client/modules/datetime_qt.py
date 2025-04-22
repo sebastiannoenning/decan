@@ -31,6 +31,7 @@ def DateTimeToPy(dateTime: QDateTime,
 
 # Turns QDate into a formatted string or datetime object
 def DateToFS(date: QDate): return date.toString('d MMM yyyy')
+def DateToFSLong(date: QDate): return date.toString('ddd, d MMM yyyy')
 def DateToISO(date: QDate): return date.toString(format=Qt.DateFormat.ISODate)
 def DateToPy(date: QDate): return date.toPython()
 

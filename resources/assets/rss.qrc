@@ -12,6 +12,18 @@
         <file>arrow_down_red.svg</file>
         <file>arrow_down_light.svg</file>
         <file>arrow_down_dark.svg</file>
+        <file>arrow_move_blue.svg</file>
+        <file>arrow_move_dark.svg</file>
+        <file>arrow_move_grey.svg</file>
+        <file>arrow_move_light.svg</file>
+        <file>arrow_redo_blue.svg</file>
+        <file>arrow_redo_dark.svg</file>
+        <file>arrow_redo_grey.svg</file>
+        <file>arrow_redo_light.svg</file>
+        <file>arrow_undo_blue.svg</file>
+        <file>arrow_undo_dark.svg</file>
+        <file>arrow_undo_grey.svg</file>
+        <file>arrow_undo_light.svg</file>
     </qresource>
     <qresource prefix="/icons/user">
         <file>user_add_red.svg</file>
@@ -20,6 +32,26 @@
         <file>profile_2_red.svg</file>
         <file>profile_2_light.svg</file>
         <file>profile_2_dark.svg</file>
+        <file>security_password_dark.svg</file>
+        <file>security_password_light.svg</file>
+        <file>security_slash_dark.svg</file>
+        <file>security_slash_grey.svg</file>
+        <file>security_slash_light.svg</file>
+        <file>security_slash_red.svg</file>
+        <file>security_tick_blue.svg</file>
+        <file>security_tick_dark.svg</file>
+        <file>security_tick_green.svg</file>
+        <file>security_tick_grey.svg</file>
+        <file>security_tick_light.svg</file>
+        <file>security_user_dark.svg</file>
+        <file>security_user_light.svg</file>
+        <file>profile_2_grey.svg</file>
+        <file>profile_2_orange.svg</file>
+        <file>profile_2_slash_dark.svg</file>
+        <file>profile_2_slash_grey.svg</file>
+        <file>profile_2_slash_light.svg</file>
+        <file>profile_2_slash_orange.svg</file>
+        <file>profile_2_slash_red.svg</file>
     </qresource>
     <qresource prefix="/icons/nav">
         <file>setting_red.svg</file>
@@ -51,6 +83,69 @@
         <file>add_1_red.svg</file>
         <file>add_1_light.svg</file>
         <file>add_1_dark.svg</file>
+        <file>close_dark.svg</file>
+        <file>close_light.svg</file>
+        <file>close_grey.svg</file>
+        <file>close_red.svg</file>
+        <file>alert_dark.svg</file>
+        <file>alert_light.svg</file>
+        <file>alert_yellow.svg</file>
+        <file>eye_dark.svg</file>
+        <file>eye_light.svg</file>
+        <file>eye_slash_dark.svg</file>
+        <file>eye_slash_light.svg</file>
+        <file>edit_blue.svg</file>
+        <file>edit_dark.svg</file>
+        <file>edit_grey.svg</file>
+        <file>edit_light.svg</file>
+        <file>keyboard_blue.svg</file>
+        <file>keyboard_dark.svg</file>
+        <file>keyboard_grey.svg</file>
+        <file>keyboard_light.svg</file>
+        <file>keyboard_red.svg</file>
+        <file>lock_circle_dark.svg</file>
+        <file>lock_circle_grey.svg</file>
+        <file>lock_circle_light.svg</file>
+        <file>lock_circle_red.svg</file>
+        <file>refresh_blue.svg</file>
+        <file>refresh_dark.svg</file>
+        <file>refresh_grey.svg</file>
+        <file>refresh_light.svg</file>
+        <file>minus_square_dark.svg</file>
+        <file>minus_square_grey.svg</file>
+        <file>minus_square_light.svg</file>
+        <file>minus_square_red.svg</file>
+        <file>tick_square1_dark.svg</file>
+        <file>tick_square1_green.svg</file>
+        <file>tick_square1_grey.svg</file>
+        <file>tick_square1_light.svg</file>
+        <file>tick_square2_dark.svg</file>
+        <file>tick_square2_green.svg</file>
+        <file>tick_square2_grey.svg</file>
+        <file>tick_square2_light.svg</file>
+        <file>back_square1_dark.svg</file>
+        <file>back_square1_light.svg</file>
+        <file>back_square1_blue.svg</file>
+        <file>back_square2_dark.svg</file>
+        <file>back_square2_light.svg</file>
+        <file>back_square1_grey.svg</file>
+        <file>back_square2_grey.svg</file>
+        <file>close_square1_dark.svg</file>
+        <file>close_square1_grey.svg</file>
+        <file>close_square1_light.svg</file>
+        <file>close_square1_red.svg</file>
+        <file>close_square2_dark.svg</file>
+        <file>close_square2_grey.svg</file>
+        <file>close_square2_light.svg</file>
+        <file>close_square2_red.svg</file>
+        <file>move_square1_blue.svg</file>
+        <file>move_square1_dark.svg</file>
+        <file>move_square1_grey.svg</file>
+        <file>move_square1_light.svg</file>
+        <file>move_square2_blue.svg</file>
+        <file>move_square2_dark.svg</file>
+        <file>move_square2_grey.svg</file>
+        <file>move_square2_light.svg</file>
     </qresource>
     <qresource prefix="/icons/calendar">
         <file>calendar_search_red.svg</file>
@@ -59,5 +154,205 @@
         <file>calendar_edit_red.svg</file>
         <file>calendar_edit_light.svg</file>
         <file>calendar_edit_dark.svg</file>
+        <file>clock_dark.svg</file>
+        <file>clock_grey.svg</file>
+        <file>clock_light.svg</file>
+        <file>clock_orange.svg</file>
+        <file>clock_slash_dark.svg</file>
+        <file>clock_slash_grey.svg</file>
+        <file>clock_slash_light.svg</file>
+        <file>clock_slash_orange.svg</file>
+    </qresource>
+    <qresource prefix="/icons/util/buttons">
+        <file>checkbox_false_dark.svg</file>
+        <file>checkbox_false_light.svg</file>
+        <file>checkbox_true_dark.svg</file>
+        <file>checkbox_true_light.svg</file>
+        <file>toggle_off_dark.svg</file>
+        <file>toggle_off_grey.svg</file>
+        <file>toggle_off_light.svg</file>
+        <file>toggle_on_dark.svg</file>
+        <file>toggle_on_grey.svg</file>
+        <file>toggle_on_light.svg</file>
+        <file>clear_button_red.svg</file>
+        <file>clear_button_light.svg</file>
+        <file>clear_button_grey.svg</file>
+        <file>clear_button_dark.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar/events">
+        <file>layer_blue1.svg</file>
+        <file>layer_blue2.svg</file>
+        <file>layer_dark.svg</file>
+        <file>layer_grey.svg</file>
+        <file>layer_light.svg</file>
+        <file>layer_red.svg</file>
+        <file>flash_black.svg</file>
+        <file>flash_dark.svg</file>
+        <file>flash_grey.svg</file>
+        <file>flash_red.svg</file>
+        <file>flash_slash_dark.svg</file>
+        <file>flash_slash_grey.svg</file>
+        <file>flash_slash_light.svg</file>
+        <file>flash_slash_red.svg</file>
+        <file>flash_slash_yellow.svg</file>
+        <file>flash_yellow.svg</file>
+        <file>message_box_blue.svg</file>
+        <file>message_box_dark.svg</file>
+        <file>message_box_grey.svg</file>
+        <file>message_box_light.svg</file>
+        <file>message_box_red.svg</file>
+        <file>todo_task_dark.svg</file>
+        <file>todo_task_green.svg</file>
+        <file>todo_task_grey.svg</file>
+        <file>todo_task_light.svg</file>
+        <file>todo_task_red.svg</file>
+        <file>layer_slash_red.svg</file>
+        <file>layer_slash_grey.svg</file>
+        <file>layer_slash_blue1.svg</file>
+        <file>layer_slash_dark.svg</file>
+        <file>layer_slash_light.svg</file>
+        <file>layer_lock_red.svg</file>
+        <file>layer_lock_grey.svg</file>
+        <file>layer_lock_dark.svg</file>
+        <file>layer_lock_blue2.svg</file>
+        <file>layer_lock_blue1.svg</file>
+        <file>layer_lock_light.svg</file>
+        <file>layer_slash_blue2.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar/events/description">
+        <file>description_add_blue.svg</file>
+        <file>description_add_dark.svg</file>
+        <file>description_add_grey.svg</file>
+        <file>description_add_light.svg</file>
+        <file>description_add_red.svg</file>
+        <file>description_blue.svg</file>
+        <file>description_dark.svg</file>
+        <file>description_grey.svg</file>
+        <file>description_light.svg</file>
+        <file>description_red.svg</file>
+        <file>description_remove_blue.svg</file>
+        <file>description_remove_dark.svg</file>
+        <file>description_remove_grey.svg</file>
+        <file>description_remove_light.svg</file>
+        <file>description_remove_red.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar/events/todo">
+        <file>todo_add_dark.svg</file>
+        <file>todo_add_green.svg</file>
+        <file>todo_add_grey.svg</file>
+        <file>todo_add_light.svg</file>
+        <file>todo_dark.svg</file>
+        <file>todo_green.svg</file>
+        <file>todo_grey.svg</file>
+        <file>todo_light.svg</file>
+        <file>todo_remove_dark.svg</file>
+        <file>todo_remove_grey.svg</file>
+        <file>todo_remove_light.svg</file>
+        <file>todo_remove_red.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar/events/location">
+        <file>location_dark.svg</file>
+        <file>location_green.svg</file>
+        <file>location_grey.svg</file>
+        <file>location_light.svg</file>
+        <file>location_red.svg</file>
+        <file>location_remove1_dark.svg</file>
+        <file>location_remove1_green.svg</file>
+        <file>location_remove1_grey.svg</file>
+        <file>location_remove1_light.svg</file>
+        <file>location_remove1_red.svg</file>
+        <file>location_remove2_dark.svg</file>
+        <file>location_remove2_green.svg</file>
+        <file>location_remove2_grey.svg</file>
+        <file>location_remove2_light.svg</file>
+        <file>location_remove2_red.svg</file>
+        <file>location_slash_dark.svg</file>
+        <file>location_slash_green.svg</file>
+        <file>location_slash_grey.svg</file>
+        <file>location_slash_light.svg</file>
+        <file>lock_circle_dark.svg</file>
+        <file>location_add1_dark.svg</file>
+        <file>location_add1_green1.svg</file>
+        <file>location_add1_green2.svg</file>
+        <file>location_add1_grey.svg</file>
+        <file>location_add1_light.svg</file>
+        <file>location_add2_dark.svg</file>
+        <file>location_add2_green1.svg</file>
+        <file>location_add2_green2.svg</file>
+        <file>location_add2_grey.svg</file>
+        <file>location_add2_light.svg</file>
+        <file>location_lock_dark.svg</file>
+        <file>location_lock_green.svg</file>
+        <file>location_lock_grey.svg</file>
+        <file>location_lock_light.svg</file>
+        <file>location_lock_red.svg</file>
+        <file>location_back_blue.svg</file>
+        <file>location_back_dark.svg</file>
+        <file>location_back_green.svg</file>
+        <file>location_back_grey.svg</file>
+        <file>location_back_light.svg</file>
+        <file>location_tick1_dark.svg</file>
+        <file>location_tick1_green.svg</file>
+        <file>location_tick1_grey.svg</file>
+        <file>location_tick1_light.svg</file>
+        <file>location_tick2_dark.svg</file>
+        <file>location_tick2_green.svg</file>
+        <file>location_tick2_grey.svg</file>
+        <file>location_tick2_light.svg</file>
+        <file>location_edit_blue.svg</file>
+        <file>location_edit_dark.svg</file>
+        <file>location_edit_green.svg</file>
+        <file>location_edit_grey.svg</file>
+        <file>location_edit_light.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar/events/filter">
+        <file>filter_add_dark.svg</file>
+        <file>filter_add_grey.svg</file>
+        <file>filter_add_light.svg</file>
+        <file>filter_add_red.svg</file>
+        <file>filter_edit_black.svg</file>
+        <file>filter_edit_dark.svg</file>
+        <file>filter_edit_grey.svg</file>
+        <file>filter_edit_red.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar/events/tags">
+        <file>tag_add_dark.svg</file>
+        <file>tag_add_green.svg</file>
+        <file>tag_add_grey.svg</file>
+        <file>tag_add_light.svg</file>
+        <file>tag_blue.svg</file>
+        <file>tag_dark.svg</file>
+        <file>tag_grey.svg</file>
+        <file>tag_light.svg</file>
+        <file>tag_remove_dark.svg</file>
+        <file>tag_remove_grey.svg</file>
+        <file>tag_remove_light.svg</file>
+        <file>tag_remove_red.svg</file>
+        <file>tag_slash_blue.svg</file>
+        <file>tag_slash_dark.svg</file>
+        <file>tag_slash_grey.svg</file>
+        <file>tag_slash_light.svg</file>
+        <file>tag_slash_red.svg</file>
+    </qresource>
+    <qresource prefix="/icons/calendar/events/other">
+        <file>simple_orange.svg</file>
+        <file>simple_grey.svg</file>
+        <file>simple_dark.svg</file>
+        <file>simple_light.svg</file>
+        <file>complex_purple.svg</file>
+        <file>complex_grey.svg</file>
+        <file>complex_dark.svg</file>
+        <file>complex_light.svg</file>
+    </qresource>
+    <qresource prefix="/icons/util/text">
+        <file>text_bold_dark.svg</file>
+        <file>text_bold_grey.svg</file>
+        <file>text_bold_light.svg</file>
+        <file>text_italic_dark.svg</file>
+        <file>text_italic_grey.svg</file>
+        <file>text_italic_light.svg</file>
+        <file>text_underline_dark.svg</file>
+        <file>text_underline_grey.svg</file>
+        <file>text_underline_light.svg</file>
     </qresource>
 </RCC>

@@ -78,9 +78,8 @@ class EventView(QWidget):
 
         self.eventmodel = EventModel(self, db=self._database)
 
-        self._Ui.event_table.setModel(self.eventmodel)
-
-        self._Ui.eventList.setModel(self.eventmodel)
+        self._Ui.form_wrapper.horizontalScrollBar().setEnabled(False)
+        self._Ui.title_view_wrapper.verticalScrollBar().setEnabled(False)
 
         self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
         self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))

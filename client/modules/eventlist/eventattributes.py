@@ -1,13 +1,14 @@
 import datetime
 import json
 from enum import Enum
-from typing import List, Dict, Tuple, Union, Any
+from typing import List, Dict, Tuple, Union, Optional, Any
 
 # This Python file uses the following encoding: utf-8
 from PySide6 import QtCore
 from PySide6.QtCore import (Qt, QObject, Signal, 
                             QJsonDocument, QJsonValue,
-                            QByteArray, QModelIndex, Property)
+                            QByteArray, QModelIndex, Property,
+                            QDateTime, QDate, QTime)
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, 
                                QWidget, QScrollArea, QLabel, QCheckBox, QSizePolicy, QDataWidgetMapper,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
@@ -15,12 +16,15 @@ from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
 from modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event_todo, Ui_event_body
 
+from modules.datetime_qt import DateToFSLong, TimeToFS
+
 from modules.eventlist.eventtype import EventType
 
 class EBody(QWidget):
     """ Provides JSON Parsing of the Attributes column & constructs the internal body to be placed in Body & Dynamic 
         generation of internal body widgets
     """
+    sizeChanged = Signal()
     attributesChanged = Signal()
 
     def __init__(self, parent, Attributes: QByteArray = None):
@@ -329,15 +333,101 @@ class EBody(QWidget):
             if (QJsonDocument.fromJson(self._Attributes).object() != self._Json): self._updateJson()
             self.attributesChanged.emit()
 
-class ETime(QLabel):        # Time Label that provides multiple formatting/preset-styles & real-time time updating
+class ETime(QWidget):        # Time Label that provides multiple formatting/preset-styles & real-time time updating, 
     def __init__(self, parent):
         super().__init__(parent)
-        pass
+        self._startColumn   :int        = 0
+        self._endColumn     :int        = 0
+
+        self._allDay        :bool       = False
+        self._multiDay      :bool       = False
+
+        self.setupUi()
+
+        self._startLabel.dateTimeChanged.connect(self.updateFormat())
+        self._endLabel.dateTimeChanged.connect(self.updateFormat())
+
+    def setupUi(self):
+        self.label_container = QVBoxLayout()
+        self.label_container.setContentsMargins(0,0,0,0)
+        self.label_container.setSpacing(4)
+        self.setLayout(self.label_container)
+
+        self._startLabel                = self.ELabel(self)
+        self._endLabel                  = self.ELabel(self)
+
+        self._startLabel.setText('Not connected')
+        self._endLabel.setText('Not connected')
+
+        self.label_container.addWidget(self._startLabel)
+        self.label_container.addWidget(self._endLabel)
+
+    def setFont(self, font: QFont):
+        self._startLabel.setFont(font)
+        self._endLabel.setFont(font)
+
+        self.resize()
+
+    def updateFormat(self):
+        alldaytxt: str = '<span style="color: #ff5050; font-weight: bold;">All day</span>'
+
+        if (self._startLabel.Time() <= QTime(0, 0, 59)) and (self._endLabel.Time() >= QTime(23, 59, 0)): 
+            self._allDay = True
+        else: self._allDay = False
+
+        if (self._startLabel.Date() != self._endLabel.Date()):
+            self._multiDay = True
+        else: self._multiDay = False
+
+        if (self._allDay) and (self._multiDay):
+            self._startLabel.setText(f'{alldaytxt}, from {DateToFSLong(self._startLabel.Date())}')
+            self._endLabel.setText(f'to {DateToFSLong(self._endLabel.Date())}')
+        elif (self._allDay):
+            self._startLabel.setText(self._startLabel.Date().toString('dddd d MMM yyyy'))
+            self._endLabel.setText(alldaytxt)
+        elif (self._multiDay):
+            self._startLabel.setText(f'from {DateToFSLong(self._startLabel.Date())}')
+            self._endLabel.setText(f'to {DateToFSLong(self._endLabel.Date())}')
+        else:
+            self._startLabel.setText(self._startLabel.Date().toString('dddd d MMM yyyy'))
+            self._endLabel.setText(f'from {TimeToFS(self._startLabel.Time())} to {TimeToFS(self._endLabel.Time())}')
+
+    def addMappings(self, mapper: QDataWidgetMapper, col_start: int, col_end: int):
+        self._startColumn = col_start
+        self._endColumn = col_end
+        mapper.addMapping()
+
+    def removeMappings(self, mapper: QDataWidgetMapper):
+        mapper.removeMapping()
+
+    class ELabel(QLabel):
+        dateTimeChanged = Signal()
+
+        def __init__(self, parent):
+            super().__init__(parent)
+            self._DateTime: Optional[QDateTime] = QDateTime().currentDateTime()
+            pass
+
+        def Time(self): return self._DateTime.time()
+
+        def Date(self): return self._DateTime.date()
+
+        @Property(QDateTime)
+        def DateTime(self): return self._DateTime
+        
+        @DateTime.setter
+        def DateTime(self, DateTime: QDate):
+            if (self._DateTime != DateTime):
+                self._DateTime = DateTime
+                self.dateTimeChanged.emit()
+
 
 class ELocation(QLabel):    # Location Label that provides travel-time recommendations 
     def __init__(self, parent):
         super().__init__(parent)
         pass
+
+    def setModel(self, LocModel): pass
 
 class EDescription(QWidget):    # Description addition that provides a larger, scrollable box with horizontal word-wrapping
     def __init__(self, parent, key: str):
