@@ -1069,7 +1069,7 @@ QScrollBar::add-line:vertical  {
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-567</y>
+            <y>-738</y>
             <width>345</width>
             <height>1753</height>
            </rect>

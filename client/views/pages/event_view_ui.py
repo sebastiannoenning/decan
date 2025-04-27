@@ -25,7 +25,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
 from modules.eventlist.eventattributes import (EBody, EDescription, ETime, EToDo)
 from modules.eventlist.eventlist import EventList
 from modules.touchdatetime.tdatetimeedit import TDateTimeSelect
-import rss_rc
+from views import rss_rc
 
 class Ui_event_view(object):
     def setupUi(self, event_view):
@@ -656,7 +656,7 @@ class Ui_event_view(object):
         self.form_wrapper.setWidgetResizable(True)
         self.details_form = QWidget()
         self.details_form.setObjectName(u"details_form")
-        self.details_form.setGeometry(QRect(0, -567, 345, 1753))
+        self.details_form.setGeometry(QRect(0, -738, 345, 1753))
         sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
