@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QMainWindow, QPushButton,
-    QSizePolicy, QStackedWidget, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLayout, QMainWindow,
+    QPushButton, QSizePolicy, QStackedWidget, QVBoxLayout,
+    QWidget)
 from . import rss_rc
 
 class Ui_main_view(object):
@@ -56,7 +57,7 @@ class Ui_main_view(object):
         self.central_layout.setContentsMargins(10, 10, 10, 10)
         self.nav = QWidget(self.main_container)
         self.nav.setObjectName(u"nav")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.nav.sizePolicy().hasHeightForWidth())
@@ -70,14 +71,12 @@ class Ui_main_view(object):
         self.nav_layout = QHBoxLayout(self.nav)
         self.nav_layout.setSpacing(0)
         self.nav_layout.setObjectName(u"nav_layout")
+        self.nav_layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.nav_layout.setContentsMargins(0, 0, 0, 0)
         self.collapsed = QWidget(self.nav)
         self.collapsed.setObjectName(u"collapsed")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.collapsed.sizePolicy().hasHeightForWidth())
-        self.collapsed.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.collapsed.sizePolicy().hasHeightForWidth())
+        self.collapsed.setSizePolicy(sizePolicy1)
         self.collapsed.setMinimumSize(QSize(60, 0))
         self.collapsed.setMaximumSize(QSize(60, 16777215))
         self.collapsed_layout = QVBoxLayout(self.collapsed)
@@ -145,8 +144,8 @@ class Ui_main_view(object):
 
         self.expanded = QWidget(self.nav)
         self.expanded.setObjectName(u"expanded")
-        sizePolicy2.setHeightForWidth(self.expanded.sizePolicy().hasHeightForWidth())
-        self.expanded.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.expanded.sizePolicy().hasHeightForWidth())
+        self.expanded.setSizePolicy(sizePolicy1)
         self.expanded.setMinimumSize(QSize(135, 0))
         self.expanded.setMaximumSize(QSize(135, 16777215))
         self.expanded.setStyleSheet(u"QPushButton {\n"
@@ -162,18 +161,20 @@ class Ui_main_view(object):
         font = QFont()
         font.setFamilies([u"Arial"])
         self.exp_toggle.setFont(font)
-        self.exp_toggle.setIcon(icon)
+        icon5 = QIcon()
+        icon5.addFile(u":/icons/nav/burger_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.exp_toggle.setIcon(icon5)
         self.exp_toggle.setIconSize(QSize(30, 30))
 
         self.expanded_layout.addWidget(self.exp_toggle)
 
         self.exp_p1_user = QPushButton(self.expanded)
         self.exp_p1_user.setObjectName(u"exp_p1_user")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.exp_p1_user.sizePolicy().hasHeightForWidth())
-        self.exp_p1_user.setSizePolicy(sizePolicy3)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.exp_p1_user.sizePolicy().hasHeightForWidth())
+        self.exp_p1_user.setSizePolicy(sizePolicy2)
         self.exp_p1_user.setMinimumSize(QSize(135, 90))
         self.exp_p1_user.setFont(font)
         self.exp_p1_user.setIcon(icon1)
@@ -216,11 +217,11 @@ class Ui_main_view(object):
 
         self.pages = QStackedWidget(self.main_container)
         self.pages.setObjectName(u"pages")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.pages.sizePolicy().hasHeightForWidth())
-        self.pages.setSizePolicy(sizePolicy4)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.pages.sizePolicy().hasHeightForWidth())
+        self.pages.setSizePolicy(sizePolicy3)
         self.pages.setMinimumSize(QSize(635, 460))
         self.pages.setMaximumSize(QSize(710, 460))
         self.pages.setAutoFillBackground(False)

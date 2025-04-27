@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>634</width>
+    <width>710</width>
     <height>460</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -86,10 +86,10 @@ QCheckBox::indicator {
 	height: 30px; width: 30px;
 }
 QCheckBox::indicator:unchecked {
-    	image: url(&quot;:/icons/util/buttons/checkbox_false_dark.svg&quot;);
+    	image: url(&quot;:/icons/util/buttons/checkbox2_empty_dark.svg&quot;);
 }
 QCheckBox::indicator:checked {
-    	image: url(&quot;:/icons/util/buttons/checkbox_true_dark.svg&quot;);
+    	image: url(&quot;:/icons/util/buttons/checkbox2_tick_dark.svg&quot;);
 }
 
 QLabel{
@@ -181,15 +181,9 @@ QPushButton#filter_button {
 	border-bottom-right-radius: 5px;
 }
 
-ELabel{
-	background-color: None;
-	border-radius: 0px;
-	padding-left: 5px;
-	border: 0px solid transparent;
-}
-ETime {
-	background-color: rgba(20,20,20,1);
-	border-radius: 5px;
+EToDo * QLabel{
+	background-color: transparent;
+	padding: 0px;
 }</string>
   </property>
   <layout class="QHBoxLayout" name="event_view_container">
@@ -424,7 +418,7 @@ ETime {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>340</width>
+           <width>348</width>
            <height>408</height>
           </rect>
          </property>
@@ -461,7 +455,7 @@ ETime {
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page_quick">
       <property name="minimumSize">
@@ -522,7 +516,7 @@ ETime {
             <x>0</x>
             <y>0</y>
             <width>20</width>
-            <height>160</height>
+            <height>120</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -589,10 +583,10 @@ QScrollBar::down-arrow:vertical:pressed {
          <widget class="QScrollBar" name="test_bar_4">
           <property name="geometry">
            <rect>
-            <x>30</x>
+            <x>20</x>
             <y>0</y>
-            <width>231</width>
-            <height>16</height>
+            <width>292</width>
+            <height>20</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -633,10 +627,10 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
          <widget class="QScrollBar" name="test_bar_2">
           <property name="geometry">
            <rect>
-            <x>30</x>
-            <y>30</y>
-            <width>231</width>
-            <height>16</height>
+            <x>20</x>
+            <y>20</y>
+            <width>292</width>
+            <height>20</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -679,9 +673,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <widget class="QScrollBar" name="test_bar_1">
           <property name="geometry">
            <rect>
-            <x>30</x>
-            <y>60</y>
-            <width>231</width>
+            <x>20</x>
+            <y>40</y>
+            <width>292</width>
             <height>20</height>
            </rect>
           </property>
@@ -746,6 +740,99 @@ QScrollBar::left-arrow:horizontal:pressed {
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
+         </widget>
+         <widget class="EToDo" name="EToDo" native="true">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>120</y>
+            <width>312</width>
+            <height>50</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="EDescription" name="EDescription" native="true">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>60</y>
+            <width>292</width>
+            <height>61</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QScrollArea" name="ebody_test_scroll_area">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>170</y>
+            <width>312</width>
+            <height>180</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>248</width>
+            <height>1</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>312</width>
+            <height>180</height>
+           </size>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="ebody_test_container">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>310</width>
+             <height>178</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QVBoxLayout" name="ebody_test_layout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="EBody" name="ebody_test" native="true"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </widget>
        </item>
@@ -967,7 +1054,7 @@ QScrollBar::add-line:vertical  {
           <number>0</number>
          </property>
          <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+          <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
@@ -982,9 +1069,9 @@ QScrollBar::add-line:vertical  {
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-865</y>
-            <width>312</width>
-            <height>1655</height>
+            <y>-567</y>
+            <width>345</width>
+            <height>1753</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1193,7 +1280,7 @@ QScrollBar::add-line:vertical  {
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>212</width>
+                      <width>245</width>
                       <height>40</height>
                      </rect>
                     </property>
@@ -1581,8 +1668,14 @@ QScrollBar::right-arrow:horizontal:pressed {
                 <x>0</x>
                 <y>0</y>
                 <width>390</width>
-                <height>60</height>
+                <height>40</height>
                </rect>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
               </property>
               <layout class="QHBoxLayout" name="preset_container">
                <property name="spacing">
@@ -1598,7 +1691,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                 <number>0</number>
                </property>
                <property name="bottomMargin">
-                <number>20</number>
+                <number>0</number>
                </property>
                <item>
                 <widget class="QPushButton" name="note_button">
@@ -1611,7 +1704,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                  <property name="maximumSize">
                   <size>
                    <width>80</width>
-                   <height>50</height>
+                   <height>40</height>
                   </size>
                  </property>
                  <property name="font">
@@ -1653,7 +1746,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                  <property name="maximumSize">
                   <size>
                    <width>80</width>
-                   <height>50</height>
+                   <height>40</height>
                   </size>
                  </property>
                  <property name="font">
@@ -1695,7 +1788,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                  <property name="maximumSize">
                   <size>
                    <width>80</width>
-                   <height>50</height>
+                   <height>40</height>
                   </size>
                  </property>
                  <property name="font">
@@ -1739,7 +1832,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                  <property name="maximumSize">
                   <size>
                    <width>80</width>
-                   <height>50</height>
+                   <height>40</height>
                   </size>
                  </property>
                  <property name="font">
@@ -1823,13 +1916,13 @@ QScrollBar::right-arrow:horizontal:pressed {
              <property name="minimumSize">
               <size>
                <width>247</width>
-               <height>200</height>
+               <height>68</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>290</width>
-               <height>200</height>
+               <height>270</height>
               </size>
              </property>
              <property name="autoFillBackground">
@@ -1868,7 +1961,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                 <property name="maximumSize">
                  <size>
                   <width>288</width>
-                  <height>50</height>
+                  <height>68</height>
                  </size>
                 </property>
                 <property name="font">
@@ -1890,12 +1983,39 @@ QScrollBar::right-arrow:horizontal:pressed {
                 <property name="minimumSize">
                  <size>
                   <width>247</width>
-                  <height>100</height>
+                  <height>150</height>
                  </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Arial</family>
+                  <pointsize>15</pointsize>
+                 </font>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::LayoutDirection::LeftToRight</enum>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QWidget#time_edit {
+	background: rgba(30,30,30,1);
+	border-radius: 10px;
+}
+QLabel {
+	padding: 0px;
+	background: none;
+	border-radius: 0px;
+}
+</string>
                 </property>
                 <layout class="QFormLayout" name="time_edit_form">
                  <property name="labelAlignment">
-                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                  </property>
                  <property name="formAlignment">
                   <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -1907,19 +2027,25 @@ QScrollBar::right-arrow:horizontal:pressed {
                   <number>10</number>
                  </property>
                  <property name="leftMargin">
-                  <number>0</number>
+                  <number>10</number>
                  </property>
                  <property name="topMargin">
-                  <number>0</number>
+                  <number>10</number>
                  </property>
                  <property name="rightMargin">
-                  <number>0</number>
+                  <number>10</number>
                  </property>
                  <property name="bottomMargin">
-                  <number>0</number>
+                  <number>10</number>
                  </property>
                  <item row="0" column="0">
                   <widget class="QLabel" name="time_allday_label">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -1930,46 +2056,28 @@ QScrollBar::right-arrow:horizontal:pressed {
                     <font>
                      <family>Arial</family>
                      <pointsize>15</pointsize>
+                     <bold>false</bold>
                     </font>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LayoutDirection::LeftToRight</enum>
                    </property>
                    <property name="text">
                     <string>All-day</string>
                    </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QCheckBox" name="time_allday_checkbox">
-                   <property name="minimumSize">
-                    <size>
-                     <width>30</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>30</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>30</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="checked">
-                    <bool>false</bool>
-                   </property>
-                   <property name="tristate">
-                    <bool>false</bool>
+                   <property name="alignment">
+                    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="time_start_label">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -1984,6 +2092,9 @@ QScrollBar::right-arrow:horizontal:pressed {
                    </property>
                    <property name="text">
                     <string>Starts</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2008,6 +2119,12 @@ QScrollBar::right-arrow:horizontal:pressed {
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="time_end_label">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -2024,7 +2141,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                     <string>Ends</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2043,6 +2160,12 @@ QScrollBar::right-arrow:horizontal:pressed {
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="time_schedule_label">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -2058,28 +2181,155 @@ QScrollBar::right-arrow:horizontal:pressed {
                    <property name="text">
                     <string>Schedule</string>
                    </property>
+                   <property name="alignment">
+                    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QWidget" name="time_allday_checkbox_to_right_wrapper" native="true">
+                   <layout class="QHBoxLayout" name="checkbox_toright_container">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <spacer name="time_allday_checkbox_to_right_spacer">
+                      <property name="orientation">
+                       <enum>Qt::Orientation::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>161</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="time_allday_checkbox">
+                      <property name="minimumSize">
+                       <size>
+                        <width>30</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>30</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="layoutDirection">
+                       <enum>Qt::LayoutDirection::LeftToRight</enum>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>30</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="checked">
+                       <bool>false</bool>
+                      </property>
+                      <property name="tristate">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QPushButton" name="time_schedule_label_button">
-                   <property name="minimumSize">
-                    <size>
-                     <width>20</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Arial</family>
-                     <pointsize>15</pointsize>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Add schedule</string>
-                   </property>
-                   <property name="checkable">
-                    <bool>false</bool>
-                   </property>
+                  <widget class="QWidget" name="schedule_to_right_wrapper" native="true">
+                   <layout class="QHBoxLayout" name="schedule_to_right_container">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <spacer name="schedule_to_right_spacer">
+                      <property name="orientation">
+                       <enum>Qt::Orientation::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>49</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="time_schedule_label_button">
+                      <property name="minimumSize">
+                       <size>
+                        <width>140</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>140</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Arial</family>
+                        <pointsize>15</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">background-color: rgba(40, 40, 40, 1);</string>
+                      </property>
+                      <property name="text">
+                       <string> Add schedule</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../../assets/rss.qrc">
+                        <normaloff>:/icons/nav/menu_board_dark.svg</normaloff>
+                        <disabledoff>:/icons/nav/menu_board_grey.svg</disabledoff>
+                        <activeoff>:/icons/nav/menu_board_red.svg</activeoff>
+                        <selectedoff>:/icons/nav/menu_board_red.svg</selectedoff>:/icons/nav/menu_board_dark.svg</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="checkable">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -2432,7 +2682,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>211</width>
+                         <width>244</width>
                          <height>40</height>
                         </rect>
                        </property>
@@ -3083,7 +3333,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="layer_view_list" native="true">
+                  <widget class="QWidget" name="layer_view_object_container" native="true">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -3104,7 +3354,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                    </property>
                    <layout class="QVBoxLayout" name="layer_view_list_container">
                     <property name="spacing">
-                     <number>10</number>
+                     <number>0</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -3119,15 +3369,34 @@ QScrollBar::right-arrow:horizontal:pressed {
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QLabel" name="empty_label">
+                     <widget class="QLabel" name="layer_view_empty_label">
+                      <property name="minimumSize">
+                       <size>
+                        <width>80</width>
+                        <height>50</height>
+                       </size>
+                      </property>
                       <property name="font">
                        <font>
                         <family>Arial</family>
                         <pointsize>20</pointsize>
                        </font>
                       </property>
+                      <property name="styleSheet">
+                       <string notr="true">border: 2px solid rgba(120,120,120,1);</string>
+                      </property>
                       <property name="text">
                        <string>No objects</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="EBody" name="layer_view_object_ebody" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>50</height>
+                       </size>
                       </property>
                      </widget>
                     </item>
@@ -3276,8 +3545,14 @@ QScrollBar::right-arrow:horizontal:pressed {
                       <x>0</x>
                       <y>0</y>
                       <width>480</width>
-                      <height>60</height>
+                      <height>40</height>
                      </rect>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>40</height>
+                     </size>
                     </property>
                     <layout class="QHBoxLayout" name="layer_header_container">
                      <property name="spacing">
@@ -3344,7 +3619,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                        <property name="maximumSize">
                         <size>
                          <width>80</width>
-                         <height>50</height>
+                         <height>40</height>
                         </size>
                        </property>
                        <property name="font">
@@ -3380,7 +3655,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                        <property name="maximumSize">
                         <size>
                          <width>110</width>
-                         <height>50</height>
+                         <height>40</height>
                         </size>
                        </property>
                        <property name="font">
@@ -3422,7 +3697,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                        <property name="maximumSize">
                         <size>
                          <width>80</width>
-                         <height>50</height>
+                         <height>40</height>
                         </size>
                        </property>
                        <property name="font">
@@ -3466,7 +3741,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                        <property name="maximumSize">
                         <size>
                          <width>80</width>
-                         <height>50</height>
+                         <height>40</height>
                         </size>
                        </property>
                        <property name="font">
@@ -3745,7 +4020,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>252</width>
+                         <width>285</width>
                          <height>40</height>
                         </rect>
                        </property>
@@ -3753,6 +4028,12 @@ QScrollBar::right-arrow:horizontal:pressed {
                         <size>
                          <width>190</width>
                          <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>40</height>
                         </size>
                        </property>
                        <layout class="QHBoxLayout" name="layer_header_exp_add_container">
@@ -3934,27 +4215,39 @@ QScrollBar::right-arrow:horizontal:pressed {
                       <property name="minimumSize">
                        <size>
                         <width>252</width>
-                        <height>90</height>
+                        <height>86</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>290</width>
-                        <height>90</height>
+                        <height>84</height>
                        </size>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QWidget#layer_obj_edit_task_form {
+	background-color: rgba(20,20,20,1);
+	border-radius: 4px;
+	border: 2px solid rgba(80, 160, 100, 1);
+}
+
+QWidget#layer_obj_edit_task_form &gt; * {
+	border-radius: 0px;
+	border: 0px;
+}</string>
                       </property>
                       <layout class="QVBoxLayout" name="layer_obj_edit_task_form_container">
                        <property name="spacing">
-                        <number>10</number>
+                        <number>0</number>
                        </property>
                        <property name="leftMargin">
-                        <number>0</number>
+                        <number>2</number>
                        </property>
                        <property name="topMargin">
                         <number>0</number>
                        </property>
                        <property name="rightMargin">
-                        <number>0</number>
+                        <number>2</number>
                        </property>
                        <property name="bottomMargin">
                         <number>0</number>
@@ -3969,15 +4262,18 @@ QScrollBar::right-arrow:horizontal:pressed {
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>252</width>
-                           <height>42</height>
+                           <width>0</width>
+                           <height>44</height>
                           </size>
                          </property>
                          <property name="maximumSize">
                           <size>
                            <width>290</width>
-                           <height>42</height>
+                           <height>44</height>
                           </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">border-bottom: 2px solid rgba(80, 160, 100, 1);</string>
                          </property>
                          <layout class="QHBoxLayout" name="task_edit_header_container">
                           <property name="spacing">
@@ -4024,6 +4320,13 @@ QScrollBar::right-arrow:horizontal:pressed {
                             <property name="cursor">
                              <cursorShape>SizeVerCursor</cursorShape>
                             </property>
+                            <property name="styleSheet">
+                             <string notr="true">QLineEdit {
+	border: 0px solid transparent;
+	padding-left: 5px;
+	border-top-left-radius: 0px;
+}</string>
+                            </property>
                             <property name="text">
                              <string/>
                             </property>
@@ -4034,6 +4337,107 @@ QScrollBar::right-arrow:horizontal:pressed {
                              <bool>true</bool>
                             </property>
                            </widget>
+                          </item>
+                          <item>
+                           <widget class="QCheckBox" name="task_checkbox">
+                            <property name="minimumSize">
+                             <size>
+                              <width>0</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>40</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                            <property name="font">
+                             <font>
+                              <family>Arial</family>
+                              <pointsize>19</pointsize>
+                             </font>
+                            </property>
+                            <property name="layoutDirection">
+                             <enum>Qt::LayoutDirection::LeftToRight</enum>
+                            </property>
+                            <property name="styleSheet">
+                             <string notr="true">QCheckBox {
+border-bottom: 0px;
+}
+
+QCheckBox::indicator {
+	height: 36px; width: 36px;
+}</string>
+                            </property>
+                            <property name="text">
+                             <string/>
+                            </property>
+                            <property name="iconSize">
+                             <size>
+                              <width>30</width>
+                              <height>30</height>
+                             </size>
+                            </property>
+                            <property name="checked">
+                             <bool>false</bool>
+                            </property>
+                            <property name="tristate">
+                             <bool>false</bool>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QWidget" name="layer_task_edit_footer" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>248</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>290</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">background-color: rgba(20,20,20,1);
+margin: 2px;
+padding: 4px;
+border-radius: 5px;</string>
+                         </property>
+                         <layout class="QHBoxLayout" name="task_edit_footer_container">
+                          <property name="spacing">
+                           <number>0</number>
+                          </property>
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
+                          <item>
+                           <spacer name="task_edit_footer_spacer">
+                            <property name="orientation">
+                             <enum>Qt::Orientation::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>10</width>
+                              <height>10</height>
+                             </size>
+                            </property>
+                           </spacer>
                           </item>
                           <item>
                            <widget class="QPushButton" name="task_keyboard_button">
@@ -4076,92 +4480,6 @@ QScrollBar::right-arrow:horizontal:pressed {
                              </size>
                             </property>
                            </widget>
-                          </item>
-                         </layout>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QWidget" name="layer_task_edit_footer" native="true">
-                         <property name="minimumSize">
-                          <size>
-                           <width>248</width>
-                           <height>40</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>290</width>
-                           <height>40</height>
-                          </size>
-                         </property>
-                         <layout class="QHBoxLayout" name="task_edit_footer_container">
-                          <property name="spacing">
-                           <number>0</number>
-                          </property>
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
-                          </property>
-                          <item>
-                           <widget class="QCheckBox" name="task_checkbox">
-                            <property name="minimumSize">
-                             <size>
-                              <width>80</width>
-                              <height>40</height>
-                             </size>
-                            </property>
-                            <property name="maximumSize">
-                             <size>
-                              <width>70</width>
-                              <height>40</height>
-                             </size>
-                            </property>
-                            <property name="font">
-                             <font>
-                              <family>Arial</family>
-                              <pointsize>15</pointsize>
-                             </font>
-                            </property>
-                            <property name="layoutDirection">
-                             <enum>Qt::LayoutDirection::LeftToRight</enum>
-                            </property>
-                            <property name="text">
-                             <string>Status</string>
-                            </property>
-                            <property name="iconSize">
-                             <size>
-                              <width>30</width>
-                              <height>30</height>
-                             </size>
-                            </property>
-                            <property name="checked">
-                             <bool>false</bool>
-                            </property>
-                            <property name="tristate">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <spacer name="task_edit_footer_spacer">
-                            <property name="orientation">
-                             <enum>Qt::Orientation::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>20</width>
-                              <height>10</height>
-                             </size>
-                            </property>
-                           </spacer>
                           </item>
                           <item>
                            <widget class="QPushButton" name="task_edit_confirm">
@@ -4508,6 +4826,72 @@ QScrollBar::right-arrow:horizontal:pressed {
                            <pointsize>15</pointsize>
                           </font>
                          </property>
+                         <property name="styleSheet">
+                          <string notr="true">QTextEdit{
+	border-radius: 5px;
+	background-color: rgba(30,30,30,1);
+	border: 2px solid rgba(75,150,255,1);
+}
+
+QScrollBar:vertical {
+	border-left: 2px solid rgba(70,150,255,1);
+    background: rgba(40,40,40,0.9);
+    width:  24px;
+    padding: 25px 0;
+}
+
+QScrollBar::groove:vertical {
+    background: transparent;
+    width: 20px;
+}
+QScrollBar::handle:vertical {
+    	background: rgba(120,120,120,1);
+    	min-height: 50px;
+	min-width: 20px;
+	max-width: 20px;
+    	border-radius: 4px;
+}
+
+QScrollBar::sub-page:vertical, QScrollBar::add-page:vertical {
+    	background: rgba(40,40,40,1);
+}
+
+QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical {
+    	width: 20px;
+    	height: 25px;             
+    	background: rgba(20,20,20,1);
+}
+
+QScrollBar::sub-line:vertical {
+    	subcontrol-origin: margin;
+    	subcontrol-position: top;
+    	border-top-left-radius: 4px;
+    	border-top-right-radius: 4px;
+}
+
+QScrollBar::add-line:vertical {
+    subcontrol-origin: margin;
+    subcontrol-position: bottom;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+QScrollBar::up-arrow:vertical {
+    image: url(&quot;:/icons/arrows/arrow_up_dark.svg&quot;);
+    width:  20px;   height: 20px;
+}
+QScrollBar::up-arrow:vertical:pressed {
+    image: url(&quot;:/icons/arrows/arrow_up_blue.svg&quot;);
+}
+QScrollBar::down-arrow:vertical {
+    image: url(&quot;:/icons/arrows/arrow_down_dark.svg&quot;);
+    width:  20px;   height: 20px;
+}
+QScrollBar::down-arrow:vertical:pressed {
+    image: url(&quot;:/icons/arrows/arrow_down_blue.svg&quot;);
+}
+</string>
+                         </property>
                          <property name="frameShape">
                           <enum>QFrame::Shape::StyledPanel</enum>
                          </property>
@@ -4521,7 +4905,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                           <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
                          </property>
                          <property name="horizontalScrollBarPolicy">
-                          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+                          <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
                          </property>
                          <property name="sizeAdjustPolicy">
                           <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
@@ -4530,7 +4914,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                           <set>QTextEdit::AutoFormattingFlag::AutoBulletList</set>
                          </property>
                          <property name="placeholderText">
-                          <string>Note Description</string>
+                          <string>Enter your note here...</string>
                          </property>
                         </widget>
                        </item>
@@ -4632,11 +5016,11 @@ QScrollBar::right-arrow:horizontal:pressed {
                              <string/>
                             </property>
                             <property name="icon">
-                             <iconset resource="../../assets/rss.qrc">
-                              <normaloff>:/icons/arrows/arrow_undo_dark.svg</normaloff>
+                             <iconset>
                               <disabledoff>:/icons/arrows/arrow_undo_grey.svg</disabledoff>
                               <activeoff>:/icons/arrows/arrow_undo_blue.svg</activeoff>
-                              <selectedoff>:/icons/arrows/arrow_undo_blue.svg</selectedoff>:/icons/arrows/arrow_undo_dark.svg</iconset>
+                              <selectedoff>:/icons/arrows/arrow_undo_blue.svg</selectedoff>
+                             </iconset>
                             </property>
                             <property name="iconSize">
                              <size>
@@ -4773,6 +5157,24 @@ QScrollBar::right-arrow:horizontal:pressed {
    <class>ETime</class>
    <extends>QWidget</extends>
    <header>modules.eventlist.eventattributes</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EToDo</class>
+   <extends>QWidget</extends>
+   <header>modules.eventlist.eventattributes</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EDescription</class>
+   <extends>QWidget</extends>
+   <header>modules.eventlist.eventattributes</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EBody</class>
+   <extends>QWidget</extends>
+   <header location="global">modules.eventlist.eventattributes</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

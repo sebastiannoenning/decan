@@ -22,17 +22,17 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QStackedWidget, QTableView, QTableWidget, QTableWidgetItem,
     QTextEdit, QVBoxLayout, QWidget)
 
-from modules.eventlist.eventattributes import ETime
+from modules.eventlist.eventattributes import (EBody, EDescription, ETime, EToDo)
 from modules.eventlist.eventlist import EventList
 from modules.touchdatetime.tdatetimeedit import TDateTimeSelect
-from views import rss_rc
+import rss_rc
 
 class Ui_event_view(object):
     def setupUi(self, event_view):
         if not event_view.objectName():
             event_view.setObjectName(u"event_view")
-        event_view.resize(634, 460)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        event_view.resize(710, 460)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(event_view.sizePolicy().hasHeightForWidth())
@@ -94,10 +94,10 @@ class Ui_event_view(object):
 "	height: 30px; width: 30px;\n"
 "}\n"
 "QCheckBox::indicator:unchecked {\n"
-"    	image: url(\":/icons/util/buttons/checkbox_false_dark.svg\");\n"
+"    	image: url(\":/icons/util/buttons/checkbox2_empty_dark.svg\");\n"
 "}\n"
 "QCheckBox::indicator:checked {\n"
-"    	image: url(\":/icons/util/buttons/checkbox_true_dark.svg\");\n"
+"    	image: url(\":/icons/util/buttons/checkbox2_tick_dark.svg\");\n"
 "}\n"
 "\n"
 "QLabel{\n"
@@ -117,8 +117,8 @@ class Ui_event_view(object):
 "	border-top-left-radius: 10px;\n"
 "}\n"
 "#title QScrollBar:horizontal, 				\n"
-"#location "
-                        "QScrollBar:horizontal {\n"
+"#locatio"
+                        "n QScrollBar:horizontal {\n"
 "    background: rgba(100,180,255,1);\n"
 "    height:  2px;\n"
 "    padding: 0px 0px;\n"
@@ -141,8 +141,8 @@ class Ui_event_view(object):
 "    	background: None;\n"
 "}\n"
 "#title QScrollBar::left-arrow:horizontal, 		#title QScrollBar::right-arrow:horizontal,\n"
-"#location QScrollBar::left-arrow:horizontal,#location QScrollBar::right-arrow"
-                        ":horizontal {\n"
+"#location QScrollBar::left-arrow:horizontal,#location QScrollBar::right-arr"
+                        "ow:horizontal {\n"
 "	image: None;\n"
 "	width: 0px; height: 0px;\n"
 "}\n"
@@ -181,8 +181,8 @@ class Ui_event_view(object):
 "	border-radius: 0px;\n"
 "	border-left: 1px solid rgba(220,220,220,1);\n"
 "}\n"
-"QPushButt"
-                        "on#prev_day {\n"
+"QPushBu"
+                        "tton#prev_day {\n"
 "	border-left: 0px solid transparent;\n"
 "	border-top-left-radius: 5px;\n"
 "	border-bottom-left-radius: 5px;\n"
@@ -192,15 +192,9 @@ class Ui_event_view(object):
 "	border-bottom-right-radius: 5px;\n"
 "}\n"
 "\n"
-"ELabel{\n"
-"	background-color: None;\n"
-"	border-radius: 0px;\n"
-"	padding-left: 5px;\n"
-"	border: 0px solid transparent;\n"
-"}\n"
-"ETime {\n"
-"	background-color: rgba(20,20,20,1);\n"
-"	border-radius: 5px;\n"
+"EToDo * QLabel{\n"
+"	background-color: transparent;\n"
+"	padding: 0px;\n"
 "}")
         self.event_view_container = QHBoxLayout(event_view)
         self.event_view_container.setSpacing(10)
@@ -247,8 +241,11 @@ class Ui_event_view(object):
 
         self.date_label = QLabel(self.event_navigation)
         self.date_label.setObjectName(u"date_label")
-        sizePolicy.setHeightForWidth(self.date_label.sizePolicy().hasHeightForWidth())
-        self.date_label.setSizePolicy(sizePolicy)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.date_label.sizePolicy().hasHeightForWidth())
+        self.date_label.setSizePolicy(sizePolicy2)
         self.date_label.setMinimumSize(QSize(0, 40))
         font = QFont()
         font.setFamilies([u"Arial"])
@@ -299,7 +296,7 @@ class Ui_event_view(object):
         self.event_list_wrapper.setWidgetResizable(True)
         self.event_list = EventList()
         self.event_list.setObjectName(u"event_list")
-        self.event_list.setGeometry(QRect(0, 0, 340, 408))
+        self.event_list.setGeometry(QRect(0, 0, 348, 408))
         self.event_list.setMinimumSize(QSize(340, 0))
         self.event_list_wrapper.setWidget(self.event_list)
 
@@ -310,8 +307,8 @@ class Ui_event_view(object):
 
         self.details_container = QStackedWidget(event_view)
         self.details_container.setObjectName(u"details_container")
-        sizePolicy.setHeightForWidth(self.details_container.sizePolicy().hasHeightForWidth())
-        self.details_container.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.details_container.sizePolicy().hasHeightForWidth())
+        self.details_container.setSizePolicy(sizePolicy2)
         self.details_container.setMinimumSize(QSize(312, 460))
         self.details_container.setMaximumSize(QSize(350, 460))
         self.page_quick = QWidget()
@@ -345,7 +342,7 @@ class Ui_event_view(object):
         self.test_widgets.setObjectName(u"test_widgets")
         self.test_bar_3 = QScrollBar(self.test_widgets)
         self.test_bar_3.setObjectName(u"test_bar_3")
-        self.test_bar_3.setGeometry(QRect(0, 0, 20, 160))
+        self.test_bar_3.setGeometry(QRect(0, 0, 20, 120))
         self.test_bar_3.setStyleSheet(u"QScrollBar:vertical {\n"
 "    background: rgba(40,40,40,0.9);\n"
 "    width:  20px;\n"
@@ -405,7 +402,7 @@ class Ui_event_view(object):
         self.test_bar_3.setOrientation(Qt.Orientation.Vertical)
         self.test_bar_4 = QScrollBar(self.test_widgets)
         self.test_bar_4.setObjectName(u"test_bar_4")
-        self.test_bar_4.setGeometry(QRect(30, 0, 231, 16))
+        self.test_bar_4.setGeometry(QRect(20, 0, 292, 20))
         self.test_bar_4.setStyleSheet(u"QScrollBar:horizontal {\n"
 "    background: rgba(100,180,255,1);\n"
 "    height:  2px;\n"
@@ -438,7 +435,7 @@ class Ui_event_view(object):
         self.test_bar_4.setOrientation(Qt.Orientation.Horizontal)
         self.test_bar_2 = QScrollBar(self.test_widgets)
         self.test_bar_2.setObjectName(u"test_bar_2")
-        self.test_bar_2.setGeometry(QRect(30, 30, 231, 16))
+        self.test_bar_2.setGeometry(QRect(20, 20, 292, 20))
         self.test_bar_2.setStyleSheet(u"QScrollBar:horizontal {\n"
 "    background: rgba(40,40,40,1);\n"
 "    height: 30px;\n"
@@ -473,7 +470,7 @@ class Ui_event_view(object):
         self.test_bar_2.setOrientation(Qt.Orientation.Horizontal)
         self.test_bar_1 = QScrollBar(self.test_widgets)
         self.test_bar_1.setObjectName(u"test_bar_1")
-        self.test_bar_1.setGeometry(QRect(30, 60, 231, 20))
+        self.test_bar_1.setGeometry(QRect(20, 40, 292, 20))
         self.test_bar_1.setStyleSheet(u"QScrollBar:horizontal {\n"
 "   	background: rgba(40,40,40,0.9);\n"
 "    	height: 25px;\n"
@@ -532,6 +529,37 @@ class Ui_event_view(object):
 "	image: url(\":/icons/arrows/arrow_right_red.svg\")\n"
 "}")
         self.test_bar_1.setOrientation(Qt.Orientation.Horizontal)
+        self.EToDo = EToDo(self.test_widgets)
+        self.EToDo.setObjectName(u"EToDo")
+        self.EToDo.setGeometry(QRect(0, 120, 312, 50))
+        self.EDescription = EDescription(self.test_widgets)
+        self.EDescription.setObjectName(u"EDescription")
+        self.EDescription.setGeometry(QRect(20, 60, 292, 61))
+        self.ebody_test_scroll_area = QScrollArea(self.test_widgets)
+        self.ebody_test_scroll_area.setObjectName(u"ebody_test_scroll_area")
+        self.ebody_test_scroll_area.setGeometry(QRect(0, 170, 312, 180))
+        sizePolicy1.setHeightForWidth(self.ebody_test_scroll_area.sizePolicy().hasHeightForWidth())
+        self.ebody_test_scroll_area.setSizePolicy(sizePolicy1)
+        self.ebody_test_scroll_area.setMinimumSize(QSize(248, 1))
+        self.ebody_test_scroll_area.setMaximumSize(QSize(312, 180))
+        self.ebody_test_scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.ebody_test_scroll_area.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.ebody_test_scroll_area.setWidgetResizable(True)
+        self.ebody_test_container = QWidget()
+        self.ebody_test_container.setObjectName(u"ebody_test_container")
+        self.ebody_test_container.setGeometry(QRect(0, 0, 310, 178))
+        sizePolicy1.setHeightForWidth(self.ebody_test_container.sizePolicy().hasHeightForWidth())
+        self.ebody_test_container.setSizePolicy(sizePolicy1)
+        self.ebody_test_layout = QVBoxLayout(self.ebody_test_container)
+        self.ebody_test_layout.setSpacing(0)
+        self.ebody_test_layout.setObjectName(u"ebody_test_layout")
+        self.ebody_test_layout.setContentsMargins(0, 0, 0, 0)
+        self.ebody_test = EBody(self.ebody_test_container)
+        self.ebody_test.setObjectName(u"ebody_test")
+
+        self.ebody_test_layout.addWidget(self.ebody_test)
+
+        self.ebody_test_scroll_area.setWidget(self.ebody_test_container)
 
         self.quick_layout.addWidget(self.test_widgets)
 
@@ -553,8 +581,8 @@ class Ui_event_view(object):
         self.details_container.addWidget(self.page_json)
         self.page_add = QWidget()
         self.page_add.setObjectName(u"page_add")
-        sizePolicy.setHeightForWidth(self.page_add.sizePolicy().hasHeightForWidth())
-        self.page_add.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.page_add.sizePolicy().hasHeightForWidth())
+        self.page_add.setSizePolicy(sizePolicy2)
         self.page_add.setMinimumSize(QSize(312, 460))
         self.page_add.setMaximumSize(QSize(350, 460))
         self.page_add_container = QHBoxLayout(self.page_add)
@@ -563,11 +591,11 @@ class Ui_event_view(object):
         self.page_add_container.setContentsMargins(0, 0, 0, 0)
         self.add_event_button = QPushButton(self.page_add)
         self.add_event_button.setObjectName(u"add_event_button")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.add_event_button.sizePolicy().hasHeightForWidth())
-        self.add_event_button.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.add_event_button.sizePolicy().hasHeightForWidth())
+        self.add_event_button.setSizePolicy(sizePolicy3)
         self.add_event_button.setMinimumSize(QSize(312, 460))
         self.add_event_button.setMaximumSize(QSize(350, 460))
         icon4 = QIcon()
@@ -582,8 +610,8 @@ class Ui_event_view(object):
         self.details_container.addWidget(self.page_add)
         self.page_details = QWidget()
         self.page_details.setObjectName(u"page_details")
-        sizePolicy2.setHeightForWidth(self.page_details.sizePolicy().hasHeightForWidth())
-        self.page_details.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.page_details.sizePolicy().hasHeightForWidth())
+        self.page_details.setSizePolicy(sizePolicy3)
         self.page_details.setMinimumSize(QSize(312, 460))
         self.page_details.setMaximumSize(QSize(350, 460))
         self.page_details_container = QHBoxLayout(self.page_details)
@@ -592,8 +620,8 @@ class Ui_event_view(object):
         self.page_details_container.setContentsMargins(0, 0, 0, 0)
         self.form_wrapper = QScrollArea(self.page_details)
         self.form_wrapper.setObjectName(u"form_wrapper")
-        sizePolicy2.setHeightForWidth(self.form_wrapper.sizePolicy().hasHeightForWidth())
-        self.form_wrapper.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.form_wrapper.sizePolicy().hasHeightForWidth())
+        self.form_wrapper.setSizePolicy(sizePolicy3)
         self.form_wrapper.setMinimumSize(QSize(312, 460))
         self.form_wrapper.setMaximumSize(QSize(350, 460))
         self.form_wrapper.setStyleSheet(u"QScrollBar:vertical {\n"
@@ -622,18 +650,18 @@ class Ui_event_view(object):
         self.form_wrapper.setFrameShape(QFrame.Shape.NoFrame)
         self.form_wrapper.setFrameShadow(QFrame.Shadow.Plain)
         self.form_wrapper.setLineWidth(0)
-        self.form_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.form_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.form_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.form_wrapper.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.form_wrapper.setWidgetResizable(True)
         self.details_form = QWidget()
         self.details_form.setObjectName(u"details_form")
-        self.details_form.setGeometry(QRect(0, -865, 312, 1655))
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.details_form.sizePolicy().hasHeightForWidth())
-        self.details_form.setSizePolicy(sizePolicy3)
+        self.details_form.setGeometry(QRect(0, -567, 345, 1753))
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.details_form.sizePolicy().hasHeightForWidth())
+        self.details_form.setSizePolicy(sizePolicy4)
         self.details_form.setMinimumSize(QSize(312, 0))
         self.details_form.setMaximumSize(QSize(350, 16777215))
         self.details_form_container = QFormLayout(self.details_form)
@@ -662,8 +690,8 @@ class Ui_event_view(object):
         self.title = QWidget(self.details_form)
         self.title.setObjectName(u"title")
         self.title.setEnabled(True)
-        sizePolicy.setHeightForWidth(self.title.sizePolicy().hasHeightForWidth())
-        self.title.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.title.sizePolicy().hasHeightForWidth())
+        self.title.setSizePolicy(sizePolicy2)
         self.title.setMinimumSize(QSize(247, 0))
         self.title.setMaximumSize(QSize(290, 16777215))
         font1 = QFont()
@@ -676,8 +704,8 @@ class Ui_event_view(object):
         self.title_container.setContentsMargins(0, 0, 0, 0)
         self.title_view = QWidget(self.title)
         self.title_view.setObjectName(u"title_view")
-        sizePolicy.setHeightForWidth(self.title_view.sizePolicy().hasHeightForWidth())
-        self.title_view.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.title_view.sizePolicy().hasHeightForWidth())
+        self.title_view.setSizePolicy(sizePolicy2)
         self.title_view.setMinimumSize(QSize(247, 40))
         self.title_view.setMaximumSize(QSize(290, 40))
         self.title_view_container = QHBoxLayout(self.title_view)
@@ -687,11 +715,11 @@ class Ui_event_view(object):
         self.title_view_wrapper = QScrollArea(self.title_view)
         self.title_view_wrapper.setObjectName(u"title_view_wrapper")
         self.title_view_wrapper.setEnabled(True)
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.title_view_wrapper.sizePolicy().hasHeightForWidth())
-        self.title_view_wrapper.setSizePolicy(sizePolicy4)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.title_view_wrapper.sizePolicy().hasHeightForWidth())
+        self.title_view_wrapper.setSizePolicy(sizePolicy5)
         self.title_view_wrapper.setMinimumSize(QSize(207, 40))
         self.title_view_wrapper.setMaximumSize(QSize(250, 40))
         self.title_view_wrapper.setFrameShape(QFrame.Shape.NoFrame)
@@ -703,22 +731,22 @@ class Ui_event_view(object):
         self.title_view_wrapper.setWidgetResizable(True)
         self.title_label_container = QWidget()
         self.title_label_container.setObjectName(u"title_label_container")
-        self.title_label_container.setGeometry(QRect(0, 0, 212, 40))
-        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.title_label_container.sizePolicy().hasHeightForWidth())
-        self.title_label_container.setSizePolicy(sizePolicy5)
+        self.title_label_container.setGeometry(QRect(0, 0, 245, 40))
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.title_label_container.sizePolicy().hasHeightForWidth())
+        self.title_label_container.setSizePolicy(sizePolicy6)
         self.title_label_container.setMinimumSize(QSize(207, 40))
         self.title_label_container.setMaximumSize(QSize(16777215, 40))
         self.title_label = QLabel(self.title_label_container)
         self.title_label.setObjectName(u"title_label")
         self.title_label.setGeometry(QRect(0, 0, 247, 40))
-        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.title_label.sizePolicy().hasHeightForWidth())
-        self.title_label.setSizePolicy(sizePolicy6)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
+        sizePolicy7.setHorizontalStretch(0)
+        sizePolicy7.setVerticalStretch(0)
+        sizePolicy7.setHeightForWidth(self.title_label.sizePolicy().hasHeightForWidth())
+        self.title_label.setSizePolicy(sizePolicy7)
         self.title_label.setMinimumSize(QSize(247, 40))
         self.title_label.setMaximumSize(QSize(16777215, 40))
         font2 = QFont()
@@ -731,11 +759,11 @@ class Ui_event_view(object):
 
         self.title_edit_button = QPushButton(self.title_view)
         self.title_edit_button.setObjectName(u"title_edit_button")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-        sizePolicy7.setHorizontalStretch(0)
-        sizePolicy7.setVerticalStretch(0)
-        sizePolicy7.setHeightForWidth(self.title_edit_button.sizePolicy().hasHeightForWidth())
-        self.title_edit_button.setSizePolicy(sizePolicy7)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        sizePolicy8.setHorizontalStretch(0)
+        sizePolicy8.setVerticalStretch(0)
+        sizePolicy8.setHeightForWidth(self.title_edit_button.sizePolicy().hasHeightForWidth())
+        self.title_edit_button.setSizePolicy(sizePolicy8)
         self.title_edit_button.setMinimumSize(QSize(40, 40))
         self.title_edit_button.setMaximumSize(QSize(40, 40))
         icon6 = QIcon()
@@ -767,11 +795,11 @@ class Ui_event_view(object):
         self.title_edit_container.setContentsMargins(0, 0, 0, 0)
         self.title_line_edit = QLineEdit(self.title_edit)
         self.title_line_edit.setObjectName(u"title_line_edit")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        sizePolicy8.setHorizontalStretch(0)
-        sizePolicy8.setVerticalStretch(0)
-        sizePolicy8.setHeightForWidth(self.title_line_edit.sizePolicy().hasHeightForWidth())
-        self.title_line_edit.setSizePolicy(sizePolicy8)
+        sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        sizePolicy9.setHorizontalStretch(0)
+        sizePolicy9.setVerticalStretch(0)
+        sizePolicy9.setHeightForWidth(self.title_line_edit.sizePolicy().hasHeightForWidth())
+        self.title_line_edit.setSizePolicy(sizePolicy9)
         self.title_line_edit.setMinimumSize(QSize(207, 40))
         self.title_line_edit.setMaximumSize(QSize(250, 40))
         self.title_line_edit.setFont(font2)
@@ -782,8 +810,8 @@ class Ui_event_view(object):
 
         self.title_keyboard_button = QPushButton(self.title_edit)
         self.title_keyboard_button.setObjectName(u"title_keyboard_button")
-        sizePolicy7.setHeightForWidth(self.title_keyboard_button.sizePolicy().hasHeightForWidth())
-        self.title_keyboard_button.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.title_keyboard_button.sizePolicy().hasHeightForWidth())
+        self.title_keyboard_button.setSizePolicy(sizePolicy8)
         self.title_keyboard_button.setMinimumSize(QSize(40, 40))
         self.title_keyboard_button.setMaximumSize(QSize(40, 40))
         icon7 = QIcon()
@@ -807,8 +835,8 @@ class Ui_event_view(object):
 
         self.preset_button = QPushButton(self.details_form)
         self.preset_button.setObjectName(u"preset_button")
-        sizePolicy7.setHeightForWidth(self.preset_button.sizePolicy().hasHeightForWidth())
-        self.preset_button.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.preset_button.sizePolicy().hasHeightForWidth())
+        self.preset_button.setSizePolicy(sizePolicy8)
         self.preset_button.setMinimumSize(QSize(50, 50))
         self.preset_button.setMaximumSize(QSize(50, 50))
         icon8 = QIcon()
@@ -830,8 +858,8 @@ class Ui_event_view(object):
 
         self.preset_wrapper = QScrollArea(self.details_form)
         self.preset_wrapper.setObjectName(u"preset_wrapper")
-        sizePolicy6.setHeightForWidth(self.preset_wrapper.sizePolicy().hasHeightForWidth())
-        self.preset_wrapper.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.preset_wrapper.sizePolicy().hasHeightForWidth())
+        self.preset_wrapper.setSizePolicy(sizePolicy7)
         self.preset_wrapper.setMinimumSize(QSize(247, 70))
         self.preset_wrapper.setMaximumSize(QSize(290, 65))
         self.preset_wrapper.setStyleSheet(u"QScrollBar:horizontal {\n"
@@ -898,15 +926,16 @@ class Ui_event_view(object):
         self.preset_wrapper.setWidgetResizable(True)
         self.preset = QWidget()
         self.preset.setObjectName(u"preset")
-        self.preset.setGeometry(QRect(0, 0, 390, 60))
+        self.preset.setGeometry(QRect(0, 0, 390, 40))
+        self.preset.setMaximumSize(QSize(16777215, 40))
         self.preset_container = QHBoxLayout(self.preset)
         self.preset_container.setSpacing(10)
         self.preset_container.setObjectName(u"preset_container")
-        self.preset_container.setContentsMargins(0, 0, 0, 20)
+        self.preset_container.setContentsMargins(0, 0, 0, 0)
         self.note_button = QPushButton(self.preset)
         self.note_button.setObjectName(u"note_button")
         self.note_button.setMinimumSize(QSize(80, 40))
-        self.note_button.setMaximumSize(QSize(80, 50))
+        self.note_button.setMaximumSize(QSize(80, 40))
         font3 = QFont()
         font3.setFamilies([u"Arial"])
         font3.setPointSize(15)
@@ -927,7 +956,7 @@ class Ui_event_view(object):
         self.task_button = QPushButton(self.preset)
         self.task_button.setObjectName(u"task_button")
         self.task_button.setMinimumSize(QSize(80, 40))
-        self.task_button.setMaximumSize(QSize(80, 50))
+        self.task_button.setMaximumSize(QSize(80, 40))
         self.task_button.setFont(font3)
         icon10 = QIcon()
         icon10.addFile(u":/icons/calendar/events/todo_task_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
@@ -945,7 +974,7 @@ class Ui_event_view(object):
         self.simple_button = QPushButton(self.preset)
         self.simple_button.setObjectName(u"simple_button")
         self.simple_button.setMinimumSize(QSize(90, 40))
-        self.simple_button.setMaximumSize(QSize(80, 50))
+        self.simple_button.setMaximumSize(QSize(80, 40))
         self.simple_button.setFont(font3)
         icon11 = QIcon()
         icon11.addFile(u":/icons/calendar/events/other/simple_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
@@ -959,10 +988,10 @@ class Ui_event_view(object):
 
         self.other_button = QPushButton(self.preset)
         self.other_button.setObjectName(u"other_button")
-        sizePolicy6.setHeightForWidth(self.other_button.sizePolicy().hasHeightForWidth())
-        self.other_button.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.other_button.sizePolicy().hasHeightForWidth())
+        self.other_button.setSizePolicy(sizePolicy7)
         self.other_button.setMinimumSize(QSize(110, 40))
-        self.other_button.setMaximumSize(QSize(80, 50))
+        self.other_button.setMaximumSize(QSize(80, 40))
         self.other_button.setFont(font3)
         icon12 = QIcon()
         icon12.addFile(u":/icons/calendar/events/other/complex_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
@@ -1000,10 +1029,10 @@ class Ui_event_view(object):
 
         self.time = QWidget(self.details_form)
         self.time.setObjectName(u"time")
-        sizePolicy4.setHeightForWidth(self.time.sizePolicy().hasHeightForWidth())
-        self.time.setSizePolicy(sizePolicy4)
-        self.time.setMinimumSize(QSize(247, 200))
-        self.time.setMaximumSize(QSize(290, 200))
+        sizePolicy5.setHeightForWidth(self.time.sizePolicy().hasHeightForWidth())
+        self.time.setSizePolicy(sizePolicy5)
+        self.time.setMinimumSize(QSize(247, 68))
+        self.time.setMaximumSize(QSize(290, 270))
         self.time.setAutoFillBackground(False)
         self.time_viewedit_container = QVBoxLayout(self.time)
         self.time_viewedit_container.setSpacing(0)
@@ -1011,13 +1040,13 @@ class Ui_event_view(object):
         self.time_viewedit_container.setContentsMargins(0, 0, 0, 0)
         self.time_view = ETime(self.time)
         self.time_view.setObjectName(u"time_view")
-        sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-        sizePolicy9.setHorizontalStretch(0)
-        sizePolicy9.setVerticalStretch(0)
-        sizePolicy9.setHeightForWidth(self.time_view.sizePolicy().hasHeightForWidth())
-        self.time_view.setSizePolicy(sizePolicy9)
+        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        sizePolicy10.setHorizontalStretch(0)
+        sizePolicy10.setVerticalStretch(0)
+        sizePolicy10.setHeightForWidth(self.time_view.sizePolicy().hasHeightForWidth())
+        self.time_view.setSizePolicy(sizePolicy10)
         self.time_view.setMinimumSize(QSize(247, 50))
-        self.time_view.setMaximumSize(QSize(288, 50))
+        self.time_view.setMaximumSize(QSize(288, 68))
         font4 = QFont()
         font4.setFamilies([u"Arial"])
         font4.setPointSize(18)
@@ -1027,44 +1056,58 @@ class Ui_event_view(object):
 
         self.time_edit = QWidget(self.time)
         self.time_edit.setObjectName(u"time_edit")
-        sizePolicy4.setHeightForWidth(self.time_edit.sizePolicy().hasHeightForWidth())
-        self.time_edit.setSizePolicy(sizePolicy4)
-        self.time_edit.setMinimumSize(QSize(247, 100))
+        sizePolicy5.setHeightForWidth(self.time_edit.sizePolicy().hasHeightForWidth())
+        self.time_edit.setSizePolicy(sizePolicy5)
+        self.time_edit.setMinimumSize(QSize(247, 150))
+        self.time_edit.setMaximumSize(QSize(16777215, 180))
+        self.time_edit.setFont(font3)
+        self.time_edit.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.time_edit.setStyleSheet(u"QWidget#time_edit {\n"
+"	background: rgba(30,30,30,1);\n"
+"	border-radius: 10px;\n"
+"}\n"
+"QLabel {\n"
+"	padding: 0px;\n"
+"	background: none;\n"
+"	border-radius: 0px;\n"
+"}\n"
+"")
         self.time_edit_form = QFormLayout(self.time_edit)
         self.time_edit_form.setObjectName(u"time_edit_form")
-        self.time_edit_form.setLabelAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.time_edit_form.setLabelAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
         self.time_edit_form.setFormAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.time_edit_form.setHorizontalSpacing(10)
         self.time_edit_form.setVerticalSpacing(10)
-        self.time_edit_form.setContentsMargins(0, 0, 0, 0)
+        self.time_edit_form.setContentsMargins(10, 10, 10, 10)
         self.time_allday_label = QLabel(self.time_edit)
         self.time_allday_label.setObjectName(u"time_allday_label")
+        sizePolicy2.setHeightForWidth(self.time_allday_label.sizePolicy().hasHeightForWidth())
+        self.time_allday_label.setSizePolicy(sizePolicy2)
         self.time_allday_label.setMinimumSize(QSize(0, 30))
-        self.time_allday_label.setFont(font3)
+        font5 = QFont()
+        font5.setFamilies([u"Arial"])
+        font5.setPointSize(15)
+        font5.setBold(False)
+        self.time_allday_label.setFont(font5)
+        self.time_allday_label.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.time_allday_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.time_edit_form.setWidget(0, QFormLayout.LabelRole, self.time_allday_label)
 
-        self.time_allday_checkbox = QCheckBox(self.time_edit)
-        self.time_allday_checkbox.setObjectName(u"time_allday_checkbox")
-        self.time_allday_checkbox.setMinimumSize(QSize(30, 30))
-        self.time_allday_checkbox.setMaximumSize(QSize(30, 30))
-        self.time_allday_checkbox.setIconSize(QSize(30, 30))
-        self.time_allday_checkbox.setChecked(False)
-        self.time_allday_checkbox.setTristate(False)
-
-        self.time_edit_form.setWidget(0, QFormLayout.FieldRole, self.time_allday_checkbox)
-
         self.time_start_label = QLabel(self.time_edit)
         self.time_start_label.setObjectName(u"time_start_label")
+        sizePolicy2.setHeightForWidth(self.time_start_label.sizePolicy().hasHeightForWidth())
+        self.time_start_label.setSizePolicy(sizePolicy2)
         self.time_start_label.setMinimumSize(QSize(0, 30))
         self.time_start_label.setFont(font3)
+        self.time_start_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.time_edit_form.setWidget(1, QFormLayout.LabelRole, self.time_start_label)
 
         self.time_start_select = TDateTimeSelect(self.time_edit)
         self.time_start_select.setObjectName(u"time_start_select")
-        sizePolicy7.setHeightForWidth(self.time_start_select.sizePolicy().hasHeightForWidth())
-        self.time_start_select.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.time_start_select.sizePolicy().hasHeightForWidth())
+        self.time_start_select.setSizePolicy(sizePolicy8)
         self.time_start_select.setMinimumSize(QSize(0, 30))
         self.time_start_select.setAutoFillBackground(False)
 
@@ -1072,9 +1115,11 @@ class Ui_event_view(object):
 
         self.time_end_label = QLabel(self.time_edit)
         self.time_end_label.setObjectName(u"time_end_label")
+        sizePolicy2.setHeightForWidth(self.time_end_label.sizePolicy().hasHeightForWidth())
+        self.time_end_label.setSizePolicy(sizePolicy2)
         self.time_end_label.setMinimumSize(QSize(0, 30))
         self.time_end_label.setFont(font3)
-        self.time_end_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+        self.time_end_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.time_edit_form.setWidget(3, QFormLayout.LabelRole, self.time_end_label)
 
@@ -1087,18 +1132,67 @@ class Ui_event_view(object):
 
         self.time_schedule_label = QLabel(self.time_edit)
         self.time_schedule_label.setObjectName(u"time_schedule_label")
+        sizePolicy2.setHeightForWidth(self.time_schedule_label.sizePolicy().hasHeightForWidth())
+        self.time_schedule_label.setSizePolicy(sizePolicy2)
         self.time_schedule_label.setMinimumSize(QSize(0, 30))
         self.time_schedule_label.setFont(font3)
+        self.time_schedule_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.time_edit_form.setWidget(4, QFormLayout.LabelRole, self.time_schedule_label)
 
-        self.time_schedule_label_button = QPushButton(self.time_edit)
+        self.time_allday_checkbox_to_right_wrapper = QWidget(self.time_edit)
+        self.time_allday_checkbox_to_right_wrapper.setObjectName(u"time_allday_checkbox_to_right_wrapper")
+        self.checkbox_toright_container = QHBoxLayout(self.time_allday_checkbox_to_right_wrapper)
+        self.checkbox_toright_container.setSpacing(0)
+        self.checkbox_toright_container.setObjectName(u"checkbox_toright_container")
+        self.checkbox_toright_container.setContentsMargins(0, 0, 0, 0)
+        self.time_allday_checkbox_to_right_spacer = QSpacerItem(161, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.checkbox_toright_container.addItem(self.time_allday_checkbox_to_right_spacer)
+
+        self.time_allday_checkbox = QCheckBox(self.time_allday_checkbox_to_right_wrapper)
+        self.time_allday_checkbox.setObjectName(u"time_allday_checkbox")
+        self.time_allday_checkbox.setMinimumSize(QSize(30, 30))
+        self.time_allday_checkbox.setMaximumSize(QSize(30, 30))
+        self.time_allday_checkbox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.time_allday_checkbox.setIconSize(QSize(30, 30))
+        self.time_allday_checkbox.setChecked(False)
+        self.time_allday_checkbox.setTristate(False)
+
+        self.checkbox_toright_container.addWidget(self.time_allday_checkbox)
+
+
+        self.time_edit_form.setWidget(0, QFormLayout.FieldRole, self.time_allday_checkbox_to_right_wrapper)
+
+        self.schedule_to_right_wrapper = QWidget(self.time_edit)
+        self.schedule_to_right_wrapper.setObjectName(u"schedule_to_right_wrapper")
+        self.schedule_to_right_container = QHBoxLayout(self.schedule_to_right_wrapper)
+        self.schedule_to_right_container.setSpacing(0)
+        self.schedule_to_right_container.setObjectName(u"schedule_to_right_container")
+        self.schedule_to_right_container.setContentsMargins(0, 0, 0, 0)
+        self.schedule_to_right_spacer = QSpacerItem(49, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.schedule_to_right_container.addItem(self.schedule_to_right_spacer)
+
+        self.time_schedule_label_button = QPushButton(self.schedule_to_right_wrapper)
         self.time_schedule_label_button.setObjectName(u"time_schedule_label_button")
-        self.time_schedule_label_button.setMinimumSize(QSize(20, 30))
+        self.time_schedule_label_button.setMinimumSize(QSize(140, 30))
+        self.time_schedule_label_button.setMaximumSize(QSize(140, 16777215))
         self.time_schedule_label_button.setFont(font3)
+        self.time_schedule_label_button.setStyleSheet(u"background-color: rgba(40, 40, 40, 1);")
+        icon14 = QIcon()
+        icon14.addFile(u":/icons/nav/menu_board_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon14.addFile(u":/icons/nav/menu_board_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon14.addFile(u":/icons/nav/menu_board_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon14.addFile(u":/icons/nav/menu_board_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.time_schedule_label_button.setIcon(icon14)
+        self.time_schedule_label_button.setIconSize(QSize(20, 20))
         self.time_schedule_label_button.setCheckable(False)
 
-        self.time_edit_form.setWidget(4, QFormLayout.FieldRole, self.time_schedule_label_button)
+        self.schedule_to_right_container.addWidget(self.time_schedule_label_button)
+
+
+        self.time_edit_form.setWidget(4, QFormLayout.FieldRole, self.schedule_to_right_wrapper)
 
 
         self.time_viewedit_container.addWidget(self.time_edit)
@@ -1108,20 +1202,20 @@ class Ui_event_view(object):
 
         self.attributes_button = QPushButton(self.details_form)
         self.attributes_button.setObjectName(u"attributes_button")
-        sizePolicy7.setHeightForWidth(self.attributes_button.sizePolicy().hasHeightForWidth())
-        self.attributes_button.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.attributes_button.sizePolicy().hasHeightForWidth())
+        self.attributes_button.setSizePolicy(sizePolicy8)
         self.attributes_button.setMinimumSize(QSize(50, 50))
         self.attributes_button.setMaximumSize(QSize(50, 50))
-        icon14 = QIcon()
-        icon14.addFile(u":/icons/calendar/events/layer_slash_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon14.addFile(u":/icons/calendar/events/layer_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon14.addFile(u":/icons/calendar/events/layer_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon14.addFile(u":/icons/calendar/events/layer_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon14.addFile(u":/icons/calendar/events/layer_slash_blue2.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon14.addFile(u":/icons/calendar/events/layer_blue2.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon14.addFile(u":/icons/calendar/events/layer_slash_blue1.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon14.addFile(u":/icons/calendar/events/layer_blue1.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.attributes_button.setIcon(icon14)
+        icon15 = QIcon()
+        icon15.addFile(u":/icons/calendar/events/layer_slash_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon15.addFile(u":/icons/calendar/events/layer_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon15.addFile(u":/icons/calendar/events/layer_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon15.addFile(u":/icons/calendar/events/layer_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon15.addFile(u":/icons/calendar/events/layer_slash_blue2.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon15.addFile(u":/icons/calendar/events/layer_blue2.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon15.addFile(u":/icons/calendar/events/layer_slash_blue1.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon15.addFile(u":/icons/calendar/events/layer_blue1.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.attributes_button.setIcon(icon15)
         self.attributes_button.setIconSize(QSize(30, 30))
         self.attributes_button.setCheckable(False)
         self.attributes_button.setChecked(False)
@@ -1130,20 +1224,20 @@ class Ui_event_view(object):
 
         self.location_button = QPushButton(self.details_form)
         self.location_button.setObjectName(u"location_button")
-        sizePolicy7.setHeightForWidth(self.location_button.sizePolicy().hasHeightForWidth())
-        self.location_button.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.location_button.sizePolicy().hasHeightForWidth())
+        self.location_button.setSizePolicy(sizePolicy8)
         self.location_button.setMinimumSize(QSize(50, 50))
         self.location_button.setMaximumSize(QSize(50, 50))
-        icon15 = QIcon()
-        icon15.addFile(u":/icons/calendar/events/location/location_slash_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon15.addFile(u":/icons/calendar/events/location/location_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon15.addFile(u":/icons/calendar/events/location/location_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon15.addFile(u":/icons/calendar/events/location/location_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon15.addFile(u":/icons/calendar/events/location/location_slash_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon15.addFile(u":/icons/calendar/events/location/location_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon15.addFile(u":/icons/calendar/events/location/location_slash_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon15.addFile(u":/icons/calendar/events/location/location_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.location_button.setIcon(icon15)
+        icon16 = QIcon()
+        icon16.addFile(u":/icons/calendar/events/location/location_slash_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon16.addFile(u":/icons/calendar/events/location/location_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon16.addFile(u":/icons/calendar/events/location/location_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon16.addFile(u":/icons/calendar/events/location/location_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon16.addFile(u":/icons/calendar/events/location/location_slash_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon16.addFile(u":/icons/calendar/events/location/location_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon16.addFile(u":/icons/calendar/events/location/location_slash_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon16.addFile(u":/icons/calendar/events/location/location_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.location_button.setIcon(icon16)
         self.location_button.setIconSize(QSize(30, 30))
         self.location_button.setCheckable(True)
         self.location_button.setChecked(True)
@@ -1152,20 +1246,20 @@ class Ui_event_view(object):
 
         self.invitees_button = QPushButton(self.details_form)
         self.invitees_button.setObjectName(u"invitees_button")
-        sizePolicy7.setHeightForWidth(self.invitees_button.sizePolicy().hasHeightForWidth())
-        self.invitees_button.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.invitees_button.sizePolicy().hasHeightForWidth())
+        self.invitees_button.setSizePolicy(sizePolicy8)
         self.invitees_button.setMinimumSize(QSize(50, 50))
         self.invitees_button.setMaximumSize(QSize(50, 50))
-        icon16 = QIcon()
-        icon16.addFile(u":/icons/user/profile_2_slash_light.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon16.addFile(u":/icons/user/profile_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon16.addFile(u":/icons/user/profile_2_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon16.addFile(u":/icons/user/profile_2_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon16.addFile(u":/icons/user/profile_2_slash_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon16.addFile(u":/icons/user/profile_2_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon16.addFile(u":/icons/user/profile_2_slash_orange.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon16.addFile(u":/icons/user/profile_2_orange.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.invitees_button.setIcon(icon16)
+        icon17 = QIcon()
+        icon17.addFile(u":/icons/user/profile_2_slash_light.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon17.addFile(u":/icons/user/profile_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon17.addFile(u":/icons/user/profile_2_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon17.addFile(u":/icons/user/profile_2_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon17.addFile(u":/icons/user/profile_2_slash_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon17.addFile(u":/icons/user/profile_2_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon17.addFile(u":/icons/user/profile_2_slash_orange.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon17.addFile(u":/icons/user/profile_2_orange.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.invitees_button.setIcon(icon17)
         self.invitees_button.setIconSize(QSize(30, 30))
         self.invitees_button.setCheckable(True)
         self.invitees_button.setChecked(True)
@@ -1174,20 +1268,20 @@ class Ui_event_view(object):
 
         self.tags_button = QPushButton(self.details_form)
         self.tags_button.setObjectName(u"tags_button")
-        sizePolicy7.setHeightForWidth(self.tags_button.sizePolicy().hasHeightForWidth())
-        self.tags_button.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.tags_button.sizePolicy().hasHeightForWidth())
+        self.tags_button.setSizePolicy(sizePolicy8)
         self.tags_button.setMinimumSize(QSize(50, 50))
         self.tags_button.setMaximumSize(QSize(50, 50))
-        icon17 = QIcon()
-        icon17.addFile(u":/icons/calendar/events/tags/tag_slash_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon17.addFile(u":/icons/calendar/events/tags/tag_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon17.addFile(u":/icons/calendar/events/tags/tag_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon17.addFile(u":/icons/calendar/events/tags/tag_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon17.addFile(u":/icons/calendar/events/tags/tag_slash_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon17.addFile(u":/icons/calendar/events/tags/tag_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon17.addFile(u":/icons/calendar/events/tags/tag_slash_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon17.addFile(u":/icons/calendar/events/tags/tag_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.tags_button.setIcon(icon17)
+        icon18 = QIcon()
+        icon18.addFile(u":/icons/calendar/events/tags/tag_slash_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon18.addFile(u":/icons/calendar/events/tags/tag_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon18.addFile(u":/icons/calendar/events/tags/tag_slash_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon18.addFile(u":/icons/calendar/events/tags/tag_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon18.addFile(u":/icons/calendar/events/tags/tag_slash_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon18.addFile(u":/icons/calendar/events/tags/tag_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon18.addFile(u":/icons/calendar/events/tags/tag_slash_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon18.addFile(u":/icons/calendar/events/tags/tag_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.tags_button.setIcon(icon18)
         self.tags_button.setIconSize(QSize(30, 30))
         self.tags_button.setCheckable(True)
         self.tags_button.setChecked(True)
@@ -1198,14 +1292,14 @@ class Ui_event_view(object):
         self.save_button.setObjectName(u"save_button")
         self.save_button.setMinimumSize(QSize(100, 40))
         self.save_button.setFont(font)
-        icon18 = QIcon()
-        icon18.addFile(u":/icons/util/alert_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon18.addFile(u":/icons/util/add_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon18.addFile(u":/icons/util/alert_yellow.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon18.addFile(u":/icons/util/add_2_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon18.addFile(u":/icons/util/alert_yellow.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon18.addFile(u":/icons/util/add_2_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.save_button.setIcon(icon18)
+        icon19 = QIcon()
+        icon19.addFile(u":/icons/util/alert_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon19.addFile(u":/icons/util/add_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon19.addFile(u":/icons/util/alert_yellow.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon19.addFile(u":/icons/util/add_2_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon19.addFile(u":/icons/util/alert_yellow.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon19.addFile(u":/icons/util/add_2_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.save_button.setIcon(icon19)
         self.save_button.setIconSize(QSize(30, 30))
         self.save_button.setCheckable(True)
         self.save_button.setChecked(True)
@@ -1233,8 +1327,8 @@ class Ui_event_view(object):
         self.location_view_collapsed_container.setContentsMargins(0, 0, 0, 0)
         self.location_view_col_wrapper = QScrollArea(self.location_view_collapsed)
         self.location_view_col_wrapper.setObjectName(u"location_view_col_wrapper")
-        sizePolicy4.setHeightForWidth(self.location_view_col_wrapper.sizePolicy().hasHeightForWidth())
-        self.location_view_col_wrapper.setSizePolicy(sizePolicy4)
+        sizePolicy5.setHeightForWidth(self.location_view_col_wrapper.sizePolicy().hasHeightForWidth())
+        self.location_view_col_wrapper.setSizePolicy(sizePolicy5)
         self.location_view_col_wrapper.setMinimumSize(QSize(212, 40))
         self.location_view_col_wrapper.setMaximumSize(QSize(250, 40))
         self.location_view_col_wrapper.setFont(font)
@@ -1247,9 +1341,9 @@ class Ui_event_view(object):
         self.location_view_col_wrapper.setWidgetResizable(True)
         self.location_view_col_label_container = QWidget()
         self.location_view_col_label_container.setObjectName(u"location_view_col_label_container")
-        self.location_view_col_label_container.setGeometry(QRect(0, 0, 211, 40))
-        sizePolicy6.setHeightForWidth(self.location_view_col_label_container.sizePolicy().hasHeightForWidth())
-        self.location_view_col_label_container.setSizePolicy(sizePolicy6)
+        self.location_view_col_label_container.setGeometry(QRect(0, 0, 244, 40))
+        sizePolicy7.setHeightForWidth(self.location_view_col_label_container.sizePolicy().hasHeightForWidth())
+        self.location_view_col_label_container.setSizePolicy(sizePolicy7)
         self.location_view_col_label_container.setMinimumSize(QSize(211, 40))
         self.location_view_col_label_container.setMaximumSize(QSize(800, 40))
         self.location_view_col_container = QHBoxLayout(self.location_view_col_label_container)
@@ -1257,11 +1351,11 @@ class Ui_event_view(object):
         self.location_view_col_container.setContentsMargins(0, 0, 0, 2)
         self.loc_view_col_label = QLabel(self.location_view_col_label_container)
         self.loc_view_col_label.setObjectName(u"loc_view_col_label")
-        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy10.setHorizontalStretch(0)
-        sizePolicy10.setVerticalStretch(0)
-        sizePolicy10.setHeightForWidth(self.loc_view_col_label.sizePolicy().hasHeightForWidth())
-        self.loc_view_col_label.setSizePolicy(sizePolicy10)
+        sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy11.setHorizontalStretch(0)
+        sizePolicy11.setVerticalStretch(0)
+        sizePolicy11.setHeightForWidth(self.loc_view_col_label.sizePolicy().hasHeightForWidth())
+        self.loc_view_col_label.setSizePolicy(sizePolicy11)
         self.loc_view_col_label.setMinimumSize(QSize(211, 40))
         self.loc_view_col_label.setMaximumSize(QSize(800, 40))
         self.loc_view_col_label.setFont(font)
@@ -1274,20 +1368,20 @@ class Ui_event_view(object):
 
         self.location_expand_button = QPushButton(self.location_view_collapsed)
         self.location_expand_button.setObjectName(u"location_expand_button")
-        sizePolicy7.setHeightForWidth(self.location_expand_button.sizePolicy().hasHeightForWidth())
-        self.location_expand_button.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.location_expand_button.sizePolicy().hasHeightForWidth())
+        self.location_expand_button.setSizePolicy(sizePolicy8)
         self.location_expand_button.setMinimumSize(QSize(40, 40))
         self.location_expand_button.setMaximumSize(QSize(40, 40))
-        icon19 = QIcon()
-        icon19.addFile(u":/icons/calendar/events/location/location_lock_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon19.addFile(u":/icons/calendar/events/location/location_edit_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon19.addFile(u":/icons/calendar/events/location/location_lock_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon19.addFile(u":/icons/calendar/events/location/location_edit_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon19.addFile(u":/icons/calendar/events/location/location_lock_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon19.addFile(u":/icons/calendar/events/location/location_edit_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon19.addFile(u":/icons/calendar/events/location/location_lock_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon19.addFile(u":/icons/calendar/events/location/location_edit_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.location_expand_button.setIcon(icon19)
+        icon20 = QIcon()
+        icon20.addFile(u":/icons/calendar/events/location/location_lock_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon20.addFile(u":/icons/calendar/events/location/location_edit_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon20.addFile(u":/icons/calendar/events/location/location_lock_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon20.addFile(u":/icons/calendar/events/location/location_edit_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon20.addFile(u":/icons/calendar/events/location/location_lock_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon20.addFile(u":/icons/calendar/events/location/location_edit_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon20.addFile(u":/icons/calendar/events/location/location_lock_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon20.addFile(u":/icons/calendar/events/location/location_edit_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.location_expand_button.setIcon(icon20)
         self.location_expand_button.setIconSize(QSize(30, 30))
         self.location_expand_button.setCheckable(True)
         self.location_expand_button.setChecked(True)
@@ -1309,8 +1403,8 @@ class Ui_event_view(object):
         self.location_view_expanded_container.setContentsMargins(0, 0, 0, 0)
         self.location_view_exp_labels = QWidget(self.location_view_expanded)
         self.location_view_exp_labels.setObjectName(u"location_view_exp_labels")
-        sizePolicy3.setHeightForWidth(self.location_view_exp_labels.sizePolicy().hasHeightForWidth())
-        self.location_view_exp_labels.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.location_view_exp_labels.sizePolicy().hasHeightForWidth())
+        self.location_view_exp_labels.setSizePolicy(sizePolicy4)
         self.location_view_exp_labels.setMinimumSize(QSize(207, 0))
         self.location_view_exp_labels.setStyleSheet(u"")
         self.location_view_exp_labels_container = QVBoxLayout(self.location_view_exp_labels)
@@ -1364,8 +1458,8 @@ class Ui_event_view(object):
 
         self.location_view_exp_options = QWidget(self.location_view_expanded)
         self.location_view_exp_options.setObjectName(u"location_view_exp_options")
-        sizePolicy7.setHeightForWidth(self.location_view_exp_options.sizePolicy().hasHeightForWidth())
-        self.location_view_exp_options.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.location_view_exp_options.sizePolicy().hasHeightForWidth())
+        self.location_view_exp_options.setSizePolicy(sizePolicy8)
         self.location_view_exp_options.setMinimumSize(QSize(40, 0))
         self.location_view_exp_options.setMaximumSize(QSize(40, 16777215))
         self.location_view_exp_options_container = QVBoxLayout(self.location_view_exp_options)
@@ -1374,22 +1468,22 @@ class Ui_event_view(object):
         self.location_view_exp_options_container.setContentsMargins(0, 0, 0, 0)
         self.location_finish_button = QPushButton(self.location_view_exp_options)
         self.location_finish_button.setObjectName(u"location_finish_button")
-        sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(0)
-        sizePolicy11.setHeightForWidth(self.location_finish_button.sizePolicy().hasHeightForWidth())
-        self.location_finish_button.setSizePolicy(sizePolicy11)
+        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy12.setHorizontalStretch(0)
+        sizePolicy12.setVerticalStretch(0)
+        sizePolicy12.setHeightForWidth(self.location_finish_button.sizePolicy().hasHeightForWidth())
+        self.location_finish_button.setSizePolicy(sizePolicy12)
         self.location_finish_button.setMinimumSize(QSize(40, 40))
-        icon20 = QIcon()
-        icon20.addFile(u":/icons/calendar/events/location/location_back_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon20.addFile(u":/icons/calendar/events/location/location_tick1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon20.addFile(u":/icons/calendar/events/location/location_back_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon20.addFile(u":/icons/calendar/events/location/location_tick1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon20.addFile(u":/icons/calendar/events/location/location_back_dark.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon20.addFile(u":/icons/calendar/events/location/location_tick1_dark.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon20.addFile(u":/icons/calendar/events/location/location_back_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon20.addFile(u":/icons/calendar/events/location/location_tick1_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.location_finish_button.setIcon(icon20)
+        icon21 = QIcon()
+        icon21.addFile(u":/icons/calendar/events/location/location_back_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon21.addFile(u":/icons/calendar/events/location/location_tick1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon21.addFile(u":/icons/calendar/events/location/location_back_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon21.addFile(u":/icons/calendar/events/location/location_tick1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon21.addFile(u":/icons/calendar/events/location/location_back_dark.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon21.addFile(u":/icons/calendar/events/location/location_tick1_dark.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon21.addFile(u":/icons/calendar/events/location/location_back_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon21.addFile(u":/icons/calendar/events/location/location_tick1_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.location_finish_button.setIcon(icon21)
         self.location_finish_button.setIconSize(QSize(30, 30))
         self.location_finish_button.setCheckable(True)
         self.location_finish_button.setChecked(False)
@@ -1402,17 +1496,17 @@ class Ui_event_view(object):
 
         self.location_edit_button = QPushButton(self.location_view_exp_options)
         self.location_edit_button.setObjectName(u"location_edit_button")
-        sizePolicy11.setHeightForWidth(self.location_edit_button.sizePolicy().hasHeightForWidth())
-        self.location_edit_button.setSizePolicy(sizePolicy11)
+        sizePolicy12.setHeightForWidth(self.location_edit_button.sizePolicy().hasHeightForWidth())
+        self.location_edit_button.setSizePolicy(sizePolicy12)
         self.location_edit_button.setMinimumSize(QSize(40, 40))
-        icon21 = QIcon()
-        icon21.addFile(u":/icons/calendar/events/location/location_remove1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon21.addFile(u":/icons/calendar/events/location/location_add1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon21.addFile(u":/icons/calendar/events/location/location_remove1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon21.addFile(u":/icons/calendar/events/location/location_add1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon21.addFile(u":/icons/calendar/events/location/location_remove1_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon21.addFile(u":/icons/calendar/events/location/location_add1_green1.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        self.location_edit_button.setIcon(icon21)
+        icon22 = QIcon()
+        icon22.addFile(u":/icons/calendar/events/location/location_remove1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon22.addFile(u":/icons/calendar/events/location/location_add1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon22.addFile(u":/icons/calendar/events/location/location_remove1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon22.addFile(u":/icons/calendar/events/location/location_add1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon22.addFile(u":/icons/calendar/events/location/location_remove1_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon22.addFile(u":/icons/calendar/events/location/location_add1_green1.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        self.location_edit_button.setIcon(icon22)
         self.location_edit_button.setIconSize(QSize(30, 30))
         self.location_edit_button.setCheckable(True)
         self.location_edit_button.setChecked(True)
@@ -1430,8 +1524,8 @@ class Ui_event_view(object):
 
         self.location_edit_combobox = QComboBox(self.location)
         self.location_edit_combobox.setObjectName(u"location_edit_combobox")
-        sizePolicy4.setHeightForWidth(self.location_edit_combobox.sizePolicy().hasHeightForWidth())
-        self.location_edit_combobox.setSizePolicy(sizePolicy4)
+        sizePolicy5.setHeightForWidth(self.location_edit_combobox.sizePolicy().hasHeightForWidth())
+        self.location_edit_combobox.setSizePolicy(sizePolicy5)
         self.location_edit_combobox.setMinimumSize(QSize(252, 40))
         self.location_edit_combobox.setMaximumSize(QSize(290, 40))
         self.location_edit_combobox.setFont(font)
@@ -1445,8 +1539,8 @@ class Ui_event_view(object):
 
         self.layer = QWidget(self.details_form)
         self.layer.setObjectName(u"layer")
-        sizePolicy4.setHeightForWidth(self.layer.sizePolicy().hasHeightForWidth())
-        self.layer.setSizePolicy(sizePolicy4)
+        sizePolicy5.setHeightForWidth(self.layer.sizePolicy().hasHeightForWidth())
+        self.layer.setSizePolicy(sizePolicy5)
         self.layer.setMinimumSize(QSize(247, 0))
         self.layer.setMaximumSize(QSize(290, 16777215))
         self.layer.setAutoFillBackground(False)
@@ -1476,8 +1570,8 @@ class Ui_event_view(object):
 
         self.attribute_view_edit_toggle = QPushButton(self.layer_view_header)
         self.attribute_view_edit_toggle.setObjectName(u"attribute_view_edit_toggle")
-        sizePolicy11.setHeightForWidth(self.attribute_view_edit_toggle.sizePolicy().hasHeightForWidth())
-        self.attribute_view_edit_toggle.setSizePolicy(sizePolicy11)
+        sizePolicy12.setHeightForWidth(self.attribute_view_edit_toggle.sizePolicy().hasHeightForWidth())
+        self.attribute_view_edit_toggle.setSizePolicy(sizePolicy12)
         self.attribute_view_edit_toggle.setMinimumSize(QSize(130, 40))
         self.attribute_view_edit_toggle.setMaximumSize(QSize(130, 16777215))
         self.attribute_view_edit_toggle.setFont(font3)
@@ -1492,32 +1586,40 @@ class Ui_event_view(object):
 
         self.layer_view_container.addWidget(self.layer_view_header)
 
-        self.layer_view_list = QWidget(self.layer_view)
-        self.layer_view_list.setObjectName(u"layer_view_list")
-        sizePolicy.setHeightForWidth(self.layer_view_list.sizePolicy().hasHeightForWidth())
-        self.layer_view_list.setSizePolicy(sizePolicy)
-        self.layer_view_list.setMinimumSize(QSize(247, 50))
-        self.layer_view_list.setMaximumSize(QSize(290, 16777215))
-        self.layer_view_list_container = QVBoxLayout(self.layer_view_list)
-        self.layer_view_list_container.setSpacing(10)
+        self.layer_view_object_container = QWidget(self.layer_view)
+        self.layer_view_object_container.setObjectName(u"layer_view_object_container")
+        sizePolicy2.setHeightForWidth(self.layer_view_object_container.sizePolicy().hasHeightForWidth())
+        self.layer_view_object_container.setSizePolicy(sizePolicy2)
+        self.layer_view_object_container.setMinimumSize(QSize(247, 50))
+        self.layer_view_object_container.setMaximumSize(QSize(290, 16777215))
+        self.layer_view_list_container = QVBoxLayout(self.layer_view_object_container)
+        self.layer_view_list_container.setSpacing(0)
         self.layer_view_list_container.setObjectName(u"layer_view_list_container")
         self.layer_view_list_container.setContentsMargins(0, 0, 0, 0)
-        self.empty_label = QLabel(self.layer_view_list)
-        self.empty_label.setObjectName(u"empty_label")
-        self.empty_label.setFont(font)
+        self.layer_view_empty_label = QLabel(self.layer_view_object_container)
+        self.layer_view_empty_label.setObjectName(u"layer_view_empty_label")
+        self.layer_view_empty_label.setMinimumSize(QSize(80, 50))
+        self.layer_view_empty_label.setFont(font)
+        self.layer_view_empty_label.setStyleSheet(u"border: 2px solid rgba(120,120,120,1);")
 
-        self.layer_view_list_container.addWidget(self.empty_label)
+        self.layer_view_list_container.addWidget(self.layer_view_empty_label)
+
+        self.layer_view_object_ebody = EBody(self.layer_view_object_container)
+        self.layer_view_object_ebody.setObjectName(u"layer_view_object_ebody")
+        self.layer_view_object_ebody.setMinimumSize(QSize(0, 50))
+
+        self.layer_view_list_container.addWidget(self.layer_view_object_ebody)
 
 
-        self.layer_view_container.addWidget(self.layer_view_list)
+        self.layer_view_container.addWidget(self.layer_view_object_container)
 
 
         self.layer_container.addWidget(self.layer_view)
 
         self.layer_edit = QWidget(self.layer)
         self.layer_edit.setObjectName(u"layer_edit")
-        sizePolicy.setHeightForWidth(self.layer_edit.sizePolicy().hasHeightForWidth())
-        self.layer_edit.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.layer_edit.sizePolicy().hasHeightForWidth())
+        self.layer_edit.setSizePolicy(sizePolicy2)
         self.layer_edit.setMinimumSize(QSize(247, 0))
         self.layer_edit.setMaximumSize(QSize(290, 16777215))
         self.layer_edit_container = QVBoxLayout(self.layer_edit)
@@ -1526,8 +1628,8 @@ class Ui_event_view(object):
         self.layer_edit_container.setContentsMargins(0, 0, 0, 0)
         self.layer_header_wrapper = QScrollArea(self.layer_edit)
         self.layer_header_wrapper.setObjectName(u"layer_header_wrapper")
-        sizePolicy6.setHeightForWidth(self.layer_header_wrapper.sizePolicy().hasHeightForWidth())
-        self.layer_header_wrapper.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.layer_header_wrapper.sizePolicy().hasHeightForWidth())
+        self.layer_header_wrapper.setSizePolicy(sizePolicy7)
         self.layer_header_wrapper.setMinimumSize(QSize(247, 70))
         self.layer_header_wrapper.setMaximumSize(QSize(290, 65))
         self.layer_header_wrapper.setStyleSheet(u"QScrollBar:horizontal {\n"
@@ -1594,7 +1696,8 @@ class Ui_event_view(object):
         self.layer_header_wrapper.setWidgetResizable(True)
         self.layer_header = QWidget()
         self.layer_header.setObjectName(u"layer_header")
-        self.layer_header.setGeometry(QRect(0, 0, 480, 60))
+        self.layer_header.setGeometry(QRect(0, 0, 480, 40))
+        self.layer_header.setMaximumSize(QSize(16777215, 40))
         self.layer_header_container = QHBoxLayout(self.layer_header)
         self.layer_header_container.setSpacing(10)
         self.layer_header_container.setObjectName(u"layer_header_container")
@@ -1604,12 +1707,12 @@ class Ui_event_view(object):
         self.layer_finish_button.setMinimumSize(QSize(90, 40))
         self.layer_finish_button.setMaximumSize(QSize(90, 50))
         self.layer_finish_button.setFont(font3)
-        icon22 = QIcon()
-        icon22.addFile(u":/icons/util/back_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon22.addFile(u":/icons/util/back_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon22.addFile(u":/icons/util/back_square1_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon22.addFile(u":/icons/util/back_square1_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.layer_finish_button.setIcon(icon22)
+        icon23 = QIcon()
+        icon23.addFile(u":/icons/util/back_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon23.addFile(u":/icons/util/back_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon23.addFile(u":/icons/util/back_square1_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon23.addFile(u":/icons/util/back_square1_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.layer_finish_button.setIcon(icon23)
         self.layer_finish_button.setIconSize(QSize(20, 20))
 
         self.layer_header_container.addWidget(self.layer_finish_button)
@@ -1617,11 +1720,11 @@ class Ui_event_view(object):
         self.layer_add_button = QPushButton(self.layer_header)
         self.layer_add_button.setObjectName(u"layer_add_button")
         self.layer_add_button.setMinimumSize(QSize(80, 40))
-        self.layer_add_button.setMaximumSize(QSize(80, 50))
+        self.layer_add_button.setMaximumSize(QSize(80, 40))
         self.layer_add_button.setFont(font3)
-        icon23 = QIcon()
-        icon23.addFile(u":/icons/util/add_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        self.layer_add_button.setIcon(icon23)
+        icon24 = QIcon()
+        icon24.addFile(u":/icons/util/add_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.layer_add_button.setIcon(icon24)
         self.layer_add_button.setIconSize(QSize(20, 20))
 
         self.layer_header_container.addWidget(self.layer_add_button)
@@ -1629,17 +1732,17 @@ class Ui_event_view(object):
         self.layer_remove_button = QPushButton(self.layer_header)
         self.layer_remove_button.setObjectName(u"layer_remove_button")
         self.layer_remove_button.setMinimumSize(QSize(110, 40))
-        self.layer_remove_button.setMaximumSize(QSize(110, 50))
+        self.layer_remove_button.setMaximumSize(QSize(110, 40))
         self.layer_remove_button.setFont(font3)
-        icon24 = QIcon()
-        icon24.addFile(u":/icons/util/minus_square_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon24.addFile(u":/icons/util/minus_square_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon24.addFile(u":/icons/util/minus_square_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
-        icon24.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon24.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        icon24.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        icon24.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
-        self.layer_remove_button.setIcon(icon24)
+        icon25 = QIcon()
+        icon25.addFile(u":/icons/util/minus_square_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon25.addFile(u":/icons/util/minus_square_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon25.addFile(u":/icons/util/minus_square_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon25.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon25.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
+        icon25.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon25.addFile(u":/icons/util/minus_square_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.On)
+        self.layer_remove_button.setIcon(icon25)
         self.layer_remove_button.setIconSize(QSize(20, 20))
 
         self.layer_header_container.addWidget(self.layer_remove_button)
@@ -1647,31 +1750,31 @@ class Ui_event_view(object):
         self.layer_edit_button = QPushButton(self.layer_header)
         self.layer_edit_button.setObjectName(u"layer_edit_button")
         self.layer_edit_button.setMinimumSize(QSize(80, 40))
-        self.layer_edit_button.setMaximumSize(QSize(80, 50))
+        self.layer_edit_button.setMaximumSize(QSize(80, 40))
         self.layer_edit_button.setFont(font3)
-        icon25 = QIcon()
-        icon25.addFile(u":/icons/util/edit_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon25.addFile(u":/icons/util/edit_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon25.addFile(u":/icons/util/edit_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon25.addFile(u":/icons/util/edit_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.layer_edit_button.setIcon(icon25)
+        icon26 = QIcon()
+        icon26.addFile(u":/icons/util/edit_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon26.addFile(u":/icons/util/edit_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon26.addFile(u":/icons/util/edit_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon26.addFile(u":/icons/util/edit_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.layer_edit_button.setIcon(icon26)
         self.layer_edit_button.setIconSize(QSize(20, 20))
 
         self.layer_header_container.addWidget(self.layer_edit_button)
 
         self.layer_move_button = QPushButton(self.layer_header)
         self.layer_move_button.setObjectName(u"layer_move_button")
-        sizePolicy6.setHeightForWidth(self.layer_move_button.sizePolicy().hasHeightForWidth())
-        self.layer_move_button.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.layer_move_button.sizePolicy().hasHeightForWidth())
+        self.layer_move_button.setSizePolicy(sizePolicy7)
         self.layer_move_button.setMinimumSize(QSize(80, 40))
-        self.layer_move_button.setMaximumSize(QSize(80, 50))
+        self.layer_move_button.setMaximumSize(QSize(80, 40))
         self.layer_move_button.setFont(font3)
-        icon26 = QIcon()
-        icon26.addFile(u":/icons/util/move_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon26.addFile(u":/icons/util/move_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon26.addFile(u":/icons/util/move_square1_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon26.addFile(u":/icons/util/move_square1_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.layer_move_button.setIcon(icon26)
+        icon27 = QIcon()
+        icon27.addFile(u":/icons/util/move_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon27.addFile(u":/icons/util/move_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon27.addFile(u":/icons/util/move_square1_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon27.addFile(u":/icons/util/move_square1_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.layer_move_button.setIcon(icon27)
         self.layer_move_button.setIconSize(QSize(20, 20))
 
         self.layer_header_container.addWidget(self.layer_move_button)
@@ -1688,8 +1791,8 @@ class Ui_event_view(object):
         self.layer_header_expanded_container.setContentsMargins(0, 0, 0, 0)
         self.layer_header_exp_finish = QWidget(self.layer_header_expanded)
         self.layer_header_exp_finish.setObjectName(u"layer_header_exp_finish")
-        sizePolicy6.setHeightForWidth(self.layer_header_exp_finish.sizePolicy().hasHeightForWidth())
-        self.layer_header_exp_finish.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.layer_header_exp_finish.sizePolicy().hasHeightForWidth())
+        self.layer_header_exp_finish.setSizePolicy(sizePolicy7)
         self.layer_header_exp_finish.setMinimumSize(QSize(247, 40))
         self.layer_header_exp_finish.setMaximumSize(QSize(290, 40))
         self.finish_options_container = QHBoxLayout(self.layer_header_exp_finish)
@@ -1701,12 +1804,12 @@ class Ui_event_view(object):
         self.layer_save_changes_button.setMinimumSize(QSize(90, 40))
         self.layer_save_changes_button.setMaximumSize(QSize(90, 50))
         self.layer_save_changes_button.setFont(font3)
-        icon27 = QIcon()
-        icon27.addFile(u":/icons/util/tick_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon27.addFile(u":/icons/util/tick_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon27.addFile(u":/icons/util/tick_square1_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon27.addFile(u":/icons/util/tick_square1_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.layer_save_changes_button.setIcon(icon27)
+        icon28 = QIcon()
+        icon28.addFile(u":/icons/util/tick_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon28.addFile(u":/icons/util/tick_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon28.addFile(u":/icons/util/tick_square1_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon28.addFile(u":/icons/util/tick_square1_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.layer_save_changes_button.setIcon(icon28)
         self.layer_save_changes_button.setIconSize(QSize(20, 20))
 
         self.finish_options_container.addWidget(self.layer_save_changes_button)
@@ -1716,12 +1819,12 @@ class Ui_event_view(object):
         self.layer_cancel_changes_button.setMinimumSize(QSize(100, 40))
         self.layer_cancel_changes_button.setMaximumSize(QSize(100, 50))
         self.layer_cancel_changes_button.setFont(font3)
-        icon28 = QIcon()
-        icon28.addFile(u":/icons/util/close_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon28.addFile(u":/icons/util/close_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon28.addFile(u":/icons/util/close_square1_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon28.addFile(u":/icons/util/close_square1_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.layer_cancel_changes_button.setIcon(icon28)
+        icon29 = QIcon()
+        icon29.addFile(u":/icons/util/close_square1_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon29.addFile(u":/icons/util/close_square1_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon29.addFile(u":/icons/util/close_square1_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon29.addFile(u":/icons/util/close_square1_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.layer_cancel_changes_button.setIcon(icon29)
         self.layer_cancel_changes_button.setIconSize(QSize(20, 20))
 
         self.finish_options_container.addWidget(self.layer_cancel_changes_button)
@@ -1735,8 +1838,8 @@ class Ui_event_view(object):
 
         self.layer_header_exp_add_wrapper = QScrollArea(self.layer_header_expanded)
         self.layer_header_exp_add_wrapper.setObjectName(u"layer_header_exp_add_wrapper")
-        sizePolicy7.setHeightForWidth(self.layer_header_exp_add_wrapper.sizePolicy().hasHeightForWidth())
-        self.layer_header_exp_add_wrapper.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.layer_header_exp_add_wrapper.sizePolicy().hasHeightForWidth())
+        self.layer_header_exp_add_wrapper.setSizePolicy(sizePolicy8)
         self.layer_header_exp_add_wrapper.setMinimumSize(QSize(190, 40))
         self.layer_header_exp_add_wrapper.setMaximumSize(QSize(16777215, 40))
         self.layer_header_exp_add_wrapper.setStyleSheet(u"QScrollBar:horizontal {\n"
@@ -1803,8 +1906,9 @@ class Ui_event_view(object):
         self.layer_header_exp_add_wrapper.setWidgetResizable(True)
         self.layer_header_exp_add = QWidget()
         self.layer_header_exp_add.setObjectName(u"layer_header_exp_add")
-        self.layer_header_exp_add.setGeometry(QRect(0, 0, 252, 40))
+        self.layer_header_exp_add.setGeometry(QRect(0, 0, 285, 40))
         self.layer_header_exp_add.setMinimumSize(QSize(190, 0))
+        self.layer_header_exp_add.setMaximumSize(QSize(16777215, 40))
         self.layer_header_exp_add_container = QHBoxLayout(self.layer_header_exp_add)
         self.layer_header_exp_add_container.setSpacing(10)
         self.layer_header_exp_add_container.setObjectName(u"layer_header_exp_add_container")
@@ -1814,12 +1918,12 @@ class Ui_event_view(object):
         self.layer_add_task_button.setMinimumSize(QSize(90, 40))
         self.layer_add_task_button.setMaximumSize(QSize(90, 40))
         self.layer_add_task_button.setFont(font3)
-        icon29 = QIcon()
-        icon29.addFile(u":/icons/calendar/events/description/description_add_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon29.addFile(u":/icons/calendar/events/description/description_add_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon29.addFile(u":/icons/calendar/events/description/description_add_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon29.addFile(u":/icons/calendar/events/description/description_add_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.layer_add_task_button.setIcon(icon29)
+        icon30 = QIcon()
+        icon30.addFile(u":/icons/calendar/events/description/description_add_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon30.addFile(u":/icons/calendar/events/description/description_add_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon30.addFile(u":/icons/calendar/events/description/description_add_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon30.addFile(u":/icons/calendar/events/description/description_add_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.layer_add_task_button.setIcon(icon30)
         self.layer_add_task_button.setIconSize(QSize(20, 20))
 
         self.layer_header_exp_add_container.addWidget(self.layer_add_task_button)
@@ -1829,12 +1933,12 @@ class Ui_event_view(object):
         self.layer_add_note_button.setMinimumSize(QSize(90, 40))
         self.layer_add_note_button.setMaximumSize(QSize(90, 40))
         self.layer_add_note_button.setFont(font3)
-        icon30 = QIcon()
-        icon30.addFile(u":/icons/calendar/events/todo/todo_add_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon30.addFile(u":/icons/calendar/events/todo/todo_add_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon30.addFile(u":/icons/calendar/events/todo/todo_add_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon30.addFile(u":/icons/calendar/events/todo/todo_add_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.layer_add_note_button.setIcon(icon30)
+        icon31 = QIcon()
+        icon31.addFile(u":/icons/calendar/events/todo/todo_add_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon31.addFile(u":/icons/calendar/events/todo/todo_add_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon31.addFile(u":/icons/calendar/events/todo/todo_add_green.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon31.addFile(u":/icons/calendar/events/todo/todo_add_green.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.layer_add_note_button.setIcon(icon31)
         self.layer_add_note_button.setIconSize(QSize(20, 20))
 
         self.layer_header_exp_add_container.addWidget(self.layer_add_note_button)
@@ -1852,8 +1956,8 @@ class Ui_event_view(object):
 
         self.layer_object_edit = QWidget(self.layer_edit)
         self.layer_object_edit.setObjectName(u"layer_object_edit")
-        sizePolicy4.setHeightForWidth(self.layer_object_edit.sizePolicy().hasHeightForWidth())
-        self.layer_object_edit.setSizePolicy(sizePolicy4)
+        sizePolicy5.setHeightForWidth(self.layer_object_edit.sizePolicy().hasHeightForWidth())
+        self.layer_object_edit.setSizePolicy(sizePolicy5)
         self.layer_object_edit.setMinimumSize(QSize(247, 0))
         self.layer_object_edit.setMaximumSize(QSize(290, 16777215))
         self.layer_object_edit_container = QVBoxLayout(self.layer_object_edit)
@@ -1862,60 +1966,83 @@ class Ui_event_view(object):
         self.layer_object_edit_container.setContentsMargins(0, 0, 0, 0)
         self.layer_current_label = QLabel(self.layer_object_edit)
         self.layer_current_label.setObjectName(u"layer_current_label")
-        sizePolicy.setHeightForWidth(self.layer_current_label.sizePolicy().hasHeightForWidth())
-        self.layer_current_label.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.layer_current_label.sizePolicy().hasHeightForWidth())
+        self.layer_current_label.setSizePolicy(sizePolicy2)
         self.layer_current_label.setMinimumSize(QSize(248, 30))
-        font5 = QFont()
-        font5.setFamilies([u"Arial"])
-        font5.setPointSize(15)
-        font5.setBold(False)
         self.layer_current_label.setFont(font5)
 
         self.layer_object_edit_container.addWidget(self.layer_current_label)
 
         self.layer_obj_edit_task_form = QWidget(self.layer_object_edit)
         self.layer_obj_edit_task_form.setObjectName(u"layer_obj_edit_task_form")
-        self.layer_obj_edit_task_form.setMinimumSize(QSize(252, 90))
-        self.layer_obj_edit_task_form.setMaximumSize(QSize(290, 90))
+        self.layer_obj_edit_task_form.setMinimumSize(QSize(252, 86))
+        self.layer_obj_edit_task_form.setMaximumSize(QSize(290, 84))
+        self.layer_obj_edit_task_form.setStyleSheet(u"QWidget#layer_obj_edit_task_form {\n"
+"	background-color: rgba(20,20,20,1);\n"
+"	border-radius: 4px;\n"
+"	border: 2px solid rgba(80, 160, 100, 1);\n"
+"}\n"
+"\n"
+"QWidget#layer_obj_edit_task_form > * {\n"
+"	border-radius: 0px;\n"
+"	border: 0px;\n"
+"}")
         self.layer_obj_edit_task_form_container = QVBoxLayout(self.layer_obj_edit_task_form)
-        self.layer_obj_edit_task_form_container.setSpacing(10)
+        self.layer_obj_edit_task_form_container.setSpacing(0)
         self.layer_obj_edit_task_form_container.setObjectName(u"layer_obj_edit_task_form_container")
-        self.layer_obj_edit_task_form_container.setContentsMargins(0, 0, 0, 0)
+        self.layer_obj_edit_task_form_container.setContentsMargins(2, 0, 2, 0)
         self.layer_task_edit_header = QWidget(self.layer_obj_edit_task_form)
         self.layer_task_edit_header.setObjectName(u"layer_task_edit_header")
-        sizePolicy4.setHeightForWidth(self.layer_task_edit_header.sizePolicy().hasHeightForWidth())
-        self.layer_task_edit_header.setSizePolicy(sizePolicy4)
-        self.layer_task_edit_header.setMinimumSize(QSize(252, 42))
-        self.layer_task_edit_header.setMaximumSize(QSize(290, 42))
+        sizePolicy5.setHeightForWidth(self.layer_task_edit_header.sizePolicy().hasHeightForWidth())
+        self.layer_task_edit_header.setSizePolicy(sizePolicy5)
+        self.layer_task_edit_header.setMinimumSize(QSize(0, 44))
+        self.layer_task_edit_header.setMaximumSize(QSize(290, 44))
+        self.layer_task_edit_header.setStyleSheet(u"border-bottom: 2px solid rgba(80, 160, 100, 1);")
         self.task_edit_header_container = QHBoxLayout(self.layer_task_edit_header)
         self.task_edit_header_container.setSpacing(0)
         self.task_edit_header_container.setObjectName(u"task_edit_header_container")
         self.task_edit_header_container.setContentsMargins(0, 0, 0, 0)
         self.task_line_edit = QLineEdit(self.layer_task_edit_header)
         self.task_line_edit.setObjectName(u"task_line_edit")
-        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy12.setHorizontalStretch(0)
-        sizePolicy12.setVerticalStretch(0)
-        sizePolicy12.setHeightForWidth(self.task_line_edit.sizePolicy().hasHeightForWidth())
-        self.task_line_edit.setSizePolicy(sizePolicy12)
+        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy13.setHorizontalStretch(0)
+        sizePolicy13.setVerticalStretch(0)
+        sizePolicy13.setHeightForWidth(self.task_line_edit.sizePolicy().hasHeightForWidth())
+        self.task_line_edit.setSizePolicy(sizePolicy13)
         self.task_line_edit.setMinimumSize(QSize(212, 40))
         self.task_line_edit.setMaximumSize(QSize(250, 40))
         self.task_line_edit.setFont(font2)
         self.task_line_edit.setCursor(QCursor(Qt.CursorShape.SizeVerCursor))
+        self.task_line_edit.setStyleSheet(u"QLineEdit {\n"
+"	border: 0px solid transparent;\n"
+"	padding-left: 5px;\n"
+"	border-top-left-radius: 0px;\n"
+"}")
         self.task_line_edit.setClearButtonEnabled(True)
 
         self.task_edit_header_container.addWidget(self.task_line_edit)
 
-        self.task_keyboard_button = QPushButton(self.layer_task_edit_header)
-        self.task_keyboard_button.setObjectName(u"task_keyboard_button")
-        sizePolicy11.setHeightForWidth(self.task_keyboard_button.sizePolicy().hasHeightForWidth())
-        self.task_keyboard_button.setSizePolicy(sizePolicy11)
-        self.task_keyboard_button.setMinimumSize(QSize(40, 40))
-        self.task_keyboard_button.setMaximumSize(QSize(40, 40))
-        self.task_keyboard_button.setIcon(icon7)
-        self.task_keyboard_button.setIconSize(QSize(30, 30))
+        self.task_checkbox = QCheckBox(self.layer_task_edit_header)
+        self.task_checkbox.setObjectName(u"task_checkbox")
+        self.task_checkbox.setMinimumSize(QSize(0, 40))
+        self.task_checkbox.setMaximumSize(QSize(40, 40))
+        font6 = QFont()
+        font6.setFamilies([u"Arial"])
+        font6.setPointSize(19)
+        self.task_checkbox.setFont(font6)
+        self.task_checkbox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.task_checkbox.setStyleSheet(u"QCheckBox {\n"
+"border-bottom: 0px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"	height: 36px; width: 36px;\n"
+"}")
+        self.task_checkbox.setIconSize(QSize(30, 30))
+        self.task_checkbox.setChecked(False)
+        self.task_checkbox.setTristate(False)
 
-        self.task_edit_header_container.addWidget(self.task_keyboard_button)
+        self.task_edit_header_container.addWidget(self.task_checkbox)
 
 
         self.layer_obj_edit_task_form_container.addWidget(self.layer_task_edit_header)
@@ -1924,33 +2051,36 @@ class Ui_event_view(object):
         self.layer_task_edit_footer.setObjectName(u"layer_task_edit_footer")
         self.layer_task_edit_footer.setMinimumSize(QSize(248, 40))
         self.layer_task_edit_footer.setMaximumSize(QSize(290, 40))
+        self.layer_task_edit_footer.setStyleSheet(u"background-color: rgba(20,20,20,1);\n"
+"margin: 2px;\n"
+"padding: 4px;\n"
+"border-radius: 5px;")
         self.task_edit_footer_container = QHBoxLayout(self.layer_task_edit_footer)
         self.task_edit_footer_container.setSpacing(0)
         self.task_edit_footer_container.setObjectName(u"task_edit_footer_container")
         self.task_edit_footer_container.setContentsMargins(0, 0, 0, 0)
-        self.task_checkbox = QCheckBox(self.layer_task_edit_footer)
-        self.task_checkbox.setObjectName(u"task_checkbox")
-        self.task_checkbox.setMinimumSize(QSize(80, 40))
-        self.task_checkbox.setMaximumSize(QSize(70, 40))
-        self.task_checkbox.setFont(font3)
-        self.task_checkbox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-        self.task_checkbox.setIconSize(QSize(30, 30))
-        self.task_checkbox.setChecked(False)
-        self.task_checkbox.setTristate(False)
-
-        self.task_edit_footer_container.addWidget(self.task_checkbox)
-
-        self.task_edit_footer_spacer = QSpacerItem(20, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.task_edit_footer_spacer = QSpacerItem(10, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.task_edit_footer_container.addItem(self.task_edit_footer_spacer)
 
+        self.task_keyboard_button = QPushButton(self.layer_task_edit_footer)
+        self.task_keyboard_button.setObjectName(u"task_keyboard_button")
+        sizePolicy12.setHeightForWidth(self.task_keyboard_button.sizePolicy().hasHeightForWidth())
+        self.task_keyboard_button.setSizePolicy(sizePolicy12)
+        self.task_keyboard_button.setMinimumSize(QSize(40, 40))
+        self.task_keyboard_button.setMaximumSize(QSize(40, 40))
+        self.task_keyboard_button.setIcon(icon7)
+        self.task_keyboard_button.setIconSize(QSize(30, 30))
+
+        self.task_edit_footer_container.addWidget(self.task_keyboard_button)
+
         self.task_edit_confirm = QPushButton(self.layer_task_edit_footer)
         self.task_edit_confirm.setObjectName(u"task_edit_confirm")
-        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy13.setHorizontalStretch(0)
-        sizePolicy13.setVerticalStretch(40)
-        sizePolicy13.setHeightForWidth(self.task_edit_confirm.sizePolicy().hasHeightForWidth())
-        self.task_edit_confirm.setSizePolicy(sizePolicy13)
+        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy14.setHorizontalStretch(0)
+        sizePolicy14.setVerticalStretch(40)
+        sizePolicy14.setHeightForWidth(self.task_edit_confirm.sizePolicy().hasHeightForWidth())
+        self.task_edit_confirm.setSizePolicy(sizePolicy14)
         self.task_edit_confirm.setMinimumSize(QSize(90, 40))
         self.task_edit_confirm.setMaximumSize(QSize(90, 40))
         self.task_edit_confirm.setFont(font3)
@@ -1973,8 +2103,8 @@ class Ui_event_view(object):
         self.layer_obj_edit_note_form_container.setContentsMargins(0, 0, 0, 0)
         self.layer_note_edit_header_wrapper = QScrollArea(self.layer_obj_edit_note_form)
         self.layer_note_edit_header_wrapper.setObjectName(u"layer_note_edit_header_wrapper")
-        sizePolicy4.setHeightForWidth(self.layer_note_edit_header_wrapper.sizePolicy().hasHeightForWidth())
-        self.layer_note_edit_header_wrapper.setSizePolicy(sizePolicy4)
+        sizePolicy5.setHeightForWidth(self.layer_note_edit_header_wrapper.sizePolicy().hasHeightForWidth())
+        self.layer_note_edit_header_wrapper.setSizePolicy(sizePolicy5)
         self.layer_note_edit_header_wrapper.setMinimumSize(QSize(247, 40))
         self.layer_note_edit_header_wrapper.setMaximumSize(QSize(290, 70))
         self.layer_note_edit_header_wrapper.setStyleSheet(u"QScrollBar:horizontal {\n"
@@ -2042,8 +2172,8 @@ class Ui_event_view(object):
         self.note_edit_header = QWidget()
         self.note_edit_header.setObjectName(u"note_edit_header")
         self.note_edit_header.setGeometry(QRect(0, 0, 340, 40))
-        sizePolicy.setHeightForWidth(self.note_edit_header.sizePolicy().hasHeightForWidth())
-        self.note_edit_header.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.note_edit_header.sizePolicy().hasHeightForWidth())
+        self.note_edit_header.setSizePolicy(sizePolicy2)
         self.note_edit_header.setMinimumSize(QSize(0, 40))
         self.note_edit_header.setMaximumSize(QSize(16777215, 40))
         self.note_edit_header_container = QHBoxLayout(self.note_edit_header)
@@ -2055,10 +2185,10 @@ class Ui_event_view(object):
         self.bold_selected.setMinimumSize(QSize(90, 40))
         self.bold_selected.setMaximumSize(QSize(90, 40))
         self.bold_selected.setFont(font3)
-        icon31 = QIcon()
-        icon31.addFile(u":/icons/util/text/text_bold_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon31.addFile(u":/icons/util/text/text_bold_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        self.bold_selected.setIcon(icon31)
+        icon32 = QIcon()
+        icon32.addFile(u":/icons/util/text/text_bold_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon32.addFile(u":/icons/util/text/text_bold_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        self.bold_selected.setIcon(icon32)
         self.bold_selected.setIconSize(QSize(20, 20))
 
         self.note_edit_header_container.addWidget(self.bold_selected)
@@ -2068,10 +2198,10 @@ class Ui_event_view(object):
         self.underline_selected.setMinimumSize(QSize(120, 40))
         self.underline_selected.setMaximumSize(QSize(120, 40))
         self.underline_selected.setFont(font3)
-        icon32 = QIcon()
-        icon32.addFile(u":/icons/util/text/text_underline_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon32.addFile(u":/icons/util/text/text_underline_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        self.underline_selected.setIcon(icon32)
+        icon33 = QIcon()
+        icon33.addFile(u":/icons/util/text/text_underline_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon33.addFile(u":/icons/util/text/text_underline_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        self.underline_selected.setIcon(icon33)
         self.underline_selected.setIconSize(QSize(20, 20))
 
         self.note_edit_header_container.addWidget(self.underline_selected)
@@ -2081,10 +2211,10 @@ class Ui_event_view(object):
         self.italicise_selected.setMinimumSize(QSize(110, 40))
         self.italicise_selected.setMaximumSize(QSize(110, 40))
         self.italicise_selected.setFont(font3)
-        icon33 = QIcon()
-        icon33.addFile(u":/icons/util/text/text_italic_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon33.addFile(u":/icons/util/text/text_italic_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        self.italicise_selected.setIcon(icon33)
+        icon34 = QIcon()
+        icon34.addFile(u":/icons/util/text/text_italic_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon34.addFile(u":/icons/util/text/text_italic_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        self.italicise_selected.setIcon(icon34)
         self.italicise_selected.setIconSize(QSize(20, 20))
 
         self.note_edit_header_container.addWidget(self.italicise_selected)
@@ -2095,19 +2225,84 @@ class Ui_event_view(object):
 
         self.layer_note_text_edit = QTextEdit(self.layer_obj_edit_note_form)
         self.layer_note_text_edit.setObjectName(u"layer_note_text_edit")
-        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Expanding)
-        sizePolicy14.setHorizontalStretch(0)
-        sizePolicy14.setVerticalStretch(0)
-        sizePolicy14.setHeightForWidth(self.layer_note_text_edit.sizePolicy().hasHeightForWidth())
-        self.layer_note_text_edit.setSizePolicy(sizePolicy14)
+        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Expanding)
+        sizePolicy15.setHorizontalStretch(0)
+        sizePolicy15.setVerticalStretch(0)
+        sizePolicy15.setHeightForWidth(self.layer_note_text_edit.sizePolicy().hasHeightForWidth())
+        self.layer_note_text_edit.setSizePolicy(sizePolicy15)
         self.layer_note_text_edit.setMinimumSize(QSize(247, 0))
         self.layer_note_text_edit.setMaximumSize(QSize(290, 16777215))
         self.layer_note_text_edit.setFont(font3)
+        self.layer_note_text_edit.setStyleSheet(u"QTextEdit{\n"
+"	border-radius: 5px;\n"
+"	background-color: rgba(30,30,30,1);\n"
+"	border: 2px solid rgba(75,150,255,1);\n"
+"}\n"
+"\n"
+"QScrollBar:vertical {\n"
+"	border-left: 2px solid rgba(70,150,255,1);\n"
+"    background: rgba(40,40,40,0.9);\n"
+"    width:  24px;\n"
+"    padding: 25px 0;\n"
+"}\n"
+"\n"
+"QScrollBar::groove:vertical {\n"
+"    background: transparent;\n"
+"    width: 20px;\n"
+"}\n"
+"QScrollBar::handle:vertical {\n"
+"    	background: rgba(120,120,120,1);\n"
+"    	min-height: 50px;\n"
+"	min-width: 20px;\n"
+"	max-width: 20px;\n"
+"    	border-radius: 4px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-page:vertical, QScrollBar::add-page:vertical {\n"
+"    	background: rgba(40,40,40,1);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical {\n"
+"    	width: 20px;\n"
+"    	height: 25px;             \n"
+"    	background: rgba(20,20,20,1);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"    	subcontrol-origin: margin;\n"
+"    	subcontrol-position: top;\n"
+"    	border-top-left-radius: 4px;\n"
+""
+                        "    	border-top-right-radius: 4px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: bottom;\n"
+"    border-bottom-left-radius: 4px;\n"
+"    border-bottom-right-radius: 4px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical {\n"
+"    image: url(\":/icons/arrows/arrow_up_dark.svg\");\n"
+"    width:  20px;   height: 20px;\n"
+"}\n"
+"QScrollBar::up-arrow:vertical:pressed {\n"
+"    image: url(\":/icons/arrows/arrow_up_blue.svg\");\n"
+"}\n"
+"QScrollBar::down-arrow:vertical {\n"
+"    image: url(\":/icons/arrows/arrow_down_dark.svg\");\n"
+"    width:  20px;   height: 20px;\n"
+"}\n"
+"QScrollBar::down-arrow:vertical:pressed {\n"
+"    image: url(\":/icons/arrows/arrow_down_blue.svg\");\n"
+"}\n"
+"")
         self.layer_note_text_edit.setFrameShape(QFrame.Shape.StyledPanel)
         self.layer_note_text_edit.setFrameShadow(QFrame.Shadow.Plain)
         self.layer_note_text_edit.setLineWidth(0)
         self.layer_note_text_edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.layer_note_text_edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.layer_note_text_edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.layer_note_text_edit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
         self.layer_note_text_edit.setAutoFormatting(QTextEdit.AutoFormattingFlag.AutoBulletList)
 
@@ -2115,8 +2310,8 @@ class Ui_event_view(object):
 
         self.layer_note_edit_footer = QWidget(self.layer_obj_edit_note_form)
         self.layer_note_edit_footer.setObjectName(u"layer_note_edit_footer")
-        sizePolicy4.setHeightForWidth(self.layer_note_edit_footer.sizePolicy().hasHeightForWidth())
-        self.layer_note_edit_footer.setSizePolicy(sizePolicy4)
+        sizePolicy5.setHeightForWidth(self.layer_note_edit_footer.sizePolicy().hasHeightForWidth())
+        self.layer_note_edit_footer.setSizePolicy(sizePolicy5)
         self.layer_note_edit_footer.setMinimumSize(QSize(252, 40))
         self.layer_note_edit_footer.setMaximumSize(QSize(16777215, 40))
         self.note_edit_footer_container = QHBoxLayout(self.layer_note_edit_footer)
@@ -2128,12 +2323,12 @@ class Ui_event_view(object):
         self.undo_button.setMinimumSize(QSize(40, 40))
         self.undo_button.setMaximumSize(QSize(40, 40))
         self.undo_button.setFont(font3)
-        icon34 = QIcon()
-        icon34.addFile(u":/icons/arrows/arrow_redo_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon34.addFile(u":/icons/arrows/arrow_redo_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon34.addFile(u":/icons/arrows/arrow_redo_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon34.addFile(u":/icons/arrows/arrow_redo_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.undo_button.setIcon(icon34)
+        icon35 = QIcon()
+        icon35.addFile(u":/icons/arrows/arrow_redo_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon35.addFile(u":/icons/arrows/arrow_redo_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon35.addFile(u":/icons/arrows/arrow_redo_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon35.addFile(u":/icons/arrows/arrow_redo_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.undo_button.setIcon(icon35)
         self.undo_button.setIconSize(QSize(20, 20))
 
         self.note_edit_footer_container.addWidget(self.undo_button)
@@ -2143,12 +2338,11 @@ class Ui_event_view(object):
         self.redo_button.setMinimumSize(QSize(40, 40))
         self.redo_button.setMaximumSize(QSize(40, 40))
         self.redo_button.setFont(font3)
-        icon35 = QIcon()
-        icon35.addFile(u":/icons/arrows/arrow_undo_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon35.addFile(u":/icons/arrows/arrow_undo_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon35.addFile(u":/icons/arrows/arrow_undo_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
-        icon35.addFile(u":/icons/arrows/arrow_undo_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.redo_button.setIcon(icon35)
+        icon36 = QIcon()
+        icon36.addFile(u":/icons/arrows/arrow_undo_grey.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon36.addFile(u":/icons/arrows/arrow_undo_blue.svg", QSize(), QIcon.Mode.Active, QIcon.State.Off)
+        icon36.addFile(u":/icons/arrows/arrow_undo_blue.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.redo_button.setIcon(icon36)
         self.redo_button.setIconSize(QSize(20, 20))
 
         self.note_edit_footer_container.addWidget(self.redo_button)
@@ -2159,8 +2353,8 @@ class Ui_event_view(object):
 
         self.note_edit_confirm = QPushButton(self.layer_note_edit_footer)
         self.note_edit_confirm.setObjectName(u"note_edit_confirm")
-        sizePolicy13.setHeightForWidth(self.note_edit_confirm.sizePolicy().hasHeightForWidth())
-        self.note_edit_confirm.setSizePolicy(sizePolicy13)
+        sizePolicy14.setHeightForWidth(self.note_edit_confirm.sizePolicy().hasHeightForWidth())
+        self.note_edit_confirm.setSizePolicy(sizePolicy14)
         self.note_edit_confirm.setMinimumSize(QSize(90, 40))
         self.note_edit_confirm.setMaximumSize(QSize(90, 40))
         self.note_edit_confirm.setFont(font3)
@@ -2213,7 +2407,7 @@ class Ui_event_view(object):
 
         self.retranslateUi(event_view)
 
-        self.details_container.setCurrentIndex(1)
+        self.details_container.setCurrentIndex(3)
         self.preset_button.setDefault(False)
         self.save_button.setDefault(False)
 
@@ -2249,11 +2443,11 @@ class Ui_event_view(object):
         self.other_button.setText(QCoreApplication.translate("event_view", u"Complex", None))
         self.time_button.setText("")
         self.time_allday_label.setText(QCoreApplication.translate("event_view", u"All-day", None))
-        self.time_allday_checkbox.setText("")
         self.time_start_label.setText(QCoreApplication.translate("event_view", u"Starts", None))
         self.time_end_label.setText(QCoreApplication.translate("event_view", u"Ends", None))
         self.time_schedule_label.setText(QCoreApplication.translate("event_view", u"Schedule", None))
-        self.time_schedule_label_button.setText(QCoreApplication.translate("event_view", u"Add schedule", None))
+        self.time_allday_checkbox.setText("")
+        self.time_schedule_label_button.setText(QCoreApplication.translate("event_view", u" Add schedule", None))
         self.attributes_button.setText("")
         self.location_button.setText("")
         self.invitees_button.setText("")
@@ -2272,7 +2466,7 @@ class Ui_event_view(object):
         self.location_edit_combobox.setCurrentText("")
         self.location_edit_combobox.setPlaceholderText(QCoreApplication.translate("event_view", u"Address...", None))
         self.attribute_view_edit_toggle.setText(QCoreApplication.translate("event_view", u"Edit Layers", None))
-        self.empty_label.setText(QCoreApplication.translate("event_view", u"No objects", None))
+        self.layer_view_empty_label.setText(QCoreApplication.translate("event_view", u"No objects", None))
         self.layer_finish_button.setText(QCoreApplication.translate("event_view", u"Finish", None))
         self.layer_add_button.setText(QCoreApplication.translate("event_view", u"Add", None))
         self.layer_remove_button.setText(QCoreApplication.translate("event_view", u"Remove", None))
@@ -2285,13 +2479,13 @@ class Ui_event_view(object):
         self.layer_current_label.setText(QCoreApplication.translate("event_view", u"Currently editing:", None))
         self.task_line_edit.setText("")
         self.task_line_edit.setPlaceholderText(QCoreApplication.translate("event_view", u"Task", None))
+        self.task_checkbox.setText("")
         self.task_keyboard_button.setText("")
-        self.task_checkbox.setText(QCoreApplication.translate("event_view", u"Status", None))
         self.task_edit_confirm.setText(QCoreApplication.translate("event_view", u"Confirm", None))
         self.bold_selected.setText(QCoreApplication.translate("event_view", u"Bold", None))
         self.underline_selected.setText(QCoreApplication.translate("event_view", u"Underline", None))
         self.italicise_selected.setText(QCoreApplication.translate("event_view", u"Italicise", None))
-        self.layer_note_text_edit.setPlaceholderText(QCoreApplication.translate("event_view", u"Note Description", None))
+        self.layer_note_text_edit.setPlaceholderText(QCoreApplication.translate("event_view", u"Enter your note here...", None))
         self.undo_button.setText("")
         self.redo_button.setText("")
         self.note_edit_confirm.setText(QCoreApplication.translate("event_view", u"Confirm", None))

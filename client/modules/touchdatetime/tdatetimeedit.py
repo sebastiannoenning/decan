@@ -39,13 +39,12 @@ class DTPushButton(QLabel):
                  test_en=False):
         if (color == 'red'): color = 'rgba(255, 80, 80, 0.9)'
         else: color = 'white'
-        opacity %= 1
-        bg_color %= 255
         padding = 6
-        self.setStyleSheet("border-radius: 4px;"
-                           f"background-color: rgba({bg_color}, {bg_color}, {bg_color}, {opacity});"
-                           f"color: {color};"
-                           f"padding: {padding}px;"
+        self.setStyleSheet( "border-radius: 4px;"
+                            "border: none;"
+                            "background-color: rgba(40,40,40,1);"
+                            "color: white;"
+                            "padding: 6px;"
         )
         pref_height = (self.font().pointSize()
                        + (2 * padding) + 2)

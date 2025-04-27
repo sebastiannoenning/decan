@@ -20,6 +20,7 @@ class MainView(QMainWindow):
         self._ui = Ui_main_view()
         self._ui.setupUi(self)
         self._ui.collapsed.hide()
+
         self.setupConnections()
 
         self._ui.pages.addWidget(UserView(self))

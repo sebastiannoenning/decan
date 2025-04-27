@@ -8,7 +8,8 @@ from PySide6.QtCore import (Qt,
                             QDateTime, QDate, QTime, 
                             QEasingCurve, 
                             Slot, Signal,
-                            QPointF)
+                            QPointF,
+                            QTimer)
 from PySide6.QtWidgets import (QWidget, QScrollArea, QLabel, QPushButton, 
                                QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, 
                                QDialog, QDialogButtonBox)
@@ -29,7 +30,7 @@ class TimeSelect(QWidget):
     Variables:
         type:       TimeType, custom Enum which will influence _entries, _repeats, _mult, and consequently _period
         labels:     Python Dictionary storing references to labels, can refer to specific values via labels[n]
-        _locked:     Adds omitting options for __approxFunc
+        _locked:    Adds omitting options for __approxFunc
         _entries:   Number of options (i.e, 0-23, 0-55, 0-59) or Amplitude
         _repeats:   Amount of times the number of _entries are repeated during generation
         _mult:      Multiplier for conversion to SimpleMinutes/5 minute intervals
@@ -64,7 +65,7 @@ class TimeSelect(QWidget):
         self.labels: Dict[int, List[Optional[QLabel],bool]] = {}
         self.labelContainer                                 = QVBoxLayout(self)
 
-        self._selected: bool                                = None
+        self._selected: int                                 = None
 
         self.setObjectName(f"TimeSelect_{hex(id(self))}")
 
@@ -117,7 +118,7 @@ class TimeSelect(QWidget):
         self._setSelected(math.trunc(offset / self.returnInterval()))
         return self._mult * math.trunc(self.__approxFunc(offset, self.period, self._entries, self._locked))
     
-    def _setSelected(self, val):
+    def _setSelected(self, val: int):
         self._selected  = val
         palette, font   = (QPalette(self.labels[self._selected][0].palette()), 
                            QFont(self.labels[self._selected][0].font())
@@ -132,11 +133,11 @@ class TimeSelect(QWidget):
         # Should be outside of scroll range, so serves as a default palette value
         palette, font = QPalette(self.labels[0][0].palette()), QFont(self.labels[0][0].font())
         # Clear any selected labels (excluding the selected)
-        for label in self.labels.items():
-            if self.labels[label][1] == True:
-                self.labels[label][0].setPalette(palette)
-                self.labels[label][0].setFont(font)
-                self.labels[self._selected][1] = False
+        for index, (label, selected) in list(self.labels.items()):
+            if selected:
+                label.setPalette(palette)
+                label.setFont(font)
+                self.labels[index][1] = False
         if (self._selected != None):
             self.labels[self._selected][0].setPalette(palette)
             self.labels[self._selected][0].setFont(font)
@@ -252,6 +253,7 @@ class TimeSelect(QWidget):
             self.labels[x][0] = QLabel(f"{val:02}", parent=self)
             self.labels[x][1] = False
             self.labels[x][0].setObjectName(f"{self.objectName()}_TSLabel_{x}_{val:02}")
+            self.labels[x][0].setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
             self.labels[x][0].setFont(self.labelStyle)
             self.labels[x][0].setAlignment(Qt.AlignmentFlag.AlignRight)
             self.labelContainer.addWidget(self.labels[x][0],
@@ -298,7 +300,7 @@ class  TTimeEditDialog(QDialog):
 
         self._hours, self._minutes = 0, 0
         self._function_lock = False         # Flag for locking infinite scroll
-        self._l1t_mins_TimeSelect_ACTIVE = dict()
+        self._l1t_mins_TimeSelect_ACTIVE: Dict[str, TimeSelect] = {}
         self._active = 'default'
 
         self.__setup_ui()
@@ -307,6 +309,7 @@ class  TTimeEditDialog(QDialog):
 
     def __setup_ui(self):
         self.setWindowTitle("TTimeEditDialog")
+        self.setObjectName(f"TimeEditDialogue_{hex(id(self))}")
 
         self._layer0_base       = QVBoxLayout(self)
 
@@ -317,20 +320,28 @@ class  TTimeEditDialog(QDialog):
         self._layer0_base.addLayout(self._layer1_buttons)
             
         self._l1t_hours_scrollArea = QScrollArea(self)
+        self._l1t_hours_scrollArea.setObjectName(f'{self.objectName()}_hours_scrollArea')
+
         if ((self._minimumDateTime.date() == self._dateTime.date()) 
             and (self._minimumDateTime.time().hour() > 0)): 
-            self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours, self._minimumDateTime.time().hour())
+            self._l1t_hours_TimeSelect: TimeSelect = TimeSelect(self, TimeType.Hours, self._minimumDateTime.time().hour())
             self._active = 'alternate'
-        else: self._l1t_hours_TimeSelect = TimeSelect(self, TimeType.Hours)
+        else: self._l1t_hours_TimeSelect: TimeSelect = TimeSelect(self, TimeType.Hours)
+
         self._l1t_hours_scrollArea.setWidget(self._l1t_hours_TimeSelect)
-        self._l1t_hours_timeScroller = scrQt.returnDragScroller(self._l1t_hours_scrollArea)
+        self._l1t_hours_scrollArea.setWidgetResizable(True)
+
+        self._l1t_hours_timeScroller :QScroller = scrQt.returnDragScroller(self._l1t_hours_scrollArea, scroller_header=f'{self.objectName()}_hours_sA_')
 
         self._l1t_mins_scrollArea = QScrollArea(self)
-
+        self._l1t_mins_scrollArea.setObjectName(f'{self.objectName()}_mins_scrollArea')
         self._l1t_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self._minuteType)  
         self._l1t_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self._minuteType, self._minimumDateTime.time().minute())
+
         self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
-        self._l1t_mins_timeScroller = scrQt.returnDragScroller(self._l1t_mins_scrollArea)
+        self._l1t_mins_scrollArea.setWidgetResizable(True)
+
+        self._l1t_mins_timeScroller :QScroller = scrQt.returnDragScroller(self._l1t_mins_scrollArea, scroller_header=f'{self.objectName()}_mins_sA_')
 
         self._layer1_times.addWidget(self._l1t_hours_scrollArea)
         self._layer1_times.addWidget(self._l1t_mins_scrollArea)
@@ -352,12 +363,9 @@ class  TTimeEditDialog(QDialog):
 
         self.setWindowOpacity(0.9)
 
-        self._l1t_hours_scrollArea.setWidgetResizable(True)
-        self._l1t_mins_scrollArea.setWidgetResizable(True) 
-
         self.setStyleSheet(f"""
 QScrollArea {{
-    background: transparent;
+    background: rgba(20,20,20,1);
     border: 0px;
 }}
 QScrollBar {{
@@ -536,7 +544,13 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
             self._updateMinutesActiveTimeSelect()
 
     def _updateMinutesActiveTimeSelect(self):
-        self._l1t_mins_scrollArea.takeWidget()
+        inactive: str = None
+        for key in self._l1t_mins_TimeSelect_ACTIVE.keys():
+            if (key == self._active): pass
+            inactive = key
+        if inactive is None: pass
+        self._l1t_mins_TimeSelect_ACTIVE[inactive] = self._l1t_mins_scrollArea.takeWidget()
+
         self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
         self._updateMinutesPositions()
         self._updateCurrentQTime(test_en=True)

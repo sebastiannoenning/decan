@@ -1,4 +1,5 @@
 from typing import List
+import json
 
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QModelIndex, QByteArray
@@ -16,6 +17,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationa
 
 from .event_view_ui import Ui_event_view
 from modules.touchdatetime.tdateedit import DateSelect
+from modules.eventlist.eventjsonparser import EventJsonParser
 from models.event_model import EventModel, EventFilter, DateRange
 import modules.scrollers_qt as scrQt
 
@@ -35,6 +37,37 @@ class EventView(QWidget):
         if not self._database.open():
             print('connection failed')
             print(self._database.lastError().text())
+
+        self.test_parser = EventJsonParser(self)
+        test_json = """{
+  "info": {
+    "index": 3,
+    "increment" : 3,
+    "type": "[ToDo, Description, Complex, Simple]"
+  },
+  "positions":["EDescription_3","EToDo_2","EToDo_1"],
+  "objects": {
+    "EDescription_3": "Go baby shopping",
+    "EToDo_1": {
+      "EBool": false,
+      "ETaskDescription": "Buy eggs"
+    },
+    "EToDo_2": {
+      "EBool": false,
+      "ETaskDescription": "Buy milk"
+    }
+  }
+}"""
+        self.test_parser.Attributes = test_json
+
+        self._Ui.EToDo.setText('Blah'*20)
+        self._Ui.EDescription.setText('Blah'*3)
+
+        print(self.test_parser.Info())
+        print(self.test_parser.Positions())
+        print(self.test_parser.Objects())
+
+        self._Ui.ebody_test.setJsonParser(self.test_parser)
 
         self._event_filter = EventFilter()
         self._date_range_list: List[DateRange] = []
@@ -96,23 +129,17 @@ class EventView(QWidget):
         self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
         self._Ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))
 
-        self._Ui.prev_day.clicked.connect(lambda checked: self.prev_page())
-        self._Ui.next_day.clicked.connect(lambda checked: self.next_page())
+        self._Ui.prev_day.clicked.connect(lambda: self.prev_page())
+        self._Ui.next_day.clicked.connect(lambda: self.next_page())
 
     def prev_page(self):
         index = self._Ui.details_container.currentIndex()
-        print('Current page: ', index)
         index = (index - 1) % self._Ui.details_container.count()
-        print(index, self._Ui.details_container.count())
-        print('New page: ', index)
         self._Ui.details_container.setCurrentIndex(index)
 
     def next_page(self):
         index = self._Ui.details_container.currentIndex()
-        print('Current page: ', index)
         index = (index + 1) % self._Ui.details_container.count()
-        print(index, self._Ui.details_container.count())
-        print('New page: ', index)
         self._Ui.details_container.setCurrentIndex(index)
     
     def additionalUiSettings(self):
@@ -120,11 +147,11 @@ class EventView(QWidget):
         #   Vertical only scrolls:
         self._Ui.form_wrapper.horizontalScrollBar().setEnabled(False)                  
         self.form_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.form_wrapper)
-        self._Ui.preset_wrapper.horizontalScrollBar().setEnabled(False)               
-        self.preset_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.preset_wrapper)
         self._Ui.event_list_wrapper.horizontalScrollBar().setEnabled(False),           
         self.event_list_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.event_list_wrapper)
         #   Horizontal only scrolls:
+        self._Ui.preset_wrapper.verticalScrollBar().setEnabled(False)               
+        self.preset_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.preset_wrapper)
         self._Ui.title_view_wrapper.verticalScrollBar().setEnabled(False)           
         self.title_view_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.title_view_wrapper)
         self._Ui.layer_header_wrapper.verticalScrollBar().setEnabled(False)            

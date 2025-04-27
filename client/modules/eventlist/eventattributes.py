@@ -21,320 +21,155 @@ from modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event
 
 from modules.datetime_qt import DateToFSLong, TimeToFS
 
-from modules.eventlist.eventtype import EventType
+from modules.eventlist.eventjsonparser import EventJsonParser, ObjectType
+ 
+import modules.scrollers_qt as scrQt
 
 class EBody(QWidget):
-    """ Provides JSON Parsing of the Attributes column & constructs the internal body to be placed in Body & Dynamic 
-        generation of internal body widgets
+    """ Provides a UI representation of an associated 
     """
-    sizeChanged = Signal()
-    attributesChanged = Signal()
+    sizeChanged = Signal(QSize)
 
-    def __init__(self, parent, Attributes: QByteArray = None):
+    def __init__(self, parent, 
+                 jsonParser: EventJsonParser = None):
         super().__init__(parent)
+        self._jsonParser: EventJsonParser = None
+        if jsonParser is not None: self._jsonParser = jsonParser
+        if self._jsonParser is not None: self.setConnections()
+
         self._Ui = Ui_event_body()
         self._Ui.setupUi(self)
 
-        self._Attributes = Attributes
-        self._Json          : Dict[str, QJsonValue] = {}
-
-        # Experimental internal data list for pulling key associated with object, to provide ease of use on moving or changing the values inside.
+        # Internal data list for pulling key associated with object, to provide ease of use on moving or changing the values inside.
         self._Items         : Dict[str, Union[EToDo, EDescription]] = {}
 
-    # Getters for _Json attributes
-    def returnEventType(self): return self._Json['info']['event_type']
-    def returnObjectIndex(self): return self._Json['info']['object_index']
+    def setJsonParser(self, jsonParser: EventJsonParser):
+        # Calling will clear all existing items in the EBody & import all the items directly from the new jsonParser
+        if self._Items: self.clearAll()
+        self.removeConnections()
+        self._jsonParser = jsonParser
+        self.setConnections()
+        self.importAll()
+
+    def removeConnections(self, test_en: bool=False):
+        try: self._jsonParser.objectsAdded.disconnect(self.addItems())
+        except Exception as e: 
+            if test_en: print('removeConnections()->objectsAdded.disconnect()  error: Was not connected,',e)
+        try: self._jsonParser.objectsUpdated.disconnect(self.updateItems())
+        except Exception as e: 
+            if test_en: print('removeConnections()->objectsUpdateddisconnect()  error: Was not connected,',e)
+        try: self._jsonParser.objectsRemoved.disconnect(self.removeItems())
+        except Exception as e: 
+            if test_en: print('removeConnections()->objectsRemoved.disconnect() error: Was not connected,',e)
+        try: self._jsonParser.objectsMoved.disconnect(self.moveItems())
+        except Exception as e: 
+            if test_en: print('removeConnections()->objectsMoved.disconnect() error: Was not connected,',e)
+
+    def setConnections(self):
+        if self._jsonParser:
+            self._jsonParser.objectsAdded.connect(lambda added: self.addItems(new_items=added))
+            self._jsonParser.objectsUpdated.connect(lambda updated: self.updateItems(updated_items=updated))
+            self._jsonParser.objectsRemoved.connect(lambda removed: self.removeItems(removed_items=removed))
+            self._jsonParser.objectsMoved.connect(lambda moved: self.moveItems(moved_items=moved))
+
+    def importAll(self):
+        new_objects: List[str] = self._jsonParser.Positions()
+        if new_objects: self.addItems(new_objects)
+
+    def clearAll(self):
+        all_objects: List[str] = list(self._Items.keys())
+        if all_objects: self.removeItems(all_objects)
+
+    def addItems(self, new_items: List[str]):
+        for key in new_items:
+            new_widget: Union[EToDo, EDescription] = None
+            obj_type, index = key.split('_',1)
+            obj_type: ObjectType = self._jsonParser.toObjectType(obj_type)
+            value = self._jsonParser.Object(key)
+
+            if obj_type == ObjectType.EDescription: 
+                new_widget: EDescription    = EDescription(self, key)
+                value: str                          = self._jsonParser.formatEDescription(value)
+
+                new_widget.setText(value)
+            if obj_type == ObjectType.EToDo:
+                new_widget:     EToDo               = EToDo(self, key)
+                value:  Dict[str, Union[str, bool]] = self._jsonParser.formatEToDo(value)
+                value_bool:     bool                = value.get('EBool')
+                value_string:   str                 = value.get('ETaskDescription')
+
+                new_widget.setText(value_string)
+                new_widget.setChecked(value_bool)
+
+                new_widget.checkStateChanged.connect(lambda: self._jsonParser.setObjectProperty(key, {'ETaskDescription':new_widget.text(),'EBool':new_widget.isChecked()}))
+
+            index = self._jsonParser.Positions().index(key)
+
+            self._Ui.container.insertWidget(index, new_widget)
+
+            self._Items.update({key: new_widget})
+
+        self.setMinimumHeight(self._Ui.container.minimumSize().height())
+
+        self.adjustSize()
     
-    def _updateChecked(self, key: str, checked: bool):
-        self._Json['objects'][key]['EBool'] = checked
-        self._Attributes = QJsonDocument(self._Json).toJson(QJsonDocument.JsonFormat.Compact)
+    def removeItems(self, removed_items: List[str]):
+        for key in removed_items:
+            removed_widget  = self._Items[key]
+            index           = self._Ui.container.indexOf(removed_widget)
+            removed_item    = self._Ui.container.takeAt(index)
+            removed_widget  = removed_item.widget()
+
+            del removed_item
+            removed_widget.deleteLater()
+
+            self._Items.pop(key)
+        
+        self.setMinimumHeight(self._Ui.container.minimumSize().height())
+        self.adjustSize()
+
+    def moveItems(self, moved_items: List[str]):
+        for key in moved_items:
+            moved_widget    = self._Items[key]
+            index           = self._Ui.container.indexOf(moved_widget)
+            moved_item      = self._Ui.container.takeAt(index)
+            moved_widget    = moved_item.widget()
+            del moved_item
+
+            new_index = self._jsonParser.Position(key)
+
+            self._Ui.container.insertWidget(new_index, moved_widget)
+
+        self.setMinimumSize(self._Ui.container.minimumSize().height())
+        self.adjustSize()
     
-    def _updateJson(self):
-        try: self.checkJDoc(QJsonDocument.fromJson(self._Attributes))
-        except Exception as e: print(f"_updateJson()->{e}")
+    def updateItems(self, updated_items: List[str]):
+        for key in updated_items:
+            update_widget: Union[EToDo, EDescription]   = self._Items[key]
 
-        new_Json = (QJsonDocument.fromJson(self._Attributes)).object()
-            
-        if (new_Json == self._Json): return
-        elif self._Json is not None: self.reformatUi(n_Json=new_Json)
-        else: self.generateUi(n_Json = new_Json)
-    
-    def generateUi(self, n_Json: Dict[str, QJsonValue]):
-        self._Json = n_Json
-        objects: Dict[str, QJsonValue] = self._Json.get('objects')
-        for key, val in objects.items():
+            obj_type, index = key.split('_',1)
+            obj_type: ObjectType = self._jsonParser.toObjectType(obj_type)
+            value = self._jsonParser.Object(key)
 
-            component_type, index = str(key).rsplit('_', 1)
+            if  (obj_type == ObjectType.EDescription):
+                value: str                          = self._jsonParser.formatEDescription(value)
+                update_widget.setText(value)
+            elif(obj_type == ObjectType.EToDo):
+                update_widget.checkStateChanged.disconnect(self._jsonParser.setObjectProperty())
 
-            if  (component_type == 'EDescription'):
-                txt:  str                       = str(val)
+                value:  Dict[str, Union[str, bool]] = self._jsonParser.formatEToDo(value)
+                value_bool:     bool                = value.get('EBool')
+                value_string:   str                 = value.get('ETaskDescription')
 
-                widget = EDescription(self, key)
-                widget.setObjectName(key)
-                widget.setText(txt)
-                widget.adjustSize()
-                
-            elif(component_type == 'EToDo'):
-                n_val:  Dict[str, QJsonValue]   = val
-                checked, txt                    = bool(n_val.get('EBool')), str(n_val.get('EDescription'))
+                update_widget.setText(value_string)
+                update_widget.setChecked(value_bool)
 
-                widget = EToDo(self, key)
-                widget.setObjectName(key)
-                widget.setText(txt)
-                widget.adjustSize()
-                widget.setChecked(checked)
+                update_widget.checkStateChanged.connect(lambda: self._jsonParser.setObjectProperty(key, {'ETaskDescription':update_widget.text(),'EBool':update_widget.isChecked()}))
 
-                widget._Ui.checkbox.checkStateChanged.connect(lambda: self._updateChecked(key)) # Updating _Attributes will call a connection to the DB via the dataWidgetMapper
-            
-            self._Ui.container.addWidget(widget)
-            
-            self.setMaximumHeight(self._Ui.container.sizeHint().height())
+            update_widget.adjustSize()
 
-    def reformatUi(self, n_Json: Dict[str, QJsonValue]):
-        for key, val in n_Json.get('objects',{}).items():
-            component_type, index = str(key).rsplit('_', 1)
-
-            # If a key exists in self._Json
-            if key in self._Json.get('objects',{}).keys():
-
-                # Only run if the pre-existing ui object is mismatched w/ its value
-                if (self._Json.get('objects',{}).get(key) != val):
-                
-                    if  (component_type == 'EDescription'): 
-                        widget: EDescription            = self._Ui.container.findChild(EDescription, key)
-                        n_val: str                      = val.toObject().toString()
-
-                        if ((widget.text()) != n_val):          widget.setText(str(n_val))
-
-                    elif(component_type == 'EToDo'):        
-                        widget: EToDo                   = self._Ui.container.findChild(EToDo, key)
-                        n_val:  Dict[str, QJsonValue]   = val.toObject()
-                        val_bool, val_label             = bool(n_val.get('EBool').toBool()), str(n_val.get('EDescription').toString())
-
-                        if (widget.isChecked() != val_bool):    widget.setChecked(val_bool)
-                        if (widget.text() != val_label):        widget.setText(val_label)
-                
-                # Otherwise, pass & don't update
-                else: pass
-            
-            # If a key does not already exist in self._Json
-            else:
-                if  (component_type == 'EDescription'):
-                    txt:  str                       = str(val.toString())
-
-                    widget = EDescription(self, key)
-                    widget.setObjectName(key)
-                    widget.setText(txt)
-                    widget.adjustSize()
-
-                elif(component_type == 'EToDo'):
-                    n_val:  Dict[str, QJsonValue]   = val.toObject()
-                    checked, txt                    = bool(n_val.get('EBool').toBool()), str(n_val.get('EDescription').toString())
-
-                    widget = EToDo(self, key)
-                    widget.setObjectName(key)
-                    widget.setText(txt)
-                    widget.adjustSize()
-                    widget.setChecked(checked)
-
-                    widget._Ui.checkbox.checkStateChanged.connect(lambda: self._updateChecked(key)) # Updating _Attributes will call a connection to the DB via the dataWidgetMapper
-                
-                # Attempt to match index with another object, if it exists
-                for o_key in self._Json.get('objects',{}).keys():
-                    o_component_type, o_index = str(o_key).rsplit('_', 1)
-                    if (index == o_index):  # Previous index holder for former; note it down
-                        if (component_type == 'EDescription'): deleted_widget: EDescription    = self._Ui.container.findChild(EDescription, key)
-                        if (component_type == 'EToDo'):        deleted_widget: EToDo           = self._Ui.container.findChild(EToDo, key)
-                
-                index = (int(index) - 1)
-                other_widget = self._Ui.container.itemAt(index).widget()
-                if  (deleted_widget is not None): 
-                    self._Ui.container.replaceWidget(deleted_widget, widget)
-                    deleted_widget.deleteLater()
-                elif(other_widget is not None):
-                    o_c, o_i = str(other_widget.objectName()).split('_',1)
-                    o_i = (int(o_i) - 1)
-                    if      (o_i > index): 
-                        self._Ui.container.insertWidget(index, widget)
-                    elif    (o_i < index):
-                        self._Ui.container.insertWidget(index, widget)
-                else:
-                    self._Ui.container.addWidget(widget)
-        
-        self._Json['objects'] = n_Json['objects']
-        self._Json['info'] = n_Json['info']
-
-    def checkJDoc(self, t_Doc: QJsonDocument):
-        if t_Doc.isNull(): raise Exception("validateJDoc error: QJsonDocument Null")
-        t_Json = t_Doc.object()
-        if not isinstance(t_Json, dict): raise Exception("validateJDoc error: Unpacked object not dict:",type(t_Json))
-        return True  
-    def checkJsonStructure(self, t_Json: Dict[str, QJsonValue]):
-        """ Checks the Json Structure of a passed dict & checks its conformity against the expected structure; otherwise formats it """
-        def formatTabInfo(info_Json: Dict[str, QJsonValue] = []):
-            """ Formats an info tab"""
-            object_index, event_type = info_Json.get('object_index').toInt(), info_Json.get('event_type').toInt()
-            if (object_index is None): info_Json.update('object_index',0)
-            if (event_type is None): info_Json.update('event_type',EventType.Complex.value)
-
-            return info_Json
-               
-        def formatTabObject(objects_Json: Dict[str, QJsonValue] = []):
-            """ Formats an objects tab """
-            def formatEToDo(p_Json: Dict[str, QJsonValue]):
-                """ Remove non whitelisted keys, and if values don't pre-exist generate them """
-                EToDo: Dict[str, QJsonValue] = self.removeNonWhiteListedKeys(p_Json, ['EBool','ETaskDescription'])
-                EBool, ETaskDescription = EToDo.get('EBool').toBool(), p_Json.get('ETaskDescription').toString()
-                if (EBool is None): EToDo.update({'EBool':False})
-                if (ETaskDescription is None): EToDo.update({'ETaskDescription':'Task'})
-                return EToDo
-            def formatEDescription(p_Json: Dict[str, QJsonValue]):
-                """ Search if any nested values/dictionary portions may have it stored, otherwise return default value """
-                EDescription: str = self._jSearchKey(p_Json, 'EDescription')
-                if (EDescription is None): EDescription = ''
-                return EDescription
-
-            # Convert Json Dict into a sorted list
-            objects_ordered: List[Tuple[str, QJsonValue]] = sorted(
-                objects_Json.items(), 
-                key=lambda item: int(item[0].rsplit('_', 1)[1])
-                )
-
-            exp_index = 0 # Starting/expected index
-
-            n_objects_Json = objects_Json.copy()
-            n_objects_Json.clear()
-
-            for key, value in objects_ordered:
-                obj_type, index = key.rsplit('_', 1) # Remove split & parse index number
-
-                exp_index += 1
-                cur_index = int(index)
-                
-                if (cur_index != exp_index): key = f'{obj_type}_{exp_index}'
-
-                if obj_type == 'EDescription':
-                    if isinstance(value, str): pass
-                    elif isinstance(value, dict): value = formatEDescription(value)
-                    else: value = ''
-                if obj_type == 'EToDo' :
-                    value: Dict[str, QJsonValue] = formatEToDo(value)
-
-                n_objects_Json.update({key:value})
-
-            return n_objects_Json
-
-        # Extract info & objects
-        tab_Info: Dict[str, QJsonValue] = formatTabInfo(t_Json.get('info').toObject())
-        tab_Objects: Dict[str, QJsonValue] = t_Json.get('objects').toObject()
-
-        # Should be fine, but adds a layer of precaution pre-reading it
-        Index: int = tab_Info.get('object_index').toInt()
-        if tab_Objects is not None:
-            # First ensure the object branch is clear of any invalid keys
-            tab_Objects = self.removeAllBlackListedKeys(tab_Objects,['object_index','event_type','info','objects'])
-
-            # Set object_index to correct value
-            if (len(tab_Objects)) == Index:         # if len(tab_Objects) == Index: 
-                if Index == 0: tab_Objects = None                           # if (Index == 0) and (len(tab_Objects) == 0): Clear tab_Objects
-                else: pass                                                  # if (Index == len(tab_Objects)) and (Index > 0): No action necessary          
-            else:                                   # if len(tab_Objects) != Index:
-                if bool(tab_Objects): Index, tab_Objects = 0, None          # if (tab_Objects.isEmpty()) and (Index != 0): Clear tab_Objects and set Index to 0
-                else: Index = len(tab_Objects)                              # if (len(tab_Objects) > 0) and (len(tab_Objects) != Index): Set Index to length of tab_Objects
-
-            if (Index != 0): tab_Objects = formatTabObject(tab_Objects)
-            
-            if (Index != tab_Info.get('object_index')): tab_Info.update({'object_index':Index})
-        
-        n_Json: Dict[str, QJsonValue] = []
-        n_Json.update({'info':tab_Info})
-        if (tab_Objects is not None): 
-            tab_Objects = formatTabObject(tab_Objects)
-            n_Json.update({'objects':tab_Objects})
-        
-        return n_Json
-
-    def removeAllBlackListedKeys(self, p_Json: Dict[str, QJsonValue], 
-                                 bl_Keys: List[str]):
-        """ Recursively searches for a blacklisted key in a nested dictionary structure & removes it """
-        n_Json = p_Json.copy()
-
-        for key in bl_Keys:
-            self._jDeleteKey(n_Json, key)
-        
-        return n_Json   
-    def removeNonWhiteListedKeys(self, p_Json: Dict[str, QJsonValue],
-                                 wl_Keys: List[str]):
-        """ Looks for non-whitelisted keys in a regular/flat dictionary & removes them  """
-        n_Json = p_Json.copy()
-
-        invalid_keys: List[str] = []
-        for key, value in n_Json.items():
-            passed = False
-            for wl_key in wl_Keys:
-                if key == wl_key:
-                    passed = True
-            if not passed: invalid_keys.append(key)
-        
-        for inv_key in invalid_keys: n_Json.pop(inv_key)
-
-        return n_Json
-                
-    def _jCheckKeysExist(self, root_dict: dict, fields: List[str]):
-        for field in fields:
-            found = self._jSearchKeyBool(root_dict, field)
-            if not found: raise Exception(f'checkFields() error: jsonSearch() could not find "{field}"')
-        return True
-    def _jSearchKeyBool(self, s_dict: Dict[str, QJsonValue], field: str):
-        """ Wrapper that converts into bool """
-        value = self._jSearchKey(s_dict, field)
-        if (value is not None): return True
-        else: return False
-    def _jSearchKey(self, s_dict: Dict[str, QJsonValue], field: str):
-        """ Recursive json search function that searches for a field in a dictionary & if found the value associated """
-        if field in s_dict: return s_dict[field]
-        for key, val in s_dict.items():             
-            if isinstance(val, dict):
-                value = self._jSearchKey(val, field)
-                if (value is not None): return value
-    def _jDeleteKey(self, s_dict: Dict[str, QJsonValue], field: str):
-        """ Recursive definitive json search which culminates in deleting a key (& any repeats) from a dictionary
-            Be careful: Deleted keys have no way to be recovered.
-
-            Use as following:
-                'yourDict: Dict[str, QJsonValue] = self._jDeleteKey(yourDict, key)'
-        """
-        if field in s_dict: 
-            s_dict.pop(field)
-            return s_dict
-        for key, val in s_dict.items():
-            if isinstance(val, dict):
-                value = self._jDeleteKey(val, field)
-                if isinstance(value, dict): # If any dictionary was deleted, it'll return as type dictionary
-                    if (len(value) == 0):   # If the key didn't contain any other information,
-                        s_dict.pop(key)     # delete the key
-                    else:
-                        s_dict[key] = value # Otherwise, update the dictionary
-        return s_dict
-    def _jCountKeyRepeats(self, s_dict: Dict[str, QJsonValue], field: str):
-        """ Recursive json search that checks for repeated keys """
-        number: int = 0 
-        if field in s_dict: number += 1
-        for key, val in s_dict.items():
-            if isinstance(val, dict):
-                num = self._jCountKeyRepeats(val, field)
-                if isinstance(num, int): number+=num
-        return number
-
-    @Property(QByteArray)
-    def Attributes(self): return self._Attributes
-
-    @Attributes.setter
-    def Attributes(self, Attributes: QByteArray):
-        if (self._Attributes != Attributes):
-            self._Attributes = Attributes
-            if (QJsonDocument.fromJson(self._Attributes).object() != self._Json): self._updateJson()
-            self.attributesChanged.emit()
+        self.setMinimumSize(self._Ui.container.minimumSize().height())
+        self.adjustSize()
 
 class ETime(QWidget):        # Time Label that provides multiple formatting/preset-styles & real-time time updating, 
     def __init__(self, parent):
@@ -361,6 +196,7 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
         return QSize(self._b_height, self._b_width)
 
     def setupUi(self):
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
 
         self._b_height       :int        = 50    # Base height
@@ -381,6 +217,19 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
 
         self.label_container.addWidget(self._startLabel)
         self.label_container.addWidget(self._endLabel)
+
+        self.setStyleSheet("""
+ETime{
+                           background-color: rgba(20,20,20,1);
+                           border-radius: 5px;
+                           padding: 5px;
+                           
+} ELabel {
+                           background-color: None;
+                           border-radius: 0px;
+                           padding-left: 5px;
+                           border: 0px solid transparent;
+}""")
 
     def setFont(self, font: QFont):
         self._startLabel.setFont(font)
@@ -452,27 +301,37 @@ class ELocation(QLabel):    # Location Label that provides travel-time recommend
     def setModel(self, LocModel): pass
 
 class EDescription(QWidget):    # Description addition that provides a larger, scrollable box with horizontal word-wrapping
-    def __init__(self, parent, key: str):
+    def __init__(self, parent, key: str = ''):
         super().__init__(parent)
         self.setObjectName(key)
 
-        self._Ui = Ui_event_description(self)
-        self._Ui.setupUi()
+        self._Ui = Ui_event_description()
+        self._Ui.setupUi(self)
 
-    def setText(self, new_txt: str):        self._Ui.label.setText(new_txt)
+    def sizeHint(self): return QSize(100, 30)
 
-    def text(self):                         return self._Ui.label.text()
+    def setText(self, new_txt: str):        self._Ui.text.setText(new_txt)
+
+    def text(self):                         return self._Ui.text.toMarkdown()
 
 class EToDo(QWidget):           # ToDo Add-on that provides a checkable box & a specially formatted title
-    def __init__(self, parent, key: str):
+    checkStateChanged = Signal()
+
+    def __init__(self, parent, key: str = ''):
         super().__init__(parent)
         self.setObjectName(key)
 
-        self._Ui = Ui_event_todo(self)
-        self._Ui.setupUi()
+        self._Ui = Ui_event_todo()
+        self._Ui.setupUi(self)
 
-    def setText(self, new_txt: str):        self._Ui.label.setText(new_txt)
+        self._Ui.checkbox.checkStateChanged.connect(lambda: self.checkStateChanged.emit())
+
+        self.form_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.task_label_wrapper)
+
+    def sizeHint(self): return QSize(200, 50)
+
+    def setText(self, new_txt: str):        self._Ui.task_label.setText(new_txt)
     def setChecked(self, new_bool: bool):   self._Ui.checkbox.setChecked(new_bool)
 
-    def text(self):                         return self._Ui.label.text()
+    def text(self):                         return self._Ui.task_label.text()
     def isChecked(self):                    return self._Ui.checkbox.isChecked()

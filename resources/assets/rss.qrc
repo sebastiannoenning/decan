@@ -24,6 +24,10 @@
         <file>arrow_undo_dark.svg</file>
         <file>arrow_undo_grey.svg</file>
         <file>arrow_undo_light.svg</file>
+        <file>arrow_down_blue.svg</file>
+        <file>arrow_left_blue.svg</file>
+        <file>arrow_right_blue.svg</file>
+        <file>arrow_up_blue.svg</file>
     </qresource>
     <qresource prefix="/icons/user">
         <file>user_add_red.svg</file>
@@ -178,6 +182,10 @@
         <file>clear_button_light.svg</file>
         <file>clear_button_grey.svg</file>
         <file>clear_button_dark.svg</file>
+        <file>checkbox2_empty_dark.svg</file>
+        <file>checkbox2_empty_light.svg</file>
+        <file>checkbox2_tick_dark.svg</file>
+        <file>checkbox2_tick_light.svg</file>
     </qresource>
     <qresource prefix="/icons/calendar/events">
         <file>layer_blue1.svg</file>

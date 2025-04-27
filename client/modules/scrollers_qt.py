@@ -1,8 +1,12 @@
 import sys, math, re
 from enum import Enum
+from typing import Optional, Union
+from shiboken6 import Shiboken
+
 from PySide6.QtCore import (Qt, 
                             QEasingCurve)
-from PySide6.QtWidgets import (QScrollArea, QLabel, QCheckBox, QSizePolicy, QDataWidgetMapper,
+from PySide6.QtWidgets import (QScrollArea, QLabel, QCheckBox, QWidget,
+                               QSizePolicy, QDataWidgetMapper,
                                QScroller, QScrollerProperties, 
                                QStyleOption, QStyle)
 
@@ -11,7 +15,7 @@ from PySide6.QtWidgets import (QScrollArea, QLabel, QCheckBox, QSizePolicy, QDat
 """
 
 # Function for creating a uni-directional scroller
-def returnUniScroller(viewport: QScrollArea):
+def returnUniScroller(viewport: Union[QScrollArea, QWidget], scroller_header: Optional[str] = None):
     """
     Convenience function for creating a uni-directional scroller
 
@@ -23,11 +27,15 @@ def returnUniScroller(viewport: QScrollArea):
        ↪ This can be enforced with high-axis lock, removal of overshooting and slight padding (1-2px) on the scrollable objects.
        ↪ Retains preset scroll properties; but will override the properties used for this effect
     """
-
     #   Create properties profile
-    u_scroll = QScroller.scroller(viewport.viewport())
+    if isinstance(viewport, QScrollArea): v_port = viewport.viewport()
+    else: v_port = viewport
+
+    u_scroll = QScroller.scroller(v_port)
+    u_scroll.setObjectName(f'uniScroller_{hex(id(u_scroll))}')
+    if scroller_header is not None: u_scroll.setObjectName(f'{scroller_header}_dragScroller_{hex(id(u_scroll))}')
     u_scroll.grabGesture(
-        viewport.viewport(), 
+        v_port, 
         QScroller.ScrollerGestureType.LeftMouseButtonGesture
         )
 
@@ -52,7 +60,7 @@ def returnUniScroller(viewport: QScrollArea):
     return u_scroll
 
 
-def returnDragScroller(viewport: QScrollArea):
+def returnDragScroller(viewport: Union[QScrollArea, QWidget], scroller_header: Optional[str] = None):
     """
     Convenience function for creating a 'drag' scroller
 
@@ -64,8 +72,14 @@ def returnDragScroller(viewport: QScrollArea):
        ↪ This can be enforced with high-axis lock, removal of overshooting and slight padding (1-2px) on the scrollable objects.
        ↪ Retains preset scroll properties; but will override the properties used for this effect
     """
+
     #   Create properties profile
-    d_scroll = QScroller.scroller(viewport.viewport())
+    if isinstance(viewport, QScrollArea): v_port = viewport.viewport()
+    else: v_port = viewport
+
+    d_scroll = QScroller.scroller(v_port)
+    d_scroll.setObjectName(f'dragScroller_{hex(id(d_scroll))}')
+    if scroller_header is not None: d_scroll.setObjectName(f'{scroller_header}_dragScroller_{hex(id(d_scroll))}')
     d_scroll.grabGesture(
         viewport.viewport(), 
         QScroller.ScrollerGestureType.LeftMouseButtonGesture

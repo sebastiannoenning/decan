@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
+
+<svg
+   width="800px"
+   height="800px"
+   viewBox="0 0 512 512"
+   fill="#000000"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="checkbox2_tick_light copy.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="0.295"
+     inkscape:cx="400"
+     inkscape:cy="400"
+     inkscape:window-width="1312"
+     inkscape:window-height="449"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="SVGRepo_iconCarrier" />
+  <g
+     id="SVGRepo_bgCarrier"
+     stroke-width="0" />
+  <g
+     id="SVGRepo_tracerCarrier"
+     stroke-linecap="round"
+     stroke-linejoin="round" />
+  <g
+     id="SVGRepo_iconCarrier"
+     transform="matrix(1.2225815,0,0,1.2225815,-56.980864,-56.980864)"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:26.1741;stroke-dasharray:none"
+     inkscape:label="SVGRepo_iconCarrier">
+    <title
+       id="title1">ionicons-v5-l</title>
+    <rect
+       x="64"
+       y="64"
+       width="384"
+       height="384"
+       rx="48"
+       ry="48"
+       style="fill:#ffffff;fill-opacity:1;stroke:#292d32;stroke-width:26.1741;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1" />
+  </g>
+</svg>

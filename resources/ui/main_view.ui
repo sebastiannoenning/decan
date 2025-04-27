@@ -87,7 +87,7 @@ background-color: rgba(120,120,120,1);
 }</string>
   </property>
   <widget class="QWidget" name="main_container">
-   <layout class="QHBoxLayout" name="central_layout">
+   <layout class="QHBoxLayout" name="central_layout" stretch="0,0">
     <property name="spacing">
      <number>10</number>
     </property>
@@ -106,7 +106,7 @@ background-color: rgba(120,120,120,1);
     <item>
      <widget class="QWidget" name="nav" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -133,6 +133,9 @@ background-color: rgba(120,120,120,1);
        <property name="spacing">
         <number>0</number>
        </property>
+       <property name="sizeConstraint">
+        <enum>QLayout::SizeConstraint::SetFixedSize</enum>
+       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -148,7 +151,7 @@ background-color: rgba(120,120,120,1);
        <item>
         <widget class="QWidget" name="collapsed" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -310,7 +313,7 @@ background-color: rgba(120,120,120,1);
        <item>
         <widget class="QWidget" name="expanded" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -366,9 +369,9 @@ background-color: rgba(120,120,120,1);
              <string>Menu</string>
             </property>
             <property name="icon">
-             <iconset resource="../assets/rss.qrc">
-              <normaloff>:/icons/nav/burger_dark.svg</normaloff>
-              <selectedoff>:/icons/nav/burger_red.svg</selectedoff>:/icons/nav/burger_dark.svg</iconset>
+             <iconset>
+              <selectedoff>:/icons/nav/burger_red.svg</selectedoff>
+             </iconset>
             </property>
             <property name="iconSize">
              <size>
