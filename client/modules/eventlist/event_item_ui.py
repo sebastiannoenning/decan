@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
 from modules.eventlist.eventtype import EventType
-from modules.eventlist.eventattributes import EBody
+from modules.eventlist.eventattributes import EBody, ETime
 import modules.scrollers_qt as scrQt
 
 class Ui_event_item(object):
@@ -24,6 +24,7 @@ class Ui_event_item(object):
         if not event_item.objectName():
             event_item.setObjectName(u"event_item")
         event_item.resize(0, 0)
+        event_item.setMinimumHeight(100)
         event_item.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         self.format = EventType.Simple
 
@@ -64,7 +65,7 @@ class Ui_event_item(object):
         self.event_title_wrapper_scroller = scrQt.returnUniScroller(self.event_title_wrapper)
         self.event_title_wrapper_scroller.setObjectName(u"event_title_wrapper_scroller")
         # Event Time
-        self.event_time = QLabel(event_item)
+        self.event_time = ETime(event_item)
         self.event_time.setObjectName(u"event_time")
         Font1 = QFont()
         Font1.setFamilies([u"Arial"])
@@ -78,8 +79,8 @@ class Ui_event_item(object):
         Font2.setPointSize(24)
         self.event_location.setFont(Font2)
         # Event Body
-        #self.event_body = EBody(event_item)
-        #self.event_body.setObjectName("event_body")
+        self.event_body = EBody(event_item)
+        self.event_body.setObjectName("event_body")
 
         self.footer = QWidget(event_item)
         self.footer.setObjectName(u"footer")

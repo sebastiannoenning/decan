@@ -1,9 +1,5 @@
 # This Python file uses the following encoding: utf-8
-import sys
 
-from datetime import datetime
-
-from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 from PySide6.QtWidgets import QMainWindow
 
 # Important:
@@ -14,6 +10,7 @@ from .main_view_ui import Ui_main_view
 from .pages.user_view import UserView
 from .pages.event_view import EventView
 
+
 class MainView(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -21,12 +18,12 @@ class MainView(QMainWindow):
         self._ui.setupUi(self)
         self._ui.collapsed.hide()
 
-        self.setupConnections()
+        self.setup_connections()
 
         self._ui.pages.addWidget(UserView(self))
         self._ui.pages.addWidget(EventView(self))
 
-    def setupConnections(self):
+    def setup_connections(self):
         self._ui.col_toggle.clicked.connect(lambda: self.toggle_nav())
         self._ui.exp_toggle.clicked.connect(lambda: self.toggle_nav())
 
@@ -42,160 +39,12 @@ class MainView(QMainWindow):
             PointSize: {self._ui.col_p4_pref.fontInfo().pointSize()}
             WidgetSize: {self._ui.col_p4_pref.size()}
             """)
-            )
+                                             )
 
     def toggle_nav(self):
-        if (self._ui.collapsed.isVisible()):
+        if self._ui.collapsed.isVisible():
             self._ui.expanded.show()
             self._ui.collapsed.hide()
-        else: 
+        else:
             self._ui.collapsed.show()
             self._ui.expanded.hide()
-
-
-"""class MainWindow(QMainWindow):
-    def __init__(self, parent=None):#, model, controller):
-        super().__init__(parent)
-
-        #self._model = model
-        #self._controller = controller
-
-        #self load ui components
-        self._ui = Ui_MainWindow()
-        self._ui.setupUi(self)
-        
-        #print(QSqlDatabase.drivers())
-
-        #remove title bar
-        #self.setWindowFlag(Qt.FramelessWindowHint)
-
-        self._ui.pages.setCurrentIndex(0)
-        self.setup_links_nav()
-        self.setup_connection()
-        self.setup_tables()
-        self.setup_links_combo()
-        self.setup_add_event()
-
-        #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
-
-    def setup_links_nav(self):
-        #defines all links for components in ui
-        self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
-        self._ui.b_calendar.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
-        self._ui.b_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
-        self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(3))
-
-    def setup_links_combo(self): #Temporary function for connecting userSelect to the 
-        self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
-        self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
-
-    def setup_add_event(self):
-        self._ui.AE_CB_userSelect.setModel(self._user_profile_model)
-        self._ui.AE_CB_userSelect.setModelColumn(2)
-
-        #self._ui.AE_LE_inputTitle.editingFinished
-        self._ui.AE_DTE_startDTSelect.dateChanged.connect(lambda: 
-                                                          self._ui.AE_DTE_endDTSelect.setMinimumDateTime(
-                                                              self._ui.AE_DTE_startDTSelect.dateTime()
-                                                          ))
-        
-        self._ui.AE_DTE_startSelect.dateTimeChanged.connect(lambda datetime:
-                                                      self._ui.AE_DTE_endSelect.setMinimumDateTime(datetime))
-
-        self._ui.AE_DTE_startDTSelect.setDate(QDate.currentDate())
-        self._ui.AE_DTE_endDTSelect.setDate(QDate.currentDate())
-
-        self._ui.AE_PB_addEvent.clicked.connect(lambda: self.addEvent())
-
-    def setup_tables(self):
-        print(self._database.tables())
-        #query = QSqlQuery()
-        #query.exec('SELECT * FROM Events')
-        #print(query.size(), query.record().count())
-        self._user_model = QSqlTableModel()
-        self._user_profile_model = QSqlTableModel()
-        self._event_model = QSqlRelationalTableModel()
-        
-        self._user_model.setTable("Users")
-        self._user_profile_model.setTable("UserProfile")
-        self._event_model.setTable("Events")
-        
-        #self._user_profile_model.setRelation(5, QSqlRelation("Address","AddressID","AddressID"))
-        self._event_model.setRelation(7, QSqlRelation("Users","UserID","Username"))
-        self._event_model.setFilter("UserID = '2'")
-        
-        self._user_model.select()
-        self._user_profile_model.select()
-        self._event_model.select()
-        
-        self._ui.table_user.setModel(self._user_model)
-        self._ui.table_user_profile.setModel(self._user_profile_model)
-        self._ui.table_events.setModel(self._event_model)
-
-        self._ui.userSelect.setModel(self._user_profile_model)
-        self._ui.userSelect.setModelColumn(2)
-
-        self._ui.scrollAreaWidgetContents.resize(self._ui.upcomingevents.width(), self._ui.upcomingevents.height())
-        self._ui.scrollAreaWidgetContents.setModel(self._event_model)
-        #print(self._user_model.rowCount())
-        # 
-        self._event_model2 =  QSqlRelationalTableModel()
-        self._event_model2.setTable("Events") 
-        self._event_model2.setRelation(7, QSqlRelation("Users","UserID","Username"))
-        self._event_model2.setFilter("UserID = '3'")
-        self._event_model2.select()
-        self._ui.scrollAreaWidgetContents.setModel(self._event_model2)
-        
-    def setup_connection(self):
-        self._database = QSqlDatabase.addDatabase('QMYSQL')
-        self._database.setHostName('localhost')
-        self._database.setUserName('sebastianji')
-        self._database.setPassword('admin')#genTen212!')
-        self._database.setDatabaseName('decan')
-
-        if not self._database.open():
-            print('connection failed')
-            print(self._database.lastError().text())
-
-    def changeEventFilter(self, currentText):
-        try:
-            userID = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{currentText}'"))
-            self._event_model.setFilter(f"UserID = '{userID}'")
-            self._event_model.select()
-            self._ui.table_events.setModel(self._event_model)
-        except Exception as e:
-            print("eventFilter change not possible:",e)
-    
-    def addEvent(self):
-        userID = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._ui.AE_CB_userSelect.currentText())}'"))
-        print(self._ui.AE_LE_inputTitle.displayText())
-        newEvent = {
-            'ETitle'            :   self._ui.AE_LE_inputTitle.displayText(),
-            'EStart_Date'       :   (self._ui.AE_DTE_startDTSelect.date()).toPython().strftime('%Y-%m-%d'),
-            'EStart_Time'       :   (self._ui.AE_DTE_startDTSelect.time()).toPython().strftime('%H:%M:%S'),
-            'EEnd_Date'         :   (self._ui.AE_DTE_endDTSelect.date()).toPython().strftime('%Y-%m-%d'),
-            'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
-            'E_CreatorUserID'   :   userID
-        }
-        try:
-            inputQuery = QSqlQuery()
-            inputQuery.prepare("INSERT INTO `Events`(`ETitle`, `EStart_Date`, `EEnd_Date`, `EStart_Time`, `EEnd_Time`, `E_CreatorUserID`) VALUES (:ETitle, :EStart_Date, :EEnd_Date, :EStart_Time, :EEnd_Time, :E_CreatorUserID)")
-            inputQuery.bindValue(":ETitle", newEvent['ETitle'])
-            inputQuery.bindValue(":EStart_Date", newEvent['EStart_Date'])
-            inputQuery.bindValue(":EStart_Time", newEvent['EStart_Time'])
-            inputQuery.bindValue(":EEnd_Date", newEvent['EEnd_Date'])
-            inputQuery.bindValue(":EEnd_Time", newEvent['EEnd_Time'])
-            inputQuery.bindValue(":E_CreatorUserID", newEvent['E_CreatorUserID'])
-            if not inputQuery.exec():
-                print("Event inputting failed:", inputQuery.lastError().text())
-            else:
-                print("Event added successfully")
-        except Exception as e:
-            print("Error:", e)
-    
-    def returnQuery(self, query: QSqlQuery):
-        query.exec()
-        query.next()
-        return query.value(0)
-
-    #def clearEvent(self):"""

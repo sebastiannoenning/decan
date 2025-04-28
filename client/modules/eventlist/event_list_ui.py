@@ -22,6 +22,7 @@ class Ui_event_list(object):
         if not event_list.objectName():
             event_list.setObjectName(u"event_list")
         event_list.resize(0, 0)
+        event_list.setMinimumWidth(250)
         event_list.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
         # Central Container

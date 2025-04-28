@@ -19,6 +19,7 @@ from modules.eventlist.event_item_ui import Ui_event_item
 
 from modules.eventlist.eventattributes import EBody
 from modules.eventlist.eventtype import EventType
+from modules.eventlist.eventjsonparser import EventJsonParser
 
 class EventItem(QWidget):
 
@@ -50,14 +51,16 @@ class EventItem(QWidget):
         self._mapper    :QDataWidgetMapper      = QDataWidgetMapper(parent=self)
         if (model is not None): self._mapper.setModel(model)
 
+        self._jsonParser = EventJsonParser(self)
+        self._Ui.event_body.setJsonParser(self._jsonParser)
+
         self._setupMappings()
 
         self._index     :QModelIndex           = index
         if (index is not None): self._mapper.setCurrentModelIndex(index)
 
-    def setupConnections(self):
-        #self._Ui.event_body.attributesChanged.connect(self._mapper.submit())
-        pass
+    def connections(self):
+        self._jsonParser.typeChanged.connect(lambda new_type: self._Ui.formatUi(new_type))
 
     def setModel(self, model: EventModel):              self._mapper.setModel(model)
     def setCurrentModelIndex(self, index: QModelIndex): self._mapper.setCurrentModelIndex(index)
@@ -67,13 +70,11 @@ class EventItem(QWidget):
 
     def _setupMappings(self): # Sets mappings to each ui object generated via the _setup_Ui
         self._mapper.addMapping(self._Ui.event_title, 1, QByteArray("text"))
-        self._mapper.addMapping(self._Ui.event_time, 2, QByteArray("text"))
-        #self._mapper.addMapping(self._Ui.event_body, 4, QByteArray("Attributes"))
+        self._Ui.event_time.addMappings(self._mapper, 2, 3)
+        self._mapper.addMapping(self._jsonParser, 4, QByteArray("Attributes"))
         self._mapper.addMapping(self._Ui.event_location, 6)
 
         self._mapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)
-
-    def _formatUi(self, Type: EventType=EventType.Simple): pass
 
     def mousePressEvent(self, event):
         # Check if the left mouse button was pressed

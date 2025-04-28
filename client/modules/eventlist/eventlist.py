@@ -62,7 +62,7 @@ class EventList(QWidget):
         eventItem: EventItem = self._Items[index]
 
     def minimumHeight(self):
-        """ Absolute minimum height for the QScrollArea wrapper holding this """
+        """ Absolute minimum height return wrapper holding this """
         spacing = (self._Ui.container.spacing() * len(self._Items))
 
         item_dimensions: Tuple[int] = tuple(event_item.sizeHint().height() for event_item in self._Items.values())

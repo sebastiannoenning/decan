@@ -2,11 +2,14 @@
 <ui version="4.0">
  <class>event_view</class>
  <widget class="QWidget" name="event_view">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
+    <width>634</width>
     <height>460</height>
    </rect>
   </property>
@@ -343,8 +346,7 @@ EToDo * QLabel{
            <property name="icon">
             <iconset resource="../../assets/rss.qrc">
              <normaloff>:/icons/calendar/calendar_search_dark.svg</normaloff>
-             <activeoff>:/icons/calendar/calendar_search_red.svg</activeoff>
-             <selectedoff>:/icons/calendar/calendar_search_red.svg</selectedoff>:/icons/calendar/calendar_search_dark.svg</iconset>
+             <normalon>:/icons/calendar/calendar_search_red.svg</normalon>:/icons/calendar/calendar_search_dark.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -368,13 +370,7 @@ EToDo * QLabel{
            <property name="icon">
             <iconset resource="../../assets/rss.qrc">
              <normaloff>:/icons/calendar/events/filter/filter_add_dark.svg</normaloff>
-             <normalon>:/icons/calendar/events/filter/filter_edit_dark.svg</normalon>
-             <disabledoff>:/icons/calendar/events/filter/filter_add_grey.svg</disabledoff>
-             <disabledon>:/icons/calendar/events/filter/filter_edit_grey.svg</disabledon>
-             <activeoff>:/icons/calendar/events/filter/filter_add_red.svg</activeoff>
-             <activeon>:/icons/calendar/events/filter/filter_edit_red.svg</activeon>
-             <selectedoff>:/icons/calendar/events/filter/filter_add_red.svg</selectedoff>
-             <selectedon>:/icons/calendar/events/filter/filter_edit_red.svg</selectedon>:/icons/calendar/events/filter/filter_add_dark.svg</iconset>
+             <normalon>:/icons/calendar/events/filter/filter_add_red.svg</normalon>:/icons/calendar/events/filter/filter_add_dark.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -418,7 +414,7 @@ EToDo * QLabel{
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>348</width>
+           <width>340</width>
            <height>408</height>
           </rect>
          </property>
@@ -1069,9 +1065,9 @@ QScrollBar::add-line:vertical  {
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-738</y>
-            <width>345</width>
-            <height>1753</height>
+            <y>-1324</y>
+            <width>312</width>
+            <height>1949</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1146,7 +1142,7 @@ QScrollBar::add-line:vertical  {
               </size>
              </property>
              <property name="checkable">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -1206,14 +1202,17 @@ QScrollBar::add-line:vertical  {
                 <property name="minimumSize">
                  <size>
                   <width>247</width>
-                  <height>40</height>
+                  <height>50</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>290</width>
-                  <height>40</height>
+                  <height>50</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
                 </property>
                 <layout class="QHBoxLayout" name="title_view_container">
                  <property name="spacing">
@@ -1244,18 +1243,39 @@ QScrollBar::add-line:vertical  {
                    </property>
                    <property name="minimumSize">
                     <size>
-                     <width>207</width>
-                     <height>40</height>
+                     <width>212</width>
+                     <height>50</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>250</width>
-                     <height>40</height>
+                     <height>50</height>
                     </size>
                    </property>
+                   <property name="autoFillBackground">
+                    <bool>false</bool>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">#title_label_container { 
+	background: rgba(20,20,20,1);
+	border-top-left-radius: 10px;
+}
+
+QScrollBar:horizontal {
+    background: rgba(100,180,255,1);
+    height:  2px;
+    padding: 0px 0px;
+}
+
+QScrollBar::groove:horizontal {
+    background: rgba(100,180,255,1);
+    height: 2px;
+    margin: 0px;
+}</string>
+                   </property>
                    <property name="frameShape">
-                    <enum>QFrame::Shape::NoFrame</enum>
+                    <enum>QFrame::Shape::Box</enum>
                    </property>
                    <property name="frameShadow">
                     <enum>QFrame::Shadow::Plain</enum>
@@ -1273,72 +1293,92 @@ QScrollBar::add-line:vertical  {
                     <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
                    </property>
                    <property name="widgetResizable">
-                    <bool>true</bool>
+                    <bool>false</bool>
                    </property>
                    <widget class="QWidget" name="title_label_container">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>245</width>
-                      <height>40</height>
+                      <width>250</width>
+                      <height>48</height>
                      </rect>
                     </property>
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
                     <property name="minimumSize">
                      <size>
-                      <width>207</width>
-                      <height>40</height>
+                      <width>212</width>
+                      <height>48</height>
                      </size>
                     </property>
                     <property name="maximumSize">
                      <size>
                       <width>16777215</width>
-                      <height>40</height>
+                      <height>48</height>
                      </size>
                     </property>
-                    <widget class="QLabel" name="title_label">
-                     <property name="geometry">
-                      <rect>
-                       <x>0</x>
-                       <y>0</y>
-                       <width>247</width>
-                       <height>40</height>
-                      </rect>
+                    <layout class="QHBoxLayout" name="title_label_container_layout">
+                     <property name="spacing">
+                      <number>0</number>
                      </property>
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
+                     <property name="leftMargin">
+                      <number>0</number>
                      </property>
-                     <property name="minimumSize">
-                      <size>
-                       <width>247</width>
-                       <height>40</height>
-                      </size>
+                     <property name="topMargin">
+                      <number>0</number>
                      </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>40</height>
-                      </size>
+                     <property name="rightMargin">
+                      <number>0</number>
                      </property>
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>24</pointsize>
-                      </font>
+                     <property name="bottomMargin">
+                      <number>0</number>
                      </property>
-                     <property name="text">
-                      <string>Event</string>
-                     </property>
-                    </widget>
+                     <item alignment="Qt::AlignmentFlag::AlignLeft">
+                      <widget class="QLabel" name="title_label">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="minimumSize">
+                        <size>
+                         <width>212</width>
+                         <height>48</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>800</width>
+                         <height>48</height>
+                        </size>
+                       </property>
+                       <property name="baseSize">
+                        <size>
+                         <width>212</width>
+                         <height>48</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <family>Arial</family>
+                         <pointsize>27</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background: None;</string>
+                       </property>
+                       <property name="text">
+                        <string>Event</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </widget>
                  </item>
@@ -1353,28 +1393,33 @@ QScrollBar::add-line:vertical  {
                    <property name="minimumSize">
                     <size>
                      <width>40</width>
-                     <height>40</height>
+                     <height>50</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>40</width>
-                     <height>40</height>
+                     <height>50</height>
                     </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>15</pointsize>
+                    </font>
                    </property>
                    <property name="text">
                     <string/>
                    </property>
                    <property name="icon">
                     <iconset resource="../../assets/rss.qrc">
-                     <normaloff>:/icons/util/lock_circle_dark.svg</normaloff>
-                     <normalon>:/icons/util/edit_dark.svg</normalon>
-                     <disabledoff>:/icons/util/lock_circle_grey.svg</disabledoff>
-                     <disabledon>:/icons/util/edit_grey.svg</disabledon>
+                     <normaloff>:/icons/util/edit_dark.svg</normaloff>
+                     <normalon>:/icons/util/edit_blue.svg</normalon>
+                     <disabledoff>:/icons/util/lock_circle_dark.svg</disabledoff>
+                     <disabledon>:/icons/util/lock_circle_dark.svg</disabledon>
                      <activeoff>:/icons/util/lock_circle_red.svg</activeoff>
                      <activeon>:/icons/util/edit_blue.svg</activeon>
                      <selectedoff>:/icons/util/lock_circle_red.svg</selectedoff>
-                     <selectedon>:/icons/util/edit_blue.svg</selectedon>:/icons/util/lock_circle_dark.svg</iconset>
+                     <selectedon>:/icons/util/edit_blue.svg</selectedon>:/icons/util/edit_dark.svg</iconset>
                    </property>
                    <property name="iconSize">
                     <size>
@@ -1386,7 +1431,7 @@ QScrollBar::add-line:vertical  {
                     <bool>true</bool>
                    </property>
                    <property name="checked">
-                    <bool>true</bool>
+                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -1398,13 +1443,13 @@ QScrollBar::add-line:vertical  {
                 <property name="minimumSize">
                  <size>
                   <width>247</width>
-                  <height>40</height>
+                  <height>50</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>290</width>
-                  <height>40</height>
+                  <height>50</height>
                  </size>
                 </property>
                 <layout class="QHBoxLayout" name="title_edit_container">
@@ -1434,19 +1479,19 @@ QScrollBar::add-line:vertical  {
                    <property name="minimumSize">
                     <size>
                      <width>207</width>
-                     <height>40</height>
+                     <height>50</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>250</width>
-                     <height>40</height>
+                     <height>50</height>
                     </size>
                    </property>
                    <property name="font">
                     <font>
                      <family>Arial</family>
-                     <pointsize>24</pointsize>
+                     <pointsize>27</pointsize>
                     </font>
                    </property>
                    <property name="cursor">
@@ -1474,34 +1519,31 @@ QScrollBar::add-line:vertical  {
                    <property name="minimumSize">
                     <size>
                      <width>40</width>
-                     <height>40</height>
+                     <height>50</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>40</width>
-                     <height>40</height>
+                     <height>50</height>
                     </size>
                    </property>
                    <property name="text">
                     <string/>
                    </property>
                    <property name="icon">
-                    <iconset>
-                     <normalon>:/icons/util/keyboard_dark.svg</normalon>
-                     <disabledoff>:/icons/util/keyboard_grey.svg</disabledoff>
-                     <disabledon>:/icons/util/keyboard_grey.svg</disabledon>
-                     <activeoff>:/icons/util/keyboard_blue.svg</activeoff>
-                     <activeon>:/icons/util/keyboard_blue.svg</activeon>
-                     <selectedoff>:/icons/util/keyboard_blue.svg</selectedoff>
-                     <selectedon>:/icons/util/keyboard_blue.svg</selectedon>
-                    </iconset>
+                    <iconset resource="../../assets/rss.qrc">
+                     <normaloff>:/icons/util/keyboard_dark.svg</normaloff>
+                     <normalon>:/icons/util/keyboard_blue.svg</normalon>:/icons/util/keyboard_dark.svg</iconset>
                    </property>
                    <property name="iconSize">
                     <size>
                      <width>30</width>
                      <height>30</height>
                     </size>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>
@@ -1536,14 +1578,10 @@ QScrollBar::add-line:vertical  {
              </property>
              <property name="icon">
               <iconset resource="../../assets/rss.qrc">
-               <normaloff>:/icons/calendar/events/flash_slash_dark.svg</normaloff>
-               <normalon>:/icons/calendar/events/flash_dark.svg</normalon>
-               <disabledoff>:/icons/calendar/events/flash_slash_grey.svg</disabledoff>
-               <disabledon>:/icons/calendar/events/flash_grey.svg</disabledon>
-               <activeoff>:/icons/calendar/events/flash_slash_yellow.svg</activeoff>
-               <activeon>:/icons/calendar/events/flash_yellow.svg</activeon>
-               <selectedoff>:/icons/calendar/events/flash_slash_yellow.svg</selectedoff>
-               <selectedon>:/icons/calendar/events/flash_yellow.svg</selectedon>:/icons/calendar/events/flash_slash_dark.svg</iconset>
+               <normaloff>:/icons/calendar/events/flash_dark.svg</normaloff>
+               <normalon>:/icons/calendar/events/flash_yellow.svg</normalon>
+               <disabledoff>:/icons/calendar/events/flash_slash_dark.svg</disabledoff>
+               <disabledon>:/icons/calendar/events/flash_slash_yellow.svg</disabledon>:/icons/calendar/events/flash_dark.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -1552,7 +1590,7 @@ QScrollBar::add-line:vertical  {
               </size>
              </property>
              <property name="checkable">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="checked">
               <bool>false</bool>
@@ -1717,15 +1755,10 @@ QScrollBar::right-arrow:horizontal:pressed {
                   <string>Note</string>
                  </property>
                  <property name="icon">
-                  <iconset>
-                   <normalon>:/icons/calendar/events/message_box_dark.svg</normalon>
-                   <disabledoff>:/icons/calendar/events/message_box_grey.svg</disabledoff>
-                   <disabledon>:/icons/calendar/events/message_box_grey.svg</disabledon>
-                   <activeoff>:/icons/calendar/events/message_box_blue.svg</activeoff>
-                   <activeon>:/icons/calendar/events/message_box_blue.svg</activeon>
-                   <selectedoff>:/icons/calendar/events/message_box_blue.svg</selectedoff>
-                   <selectedon>:/icons/calendar/events/message_box_blue.svg</selectedon>
-                  </iconset>
+                  <iconset resource="../../assets/rss.qrc">
+                   <normaloff>:/icons/calendar/events/message_box_dark.svg</normaloff>
+                   <normalon>:/icons/calendar/events/message_box_blue.svg</normalon>
+                   <disabledoff>:/icons/calendar/events/message_box_grey.svg</disabledoff>:/icons/calendar/events/message_box_dark.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -1733,10 +1766,19 @@ QScrollBar::right-arrow:horizontal:pressed {
                    <height>20</height>
                   </size>
                  </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>true</bool>
+                 </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="task_button">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>80</width>
@@ -1759,21 +1801,25 @@ QScrollBar::right-arrow:horizontal:pressed {
                   <string>Task</string>
                  </property>
                  <property name="icon">
-                  <iconset>
-                   <normalon>:/icons/calendar/events/todo_task_dark.svg</normalon>
-                   <disabledoff>:/icons/calendar/events/todo_task_grey.svg</disabledoff>
-                   <disabledon>:/icons/calendar/events/todo_task_grey.svg</disabledon>
-                   <activeoff>:/icons/calendar/events/todo_task_green.svg</activeoff>
-                   <activeon>:/icons/calendar/events/todo_task_green.svg</activeon>
-                   <selectedoff>:/icons/calendar/events/todo_task_green.svg</selectedoff>
-                   <selectedon>:/icons/calendar/events/todo_task_green.svg</selectedon>
-                  </iconset>
+                  <iconset resource="../../assets/rss.qrc">
+                   <normaloff>:/icons/calendar/events/todo_task_dark.svg</normaloff>
+                   <normalon>:/icons/calendar/events/todo_task_green.svg</normalon>
+                   <disabledoff>:/icons/calendar/events/message_box_grey.svg</disabledoff>:/icons/calendar/events/todo_task_dark.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
                    <width>20</width>
                    <height>20</height>
                   </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1803,9 +1849,8 @@ QScrollBar::right-arrow:horizontal:pressed {
                  <property name="icon">
                   <iconset resource="../../assets/rss.qrc">
                    <normaloff>:/icons/calendar/events/other/simple_dark.svg</normaloff>
-                   <disabledoff>:/icons/calendar/events/other/simple_grey.svg</disabledoff>
-                   <activeoff>:/icons/calendar/events/other/simple_orange.svg</activeoff>
-                   <selectedoff>:/icons/calendar/events/other/simple_orange.svg</selectedoff>:/icons/calendar/events/other/simple_dark.svg</iconset>
+                   <normalon>:/icons/calendar/events/other/simple_orange.svg</normalon>
+                   <disabledoff>:/icons/calendar/events/other/simple_grey.svg</disabledoff>:/icons/calendar/events/other/simple_dark.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -1813,10 +1858,22 @@ QScrollBar::right-arrow:horizontal:pressed {
                    <height>20</height>
                   </size>
                  </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoDefault">
+                  <bool>true</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="other_button">
+                <widget class="QPushButton" name="complex_button">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1847,15 +1904,20 @@ QScrollBar::right-arrow:horizontal:pressed {
                  <property name="icon">
                   <iconset resource="../../assets/rss.qrc">
                    <normaloff>:/icons/calendar/events/other/complex_dark.svg</normaloff>
-                   <disabledon>:/icons/calendar/events/other/complex_grey.svg</disabledon>
-                   <activeoff>:/icons/calendar/events/other/complex_purple.svg</activeoff>
-                   <selectedoff>:/icons/calendar/events/other/complex_purple.svg</selectedoff>:/icons/calendar/events/other/complex_dark.svg</iconset>
+                   <normalon>:/icons/calendar/events/other/complex_purple.svg</normalon>
+                   <disabledoff>:/icons/calendar/events/other/complex_grey.svg</disabledoff>:/icons/calendar/events/other/complex_dark.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
                    <width>20</width>
                    <height>20</height>
                   </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1882,14 +1944,10 @@ QScrollBar::right-arrow:horizontal:pressed {
              </property>
              <property name="icon">
               <iconset resource="../../assets/rss.qrc">
-               <normaloff>:/icons/calendar/clock_slash_dark.svg</normaloff>
-               <normalon>:/icons/calendar/clock_light.svg</normalon>
-               <disabledoff>:/icons/calendar/clock_slash_grey.svg</disabledoff>
-               <disabledon>:/icons/calendar/clock_grey.svg</disabledon>
-               <activeoff>:/icons/calendar/clock_slash_orange.svg</activeoff>
-               <activeon>:/icons/calendar/clock_orange.svg</activeon>
-               <selectedoff>:/icons/calendar/clock_slash_orange.svg</selectedoff>
-               <selectedon>:/icons/calendar/clock_orange.svg</selectedon>:/icons/calendar/clock_slash_dark.svg</iconset>
+               <normaloff>:/icons/calendar/clock_light.svg</normaloff>
+               <normalon>:/icons/calendar/clock_orange.svg</normalon>
+               <disabledoff>:/icons/calendar/clock_slash_dark.svg</disabledoff>
+               <disabledon>:/icons/calendar/clock_slash_orange.svg</disabledon>:/icons/calendar/clock_light.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -1898,7 +1956,7 @@ QScrollBar::right-arrow:horizontal:pressed {
               </size>
              </property>
              <property name="checkable">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="checked">
               <bool>false</bool>
@@ -1928,21 +1986,27 @@ QScrollBar::right-arrow:horizontal:pressed {
              <property name="autoFillBackground">
               <bool>false</bool>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QWidget#time {
+	border: 2px solid rgba(255, 177, 61, 1);
+	border-radius: 10px;
+}</string>
+             </property>
              <layout class="QVBoxLayout" name="time_viewedit_container">
               <property name="spacing">
                <number>0</number>
               </property>
               <property name="leftMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <property name="topMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <property name="rightMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <property name="bottomMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <item>
                <widget class="ETime" name="time_view" native="true">
@@ -1955,7 +2019,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                 <property name="minimumSize">
                  <size>
                   <width>247</width>
-                  <height>50</height>
+                  <height>68</height>
                  </size>
                 </property>
                 <property name="maximumSize">
@@ -1969,6 +2033,17 @@ QScrollBar::right-arrow:horizontal:pressed {
                   <family>Arial</family>
                   <pointsize>18</pointsize>
                  </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">ETime{
+                           background-color: rgba(20,20,20,1);
+                           border-radius: 6px;                 
+} ELabel {
+                           background-color: None;
+                           border-radius: 0px;
+                           padding-left: 3px;
+                           border: 0px solid transparent;
+}</string>
                 </property>
                </widget>
               </item>
@@ -2004,7 +2079,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                 <property name="styleSheet">
                  <string notr="true">QWidget#time_edit {
 	background: rgba(30,30,30,1);
-	border-radius: 10px;
+	border-radius: 6px;
 }
 QLabel {
 	padding: 0px;
@@ -2211,7 +2286,7 @@ QLabel {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>161</width>
+                        <width>155</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -2279,8 +2354,8 @@ QLabel {
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>49</width>
-                        <height>20</height>
+                        <width>43</width>
+                        <height>15</height>
                        </size>
                       </property>
                      </spacer>
@@ -2339,7 +2414,10 @@ QLabel {
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QPushButton" name="attributes_button">
+            <widget class="QPushButton" name="layer_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                <horstretch>0</horstretch>
@@ -2363,14 +2441,10 @@ QLabel {
              </property>
              <property name="icon">
               <iconset resource="../../assets/rss.qrc">
-               <normaloff>:/icons/calendar/events/layer_slash_dark.svg</normaloff>
-               <normalon>:/icons/calendar/events/layer_dark.svg</normalon>
-               <disabledoff>:/icons/calendar/events/layer_slash_grey.svg</disabledoff>
-               <disabledon>:/icons/calendar/events/layer_grey.svg</disabledon>
-               <activeoff>:/icons/calendar/events/layer_slash_blue2.svg</activeoff>
-               <activeon>:/icons/calendar/events/layer_blue2.svg</activeon>
-               <selectedoff>:/icons/calendar/events/layer_slash_blue1.svg</selectedoff>
-               <selectedon>:/icons/calendar/events/layer_blue1.svg</selectedon>:/icons/calendar/events/layer_slash_dark.svg</iconset>
+               <normaloff>:/icons/calendar/events/layer_dark.svg</normaloff>
+               <normalon>:/icons/calendar/events/layer_blue2.svg</normalon>
+               <disabledoff>:/icons/calendar/events/layer_slash_dark.svg</disabledoff>
+               <disabledon>:/icons/calendar/events/layer_slash_blue2.svg</disabledon>:/icons/calendar/events/layer_dark.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -2379,7 +2453,7 @@ QLabel {
               </size>
              </property>
              <property name="checkable">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="checked">
               <bool>false</bool>
@@ -2411,14 +2485,10 @@ QLabel {
              </property>
              <property name="icon">
               <iconset resource="../../assets/rss.qrc">
-               <normaloff>:/icons/calendar/events/location/location_slash_dark.svg</normaloff>
-               <normalon>:/icons/calendar/events/location/location_dark.svg</normalon>
-               <disabledoff>:/icons/calendar/events/location/location_slash_grey.svg</disabledoff>
-               <disabledon>:/icons/calendar/events/location/location_grey.svg</disabledon>
-               <activeoff>:/icons/calendar/events/location/location_slash_green.svg</activeoff>
-               <activeon>:/icons/calendar/events/location/location_green.svg</activeon>
-               <selectedoff>:/icons/calendar/events/location/location_slash_green.svg</selectedoff>
-               <selectedon>:/icons/calendar/events/location/location_green.svg</selectedon>:/icons/calendar/events/location/location_slash_dark.svg</iconset>
+               <normaloff>:/icons/calendar/events/location/location_dark.svg</normaloff>
+               <normalon>:/icons/calendar/events/location/location_green.svg</normalon>
+               <disabledoff>:/icons/calendar/events/location/location_slash_dark.svg</disabledoff>
+               <disabledon>:/icons/calendar/events/location/location_slash_dark.svg</disabledon>:/icons/calendar/events/location/location_dark.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -2430,7 +2500,7 @@ QLabel {
               <bool>true</bool>
              </property>
              <property name="checked">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -2614,6 +2684,18 @@ QLabel {
                  </property>
                  <item>
                   <widget class="QWidget" name="location_view_collapsed" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>50</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>50</height>
+                    </size>
+                   </property>
                    <layout class="QHBoxLayout" name="location_view_collapsed_container">
                     <property name="spacing">
                      <number>0</number>
@@ -2641,13 +2723,13 @@ QLabel {
                       <property name="minimumSize">
                        <size>
                         <width>212</width>
-                        <height>40</height>
+                        <height>50</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>250</width>
-                        <height>40</height>
+                        <height>50</height>
                        </size>
                       </property>
                       <property name="font">
@@ -2675,36 +2757,42 @@ QLabel {
                        <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
                       </property>
                       <property name="widgetResizable">
-                       <bool>true</bool>
+                       <bool>false</bool>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
                       </property>
                       <widget class="QWidget" name="location_view_col_label_container">
                        <property name="geometry">
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>244</width>
-                         <height>40</height>
+                         <width>212</width>
+                         <height>48</height>
                         </rect>
                        </property>
                        <property name="sizePolicy">
-                        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                          <horstretch>0</horstretch>
                          <verstretch>0</verstretch>
                         </sizepolicy>
                        </property>
                        <property name="minimumSize">
                         <size>
-                         <width>211</width>
-                         <height>40</height>
+                         <width>212</width>
+                         <height>48</height>
                         </size>
                        </property>
                        <property name="maximumSize">
                         <size>
                          <width>800</width>
-                         <height>40</height>
+                         <height>48</height>
                         </size>
                        </property>
                        <layout class="QHBoxLayout" name="location_view_col_container">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
                         <property name="leftMargin">
                          <number>0</number>
                         </property>
@@ -2720,7 +2808,7 @@ QLabel {
                         <item>
                          <widget class="QLabel" name="loc_view_col_label">
                           <property name="sizePolicy">
-                           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
@@ -2728,20 +2816,23 @@ QLabel {
                           <property name="minimumSize">
                            <size>
                             <width>211</width>
-                            <height>40</height>
+                            <height>46</height>
                            </size>
                           </property>
                           <property name="maximumSize">
                            <size>
-                            <width>800</width>
-                            <height>40</height>
+                            <width>212</width>
+                            <height>46</height>
                            </size>
                           </property>
                           <property name="font">
                            <font>
                             <family>Arial</family>
-                            <pointsize>20</pointsize>
+                            <pointsize>27</pointsize>
                            </font>
+                          </property>
+                          <property name="lineWidth">
+                           <number>0</number>
                           </property>
                           <property name="text">
                            <string>None</string>
@@ -2763,13 +2854,13 @@ QLabel {
                       <property name="minimumSize">
                        <size>
                         <width>40</width>
-                        <height>40</height>
+                        <height>50</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>40</width>
-                        <height>40</height>
+                        <height>50</height>
                        </size>
                       </property>
                       <property name="text">
@@ -2777,14 +2868,8 @@ QLabel {
                       </property>
                       <property name="icon">
                        <iconset resource="../../assets/rss.qrc">
-                        <normaloff>:/icons/calendar/events/location/location_lock_dark.svg</normaloff>
-                        <normalon>:/icons/calendar/events/location/location_edit_dark.svg</normalon>
-                        <disabledoff>:/icons/calendar/events/location/location_lock_grey.svg</disabledoff>
-                        <disabledon>:/icons/calendar/events/location/location_edit_grey.svg</disabledon>
-                        <activeoff>:/icons/calendar/events/location/location_lock_red.svg</activeoff>
-                        <activeon>:/icons/calendar/events/location/location_edit_green.svg</activeon>
-                        <selectedoff>:/icons/calendar/events/location/location_lock_red.svg</selectedoff>
-                        <selectedon>:/icons/calendar/events/location/location_edit_green.svg</selectedon>:/icons/calendar/events/location/location_lock_dark.svg</iconset>
+                        <normaloff>:/icons/calendar/events/location/location_edit_dark.svg</normaloff>
+                        <disabledoff>:/icons/calendar/events/location/location_lock_dark.svg</disabledoff>:/icons/calendar/events/location/location_edit_dark.svg</iconset>
                       </property>
                       <property name="iconSize">
                        <size>
@@ -2853,6 +2938,12 @@ QLabel {
                         <height>0</height>
                        </size>
                       </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>300</height>
+                       </size>
+                      </property>
                       <property name="styleSheet">
                        <string notr="true"/>
                       </property>
@@ -2874,6 +2965,18 @@ QLabel {
                        </property>
                        <item>
                         <widget class="QLabel" name="loc_address_line_1_label">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>40</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Arial</family>
@@ -2890,6 +2993,12 @@ QLabel {
                        </item>
                        <item>
                         <widget class="QLabel" name="loc_address_line_2_label">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>40</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Arial</family>
@@ -2906,6 +3015,18 @@ QLabel {
                        </item>
                        <item>
                         <widget class="QLabel" name="loc_address_line_3_label">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>40</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Arial</family>
@@ -2922,6 +3043,18 @@ QLabel {
                        </item>
                        <item>
                         <widget class="QLabel" name="loc_county_label">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>40</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Arial</family>
@@ -2938,6 +3071,18 @@ QLabel {
                        </item>
                        <item>
                         <widget class="QLabel" name="loc_city_label">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>40</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Arial</family>
@@ -2954,6 +3099,18 @@ QLabel {
                        </item>
                        <item>
                         <widget class="QLabel" name="loc_postcode_label">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>40</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Arial</family>
@@ -3018,7 +3175,13 @@ QLabel {
                          <property name="minimumSize">
                           <size>
                            <width>40</width>
-                           <height>40</height>
+                           <height>50</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>40</width>
+                           <height>50</height>
                           </size>
                          </property>
                          <property name="text">
@@ -3027,13 +3190,7 @@ QLabel {
                          <property name="icon">
                           <iconset resource="../../assets/rss.qrc">
                            <normaloff>:/icons/calendar/events/location/location_back_dark.svg</normaloff>
-                           <normalon>:/icons/calendar/events/location/location_tick1_dark.svg</normalon>
-                           <disabledoff>:/icons/calendar/events/location/location_back_grey.svg</disabledoff>
-                           <disabledon>:/icons/calendar/events/location/location_tick1_grey.svg</disabledon>
-                           <activeoff>:/icons/calendar/events/location/location_back_dark.svg</activeoff>
-                           <activeon>:/icons/calendar/events/location/location_tick1_dark.svg</activeon>
-                           <selectedoff>:/icons/calendar/events/location/location_back_blue.svg</selectedoff>
-                           <selectedon>:/icons/calendar/events/location/location_tick1_green.svg</selectedon>:/icons/calendar/events/location/location_back_dark.svg</iconset>
+                           <normalon>:/icons/calendar/events/location/location_tick1_dark.svg</normalon>:/icons/calendar/events/location/location_back_dark.svg</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -3045,7 +3202,7 @@ QLabel {
                           <bool>true</bool>
                          </property>
                          <property name="checked">
-                          <bool>false</bool>
+                          <bool>true</bool>
                          </property>
                         </widget>
                        </item>
@@ -3076,7 +3233,13 @@ QLabel {
                          <property name="minimumSize">
                           <size>
                            <width>40</width>
-                           <height>40</height>
+                           <height>50</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>40</width>
+                           <height>50</height>
                           </size>
                          </property>
                          <property name="text">
@@ -3085,11 +3248,7 @@ QLabel {
                          <property name="icon">
                           <iconset resource="../../assets/rss.qrc">
                            <normaloff>:/icons/calendar/events/location/location_remove1_dark.svg</normaloff>
-                           <normalon>:/icons/calendar/events/location/location_add1_dark.svg</normalon>
-                           <disabledoff>:/icons/calendar/events/location/location_remove1_grey.svg</disabledoff>
-                           <disabledon>:/icons/calendar/events/location/location_add1_grey.svg</disabledon>
-                           <activeoff>:/icons/calendar/events/location/location_remove1_red.svg</activeoff>
-                           <activeon>:/icons/calendar/events/location/location_add1_green1.svg</activeon>:/icons/calendar/events/location/location_remove1_dark.svg</iconset>
+                           <normalon>:/icons/calendar/events/location/location_add1_dark.svg</normalon>:/icons/calendar/events/location/location_remove1_dark.svg</iconset>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -3125,19 +3284,19 @@ QLabel {
                 <property name="minimumSize">
                  <size>
                   <width>252</width>
-                  <height>40</height>
+                  <height>50</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>290</width>
-                  <height>40</height>
+                  <height>50</height>
                  </size>
                 </property>
                 <property name="font">
                  <font>
                   <family>Arial</family>
-                  <pointsize>20</pointsize>
+                  <pointsize>27</pointsize>
                  </font>
                 </property>
                 <property name="editable">
@@ -3183,227 +3342,58 @@ QLabel {
              <property name="autoFillBackground">
               <bool>false</bool>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QWidget#layer {
+	border: 2px solid rgba(60,60,60,1);
+	border-radius: 10px;
+}</string>
+             </property>
              <layout class="QVBoxLayout" name="layer_container">
+              <property name="spacing">
+               <number>10</number>
+              </property>
               <property name="leftMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <property name="topMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <property name="rightMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <property name="bottomMargin">
-               <number>0</number>
+               <number>3</number>
               </property>
               <item>
-               <widget class="QWidget" name="layer_view" native="true">
+               <widget class="QLabel" name="layers_header">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>248</width>
-                  <height>0</height>
+                  <height>40</height>
                  </size>
                 </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>290</width>
-                  <height>16777215</height>
-                 </size>
+                <property name="font">
+                 <font>
+                  <family>Arial</family>
+                  <pointsize>24</pointsize>
+                 </font>
                 </property>
-                <property name="autoFillBackground">
-                 <bool>false</bool>
+                <property name="styleSheet">
+                 <string notr="true">border-radius: 6px;
+padding-left: 5px;</string>
                 </property>
-                <layout class="QVBoxLayout" name="layer_view_container">
-                 <property name="spacing">
-                  <number>10</number>
-                 </property>
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QWidget" name="layer_view_header" native="true">
-                   <property name="minimumSize">
-                    <size>
-                     <width>252</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>290</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                   <layout class="QHBoxLayout" name="layer_view_header_container">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
-                    <property name="leftMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <spacer name="layer_view_header_spacer">
-                      <property name="orientation">
-                       <enum>Qt::Orientation::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="attribute_view_edit_toggle">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>130</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>130</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>Arial</family>
-                        <pointsize>15</pointsize>
-                       </font>
-                      </property>
-                      <property name="layoutDirection">
-                       <enum>Qt::LayoutDirection::LeftToRight</enum>
-                      </property>
-                      <property name="text">
-                       <string>Edit Layers</string>
-                      </property>
-                      <property name="icon">
-                       <iconset resource="../../assets/rss.qrc">
-                        <normaloff>:/icons/util/lock_circle_dark.svg</normaloff>
-                        <normalon>:/icons/util/edit_dark.svg</normalon>
-                        <disabledoff>:/icons/util/lock_circle_grey.svg</disabledoff>
-                        <disabledon>:/icons/util/edit_grey.svg</disabledon>
-                        <activeoff>:/icons/util/lock_circle_red.svg</activeoff>
-                        <activeon>:/icons/util/edit_blue.svg</activeon>
-                        <selectedoff>:/icons/util/lock_circle_red.svg</selectedoff>
-                        <selectedon>:/icons/util/edit_blue.svg</selectedon>:/icons/util/lock_circle_dark.svg</iconset>
-                      </property>
-                      <property name="iconSize">
-                       <size>
-                        <width>30</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="checkable">
-                       <bool>true</bool>
-                      </property>
-                      <property name="checked">
-                       <bool>false</bool>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QWidget" name="layer_view_object_container" native="true">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>247</width>
-                     <height>50</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>290</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <layout class="QVBoxLayout" name="layer_view_list_container">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
-                    <property name="leftMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <widget class="QLabel" name="layer_view_empty_label">
-                      <property name="minimumSize">
-                       <size>
-                        <width>80</width>
-                        <height>50</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>Arial</family>
-                        <pointsize>20</pointsize>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">border: 2px solid rgba(120,120,120,1);</string>
-                      </property>
-                      <property name="text">
-                       <string>No objects</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="EBody" name="layer_view_object_ebody" native="true">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>50</height>
-                       </size>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                </layout>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string>Layers</string>
+                </property>
                </widget>
               </item>
               <item>
@@ -3425,6 +3415,11 @@ QLabel {
                   <width>290</width>
                   <height>16777215</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QWidget#layer_edit {
+	border-radius: 6px;
+}</string>
                 </property>
                 <layout class="QVBoxLayout" name="layer_edit_container">
                  <property name="spacing">
@@ -3459,8 +3454,11 @@ QLabel {
                    <property name="maximumSize">
                     <size>
                      <width>290</width>
-                     <height>65</height>
+                     <height>70</height>
                     </size>
+                   </property>
+                   <property name="autoFillBackground">
+                    <bool>false</bool>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">QScrollBar:horizontal {
@@ -3544,7 +3542,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>480</width>
+                      <width>530</width>
                       <height>40</height>
                      </rect>
                     </property>
@@ -3557,6 +3555,9 @@ QScrollBar::right-arrow:horizontal:pressed {
                     <layout class="QHBoxLayout" name="layer_header_container">
                      <property name="spacing">
                       <number>10</number>
+                     </property>
+                     <property name="sizeConstraint">
+                      <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
                      </property>
                      <property name="leftMargin">
                       <number>0</number>
@@ -3596,15 +3597,21 @@ QScrollBar::right-arrow:horizontal:pressed {
                        <property name="icon">
                         <iconset resource="../../assets/rss.qrc">
                          <normaloff>:/icons/util/back_square1_dark.svg</normaloff>
+                         <normalon>:/icons/util/back_square1_blue.svg</normalon>
                          <disabledoff>:/icons/util/back_square1_grey.svg</disabledoff>
-                         <activeoff>:/icons/util/back_square1_blue.svg</activeoff>
-                         <selectedoff>:/icons/util/back_square1_blue.svg</selectedoff>:/icons/util/back_square1_dark.svg</iconset>
+                         <disabledon>:/icons/util/back_square1_grey.svg</disabledon>:/icons/util/back_square1_dark.svg</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
                          <width>20</width>
                          <height>20</height>
                         </size>
+                       </property>
+                       <property name="checkable">
+                        <bool>true</bool>
+                       </property>
+                       <property name="autoExclusive">
+                        <bool>false</bool>
                        </property>
                       </widget>
                      </item>
@@ -3632,15 +3639,21 @@ QScrollBar::right-arrow:horizontal:pressed {
                         <string>Add</string>
                        </property>
                        <property name="icon">
-                        <iconset>
-                         <normalon>:/icons/util/add_2_dark.svg</normalon>
-                        </iconset>
+                        <iconset resource="../../assets/rss.qrc">
+                         <normaloff>:/icons/util/add_2_dark.svg</normaloff>
+                         <normalon>:/icons/util/add_2_red.svg</normalon>:/icons/util/add_2_dark.svg</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
                          <width>20</width>
                          <height>20</height>
                         </size>
+                       </property>
+                       <property name="checkable">
+                        <bool>true</bool>
+                       </property>
+                       <property name="autoExclusive">
+                        <bool>false</bool>
                        </property>
                       </widget>
                      </item>
@@ -3684,6 +3697,12 @@ QScrollBar::right-arrow:horizontal:pressed {
                          <height>20</height>
                         </size>
                        </property>
+                       <property name="checkable">
+                        <bool>true</bool>
+                       </property>
+                       <property name="autoExclusive">
+                        <bool>false</bool>
+                       </property>
                       </widget>
                      </item>
                      <item>
@@ -3721,6 +3740,12 @@ QScrollBar::right-arrow:horizontal:pressed {
                          <width>20</width>
                          <height>20</height>
                         </size>
+                       </property>
+                       <property name="checkable">
+                        <bool>true</bool>
+                       </property>
+                       <property name="autoExclusive">
+                        <bool>false</bool>
                        </property>
                       </widget>
                      </item>
@@ -3766,6 +3791,52 @@ QScrollBar::right-arrow:horizontal:pressed {
                          <height>20</height>
                         </size>
                        </property>
+                       <property name="checkable">
+                        <bool>true</bool>
+                       </property>
+                       <property name="autoExclusive">
+                        <bool>false</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="spacer_widget" native="true">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <layout class="QHBoxLayout" name="spacer_widget_layout">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>10</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <spacer name="layer_header_spacer">
+                          <property name="orientation">
+                           <enum>Qt::Orientation::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>17</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
                       </widget>
                      </item>
                     </layout>
@@ -4020,7 +4091,7 @@ QScrollBar::right-arrow:horizontal:pressed {
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>285</width>
+                         <width>247</width>
                          <height>40</height>
                         </rect>
                        </property>
@@ -4078,15 +4149,20 @@ QScrollBar::right-arrow:horizontal:pressed {
                           <property name="icon">
                            <iconset resource="../../assets/rss.qrc">
                             <normaloff>:/icons/calendar/events/description/description_add_dark.svg</normaloff>
-                            <disabledoff>:/icons/calendar/events/description/description_add_grey.svg</disabledoff>
-                            <activeoff>:/icons/calendar/events/description/description_add_blue.svg</activeoff>
-                            <selectedoff>:/icons/calendar/events/description/description_add_blue.svg</selectedoff>:/icons/calendar/events/description/description_add_dark.svg</iconset>
+                            <normalon>:/icons/calendar/events/description/description_add_blue.svg</normalon>
+                            <disabledoff>:/icons/calendar/events/description/description_add_grey.svg</disabledoff>:/icons/calendar/events/description/description_add_dark.svg</iconset>
                           </property>
                           <property name="iconSize">
                            <size>
                             <width>20</width>
                             <height>20</height>
                            </size>
+                          </property>
+                          <property name="checkable">
+                           <bool>true</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>false</bool>
                           </property>
                          </widget>
                         </item>
@@ -4116,15 +4192,19 @@ QScrollBar::right-arrow:horizontal:pressed {
                           <property name="icon">
                            <iconset resource="../../assets/rss.qrc">
                             <normaloff>:/icons/calendar/events/todo/todo_add_dark.svg</normaloff>
-                            <disabledoff>:/icons/calendar/events/todo/todo_add_grey.svg</disabledoff>
-                            <activeoff>:/icons/calendar/events/todo/todo_add_green.svg</activeoff>
-                            <selectedoff>:/icons/calendar/events/todo/todo_add_green.svg</selectedoff>:/icons/calendar/events/todo/todo_add_dark.svg</iconset>
+                            <normalon>:/icons/calendar/events/todo/todo_add_green.svg</normalon>:/icons/calendar/events/todo/todo_add_dark.svg</iconset>
                           </property>
                           <property name="iconSize">
                            <size>
                             <width>20</width>
                             <height>20</height>
                            </size>
+                          </property>
+                          <property name="checkable">
+                           <bool>true</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>false</bool>
                           </property>
                          </widget>
                         </item>
@@ -4173,13 +4253,13 @@ QScrollBar::right-arrow:horizontal:pressed {
                      <number>10</number>
                     </property>
                     <property name="leftMargin">
-                     <number>0</number>
+                     <number>1</number>
                     </property>
                     <property name="topMargin">
                      <number>0</number>
                     </property>
                     <property name="rightMargin">
-                     <number>0</number>
+                     <number>1</number>
                     </property>
                     <property name="bottomMargin">
                      <number>0</number>
@@ -4198,12 +4278,21 @@ QScrollBar::right-arrow:horizontal:pressed {
                         <height>30</height>
                        </size>
                       </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>30</height>
+                       </size>
+                      </property>
                       <property name="font">
                        <font>
                         <family>Arial</family>
                         <pointsize>15</pointsize>
                         <bold>false</bold>
                        </font>
+                      </property>
+                      <property name="lineWidth">
+                       <number>0</number>
                       </property>
                       <property name="text">
                        <string>Currently editing:</string>
@@ -4215,13 +4304,13 @@ QScrollBar::right-arrow:horizontal:pressed {
                       <property name="minimumSize">
                        <size>
                         <width>252</width>
-                        <height>86</height>
+                        <height>82</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>290</width>
-                        <height>84</height>
+                        <height>82</height>
                        </size>
                       </property>
                       <property name="styleSheet">
@@ -4440,6 +4529,63 @@ border-radius: 5px;</string>
                            </spacer>
                           </item>
                           <item>
+                           <widget class="QPushButton" name="task_edit_confirm">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>90</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>90</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                            <property name="font">
+                             <font>
+                              <family>Arial</family>
+                              <pointsize>15</pointsize>
+                             </font>
+                            </property>
+                            <property name="styleSheet">
+                             <string notr="true">QPushButton {
+    background-color: rgba(30, 30, 30, 1);
+    border: 1px;
+    border-radius: 0px;
+}
+
+QPushButton {
+    border-bottom-left-radius: 4px;
+	border-top-left-radius: 4px;
+}
+                           
+QPushButton:pressed {
+    /* Pressed state */
+    background: rgba(140, 255, 140, 1);
+}</string>
+                            </property>
+                            <property name="text">
+                             <string>Confirm</string>
+                            </property>
+                            <property name="iconSize">
+                             <size>
+                              <width>20</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                            <property name="checkable">
+                             <bool>true</bool>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
                            <widget class="QPushButton" name="task_keyboard_button">
                             <property name="sizePolicy">
                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4458,6 +4604,10 @@ border-radius: 5px;</string>
                               <width>40</width>
                               <height>40</height>
                              </size>
+                            </property>
+                            <property name="styleSheet">
+                             <string notr="true">border-left: 1px solid white;
+border-radius: 0px;</string>
                             </property>
                             <property name="text">
                              <string/>
@@ -4481,43 +4631,6 @@ border-radius: 5px;</string>
                             </property>
                            </widget>
                           </item>
-                          <item>
-                           <widget class="QPushButton" name="task_edit_confirm">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>40</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                             <size>
-                              <width>90</width>
-                              <height>40</height>
-                             </size>
-                            </property>
-                            <property name="maximumSize">
-                             <size>
-                              <width>90</width>
-                              <height>40</height>
-                             </size>
-                            </property>
-                            <property name="font">
-                             <font>
-                              <family>Arial</family>
-                              <pointsize>15</pointsize>
-                             </font>
-                            </property>
-                            <property name="text">
-                             <string>Confirm</string>
-                            </property>
-                            <property name="iconSize">
-                             <size>
-                              <width>20</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </widget>
-                          </item>
                          </layout>
                         </widget>
                        </item>
@@ -4529,7 +4642,13 @@ border-radius: 5px;</string>
                       <property name="minimumSize">
                        <size>
                         <width>247</width>
-                        <height>230</height>
+                        <height>280</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>280</height>
                        </size>
                       </property>
                       <layout class="QVBoxLayout" name="layer_obj_edit_note_form_container">
@@ -4811,13 +4930,13 @@ QScrollBar::right-arrow:horizontal:pressed {
                          <property name="minimumSize">
                           <size>
                            <width>247</width>
-                           <height>0</height>
+                           <height>150</height>
                           </size>
                          </property>
                          <property name="maximumSize">
                           <size>
                            <width>290</width>
-                           <height>16777215</height>
+                           <height>150</height>
                           </size>
                          </property>
                          <property name="font">
@@ -5089,39 +5208,198 @@ QScrollBar::down-arrow:vertical:pressed {
                    </layout>
                   </widget>
                  </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="layer_edit_table">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>200</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::NoFrame</enum>
+                </property>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="sortingEnabled">
+                 <bool>true</bool>
+                </property>
+                <attribute name="horizontalHeaderVisible">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>true</bool>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>FakeItem1</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>FakeItem2</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>FakeItem3</string>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>Index</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Edit</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Remove</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Move</string>
+                 </property>
+                </column>
+                <item row="0" column="0">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="layer_view" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>248</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>290</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <layout class="QVBoxLayout" name="layer_view_container">
+                 <property name="spacing">
+                  <number>10</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
-                  <widget class="QTableWidget" name="layer_edit_table">
-                   <property name="alternatingRowColors">
-                    <bool>true</bool>
+                  <widget class="QWidget" name="layer_view_objects" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
                    </property>
-                   <property name="selectionMode">
-                    <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+                   <property name="minimumSize">
+                    <size>
+                     <width>247</width>
+                     <height>50</height>
+                    </size>
                    </property>
-                   <column>
-                    <property name="text">
-                     <string>Name</string>
+                   <property name="maximumSize">
+                    <size>
+                     <width>290</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <layout class="QVBoxLayout" name="layer_view_object_container">
+                    <property name="spacing">
+                     <number>0</number>
                     </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Type</string>
+                    <property name="leftMargin">
+                     <number>0</number>
                     </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Edit</string>
+                    <property name="topMargin">
+                     <number>0</number>
                     </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Remove</string>
+                    <property name="rightMargin">
+                     <number>0</number>
                     </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Move</string>
+                    <property name="bottomMargin">
+                     <number>0</number>
                     </property>
-                   </column>
+                    <item>
+                     <widget class="QLabel" name="layer_view_empty_label">
+                      <property name="minimumSize">
+                       <size>
+                        <width>80</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Arial</family>
+                        <pointsize>20</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">border: 2px solid rgba(120,120,120,1);
+border-radius: 7px;</string>
+                      </property>
+                      <property name="text">
+                       <string>No objects</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignmentFlag::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="EBody" name="layer_view_list_ebody" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -5176,10 +5454,718 @@ QScrollBar::down-arrow:vertical:pressed {
    <extends>QWidget</extends>
    <header location="global">modules.eventlist.eventattributes</header>
    <container>1</container>
+   <slots>
+    <signal>hasItems(bool)</signal>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>
   <include location="../../assets/rss.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>time_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>time_view</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>-115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>-112</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>time_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>time_edit</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>-115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_view</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>1046</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_edit</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>350</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_view_list_ebody</sender>
+   <signal>hasItems(bool)</signal>
+   <receiver>layer_view_empty_label</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>701</x>
+     <y>1046</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>996</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_view_list_ebody</sender>
+   <signal>hasItems(bool)</signal>
+   <receiver>layer_view_list_ebody</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>701</x>
+     <y>1046</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>1046</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_header_expanded</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>602</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_header_exp_add_wrapper</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>602</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_finish_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_header_exp_finish</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_obj_edit_task_form</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>612</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>700</x>
+     <y>444</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_obj_edit_note_form</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>700</x>
+     <y>575</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_object_edit</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>487</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_object_edit</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>612</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>487</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>undo_button</sender>
+   <signal>clicked()</signal>
+   <receiver>layer_note_text_edit</receiver>
+   <slot>undo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>752</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>700</x>
+     <y>656</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>redo_button</sender>
+   <signal>clicked()</signal>
+   <receiver>layer_note_text_edit</receiver>
+   <slot>redo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>513</x>
+     <y>752</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>700</x>
+     <y>656</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_edit_confirm</sender>
+   <signal>clicked()</signal>
+   <receiver>layer_add_note_button</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>700</x>
+     <y>752</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>567</x>
+     <y>323</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>title_edit_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>title_edit</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>704</x>
+     <y>-304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>704</x>
+     <y>-240</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>title_line_edit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>title_edit_button</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>664</x>
+     <y>-237</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>704</x>
+     <y>-287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>title_edit_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>title_view</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>704</x>
+     <y>-299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>704</x>
+     <y>-297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>title_line_edit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>title_label</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>664</x>
+     <y>-237</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>666</x>
+     <y>-282</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_finish_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_header_expanded</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>467</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simple_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>611</x>
+     <y>-171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>387</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simple_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>634</x>
+     <y>-187</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_add_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>572</x>
+     <y>-170</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>590</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_remove_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>553</x>
+     <y>-190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>659</x>
+     <y>211</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_add_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>465</x>
+     <y>-191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>563</x>
+     <y>210</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_remove_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>469</x>
+     <y>-178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>636</x>
+     <y>210</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_move_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>479</x>
+     <y>-187</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>846</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_move_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>539</x>
+     <y>-182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>884</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_object_edit</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>553</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>656</x>
+     <y>604</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task_edit_confirm</sender>
+   <signal>clicked()</signal>
+   <receiver>layer_add_note_button</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>461</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>608</x>
+     <y>329</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spacer_widget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>-168</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>941</x>
+     <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spacer_widget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>535</x>
+     <y>-160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>950</x>
+     <y>211</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>complex_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spacer_widget</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>732</x>
+     <y>-169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>926</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>549</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>1115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>549</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>1109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>1109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>note_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location_button</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>1115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simple_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>1109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simple_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location_button</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>1115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>complex_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>754</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>1109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>complex_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location_button</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>754</x>
+     <y>-176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>1115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_finish_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_header_exp_add_wrapper</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>493</x>
+     <y>236</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>668</x>
+     <y>350</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>layer_add_button</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>layer_header_exp_finish</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>542</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>289</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

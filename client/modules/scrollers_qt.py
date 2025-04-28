@@ -98,7 +98,7 @@ def returnDragScroller(viewport: Union[QScrollArea, QWidget], scroller_header: O
     d_scroll_properties.setScrollMetric(
         QScrollerProperties.ScrollMetric.ScrollingCurve, QEasingCurve(QEasingCurve.Type.OutExpo))
     d_scroll_properties.setScrollMetric( #DecelerationFactor is a percentage decrease of velocity every frame
-        QScrollerProperties.ScrollMetric.DecelerationFactor, 0.01) #I.e, around 0.5% each frame
+        QScrollerProperties.ScrollMetric.DecelerationFactor, 0.001) #I.e, around 0.5% each frame
     d_scroll_properties.setScrollMetric( # at 60 frames per second
         QScrollerProperties.ScrollMetric.FrameRate, QScrollerProperties.FrameRates.Fps60)
     d_scroll_properties.setScrollMetric(

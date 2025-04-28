@@ -29,6 +29,8 @@ class EBody(QWidget):
     """ Provides a UI representation of an associated 
     """
     sizeChanged = Signal(QSize)
+    itemsChanged = Signal()
+    hasItems = Signal(bool)
 
     def __init__(self, parent, 
                  jsonParser: EventJsonParser = None):
@@ -50,6 +52,7 @@ class EBody(QWidget):
         self._jsonParser = jsonParser
         self.setConnections()
         self.importAll()
+        self.checkState()
 
     def removeConnections(self, test_en: bool=False):
         try: self._jsonParser.objectsAdded.disconnect(self.addItems())
@@ -72,6 +75,8 @@ class EBody(QWidget):
             self._jsonParser.objectsRemoved.connect(lambda removed: self.removeItems(removed_items=removed))
             self._jsonParser.objectsMoved.connect(lambda moved: self.moveItems(moved_items=moved))
 
+            self._jsonParser.finishedEditing.connect(lambda: self.checkState())
+
     def importAll(self):
         new_objects: List[str] = self._jsonParser.Positions()
         if new_objects: self.addItems(new_objects)
@@ -80,11 +85,19 @@ class EBody(QWidget):
         all_objects: List[str] = list(self._Items.keys())
         if all_objects: self.removeItems(all_objects)
 
+    def checkState(self):
+        if self._Items: self.hasItems.emit(True)
+        else: self.hasItems.emit(False)
+
+    def updateStatus(self):
+        self.setMinimumHeight(self._Ui.container.minimumSize().height())
+        self.adjustSize()
+
     def addItems(self, new_items: List[str]):
         for key in new_items:
             new_widget: Union[EToDo, EDescription] = None
             obj_type, index = key.split('_',1)
-            obj_type: ObjectType = self._jsonParser.toObjectType(obj_type)
+            obj_type: ObjectType = self._jsonParser.strToObjectType(obj_type)
             value = self._jsonParser.Object(key)
 
             if obj_type == ObjectType.EDescription: 
@@ -109,9 +122,7 @@ class EBody(QWidget):
 
             self._Items.update({key: new_widget})
 
-        self.setMinimumHeight(self._Ui.container.minimumSize().height())
-
-        self.adjustSize()
+        self.updateStatus()
     
     def removeItems(self, removed_items: List[str]):
         for key in removed_items:
@@ -125,8 +136,7 @@ class EBody(QWidget):
 
             self._Items.pop(key)
         
-        self.setMinimumHeight(self._Ui.container.minimumSize().height())
-        self.adjustSize()
+        self.updateStatus()
 
     def moveItems(self, moved_items: List[str]):
         for key in moved_items:
@@ -140,15 +150,14 @@ class EBody(QWidget):
 
             self._Ui.container.insertWidget(new_index, moved_widget)
 
-        self.setMinimumSize(self._Ui.container.minimumSize().height())
-        self.adjustSize()
+        self.updateStatus()
     
     def updateItems(self, updated_items: List[str]):
         for key in updated_items:
             update_widget: Union[EToDo, EDescription]   = self._Items[key]
 
             obj_type, index = key.split('_',1)
-            obj_type: ObjectType = self._jsonParser.toObjectType(obj_type)
+            obj_type: ObjectType = self._jsonParser.strToObjectType(obj_type)
             value = self._jsonParser.Object(key)
 
             if  (obj_type == ObjectType.EDescription):
@@ -168,8 +177,7 @@ class EBody(QWidget):
 
             update_widget.adjustSize()
 
-        self.setMinimumSize(self._Ui.container.minimumSize().height())
-        self.adjustSize()
+        self.updateStatus()
 
 class ETime(QWidget):        # Time Label that provides multiple formatting/preset-styles & real-time time updating, 
     def __init__(self, parent):
@@ -203,12 +211,16 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
         self._b_width        :int        = 150   # Base width
 
         self.label_container = QVBoxLayout()
-        self.label_container.setContentsMargins(0,0,0,0)
+        self.label_container.setContentsMargins(2,2,2,2)
         self.label_container.setSpacing(4)
         self.setLayout(self.label_container)
 
         self._startLabel                = self.ELabel(self)
         self._endLabel                  = self.ELabel(self)
+        Font = QFont()
+        Font.setFamilies([u"Arial"])
+        Font.setPointSize(18)
+        Font.setBold(False)
         self._startLabel.setObjectName("event_time_label")
         self._endLabel.setObjectName("event_time_label")
 
@@ -270,6 +282,9 @@ ETime{
     def removeMappings(self, mapper: QDataWidgetMapper):
         mapper.removeMapping(self._startLabel)
         mapper.removeMapping(self._endLabel)
+
+    def connectToWidgets(self):
+        pass
 
     class ELabel(QLabel):
         dateTimeChanged = Signal()

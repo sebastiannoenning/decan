@@ -17,10 +17,18 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
+from modules.eventlist.eventtype import EventType
+
 class ObjectType(Enum):
-    EDescription    = 0
-    EToDo           = 1
-    Invalid         = 2
+    EDescription    = 0, 'EDescription'
+    EToDo           = 1, 'EToDo'
+    Invalid         = 2, 'Invalid'
+
+    def __int__(self):
+        return self.value[0]
+
+    def __str__(self):
+        return self.value[1]
 
 class EventJsonParser(QObject):
     """ Object for connecting a json file to, & then """
@@ -28,6 +36,10 @@ class EventJsonParser(QObject):
     objectsUpdated = Signal(list)
     objectsRemoved = Signal(list)
     objectsMoved = Signal(list)
+
+    typeChanged = Signal(EventType)
+
+    finishedEditing = Signal()
 
     def __init__(self, /, 
                  parent, 
@@ -37,7 +49,7 @@ class EventJsonParser(QObject):
                          objectName=objectName)
         self._attributes:   Optional[Union[QByteArray, str]]= None
 
-        self._info:         Dict[str, Union[int, str]]      = {}  
+        self._info:         Dict[str, int]                  = {}  
         self._positions:    List[str]                       = []
         self._objects:      Dict[str, Union[
                                             str,                        # Either of type string
@@ -50,13 +62,15 @@ class EventJsonParser(QObject):
                                             ]
                                         ]
                                     ]                       = {}
+        
+        self._info.update({"types": ["Simple", "Complex", "Note", "Task"]})
     
     def _update(self):
         """ Updates the internal dicts & converts them into internal objects """
         new_json:       dict                = json.loads(self._attributes)
         if (new_json is None): raise Exception('Attributes loaded empty file')
 
-        new_info:       Dict[str, Any]      = new_json['info']
+        new_info:       Dict[str, int]      = new_json['info']
         new_positions:  List[str]           = new_json.get('positions')
         new_objects:    Dict[str, Any]      = new_json['objects']
 
@@ -74,7 +88,7 @@ class EventJsonParser(QObject):
             for key, value in new_objects.items():
                 # Check formatting
                 format, index       = key.rsplit('_', 1)
-                format: ObjectType  = self.toObjectType(format)
+                format: ObjectType  = self.strToObjectType(format)
                 index:  int         = int(index)
                 largest_val = max(index, largest_val)
 
@@ -150,12 +164,13 @@ class EventJsonParser(QObject):
             if (len(new_objects) != new_index): 
                 new_index = len(new_objects)
             new_increment = max(largest_val, new_increment)
-            if not isinstance(new_type, str):
-                new_type = 'Complex'
 
             self._info.update({'index':      new_index})
             self._info.update({'increment':  new_increment})
             self._info.update({'type':       new_type})
+        
+        self.typeChanged.emit(self.intToEventType(self._info.get('type')))
+        self.finishedEditing.emit()
 
     def formatEDescription(self, value: Union[str, dict]):
         if  (isinstance(value, str)):   return value
@@ -178,14 +193,18 @@ class EventJsonParser(QObject):
         new_todo.update({'EBool': new_bool})
         return new_todo
     
-    def toObjectType(self, format: str):
+    def intToEventType(self, format: int):
+        EventTypeLookup : List[EventType] = [EventType.Simple, EventType.Complex, EventType.Note, EventType.Task]
+        return EventTypeLookup[format]
+    
+    def strToObjectType(self, format: str):
         if  (format == 'EDescription'): return ObjectType.EDescription
         elif(format == 'EToDo'):        return ObjectType.EToDo
         else:                           return ObjectType.Invalid
 
     def setObjectProperty(self, key: str, value: Union[str, Dict[str, bool]]):
         format, index = key.split('_',1)
-        format = self.toObjectType(format)
+        format = self.strToObjectType(format)
         if (format == ObjectType.EDescription): value = self.formatEDescription(value)
         elif (format == ObjectType.EToDo):      value = self.formatEToDo(value)
         self._objects.update({key: value})

@@ -54,7 +54,7 @@ class DTPushButton(QLabel):
 
     def setText(self, dateTime: QDateTime):
         self._dateTime = dateTime
-        super().setText(dt_qt.DateTimeToFS(self._dateTime, self._type))
+        super().setText(dt_qt.date_time_to_fs(self._dateTime, self._type))
         self.adjustSize()       # CHECK FOR ERROR LATER; DOES ADJUST SIZE CALL AFTER THE SET TEXT CALL?
 
     def setFont(self, arg):
@@ -80,6 +80,10 @@ class DTPushButton(QLabel):
 
     def date(self):
         return self._dateTime
+    
+    def resizeEvent(self, event):
+        
+        return super().resizeEvent(event)
 
 class TDateTimeSelect(QWidget):
     """ Base class for opening QCalendar & TDateTimeEdit

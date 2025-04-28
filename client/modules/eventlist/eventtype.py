@@ -1,7 +1,13 @@
 from enum import Enum
 
 class EventType(Enum):
-    Description = 0
-    ToDo = 1
-    Complex = 2
-    Simple = 3
+    Simple      = 0, 'Simple'
+    Complex     = 1, 'Complex'
+    Note        = 2, 'Note'
+    Task        = 3, 'Task'
+
+    def __int__(self):
+        return self.value[0]
+
+    def __str__(self):
+        return self.value[1]

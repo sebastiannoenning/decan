@@ -3,7 +3,7 @@ import json
 
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QDateTime, QDate, QTime, QModelIndex, QByteArray
-from PySide6.QtWidgets import QWidget, QScroller, QDataWidgetMapper
+from PySide6.QtWidgets import QWidget, QScroller, QDataWidgetMapper, QPushButton
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
 
 # Important:
@@ -17,6 +17,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationa
 
 from .event_view_ui import Ui_event_view
 from modules.touchdatetime.tdateedit import DateSelect
+from modules.eventlist.eventtype import EventType
 from modules.eventlist.eventjsonparser import EventJsonParser
 from models.event_model import EventModel, EventFilter, DateRange
 import modules.scrollers_qt as scrQt
@@ -28,6 +29,8 @@ class EventView(QWidget):
         self._Ui.setupUi(self)
         self.additionalUiSettings()
 
+        self.testCode()
+
         self._database = QSqlDatabase.addDatabase('QMYSQL')
         self._database.setHostName('localhost')
         self._database.setUserName('sebastianji')
@@ -38,26 +41,128 @@ class EventView(QWidget):
             print('connection failed')
             print(self._database.lastError().text())
 
+        self.eventmodel = EventModel(self, db=self._database)
+        self._Ui.event_view_table.setModel(self.eventmodel)
+
+        self._Ui.layer_view_list_ebody.setJsonParser(self.test_parser)
+        
+        self.connections()
+
+    def internal(self):
+        pass
+
+    def additionalUiSettings(self):
+        # Remove perpendicular scroll ability from all scroll-areas & place a touch scroller on all of them
+        #   Vertical only scrolls:
+        self._Ui.form_wrapper.horizontalScrollBar().setEnabled(False)                  
+        self.form_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.form_wrapper)
+        self._Ui.event_list_wrapper.horizontalScrollBar().setEnabled(False),           
+        self.event_list_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.event_list_wrapper)
+        #   Horizontal only scrolls:
+        self._Ui.preset_wrapper.verticalScrollBar().setEnabled(False)               
+        self.preset_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.preset_wrapper)
+        self._Ui.title_view_wrapper.verticalScrollBar().setEnabled(False)           
+        self.title_view_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.title_view_wrapper)
+        self._Ui.layer_header_wrapper.verticalScrollBar().setEnabled(False)            
+        self.layer_header_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.layer_header_wrapper)
+        self._Ui.layer_header_exp_add_wrapper.verticalScrollBar().setEnabled(False)
+        self.layer_header_exp_add_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.layer_header_exp_add_wrapper)
+        self._Ui.layer_note_edit_header_wrapper.verticalScrollBar().setEnabled(False)
+        self.layer_note_edit_header_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.layer_note_edit_header_wrapper)
+
+        # Create additional helper classes
+        self.eventMapper = QDataWidgetMapper(self)
+        self.formParser = EventJsonParser(self)
+        self.locationMapper = QDataWidgetMapper(self)
+
+    def connections(self):
+        self._Ui.time_schedule_label_button.clicked.connect(lambda: print(f"""
+            Family: {self._Ui.time_schedule_label_button.fontInfo().family()}
+            PixelSize: {self._Ui.time_schedule_label_button.fontInfo().pixelSize()}
+            PointSize: {self._Ui.time_schedule_label_button.fontInfo().pointSize()}
+            WidgetSize: {self._Ui.time_schedule_label_button.size()}
+            """)
+            )
+
+        self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
+        self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
+        self._Ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))
+
+        self._Ui.prev_day.clicked.connect(lambda: self.prev_page())
+        self._Ui.next_day.clicked.connect(lambda: self.next_page())
+
+        # Custom Auto Default Behaviour
+        self._Ui.layer_finish_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_finish_button))
+        self._Ui.layer_add_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_add_button))
+        self._Ui.layer_add_button.toggled.connect(lambda toggled: self.clearDependentToggles(toggled, self._Ui.layer_header_exp_add))
+        self._Ui.layer_remove_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_remove_button))
+        self._Ui.layer_edit_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_edit_button))
+        self._Ui.layer_move_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_move_button))
+
+        self._Ui.layer_add_note_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_add_note_button))
+        self._Ui.layer_add_task_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_add_task_button))
+
+        self.formParser.typeChanged.connect(lambda: self.updateInfo())
+
+    def clearOtherToggles(self, exception: QPushButton):
+        parent_container = exception.parentWidget().layout()
+        if exception.isChecked():
+            for i in range(parent_container.count()):
+                lay_item = parent_container.itemAt(i)
+                if isinstance(lay_item.widget(), QPushButton):
+                    button: QPushButton = lay_item.widget()
+                    if button == exception: pass
+                    else: 
+                        button.setChecked(False)
+                        button.setEnabled(False)
+        else:
+            ignore = False
+            for i in range(parent_container.count()):
+                lay_item = parent_container.itemAt(i)
+                if isinstance(lay_item.widget(), QPushButton):
+                    button: QPushButton = lay_item.widget()
+                    if button.isChecked() and (button != exception):
+                        ignore = True
+            if not ignore:
+                for i in range(parent_container.count()):
+                    lay_item = parent_container.itemAt(i)
+                    if isinstance(lay_item.widget(), QPushButton):
+                        button: QPushButton = lay_item.widget()
+                        button.setEnabled(True)
+
+    def clearDependentToggles(self, ignore: bool, container: QWidget):
+        if not ignore:
+            dependent_container = container.layout()
+            for i in range(dependent_container.count()):
+                lay_item = dependent_container.itemAt(i)
+                if isinstance(lay_item.widget(), QPushButton):
+                    button: QPushButton = lay_item.widget()
+                    button.setChecked(False)
+                    button.setEnabled(True)
+
+    def testCode(self):
         self.test_parser = EventJsonParser(self)
-        test_json = """{
-  "info": {
-    "index": 3,
-    "increment" : 3,
-    "type": "[ToDo, Description, Complex, Simple]"
-  },
-  "positions":["EDescription_3","EToDo_2","EToDo_1"],
-  "objects": {
-    "EDescription_3": "Go baby shopping",
-    "EToDo_1": {
-      "EBool": false,
-      "ETaskDescription": "Buy eggs"
-    },
-    "EToDo_2": {
-      "EBool": false,
-      "ETaskDescription": "Buy milk"
-    }
-  }
-}"""
+        test_json = """
+        {
+            "info": {
+                "index": 3,
+                "increment" : 3,
+                "type": 1,
+                "types" : ["Simple", "Complex", "Note", "Task"]
+            },
+            "positions":["EDescription_3","EToDo_2","EToDo_1"],
+            "objects": {
+                "EDescription_3": "Go baby shopping",
+                "EToDo_1": {
+                "EBool": false,
+                "ETaskDescription": "Buy eggs"
+                },
+                "EToDo_2": {
+                "EBool": false,
+                "ETaskDescription": "Buy milk"
+                }
+            }
+        }"""
         self.test_parser.Attributes = test_json
 
         self._Ui.EToDo.setText('Blah'*20)
@@ -111,27 +216,6 @@ class EventView(QWidget):
         self._event_filter.addUserFilter(2)
         print(self._event_filter.constructFilter())
 
-        self.eventmodel = EventModel(self, db=self._database)
-        self._Ui.event_view_table.setModel(self.eventmodel)
-        
-        self.connections()
-
-    def connections(self):
-        self._Ui.time_schedule_label_button.clicked.connect(lambda: print(f"""
-            Family: {self._Ui.time_schedule_label_button.fontInfo().family()}
-            PixelSize: {self._Ui.time_schedule_label_button.fontInfo().pixelSize()}
-            PointSize: {self._Ui.time_schedule_label_button.fontInfo().pointSize()}
-            WidgetSize: {self._Ui.time_schedule_label_button.size()}
-            """)
-            )
-
-        self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
-        self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
-        self._Ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))
-
-        self._Ui.prev_day.clicked.connect(lambda: self.prev_page())
-        self._Ui.next_day.clicked.connect(lambda: self.next_page())
-
     def prev_page(self):
         index = self._Ui.details_container.currentIndex()
         index = (index - 1) % self._Ui.details_container.count()
@@ -141,36 +225,9 @@ class EventView(QWidget):
         index = self._Ui.details_container.currentIndex()
         index = (index + 1) % self._Ui.details_container.count()
         self._Ui.details_container.setCurrentIndex(index)
-    
-    def additionalUiSettings(self):
-        # Remove perpendicular scroll ability from all scroll-areas & place a touch scroller on all of them
-        #   Vertical only scrolls:
-        self._Ui.form_wrapper.horizontalScrollBar().setEnabled(False)                  
-        self.form_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.form_wrapper)
-        self._Ui.event_list_wrapper.horizontalScrollBar().setEnabled(False),           
-        self.event_list_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.event_list_wrapper)
-        #   Horizontal only scrolls:
-        self._Ui.preset_wrapper.verticalScrollBar().setEnabled(False)               
-        self.preset_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.preset_wrapper)
-        self._Ui.title_view_wrapper.verticalScrollBar().setEnabled(False)           
-        self.title_view_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.title_view_wrapper)
-        self._Ui.layer_header_wrapper.verticalScrollBar().setEnabled(False)            
-        self.layer_header_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.layer_header_wrapper)
-        self._Ui.layer_header_exp_add_wrapper.verticalScrollBar().setEnabled(False)
-        self.layer_header_exp_add_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.layer_header_exp_add_wrapper)
-        self._Ui.layer_note_edit_header_wrapper.verticalScrollBar().setEnabled(False)
-        self.layer_note_edit_header_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.layer_note_edit_header_wrapper)
-
-        self.eventMapper = QDataWidgetMapper()
-        self.locationMapper = QDataWidgetMapper()
-
-
-    def openFormEditing(self):
-        pass
 
     def mapToWidgets(self, index: QModelIndex):
         # Title Mappings
-        self.eventMapper.addMapping(self._Ui.title_label,                   1, QByteArray('text'))
         self.eventMapper.addMapping(self._Ui.title_line_edit,               1, QByteArray('text'))
 
         # Time Mappings
@@ -178,12 +235,14 @@ class EventView(QWidget):
                                        col_start=2, 
                                        col_end=3)
         self.eventMapper.addMapping(self._Ui.time_start_select,             2, QByteArray('DateTime'))
-        self.eventMapper.addMapping(self._Ui.time_end_select,               2, QByteArray('DateTime'))
+        self.eventMapper.addMapping(self._Ui.time_end_select,               3, QByteArray('DateTime'))
 
         # Attribute Mappings
+        self.eventMapper.addMapping(self.formParser,                        4, QByteArray('Attributes'))
 
         # Location Mappings
         self.eventMapper.addMapping(self._Ui.loc_view_col_label,            6, QByteArray('text'))
+        #self.eventMapper.addMapping(self                                    6, )   Add Mapper to helper object that will update locationMapper with the correct attributes
 
         self.locationMapper.addMapping(self._Ui.loc_address_line_1_label,   1, QByteArray('text'))
         self.locationMapper.addMapping(self._Ui.loc_address_line_2_label,   2, QByteArray('text'))
@@ -200,3 +259,99 @@ class EventView(QWidget):
     def emptyForm(self):
         pass
 
+    def openFormEditing(self):
+        pass
+        pass
+
+    def defaultParserValues(self, format: EventType=EventType.Simple):
+        default_text: str = ''
+        if format == EventType.Simple:
+            default_text = """
+            {
+                "info": {
+                    "index": 0,
+                    "increment" : 0,
+                    "type": 0
+                    "types": ["Simple", "Complex", "Note", "Task"]
+                },
+            }"""
+        if format == EventType.Complex: 
+            default_text = """
+            {
+                "info": {
+                    "index": 0,
+                    "increment" : 0,
+                    "type": 2,
+                    "types": ["Simple", "Complex", "Note", "Task"]
+                },
+                "positions":[],
+                "objects": {
+                },
+            }"""
+        if format == EventType.Note: 
+            default_text = """
+            {
+                "info": {
+                    "index": 1,
+                    "increment" : 1,
+                    "type": 3,
+                    "types": ["Simple", "Complex", "Note", "Task"]
+                },
+                "positions":["EDescription_1"],
+                "objects": {
+                    "EDescription_1": "Your description here"
+                },
+            }"""
+        if format == EventType.Task: 
+            default_text = """
+            {
+                "info": {
+                    "index": 1,
+                    "increment" : 1,
+                    "type": 4,
+                    "types": ["Simple", "Complex", "Note", "Task"]
+                },
+                "positions":["EToDo_1"],
+                "objects": {
+                    "EToDo_1": {
+                        "EBool": false,
+                        "ETaskDescription": "Your task name"
+                    }
+                },
+            }"""
+
+    def updateInfo(self):
+        pass
+
+    def toggleTitleEditable(self):
+        if (self._Ui.title_view.isVisible()):
+            self._Ui.title_edit.show()
+            self._Ui.title_view.hide()
+        else: 
+            self._Ui.title_view.show()
+            self._Ui.title_edit.hide()
+
+    def togglePresetEditable(self):
+        if self._Ui.preset_button.isChecked():
+            for i in self._Ui.preset_container.count():
+                lay_item = self._Ui.preset_container.itemAt(i)
+                button: QPushButton = lay_item.widget()
+                button.setEnabled(True)
+        else:
+            for i in self._Ui.preset_container.count():
+                lay_item = self._Ui.preset_container.itemAt(i)
+                button: QPushButton = lay_item.widget()
+                if not button.isChecked():
+                    button.setEnabled(False)
+
+    def toggleTimeEditable(self):
+        pass
+
+    def toggleLayerEditable(self):
+        pass
+    
+    def toggleLocationEditable(self):
+        pass
+
+    def loadTableData(self):
+        pass
