@@ -11,7 +11,7 @@ from PySide6.QtSql import (QSqlDatabase,
 
 from .user_model import UserModel
 import modules.sql_qt as sqlFuncs
-import modules.datetime_qt as dtFuncs
+import modules.datetime_qt as dt_funcs
 
 class LocationModel(QSortFilterProxyModel):
     def __init__(self, /, parent=None, *, 

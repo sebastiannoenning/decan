@@ -17,13 +17,13 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-from modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event_todo, Ui_event_body
+from client.modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event_todo, Ui_event_body
 
-from modules.datetime_qt import DateToFSLong, TimeToFS
+from client.modules.datetime_qt import date_to_fs_long, time_to_fs
 
-from modules.eventlist.eventjsonparser import EventJsonParser, ObjectType
+from client.modules.eventlist.eventjsonparser import EventJsonParser, ObjectType
  
-import modules.scrollers_qt as scrQt
+import client.modules.scrollers_qt as scr_qt
 
 class EBody(QWidget):
     """ Provides a UI representation of an associated 
@@ -35,7 +35,7 @@ class EBody(QWidget):
     def __init__(self, parent, 
                  jsonParser: EventJsonParser = None):
         super().__init__(parent)
-        self._jsonParser: EventJsonParser = None
+        self._jsonParser: Optional[EventJsonParser] = None
         if jsonParser is not None: self._jsonParser = jsonParser
         if self._jsonParser is not None: self.setConnections()
 
@@ -55,16 +55,16 @@ class EBody(QWidget):
         self.checkState()
 
     def removeConnections(self, test_en: bool=False):
-        try: self._jsonParser.objectsAdded.disconnect(self.addItems())
+        try: self._jsonParser.objectsAdded.disconnect(self.addItems)
         except Exception as e: 
             if test_en: print('removeConnections()->objectsAdded.disconnect()  error: Was not connected,',e)
-        try: self._jsonParser.objectsUpdated.disconnect(self.updateItems())
+        try: self._jsonParser.objectsUpdated.disconnect(self.updateItems)
         except Exception as e: 
             if test_en: print('removeConnections()->objectsUpdateddisconnect()  error: Was not connected,',e)
-        try: self._jsonParser.objectsRemoved.disconnect(self.removeItems())
+        try: self._jsonParser.objectsRemoved.disconnect(self.removeItems)
         except Exception as e: 
             if test_en: print('removeConnections()->objectsRemoved.disconnect() error: Was not connected,',e)
-        try: self._jsonParser.objectsMoved.disconnect(self.moveItems())
+        try: self._jsonParser.objectsMoved.disconnect(self.moveItems)
         except Exception as e: 
             if test_en: print('removeConnections()->objectsMoved.disconnect() error: Was not connected,',e)
 
@@ -95,9 +95,9 @@ class EBody(QWidget):
 
     def addItems(self, new_items: List[str]):
         for key in new_items:
-            new_widget: Union[EToDo, EDescription] = None
-            obj_type, index = key.split('_',1)
-            obj_type: ObjectType = self._jsonParser.strToObjectType(obj_type)
+            new_widget: Union[EToDo, EDescription, None] = None
+            obj_name, index = key.split('_',1)
+            obj_type: ObjectType = self._jsonParser.strToObjectType(obj_name)
             value = self._jsonParser.Object(key)
 
             if obj_type == ObjectType.EDescription: 
@@ -156,15 +156,15 @@ class EBody(QWidget):
         for key in updated_items:
             update_widget: Union[EToDo, EDescription]   = self._Items[key]
 
-            obj_type, index = key.split('_',1)
-            obj_type: ObjectType = self._jsonParser.strToObjectType(obj_type)
+            obj_name, index = key.split('_',1)
+            obj_type: ObjectType = self._jsonParser.strToObjectType(obj_name)
             value = self._jsonParser.Object(key)
 
-            if  (obj_type == ObjectType.EDescription):
+            if obj_type == ObjectType.EDescription:
                 value: str                          = self._jsonParser.formatEDescription(value)
                 update_widget.setText(value)
-            elif(obj_type == ObjectType.EToDo):
-                update_widget.checkStateChanged.disconnect(self._jsonParser.setObjectProperty())
+            elif obj_type == ObjectType.EToDo:
+                update_widget.checkStateChanged.disconnect(self._jsonParser.setObjectProperty)
 
                 value:  Dict[str, Union[str, bool]] = self._jsonParser.formatEToDo(value)
                 value_bool:     bool                = value.get('EBool')
@@ -179,7 +179,9 @@ class EBody(QWidget):
 
         self.updateStatus()
 
-class ETime(QWidget):        # Time Label that provides multiple formatting/preset-styles & real-time time updating, 
+
+# noinspection PyTypeChecker,PyAttributeOutsideInit
+class ETime(QWidget):        # Time Label that provides multiple formatting/preset-styles & real-time time updating,
     def __init__(self, parent):
         super().__init__(parent)
         self._startColumn   :int        = 0
@@ -256,22 +258,22 @@ ETime{
             self._allDay = True
         else: self._allDay = False
 
-        if (self._startLabel.Date() != self._endLabel.Date()):
+        if self._startLabel.Date() != self._endLabel.Date():
             self._multiDay = True
         else: self._multiDay = False
 
-        if (self._allDay) and (self._multiDay):
-            self._startLabel.setText(f'{alldaytxt}, from {DateToFSLong(self._startLabel.Date())}')
-            self._endLabel.setText(f'to {DateToFSLong(self._endLabel.Date())}')
-        elif (self._allDay):
+        if self._allDay and self._multiDay:
+            self._startLabel.setText(f'{alldaytxt}, from {date_to_fs_long(self._startLabel.Date())}')
+            self._endLabel.setText(f'to {date_to_fs_long(self._endLabel.Date())}')
+        elif self._allDay:
             self._startLabel.setText(self._startLabel.Date().toString('dddd d MMM yyyy'))
             self._endLabel.setText(alldaytxt)
-        elif (self._multiDay):
-            self._startLabel.setText(f'from {DateToFSLong(self._startLabel.Date())}')
-            self._endLabel.setText(f'to {DateToFSLong(self._endLabel.Date())}')
+        elif self._multiDay:
+            self._startLabel.setText(f'from {date_to_fs_long(self._startLabel.Date())}')
+            self._endLabel.setText(f'to {date_to_fs_long(self._endLabel.Date())}')
         else:
             self._startLabel.setText(self._startLabel.Date().toString('dddd d MMM yyyy'))
-            self._endLabel.setText(f'from {TimeToFS(self._startLabel.Time())} to {TimeToFS(self._endLabel.Time())}')
+            self._endLabel.setText(f'from {time_to_fs(self._startLabel.Time())} to {time_to_fs(self._endLabel.Time())}')
 
     def addMappings(self, mapper: QDataWidgetMapper, col_start: int, col_end: int):
         self._startColumn = col_start
@@ -302,8 +304,8 @@ ETime{
         def DateTime(self): return self._DateTime
         
         @DateTime.setter
-        def DateTime(self, DateTime: QDate):
-            if (self._DateTime != DateTime):
+        def DateTime(self, date_time: QDateTime):
+            if self._DateTime != date_time:
                 self._DateTime = DateTime
                 self.dateTimeChanged.emit()
 
@@ -341,7 +343,7 @@ class EToDo(QWidget):           # ToDo Add-on that provides a checkable box & a
 
         self._Ui.checkbox.checkStateChanged.connect(lambda: self.checkStateChanged.emit())
 
-        self.form_wrapper_scroller : QScroller = scrQt.returnUniScroller(self._Ui.task_label_wrapper)
+        self.form_wrapper_scroller : QScroller = scr_qt.returnUniScroller(self._Ui.task_label_wrapper)
 
     def sizeHint(self): return QSize(200, 50)
 

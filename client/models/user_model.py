@@ -10,7 +10,7 @@ from PySide6.QtSql import (QSqlDatabase,
                            QSqlQuery)
 
 import modules.sql_qt as sqlFuncs
-import modules.datetime_qt as dtFuncs
+import modules.datetime_qt as dt_funcs
 
 class UserModel(QSortFilterProxyModel):
     def __init__(self, /, parent=None, *, 

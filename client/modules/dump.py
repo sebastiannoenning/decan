@@ -668,10 +668,10 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
                                     ) AS intersecting_rows)
         
     def currentUser(self, test_en=True):
-        self.pullUser = sqlFuncs.execnext(self.pullUser)                                                           # Error messages to be passed to terminal
+        self.pullUser = sql_funcs.execnext(self.pullUser)                                                           # Error messages to be passed to terminal
         uid_check, msg = re.search('`EU_UserID`\s*=\s*(\d+)',self.pullUser.value(1)),                                       'N/A'
         if (uid_check): self._user_id, msg = uid_check.group(1),                                                            'Successfully managed to'
-        else:           self._user_id, msg = int(sqlFuncs.execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
+        else:           self._user_id, msg = int(sql_funcs.execnext(QSqlQuery("SELECT `UserID` FROM `Users` LIMIT 1")).value(0)),     'Failed to'
         # Above code checks if a match was found in the view's initial query; if not, it defaults to another user. 
         if (test_en): print(f"###EUModel {msg} extract ID from view\nCurrent UserID: ",self._user_id)
         if ((msg) == 'Failed to'): self.changeUser(uid=self._user_id)
@@ -679,10 +679,10 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
     def changeUser(self, uid: int, test_en=True):
         if (uid == self._user_id): return #Exit early if _user_id already matches the current
         else:
-            # Validate userID
+            # Validate user_id
             cur_id = self._user_id
             self.userValidate.bindValue(":user", uid)
-            self.userValidate = sqlFuncs.execnext(self.userValidate)
+            self.userValidate = sql_funcs.execnext(self.userValidate)
             if not (self.userValidate.isValid()):
                 if (test_en): print(f"###EUModel Validate Error: {self.userValidate.lastError()}")
                 return #Exit early if _user_id does not exist
@@ -692,7 +692,7 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
             self.userChange.exec()
             self.select()
             self.intersectingRowCount.bindValue(':user', cur_id)
-            same_rows = sqlFuncs.execnext(self.intersectingRowCount).value(0)
+            same_rows = sql_funcs.execnext(self.intersectingRowCount).value(0)
             if (test_en): print('###EUModel: User changed\n#### (Overall) Matching:New Rows: (',self.rowCount(),') ',same_rows,':',self.rowCount()-same_rows)"""
 
 
@@ -802,15 +802,15 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
 
     def changeEventFilter(self, currentText):
         try:
-            userID = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{currentText}'"))
-            self._event_model.setFilter(f"UserID = '{userID}'")
+            user_id = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{currentText}'"))
+            self._event_model.setFilter(f"UserID = '{user_id}'")
             self._event_model.select()
             self._ui.table_events.setModel(self._event_model)
         except Exception as e:
             print("eventFilter change not possible:",e)
     
     def addEvent(self):
-        userID = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._ui.AE_CB_userSelect.currentText())}'"))
+        user_id = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._ui.AE_CB_userSelect.currentText())}'"))
         print(self._ui.AE_LE_inputTitle.displayText())
         newEvent = {
             'ETitle'            :   self._ui.AE_LE_inputTitle.displayText(),
@@ -818,7 +818,7 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
             'EStart_Time'       :   (self._ui.AE_DTE_startDTSelect.time()).toPython().strftime('%H:%M:%S'),
             'EEnd_Date'         :   (self._ui.AE_DTE_endDTSelect.date()).toPython().strftime('%Y-%m-%d'),
             'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
-            'E_CreatorUserID'   :   userID
+            'E_CreatorUserID'   :   user_id
         }
         try:
             inputQuery = QSqlQuery()
