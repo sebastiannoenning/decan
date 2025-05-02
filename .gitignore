@@ -74,6 +74,7 @@ CMakeLists.txt.user*
 
 
 .qtcreator
+.junie
 *.idea
 *.junie
 *.venv
