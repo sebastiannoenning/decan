@@ -21,8 +21,8 @@ class Ui_event_body(object):
     def setupUi(self, event_body):
         if not event_body.objectName():
             event_body.setObjectName(u"event_body")
-        event_body.resize(0, 0)
-        event_body.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum))
+        event_body.resize(0,0)
+        event_body.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred))
         
         self.container = QVBoxLayout(event_body)
         self.container.setObjectName(u"event_body_container")

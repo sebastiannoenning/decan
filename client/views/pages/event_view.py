@@ -15,11 +15,11 @@ from PySide6.QtSql import QSqlDatabase
 #       pyside6-rcc resources/assets/rss.qrc -o client/views/rss_rc.py 
 
 from .event_view_ui import Ui_event_view
-from client.modules.touchdatetime.tdateedit import DateSelect
-from client.modules.eventlist.eventtype import EventType
-from client.modules.eventlist.eventjsonparser import EventJsonParser
-from client.models.event_model import EventModel, EventFilter, DateRange
-import client.modules.scrollers_qt as scr_qt
+from modules.touchdatetime.tdateedit import DateSelect
+from modules.eventlist.eventtype import EventType
+from modules.eventlist.eventjsonparser import EventJsonParser
+from models.event_model import EventModel, EventFilter, DateRange
+import modules.scrollers_qt as scr_qt
 
 
 # noinspection PyTypeChecker
@@ -32,20 +32,27 @@ class EventView(QWidget):
 
         self.testCode()
 
+        print(QSqlDatabase.drivers())
+
         self._database = QSqlDatabase.addDatabase('QMYSQL')
-        self._database.setHostName('localhost')
+        self._database.setHostName('192.168.1.147')
         self._database.setUserName('sebastianji')
-        self._database.setPassword('admin')  #genTen212!')
+        self._database.setPassword('salami12')  #genTen212!')
         self._database.setDatabaseName('decan')
+
+        self._database.setConnectOptions("SSL_CA=/Users/sebastianji/ca.pem")
 
         if not self._database.open():
             print('connection failed')
-            print(self._database.lastError().text())
+            print('open() error->',self._database.lastError().text())
 
         self.eventmodel = EventModel(self, db=self._database)
         self._Ui.event_view_table.setModel(self.eventmodel)
+        self._Ui.event_list.setModel(self.eventmodel)
 
         self._Ui.layer_view_list_ebody.setJsonParser(self.test_parser)
+
+        self.eventmodel.select()
 
         self.connections()
 

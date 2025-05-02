@@ -12,8 +12,8 @@ from PySide6.QtSql import (QSqlDatabase,
 
 from .user_model import UserModel
 from .location_model import LocationModel
-import client.modules.sql_qt as sql_funcs
-import client.modules.datetime_qt as dt_funcs
+import modules.sql_qt as sql_funcs
+import modules.datetime_qt as dt_funcs
 
 class DateRange:
     def __init__ (self, start_date: QDateTime, end_date: QDateTime):
@@ -85,7 +85,7 @@ class EventFilter:
         """ Changes the date range via removing the old one"""
         index -= 1
         o_dr = self._date_ranges[index] # Original DateRange
-        self._date_ranges.remove(index)
+        self._date_ranges.remove(o_dr)
         try:
             self.addDateRangeFilter(n_s_date, n_e_date, test_en=test_en)
         except Exception as e:
@@ -184,15 +184,15 @@ class EventModel(QSortFilterProxyModel):
         self._eventModel.setTable('Events')
         self._eventsUsersModel.setTable('EU_Events_access')
 
-        self._eventConcatanationProxyModel.addSourceModel(self._eventModel)
-        self._eventConcatanationProxyModel.addSourceModel(self._eventsUsersModel)
+        self._eventConcatenationProxyModel.addSourceModel(self._eventModel)
+        self._eventConcatenationProxyModel.addSourceModel(self._eventsUsersModel)
 
-        self._eventLookupModel.setSourceModel(self._eventConcatanationProxyModel)
+        self._eventLookupModel.setSourceModel(self._eventConcatenationProxyModel)
         self._eventLookupModel.setDynamicSortFilter(True)
         self._eventLookupModel.setSortRole(Qt.ItemDataRole.DisplayRole)
         self._eventLookupModel.sort(0, Qt.SortOrder.AscendingOrder)
 
-        self.setSourceModel(self._eventConcatanationProxyModel)
+        self.setSourceModel(self._eventConcatenationProxyModel)
         self.setDynamicSortFilter(True)
         self.setSortRole(Qt.ItemDataRole.EditRole)
         self.sort(3, Qt.SortOrder.AscendingOrder)

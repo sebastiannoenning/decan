@@ -27,7 +27,7 @@ class Ui_event_list(object):
 
         # Central Container
         self.container = QVBoxLayout(event_list)
-        self.container.setSpacing(0)
+        self.container.setSpacing(10)
         self.container.setObjectName(u"container")
         self.container.setContentsMargins(0, 0, 0, 0)
         event_list.setLayout(self.container)

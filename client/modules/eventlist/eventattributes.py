@@ -17,13 +17,13 @@ from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
 from PySide6.QtGui import (QFont, QMouseEvent, QPainter)
 
-from client.modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event_todo, Ui_event_body
+from modules.eventlist.event_attributes_ui import Ui_event_description, Ui_event_todo, Ui_event_body
 
-from client.modules.datetime_qt import date_to_fs_long, time_to_fs
+from modules.datetime_qt import date_to_fs_long, time_to_fs
 
-from client.modules.eventlist.eventjsonparser import EventJsonParser, ObjectType
- 
-import client.modules.scrollers_qt as scr_qt
+from modules.eventlist.eventjsonparser import EventJsonParser, ObjectType
+
+import modules.scrollers_qt as scr_qt
 
 class EBody(QWidget):
     """ Provides a UI representation of an associated 
@@ -36,8 +36,11 @@ class EBody(QWidget):
                  jsonParser: EventJsonParser = None):
         super().__init__(parent)
         self._jsonParser: Optional[EventJsonParser] = None
-        if jsonParser is not None: self._jsonParser = jsonParser
-        if self._jsonParser is not None: self.setConnections()
+        if jsonParser is not None:
+            self._jsonParser = jsonParser
+            print(self._jsonParser.objectName())
+            self.setJsonParser(self._jsonParser)
+            self.setConnections()
 
         self._Ui = Ui_event_body()
         self._Ui.setupUi(self)
@@ -60,7 +63,7 @@ class EBody(QWidget):
             if test_en: print('removeConnections()->objectsAdded.disconnect()  error: Was not connected,',e)
         try: self._jsonParser.objectsUpdated.disconnect(self.updateItems)
         except Exception as e: 
-            if test_en: print('removeConnections()->objectsUpdateddisconnect()  error: Was not connected,',e)
+            if test_en: print('removeConnections()->objectsUpdated.disconnect()  error: Was not connected,',e)
         try: self._jsonParser.objectsRemoved.disconnect(self.removeItems)
         except Exception as e: 
             if test_en: print('removeConnections()->objectsRemoved.disconnect() error: Was not connected,',e)
@@ -76,10 +79,14 @@ class EBody(QWidget):
             self._jsonParser.objectsMoved.connect(lambda moved: self.moveItems(moved_items=moved))
 
             self._jsonParser.finishedEditing.connect(lambda: self.checkState())
+            self._jsonParser.finishedEditing.connect(lambda: self.updateStatus())
 
     def importAll(self):
         new_objects: List[str] = self._jsonParser.Positions()
-        if new_objects: self.addItems(new_objects)
+        if new_objects:
+            self.addItems(new_objects)
+            print()
+            self.sizeChanged.emit(self.sizeHint())
 
     def clearAll(self):
         all_objects: List[str] = list(self._Items.keys())
@@ -90,8 +97,13 @@ class EBody(QWidget):
         else: self.hasItems.emit(False)
 
     def updateStatus(self):
-        self.setMinimumHeight(self._Ui.container.minimumSize().height())
-        self.adjustSize()
+        pass#self.propagateMinimumDimensions()
+
+    def propagateMinimumDimensions(self):
+        """ Absolute minimum height return wrapper holding this """
+        spacing = (self._Ui.container.spacing() * len(self._Items))
+        """item_dimensions: Tuple[int] = tuple(event_item.sizeHint().height() for event_item in self._Items.values())
+        self.setMinimumSize(self.minimumWidth(), sum(item_height_dimensions))"""
 
     def addItems(self, new_items: List[str]):
         for key in new_items:
@@ -118,12 +130,14 @@ class EBody(QWidget):
 
             index = self._jsonParser.Positions().index(key)
 
-            self._Ui.container.insertWidget(index, new_widget)
+            if new_widget is None:
+                continue
 
+            self._Ui.container.insertWidget(index, new_widget)
             self._Items.update({key: new_widget})
 
-        self.updateStatus()
-    
+            print(f'New_widget[{key}]].sizeHint()--> {new_widget.sizeHint()}')
+
     def removeItems(self, removed_items: List[str]):
         for key in removed_items:
             removed_widget  = self._Items[key]
@@ -135,8 +149,6 @@ class EBody(QWidget):
             removed_widget.deleteLater()
 
             self._Items.pop(key)
-        
-        self.updateStatus()
 
     def moveItems(self, moved_items: List[str]):
         for key in moved_items:
@@ -150,8 +162,6 @@ class EBody(QWidget):
 
             self._Ui.container.insertWidget(new_index, moved_widget)
 
-        self.updateStatus()
-    
     def updateItems(self, updated_items: List[str]):
         for key in updated_items:
             update_widget: Union[EToDo, EDescription]   = self._Items[key]
@@ -177,8 +187,6 @@ class EBody(QWidget):
 
             update_widget.adjustSize()
 
-        self.updateStatus()
-
 
 # noinspection PyTypeChecker,PyAttributeOutsideInit
 class ETime(QWidget):        # Time Label that provides multiple formatting/preset-styles & real-time time updating,
@@ -195,11 +203,11 @@ class ETime(QWidget):        # Time Label that provides multiple formatting/pres
 
         self.setupUi()
 
-        self._startLabel.dateTimeChanged.connect(self.updateFormat())
-        self._endLabel.dateTimeChanged.connect(self.updateFormat())
+        self._startLabel.dateTimeChanged.connect(self.updateFormat)
+        self._endLabel.dateTimeChanged.connect(self.updateFormat)
 
-    def setMinimumHeight(self, minw):
-        minw : int = max(minw, self._b_height)
+    def setMinimumHeight(self, minw: int):
+        min_w : int = max(minw, self._b_height)
         return super().setMinimumWidth(minw)
 
     def sizeHint(self):
@@ -237,7 +245,7 @@ ETime{
                            background-color: rgba(20,20,20,1);
                            border-radius: 5px;
                            padding: 5px;
-                           
+
 } ELabel {
                            background-color: None;
                            border-radius: 0px;
@@ -252,7 +260,7 @@ ETime{
         self.resize(self.label_container.minimumSize())
 
     def updateFormat(self):
-        alldaytxt: str = '<span style="color: #ff5050; font-weight: bold;">All day</span>'
+        alldaytxt: str = '<span style="color: #f4a15d; font-weight: bold;">All day</span>'
 
         if (self._startLabel.Time() <= QTime(0, 0, 59)) and (self._endLabel.Time() >= QTime(23, 59, 0)): 
             self._allDay = True
@@ -285,9 +293,6 @@ ETime{
         mapper.removeMapping(self._startLabel)
         mapper.removeMapping(self._endLabel)
 
-    def connectToWidgets(self):
-        pass
-
     class ELabel(QLabel):
         dateTimeChanged = Signal()
 
@@ -296,17 +301,17 @@ ETime{
             self._DateTime: Optional[QDateTime] = QDateTime().currentDateTime()
             pass
 
-        def Time(self): return self._DateTime.time()
+        def Time(self) -> QTime: return self._DateTime.time()
 
-        def Date(self): return self._DateTime.date()
+        def Date(self) -> QDate: return self._DateTime.date()
 
         @Property(QDateTime)
-        def DateTime(self): return self._DateTime
-        
+        def DateTime(self) -> QDateTime: return self._DateTime
+
         @DateTime.setter
         def DateTime(self, date_time: QDateTime):
             if self._DateTime != date_time:
-                self._DateTime = DateTime
+                self._DateTime = date_time
                 self.dateTimeChanged.emit()
 
 
@@ -329,7 +334,7 @@ class EDescription(QWidget):    # Description addition that provides a larger, s
 
     def setText(self, new_txt: str):        self._Ui.text.setText(new_txt)
 
-    def text(self):                         return self._Ui.text.toMarkdown()
+    def text(self) -> str:                  return self._Ui.text.toMarkdown()
 
 class EToDo(QWidget):           # ToDo Add-on that provides a checkable box & a specially formatted title
     checkStateChanged = Signal()
@@ -348,7 +353,8 @@ class EToDo(QWidget):           # ToDo Add-on that provides a checkable box & a
     def sizeHint(self): return QSize(200, 50)
 
     def setText(self, new_txt: str):        self._Ui.task_label.setText(new_txt)
-    def setChecked(self, new_bool: bool):   self._Ui.checkbox.setChecked(new_bool)
+    def setChecked(self, new_bool: bool):
+        self._Ui.checkbox.setChecked(new_bool)
 
-    def text(self):                         return self._Ui.task_label.text()
-    def isChecked(self):                    return self._Ui.checkbox.isChecked()
+    def text(self) -> str:                  return self._Ui.task_label.text()
+    def isChecked(self) -> bool:            return self._Ui.checkbox.isChecked()

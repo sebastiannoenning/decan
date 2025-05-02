@@ -23,7 +23,7 @@ class EventList(QWidget):
         # Internal Model, passed to all children
         self._model     : EventModel                                    = None
         self._current   : Optional[int]                                 = None
-    
+
     def tryExcept(func: Callable[[], Any], message: str = 'Generic error message', test_en: bool = False):
         try: func()
         except Exception as e: print(message, e)
@@ -47,7 +47,7 @@ class EventList(QWidget):
 
             self.tryExcept(self._model.modelReset.disconnect,                     f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
             self.tryExcept(self._model.modelAboutToBeReset.disconnect,            f'{msg} Could not disconnect rowsAboutToBeRemoved', test_en)
-        
+
         self._model = model
         self._model.modelAboutToBeReset.connect(lambda: self.clearList(test_en=[test_en,'modelAboutToBeReset()->']))
         self._model.modelReset.connect(lambda: self.populateList(test_en=[test_en,'modelReset()->']))
@@ -61,14 +61,6 @@ class EventList(QWidget):
     def moveRow(self, index: QModelIndex):
         eventItem: EventItem = self._Items[index]
 
-    def minimumHeight(self):
-        """ Absolute minimum height return wrapper holding this """
-        spacing = (self._Ui.container.spacing() * len(self._Items))
-
-        item_dimensions: Tuple[int] = tuple(event_item.sizeHint().height() for event_item in self._Items.values())
-        max_dimension = max(item_dimensions)
-        return max_dimension
-    
     def realWidth(self): 
         width = max((self.minimumWidth()-20),(self._Ui.container.sizeHint().width() - (self._Ui.container.contentsMargins().left() + self._Ui.container.contentsMargins().right())))
         return width
@@ -77,11 +69,13 @@ class EventList(QWidget):
                 test_en:Tuple[bool,str]=[False,'']):
         item.setMinimumWidth(self.realWidth())
         item.setObjectName(f'EventItem_{index.row()}')
-        if (test_en[0]): print(f'{test_en[1]}addItem()->item.objectName(): {item.objectName()}')
+        if test_en[0]:
+            print(f'{test_en[1]}addItem()->item.objectName(): {item.objectName()}')
 
         self._Ui.container.addWidget(item)
         self._Items.update({index.row():item}) #Row in model used as index 
-        if (test_en[0]): print(f'{test_en[1]}addItem() event added({item.objectName()}) added')
+        if test_en[0]:
+            print(f'{test_en[1]}addItem() event added({item.objectName()}) added')
 
         self.setMinimumHeight(self._Ui.container.sizeHint().height())
 
@@ -91,13 +85,13 @@ class EventList(QWidget):
         key_of_item: Optional[int] = None
         for key, value in self._Items.items():
             if (value == item): key_of_item = key
-        
+
         if key_of_item is not None:
             index = self._Ui.container.indexOf(item)
             taken_item: EventItem = self._Ui.container.takeAt(index).widget()
-            self._Items.pop[key_of_item]
+            self._Items.pop(key_of_item)
             return taken_item
-         
+
         return None
 
     def removeItem(self, item: EventItem, 
@@ -132,4 +126,3 @@ class EventList(QWidget):
         if (test_en[0]): print(f'{test_en[1]}clearList() len(items)[{len(self._Items)}]:len(container)[{self._Ui.container.count()}]')
 
         if len(self._Items) != 0: self._Items.clear()
-
