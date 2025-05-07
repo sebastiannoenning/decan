@@ -1,0 +1,543 @@
+# -*- coding: utf-8 -*-
+
+################################################################################
+## Form generated from reading UI file 'icon_picker_dialog.ui'
+##
+## Created by: Qt User Interface Compiler version 6.9.0
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
+
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QPushButton, QSizePolicy,
+    QWidget)
+
+class Ui_icon_picker_dialog(object):
+    def setupUi(self, icon_picker_dialog):
+        if not icon_picker_dialog.objectName():
+            icon_picker_dialog.setObjectName(u"icon_picker_dialog")
+        icon_picker_dialog.resize(385, 275)
+        icon_picker_dialog.setStyleSheet(u"* {\n"
+"	padding: 0px;\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"	background-color: rgba(50, 50, 50, 1);\n"
+"	border-radius: 0px;\n"
+"}\n"
+"QPushButton:pressed{\n"
+"	background-color: rgba(120,120,120,1);\n"
+"}")
+        self.icon_grid = QGridLayout(icon_picker_dialog)
+        self.icon_grid.setSpacing(0)
+        self.icon_grid.setObjectName(u"icon_grid")
+        self.icon_grid.setContentsMargins(0, 0, 0, 0)
+        self.icon_option_1 = QPushButton(icon_picker_dialog)
+        self.icon_option_1.setObjectName(u"icon_option_1")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.icon_option_1.sizePolicy().hasHeightForWidth())
+        self.icon_option_1.setSizePolicy(sizePolicy)
+        self.icon_option_1.setMinimumSize(QSize(55, 55))
+        self.icon_option_1.setMaximumSize(QSize(55, 55))
+        icon = QIcon()
+        icon.addFile(u":/icons/user/options/user_icon_option_1.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_1.setIcon(icon)
+        self.icon_option_1.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_1, 0, 0, 1, 1)
+
+        self.icon_option_2 = QPushButton(icon_picker_dialog)
+        self.icon_option_2.setObjectName(u"icon_option_2")
+        sizePolicy.setHeightForWidth(self.icon_option_2.sizePolicy().hasHeightForWidth())
+        self.icon_option_2.setSizePolicy(sizePolicy)
+        self.icon_option_2.setMinimumSize(QSize(55, 55))
+        self.icon_option_2.setMaximumSize(QSize(55, 55))
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/user/options/user_icon_option_2.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_2.setIcon(icon1)
+        self.icon_option_2.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_2, 0, 1, 1, 1)
+
+        self.icon_option_24 = QPushButton(icon_picker_dialog)
+        self.icon_option_24.setObjectName(u"icon_option_24")
+        sizePolicy.setHeightForWidth(self.icon_option_24.sizePolicy().hasHeightForWidth())
+        self.icon_option_24.setSizePolicy(sizePolicy)
+        self.icon_option_24.setMinimumSize(QSize(55, 55))
+        self.icon_option_24.setMaximumSize(QSize(55, 55))
+        icon2 = QIcon()
+        icon2.addFile(u":/icons/user/options/user_icon_option_24.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_24.setIcon(icon2)
+        self.icon_option_24.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_24, 0, 2, 1, 1)
+
+        self.icon_option_23 = QPushButton(icon_picker_dialog)
+        self.icon_option_23.setObjectName(u"icon_option_23")
+        sizePolicy.setHeightForWidth(self.icon_option_23.sizePolicy().hasHeightForWidth())
+        self.icon_option_23.setSizePolicy(sizePolicy)
+        self.icon_option_23.setMinimumSize(QSize(55, 55))
+        self.icon_option_23.setMaximumSize(QSize(55, 55))
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/user/options/user_icon_option_23.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_23.setIcon(icon3)
+        self.icon_option_23.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_23, 0, 3, 1, 1)
+
+        self.icon_option_4 = QPushButton(icon_picker_dialog)
+        self.icon_option_4.setObjectName(u"icon_option_4")
+        sizePolicy.setHeightForWidth(self.icon_option_4.sizePolicy().hasHeightForWidth())
+        self.icon_option_4.setSizePolicy(sizePolicy)
+        self.icon_option_4.setMinimumSize(QSize(55, 55))
+        self.icon_option_4.setMaximumSize(QSize(55, 55))
+        icon4 = QIcon()
+        icon4.addFile(u":/icons/user/options/user_icon_option_4.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_4.setIcon(icon4)
+        self.icon_option_4.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_4, 0, 4, 1, 1)
+
+        self.icon_option_3 = QPushButton(icon_picker_dialog)
+        self.icon_option_3.setObjectName(u"icon_option_3")
+        sizePolicy.setHeightForWidth(self.icon_option_3.sizePolicy().hasHeightForWidth())
+        self.icon_option_3.setSizePolicy(sizePolicy)
+        self.icon_option_3.setMinimumSize(QSize(55, 55))
+        self.icon_option_3.setMaximumSize(QSize(55, 55))
+        icon5 = QIcon()
+        icon5.addFile(u":/icons/user/options/user_icon_option_3.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_3.setIcon(icon5)
+        self.icon_option_3.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_3, 0, 5, 1, 1)
+
+        self.icon_option_25 = QPushButton(icon_picker_dialog)
+        self.icon_option_25.setObjectName(u"icon_option_25")
+        sizePolicy.setHeightForWidth(self.icon_option_25.sizePolicy().hasHeightForWidth())
+        self.icon_option_25.setSizePolicy(sizePolicy)
+        self.icon_option_25.setMinimumSize(QSize(55, 55))
+        self.icon_option_25.setMaximumSize(QSize(55, 55))
+        icon6 = QIcon()
+        icon6.addFile(u":/icons/user/options/user_icon_option_25.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_25.setIcon(icon6)
+        self.icon_option_25.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_25, 0, 6, 1, 1)
+
+        self.icon_option_26 = QPushButton(icon_picker_dialog)
+        self.icon_option_26.setObjectName(u"icon_option_26")
+        sizePolicy.setHeightForWidth(self.icon_option_26.sizePolicy().hasHeightForWidth())
+        self.icon_option_26.setSizePolicy(sizePolicy)
+        self.icon_option_26.setMinimumSize(QSize(55, 55))
+        self.icon_option_26.setMaximumSize(QSize(55, 55))
+        icon7 = QIcon()
+        icon7.addFile(u":/icons/user/options/user_icon_option_26.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_26.setIcon(icon7)
+        self.icon_option_26.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_26, 1, 0, 1, 1)
+
+        self.icon_option_28 = QPushButton(icon_picker_dialog)
+        self.icon_option_28.setObjectName(u"icon_option_28")
+        sizePolicy.setHeightForWidth(self.icon_option_28.sizePolicy().hasHeightForWidth())
+        self.icon_option_28.setSizePolicy(sizePolicy)
+        self.icon_option_28.setMinimumSize(QSize(55, 55))
+        self.icon_option_28.setMaximumSize(QSize(55, 55))
+        icon8 = QIcon()
+        icon8.addFile(u":/icons/user/options/user_icon_option_28.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_28.setIcon(icon8)
+        self.icon_option_28.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_28, 1, 1, 1, 1)
+
+        self.icon_option_27 = QPushButton(icon_picker_dialog)
+        self.icon_option_27.setObjectName(u"icon_option_27")
+        sizePolicy.setHeightForWidth(self.icon_option_27.sizePolicy().hasHeightForWidth())
+        self.icon_option_27.setSizePolicy(sizePolicy)
+        self.icon_option_27.setMinimumSize(QSize(55, 55))
+        self.icon_option_27.setMaximumSize(QSize(55, 55))
+        icon9 = QIcon()
+        icon9.addFile(u":/icons/user/options/user_icon_option_27.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_27.setIcon(icon9)
+        self.icon_option_27.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_27, 1, 2, 1, 1)
+
+        self.icon_option_9 = QPushButton(icon_picker_dialog)
+        self.icon_option_9.setObjectName(u"icon_option_9")
+        sizePolicy.setHeightForWidth(self.icon_option_9.sizePolicy().hasHeightForWidth())
+        self.icon_option_9.setSizePolicy(sizePolicy)
+        self.icon_option_9.setMinimumSize(QSize(55, 55))
+        self.icon_option_9.setMaximumSize(QSize(55, 55))
+        icon10 = QIcon()
+        icon10.addFile(u":/icons/user/options/user_icon_option_9.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_9.setIcon(icon10)
+        self.icon_option_9.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_9, 1, 3, 1, 1)
+
+        self.icon_option_10 = QPushButton(icon_picker_dialog)
+        self.icon_option_10.setObjectName(u"icon_option_10")
+        sizePolicy.setHeightForWidth(self.icon_option_10.sizePolicy().hasHeightForWidth())
+        self.icon_option_10.setSizePolicy(sizePolicy)
+        self.icon_option_10.setMinimumSize(QSize(55, 55))
+        self.icon_option_10.setMaximumSize(QSize(55, 55))
+        icon11 = QIcon()
+        icon11.addFile(u":/icons/user/options/user_icon_option_10.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_10.setIcon(icon11)
+        self.icon_option_10.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_10, 1, 4, 1, 1)
+
+        self.icon_option_12 = QPushButton(icon_picker_dialog)
+        self.icon_option_12.setObjectName(u"icon_option_12")
+        sizePolicy.setHeightForWidth(self.icon_option_12.sizePolicy().hasHeightForWidth())
+        self.icon_option_12.setSizePolicy(sizePolicy)
+        self.icon_option_12.setMinimumSize(QSize(55, 55))
+        self.icon_option_12.setMaximumSize(QSize(55, 55))
+        icon12 = QIcon()
+        icon12.addFile(u":/icons/user/options/user_icon_option_12.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_12.setIcon(icon12)
+        self.icon_option_12.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_12, 1, 5, 1, 1)
+
+        self.icon_option_11 = QPushButton(icon_picker_dialog)
+        self.icon_option_11.setObjectName(u"icon_option_11")
+        sizePolicy.setHeightForWidth(self.icon_option_11.sizePolicy().hasHeightForWidth())
+        self.icon_option_11.setSizePolicy(sizePolicy)
+        self.icon_option_11.setMinimumSize(QSize(55, 55))
+        self.icon_option_11.setMaximumSize(QSize(55, 55))
+        icon13 = QIcon()
+        icon13.addFile(u":/icons/user/options/user_icon_option_11.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_11.setIcon(icon13)
+        self.icon_option_11.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_11, 1, 6, 1, 1)
+
+        self.icon_option_13 = QPushButton(icon_picker_dialog)
+        self.icon_option_13.setObjectName(u"icon_option_13")
+        sizePolicy.setHeightForWidth(self.icon_option_13.sizePolicy().hasHeightForWidth())
+        self.icon_option_13.setSizePolicy(sizePolicy)
+        self.icon_option_13.setMinimumSize(QSize(55, 55))
+        self.icon_option_13.setMaximumSize(QSize(55, 55))
+        icon14 = QIcon()
+        icon14.addFile(u":/icons/user/options/user_icon_option_13.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_13.setIcon(icon14)
+        self.icon_option_13.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_13, 2, 0, 1, 1)
+
+        self.icon_option_14 = QPushButton(icon_picker_dialog)
+        self.icon_option_14.setObjectName(u"icon_option_14")
+        sizePolicy.setHeightForWidth(self.icon_option_14.sizePolicy().hasHeightForWidth())
+        self.icon_option_14.setSizePolicy(sizePolicy)
+        self.icon_option_14.setMinimumSize(QSize(55, 55))
+        self.icon_option_14.setMaximumSize(QSize(55, 55))
+        icon15 = QIcon()
+        icon15.addFile(u":/icons/user/options/user_icon_option_14.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_14.setIcon(icon15)
+        self.icon_option_14.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_14, 2, 1, 1, 1)
+
+        self.icon_option_16 = QPushButton(icon_picker_dialog)
+        self.icon_option_16.setObjectName(u"icon_option_16")
+        sizePolicy.setHeightForWidth(self.icon_option_16.sizePolicy().hasHeightForWidth())
+        self.icon_option_16.setSizePolicy(sizePolicy)
+        self.icon_option_16.setMinimumSize(QSize(55, 55))
+        self.icon_option_16.setMaximumSize(QSize(55, 55))
+        icon16 = QIcon()
+        icon16.addFile(u":/icons/user/options/user_icon_option_16.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_16.setIcon(icon16)
+        self.icon_option_16.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_16, 2, 2, 1, 1)
+
+        self.icon_option_15 = QPushButton(icon_picker_dialog)
+        self.icon_option_15.setObjectName(u"icon_option_15")
+        sizePolicy.setHeightForWidth(self.icon_option_15.sizePolicy().hasHeightForWidth())
+        self.icon_option_15.setSizePolicy(sizePolicy)
+        self.icon_option_15.setMinimumSize(QSize(55, 55))
+        self.icon_option_15.setMaximumSize(QSize(55, 55))
+        icon17 = QIcon()
+        icon17.addFile(u":/icons/user/options/user_icon_option_15.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_15.setIcon(icon17)
+        self.icon_option_15.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_15, 2, 3, 1, 1)
+
+        self.icon_option_17 = QPushButton(icon_picker_dialog)
+        self.icon_option_17.setObjectName(u"icon_option_17")
+        sizePolicy.setHeightForWidth(self.icon_option_17.sizePolicy().hasHeightForWidth())
+        self.icon_option_17.setSizePolicy(sizePolicy)
+        self.icon_option_17.setMinimumSize(QSize(55, 55))
+        self.icon_option_17.setMaximumSize(QSize(55, 55))
+        icon18 = QIcon()
+        icon18.addFile(u":/icons/user/options/user_icon_option_17.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_17.setIcon(icon18)
+        self.icon_option_17.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_17, 2, 4, 1, 1)
+
+        self.icon_option_18 = QPushButton(icon_picker_dialog)
+        self.icon_option_18.setObjectName(u"icon_option_18")
+        sizePolicy.setHeightForWidth(self.icon_option_18.sizePolicy().hasHeightForWidth())
+        self.icon_option_18.setSizePolicy(sizePolicy)
+        self.icon_option_18.setMinimumSize(QSize(55, 55))
+        self.icon_option_18.setMaximumSize(QSize(55, 55))
+        icon19 = QIcon()
+        icon19.addFile(u":/icons/user/options/user_icon_option_18.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_18.setIcon(icon19)
+        self.icon_option_18.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_18, 2, 5, 1, 1)
+
+        self.icon_option_20 = QPushButton(icon_picker_dialog)
+        self.icon_option_20.setObjectName(u"icon_option_20")
+        sizePolicy.setHeightForWidth(self.icon_option_20.sizePolicy().hasHeightForWidth())
+        self.icon_option_20.setSizePolicy(sizePolicy)
+        self.icon_option_20.setMinimumSize(QSize(55, 55))
+        self.icon_option_20.setMaximumSize(QSize(55, 55))
+        icon20 = QIcon()
+        icon20.addFile(u":/icons/user/options/user_icon_option_20.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_20.setIcon(icon20)
+        self.icon_option_20.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_20, 2, 6, 1, 1)
+
+        self.icon_option_19 = QPushButton(icon_picker_dialog)
+        self.icon_option_19.setObjectName(u"icon_option_19")
+        sizePolicy.setHeightForWidth(self.icon_option_19.sizePolicy().hasHeightForWidth())
+        self.icon_option_19.setSizePolicy(sizePolicy)
+        self.icon_option_19.setMinimumSize(QSize(55, 55))
+        self.icon_option_19.setMaximumSize(QSize(55, 55))
+        icon21 = QIcon()
+        icon21.addFile(u":/icons/user/options/user_icon_option_19.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_19.setIcon(icon21)
+        self.icon_option_19.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_19, 3, 0, 1, 1)
+
+        self.icon_option_21 = QPushButton(icon_picker_dialog)
+        self.icon_option_21.setObjectName(u"icon_option_21")
+        sizePolicy.setHeightForWidth(self.icon_option_21.sizePolicy().hasHeightForWidth())
+        self.icon_option_21.setSizePolicy(sizePolicy)
+        self.icon_option_21.setMinimumSize(QSize(55, 55))
+        self.icon_option_21.setMaximumSize(QSize(55, 55))
+        icon22 = QIcon()
+        icon22.addFile(u":/icons/user/options/user_icon_option_21.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_21.setIcon(icon22)
+        self.icon_option_21.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_21, 3, 1, 1, 1)
+
+        self.icon_option_22 = QPushButton(icon_picker_dialog)
+        self.icon_option_22.setObjectName(u"icon_option_22")
+        sizePolicy.setHeightForWidth(self.icon_option_22.sizePolicy().hasHeightForWidth())
+        self.icon_option_22.setSizePolicy(sizePolicy)
+        self.icon_option_22.setMinimumSize(QSize(55, 55))
+        self.icon_option_22.setMaximumSize(QSize(55, 55))
+        icon23 = QIcon()
+        icon23.addFile(u":/icons/user/options/user_icon_option_22.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_22.setIcon(icon23)
+        self.icon_option_22.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_22, 3, 2, 1, 1)
+
+        self.icon_option_5 = QPushButton(icon_picker_dialog)
+        self.icon_option_5.setObjectName(u"icon_option_5")
+        sizePolicy.setHeightForWidth(self.icon_option_5.sizePolicy().hasHeightForWidth())
+        self.icon_option_5.setSizePolicy(sizePolicy)
+        self.icon_option_5.setMinimumSize(QSize(55, 55))
+        self.icon_option_5.setMaximumSize(QSize(55, 55))
+        icon24 = QIcon()
+        icon24.addFile(u":/icons/user/options/user_icon_option_5.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_5.setIcon(icon24)
+        self.icon_option_5.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_5, 3, 3, 1, 1)
+
+        self.icon_option_6 = QPushButton(icon_picker_dialog)
+        self.icon_option_6.setObjectName(u"icon_option_6")
+        sizePolicy.setHeightForWidth(self.icon_option_6.sizePolicy().hasHeightForWidth())
+        self.icon_option_6.setSizePolicy(sizePolicy)
+        self.icon_option_6.setMinimumSize(QSize(55, 55))
+        self.icon_option_6.setMaximumSize(QSize(55, 55))
+        icon25 = QIcon()
+        icon25.addFile(u":/icons/user/options/user_icon_option_6.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_6.setIcon(icon25)
+        self.icon_option_6.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_6, 3, 4, 1, 1)
+
+        self.icon_option_7 = QPushButton(icon_picker_dialog)
+        self.icon_option_7.setObjectName(u"icon_option_7")
+        sizePolicy.setHeightForWidth(self.icon_option_7.sizePolicy().hasHeightForWidth())
+        self.icon_option_7.setSizePolicy(sizePolicy)
+        self.icon_option_7.setMinimumSize(QSize(55, 55))
+        self.icon_option_7.setMaximumSize(QSize(55, 55))
+        icon26 = QIcon()
+        icon26.addFile(u":/icons/user/options/user_icon_option_7.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_7.setIcon(icon26)
+        self.icon_option_7.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_7, 3, 5, 1, 1)
+
+        self.icon_option_8 = QPushButton(icon_picker_dialog)
+        self.icon_option_8.setObjectName(u"icon_option_8")
+        sizePolicy.setHeightForWidth(self.icon_option_8.sizePolicy().hasHeightForWidth())
+        self.icon_option_8.setSizePolicy(sizePolicy)
+        self.icon_option_8.setMinimumSize(QSize(55, 55))
+        self.icon_option_8.setMaximumSize(QSize(55, 55))
+        icon27 = QIcon()
+        icon27.addFile(u":/icons/user/options/user_icon_option_8.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_8.setIcon(icon27)
+        self.icon_option_8.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_8, 3, 6, 1, 1)
+
+        self.icon_option_29 = QPushButton(icon_picker_dialog)
+        self.icon_option_29.setObjectName(u"icon_option_29")
+        sizePolicy.setHeightForWidth(self.icon_option_29.sizePolicy().hasHeightForWidth())
+        self.icon_option_29.setSizePolicy(sizePolicy)
+        self.icon_option_29.setMinimumSize(QSize(55, 55))
+        self.icon_option_29.setMaximumSize(QSize(55, 55))
+        icon28 = QIcon()
+        icon28.addFile(u":/icons/user/options/user_icon_option_29.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_29.setIcon(icon28)
+        self.icon_option_29.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_29, 4, 0, 1, 1)
+
+        self.icon_option_30 = QPushButton(icon_picker_dialog)
+        self.icon_option_30.setObjectName(u"icon_option_30")
+        sizePolicy.setHeightForWidth(self.icon_option_30.sizePolicy().hasHeightForWidth())
+        self.icon_option_30.setSizePolicy(sizePolicy)
+        self.icon_option_30.setMinimumSize(QSize(55, 55))
+        self.icon_option_30.setMaximumSize(QSize(55, 55))
+        icon29 = QIcon()
+        icon29.addFile(u":/icons/user/options/user_icon_option_30.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_30.setIcon(icon29)
+        self.icon_option_30.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_30, 4, 1, 1, 1)
+
+        self.icon_option_31 = QPushButton(icon_picker_dialog)
+        self.icon_option_31.setObjectName(u"icon_option_31")
+        sizePolicy.setHeightForWidth(self.icon_option_31.sizePolicy().hasHeightForWidth())
+        self.icon_option_31.setSizePolicy(sizePolicy)
+        self.icon_option_31.setMinimumSize(QSize(55, 55))
+        self.icon_option_31.setMaximumSize(QSize(55, 55))
+        icon30 = QIcon()
+        icon30.addFile(u":/icons/user/options/user_icon_option_31.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_31.setIcon(icon30)
+        self.icon_option_31.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_31, 4, 2, 1, 1)
+
+        self.icon_option_32 = QPushButton(icon_picker_dialog)
+        self.icon_option_32.setObjectName(u"icon_option_32")
+        sizePolicy.setHeightForWidth(self.icon_option_32.sizePolicy().hasHeightForWidth())
+        self.icon_option_32.setSizePolicy(sizePolicy)
+        self.icon_option_32.setMinimumSize(QSize(55, 55))
+        self.icon_option_32.setMaximumSize(QSize(55, 55))
+        icon31 = QIcon()
+        icon31.addFile(u":/icons/user/options/user_icon_option_32.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_32.setIcon(icon31)
+        self.icon_option_32.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_32, 4, 3, 1, 1)
+
+        self.icon_option_33 = QPushButton(icon_picker_dialog)
+        self.icon_option_33.setObjectName(u"icon_option_33")
+        sizePolicy.setHeightForWidth(self.icon_option_33.sizePolicy().hasHeightForWidth())
+        self.icon_option_33.setSizePolicy(sizePolicy)
+        self.icon_option_33.setMinimumSize(QSize(55, 55))
+        self.icon_option_33.setMaximumSize(QSize(55, 55))
+        icon32 = QIcon()
+        icon32.addFile(u":/icons/user/options/user_icon_option_33.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_33.setIcon(icon32)
+        self.icon_option_33.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_33, 4, 4, 1, 1)
+
+        self.icon_option_34 = QPushButton(icon_picker_dialog)
+        self.icon_option_34.setObjectName(u"icon_option_34")
+        sizePolicy.setHeightForWidth(self.icon_option_34.sizePolicy().hasHeightForWidth())
+        self.icon_option_34.setSizePolicy(sizePolicy)
+        self.icon_option_34.setMinimumSize(QSize(55, 55))
+        self.icon_option_34.setMaximumSize(QSize(55, 55))
+        icon33 = QIcon()
+        icon33.addFile(u":/icons/user/options/user_icon_option_34.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_34.setIcon(icon33)
+        self.icon_option_34.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_34, 4, 5, 1, 1)
+
+        self.icon_option_35 = QPushButton(icon_picker_dialog)
+        self.icon_option_35.setObjectName(u"icon_option_35")
+        sizePolicy.setHeightForWidth(self.icon_option_35.sizePolicy().hasHeightForWidth())
+        self.icon_option_35.setSizePolicy(sizePolicy)
+        self.icon_option_35.setMinimumSize(QSize(55, 55))
+        self.icon_option_35.setMaximumSize(QSize(55, 55))
+        icon34 = QIcon()
+        icon34.addFile(u":/icons/user/options/user_icon_option_35.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        self.icon_option_35.setIcon(icon34)
+        self.icon_option_35.setIconSize(QSize(40, 40))
+
+        self.icon_grid.addWidget(self.icon_option_35, 4, 6, 1, 1)
+
+
+        self.retranslateUi(icon_picker_dialog)
+
+        QMetaObject.connectSlotsByName(icon_picker_dialog)
+    # setupUi
+
+    def retranslateUi(self, icon_picker_dialog):
+        icon_picker_dialog.setWindowTitle(QCoreApplication.translate("icon_picker_dialog", u"Form", None))
+        self.icon_option_1.setText("")
+        self.icon_option_2.setText("")
+        self.icon_option_24.setText("")
+        self.icon_option_23.setText("")
+        self.icon_option_4.setText("")
+        self.icon_option_3.setText("")
+        self.icon_option_25.setText("")
+        self.icon_option_26.setText("")
+        self.icon_option_28.setText("")
+        self.icon_option_27.setText("")
+        self.icon_option_9.setText("")
+        self.icon_option_10.setText("")
+        self.icon_option_12.setText("")
+        self.icon_option_11.setText("")
+        self.icon_option_13.setText("")
+        self.icon_option_14.setText("")
+        self.icon_option_16.setText("")
+        self.icon_option_15.setText("")
+        self.icon_option_17.setText("")
+        self.icon_option_18.setText("")
+        self.icon_option_20.setText("")
+        self.icon_option_19.setText("")
+        self.icon_option_21.setText("")
+        self.icon_option_22.setText("")
+        self.icon_option_5.setText("")
+        self.icon_option_6.setText("")
+        self.icon_option_7.setText("")
+        self.icon_option_8.setText("")
+        self.icon_option_29.setText("")
+        self.icon_option_30.setText("")
+        self.icon_option_31.setText("")
+        self.icon_option_32.setText("")
+        self.icon_option_33.setText("")
+        self.icon_option_34.setText("")
+        self.icon_option_35.setText("")
+    # retranslateUi
+
