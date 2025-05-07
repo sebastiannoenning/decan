@@ -42,11 +42,8 @@ class EventJsonParser(QWidget):
     finishedEditing = Signal()
 
     def __init__(self, /, 
-                 parent, 
-                 *, 
-                 objectName: str = 'eventJsonParser'):
-        super().__init__(parent=parent, 
-                         objectName=objectName)
+                 parent):
+        super().__init__(parent=parent)
         self.resize(0,0)
         self.setMaximumSize(0,0)
         self.hide()
@@ -69,7 +66,7 @@ class EventJsonParser(QWidget):
 
         self._info.update({"types": ["Simple", "Complex", "Note", "Task"]})
 
-    def _update(self):
+    def _update(self, test_en: bool = False):
         """ Updates the internal dicts & converts them into internal objects """
         new_json:       dict                = json.loads(self._attributes)
         if new_json is None: raise Exception('Attributes loaded empty file')
@@ -78,24 +75,9 @@ class EventJsonParser(QWidget):
         new_positions:  List[str]           = new_json.get('positions')
         new_objects:    Dict[str, Any]      = new_json.get('objects', {})
 
-        print('Info: ', new_info)
-        print('Objects: ',new_objects)
-        print('Positions: ', new_positions)
-
-        if isinstance(new_positions, str):
-            try:
-                new_positions = json.loads(new_positions)
-            except json.JSONDecodeError:
-                print("Error parsing positions JSON:", new_positions)
-                new_positions = []
-
-        # Parse objects if it's a string
-        if isinstance(new_objects, str):
-            try:
-                new_objects = json.loads(new_objects)
-            except json.JSONDecodeError:
-                print("Error parsing objects JSON:", new_objects)
-                new_objects = {}
+        if test_en: print('Info: ', new_info)
+        if test_en: print('Objects: ',new_objects)
+        if test_en: print('Positions: ', new_positions)
 
         description_count, todo_count = 0, 0
 
@@ -107,6 +89,20 @@ class EventJsonParser(QWidget):
         moved:      List[str]           = []
 
         largest_val = 0
+
+        if isinstance(new_positions, str):
+            try:
+                new_positions = json.loads(new_positions)
+            except json.JSONDecodeError:
+                print("Error parsing positions JSON:", new_positions)
+                new_positions = []
+        # Parse objects if it's a string
+        if isinstance(new_objects, str):
+            try:
+                new_objects = json.loads(new_objects)
+            except json.JSONDecodeError:
+                print("Error parsing objects JSON:", new_objects)
+                new_objects = {}
 
         if new_objects is not None:
             for key, value in new_objects.items():
@@ -177,18 +173,18 @@ class EventJsonParser(QWidget):
                 self._positions.append(key)
 
         if added:
-            print('Added: ',added)
+            if test_en: print('Added: ',added)
             self.objectsAdded.emit(added)           # Call linked widgets to add the new objects
         if updated:
-            print('Updated: ', updated)
+            if test_en: print('Updated: ', updated)
             self.objectsUpdated.emit(updated)       # Call linked widgets to update the changed objects
         if unchanged:
-            print('Unchanged: ', unchanged)
+            if test_en: print('Unchanged: ', unchanged)
         if removed:
-            print('Removed: ', removed)
+            if test_en: print('Removed: ', removed)
             self.objectsRemoved.emit(removed)       # Call linked widgets to remove the deleted objects
         if moved:
-            print('Moved: ', moved)
+            if test_en: print('Moved: ', moved)
             self.objectsMoved.emit(moved)           # Call linked widgets to check their layouts & move any linked widgets
 
         if new_info is not None and isinstance(new_info, dict):
@@ -204,12 +200,9 @@ class EventJsonParser(QWidget):
             self._info.update({'increment':  new_increment})
             self._info.update({'type':       new_type})
 
-        if 'type' in self._info:
-            self.typeChanged.emit(self.intToEventType(self._info.get('type')))
-
-        print('Info: ', self._info)
-        print('Positions: ', self._positions)
-        print('Objects: ', self._objects)
+        if test_en: print('Info: ', self._info)
+        if test_en: print('Positions: ', self._positions)
+        if test_en: print('Objects: ', self._objects)
         self.finishedEditing.emit()
 
     def formatEDescription(self, value: Union[str, dict]):

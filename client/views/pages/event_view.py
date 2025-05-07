@@ -18,46 +18,35 @@ from .event_view_ui import Ui_event_view
 from modules.touchdatetime.tdateedit import DateSelect
 from modules.eventlist.eventtype import EventType
 from modules.eventlist.eventjsonparser import EventJsonParser
+from client.modules.eventlist.eventattributes import EBodySingleDisplay
 from models.event_model import EventModel, EventFilter, DateRange
 import modules.scrollers_qt as scr_qt
 
 
 # noinspection PyTypeChecker
 class EventView(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent, db: QSqlDatabase):
         super().__init__(parent)
+
+        self._database = db
+
         self._Ui = Ui_event_view()
         self._Ui.setupUi(self)
         self.additionalUiSettings()
-
-        self.testCode()
-
-        print(QSqlDatabase.drivers())
-
-        self._database = QSqlDatabase.addDatabase('QMYSQL')
-        self._database.setHostName('192.168.1.147')
-        self._database.setUserName('sebastianji')
-        self._database.setPassword('salami12')  #genTen212!')
-        self._database.setDatabaseName('decan')
-
-        self._database.setConnectOptions("SSL_CA=/Users/sebastianji/ca.pem")
-
-        if not self._database.open():
-            print('connection failed')
-            print('open() error->',self._database.lastError().text())
 
         self.eventmodel = EventModel(self, db=self._database)
         self._Ui.event_view_table.setModel(self.eventmodel)
         self._Ui.event_list.setModel(self.eventmodel)
 
-        self._Ui.layer_view_list_ebody.setJsonParser(self.test_parser)
-
         self.eventmodel.select()
 
         self.connections()
 
-    def internal(self):
-        pass
+        self.setFormDefault()
+
+    def setUserFilter(self, index: QModelIndex):
+        print(index)
+        self.eventmodel.changeUser(index)
 
     # noinspection PyAttributeOutsideInit
     def additionalUiSettings(self):
@@ -85,14 +74,6 @@ class EventView(QWidget):
         self.locationMapper = QDataWidgetMapper(self)
 
     def connections(self):
-        self._Ui.time_schedule_label_button.clicked.connect(lambda: print(f"""
-            Family: {self._Ui.time_schedule_label_button.fontInfo().family()}
-            PixelSize: {self._Ui.time_schedule_label_button.fontInfo().pixelSize()}
-            PointSize: {self._Ui.time_schedule_label_button.fontInfo().pointSize()}
-            WidgetSize: {self._Ui.time_schedule_label_button.size()}
-            """)
-                                                            )
-
         self._Ui.user1.clicked.connect(lambda: self.eventmodel.changeUser(1))
         self._Ui.user2.clicked.connect(lambda: self.eventmodel.changeUser(2))
         self._Ui.user3.clicked.connect(lambda: self.eventmodel.changeUser(3))
@@ -103,16 +84,26 @@ class EventView(QWidget):
         # Custom Auto Default Behaviour
         self._Ui.layer_finish_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_finish_button))
         self._Ui.layer_add_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_add_button))
-        self._Ui.layer_add_button.toggled.connect(
-            lambda toggled: self.clearDependentToggles(toggled, self._Ui.layer_header_exp_add))
+        self._Ui.layer_add_button.toggled.connect(lambda toggled: self.clearDependentToggles(toggled, self._Ui.layer_header_exp_add))
         self._Ui.layer_remove_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_remove_button))
         self._Ui.layer_edit_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_edit_button))
-        self._Ui.layer_move_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_move_button))
 
         self._Ui.layer_add_note_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_add_note_button))
         self._Ui.layer_add_task_button.toggled.connect(lambda: self.clearOtherToggles(self._Ui.layer_add_task_button))
 
         self.formParser.typeChanged.connect(lambda: self.updateInfo())
+
+        self._Ui.event_list.itemSelected.connect(lambda load: self.loadItem(load))
+
+        self._Ui.layer_view_display_ebody.setJsonParser(self.formParser)
+        self._Ui.layer_view_list_ebody.setJsonParser(self.formParser)
+
+        self.eventMapper.setModel(self.eventmodel)
+        self.mapToWidgets()
+
+    def updateInfo():
+        t = None
+        if t == None: return None
 
     # noinspection PyTypeChecker
     @staticmethod
@@ -155,82 +146,6 @@ class EventView(QWidget):
                     button.setChecked(False)
                     button.setEnabled(True)
 
-    def testCode(self):
-        self.test_parser = EventJsonParser(self)
-        test_json = """
-        {
-            "info": {
-                "index": 3,
-                "increment" : 3,
-                "type": 1,
-                "types" : ["Simple", "Complex", "Note", "Task"]
-            },
-            "positions":["EDescription_3","EToDo_2","EToDo_1"],
-            "objects": {
-                "EDescription_3": "Go baby shopping",
-                "EToDo_1": {
-                "EBool": false,
-                "ETaskDescription": "Buy eggs"
-                },
-                "EToDo_2": {
-                "EBool": false,
-                "ETaskDescription": "Buy milk"
-                }
-            }
-        }"""
-        self.test_parser.Attributes = test_json
-
-        self._Ui.EToDo.setText('Blah' * 20)
-        self._Ui.EDescription.setText('Blah' * 3)
-
-        print(self.test_parser.Info())
-        print(self.test_parser.Positions())
-        print(self.test_parser.Objects())
-
-        self._Ui.ebody_test.setJsonParser(self.test_parser)
-
-        self._event_filter = EventFilter()
-        self._date_range_list: List[DateRange] = []
-        self._date_range_list.append(
-            DateRange(
-                QDateTime(
-                    QDate(2022, 3, 2),
-                    QTime(19, 32, 21))
-                ,
-                QDateTime(
-                    QDate(2022, 4, 14),
-                    QTime(23, 59, 59))
-            )
-        )
-
-        self._date_range_list.append(
-            DateRange(
-                QDateTime(
-                    QDate(2023, 8, 5),
-                    QTime(10, 0, 0))
-                ,
-                QDateTime(
-                    QDate(2023, 11, 10),
-                    QTime(14, 0, 0))
-            )
-        )
-
-        self._date_range_list.append(
-            DateRange(
-                QDateTime(
-                    QDate(2022, 3, 2),
-                    QTime(19, 32, 21))
-                ,
-                QDateTime(
-                    QDate(2023, 11, 10),
-                    QTime(14, 0, 0))
-            )
-        )
-
-        self._event_filter.addManyDateRangeFilters(self._date_range_list)
-        self._event_filter.addUserFilter(2)
-        print(self._event_filter.constructFilter())
-
     def prev_page(self):
         index = self._Ui.details_container.currentIndex()
         index = (index - 1) % self._Ui.details_container.count()
@@ -270,12 +185,6 @@ class EventView(QWidget):
     def clearMap(self):
         self.eventMapper.clearMapping()
         self.locationMapper.clearMapping()
-
-    def emptyForm(self):
-        pass
-
-    def openFormEditing(self):
-        pass
 
     @staticmethod
     def defaultParserValues(f: EventType = EventType.Simple):
@@ -337,38 +246,38 @@ class EventView(QWidget):
 
         return default_text
 
-    def updateInfo(self):
-        pass
+    def eventModel(self) -> EventModel: return self.eventmodel
 
-    def toggleTitleEditable(self):
-        if self._Ui.title_view.isVisible():
-            self._Ui.title_edit.show()
-            self._Ui.title_view.hide()
+    def setFormDefault(self):
+        self._Ui.title_edit_button.toggle()
+        self._Ui.title_edit_button.setChecked(False)
+
+        self._Ui.time_button.toggle()
+        self._Ui.time_button.setChecked(False)
+
+        self._Ui.layer_button.toggle()
+        self._Ui.layer_button.setChecked(False)
+
+        self._Ui.location_button.toggle()
+        self._Ui.location_button.setChecked(False)
+        self._Ui.location_button.setEnabled(False)
+        self._Ui.location_view.hide()
+        self._Ui.location_button.hide()
+        self._Ui.location_edit_combobox.hide()
+
+        self._Ui.invitees_button.hide()
+        self._Ui.tags_button.hide()
+
+        self._Ui.layer_finish_button.toggle()
+        self._Ui.layer_finish_button.setChecked(False)
+
+    def loadItem(self, load: bool):
+        self.setFormDefault()
+        if not load:
+            self.eventMapper.setCurrentIndex(-1)
+            self._Ui.details_container.setCurrentIndex(2)
         else:
-            self._Ui.title_view.show()
-            self._Ui.title_edit.hide()
+            l_row = self._Ui.event_list.current()
+            self.eventMapper.setCurrentIndex(l_row)
+            self._Ui.details_container.setCurrentIndex(3)
 
-    def togglePresetEditable(self):
-        if self._Ui.preset_button.isChecked():
-            for i in self._Ui.preset_container.count():
-                lay_item = self._Ui.preset_container.itemAt(i)
-                button: QPushButton = lay_item.widget()
-                button.setEnabled(True)
-        else:
-            for i in self._Ui.preset_container.count():
-                lay_item = self._Ui.preset_container.itemAt(i)
-                button: QPushButton = lay_item.widget()
-                if not button.isChecked():
-                    button.setEnabled(False)
-
-    def toggleTimeEditable(self):
-        pass
-
-    def toggleLayerEditable(self):
-        pass
-
-    def toggleLocationEditable(self):
-        pass
-
-    def loadTableData(self):
-        pass

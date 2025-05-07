@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
 from PySide6.QtWidgets import QMainWindow
+from PySide6.QtSql import QSqlDatabase
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -14,37 +15,51 @@ from .pages.event_view import EventView
 class MainView(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._ui = Ui_main_view()
-        self._ui.setupUi(self)
-        self._ui.collapsed.hide()
+
+
+        print(QSqlDatabase.drivers())
+
+        self._database = QSqlDatabase.addDatabase('QMYSQL')
+        self._database.setHostName('192.168.1.147')
+        self._database.setUserName('sebastianji')
+        self._database.setPassword('admin')  #genTen212!')
+        self._database.setDatabaseName('decan')
+
+        self._database.setConnectOptions("SSL_CA=/Users/sebastianji/Documents/DB Certs/ca.pem")
+
+        if not self._database.open():
+            print('connection failed')
+            print('open() error->',self._database.lastError().text())
+
+
+        self._Ui = Ui_main_view()
+        self._Ui.setupUi(self)
+        self._Ui.collapsed.hide()
+
+        self._Ui.UserPage = UserView(self, self._database)
+        self._Ui.pages.addWidget(self._Ui.UserPage)
+        self._Ui.EventPage = EventView(self, self._database)
+        self._Ui.pages.addWidget(self._Ui.EventPage)
 
         self.setup_connections()
 
-        self._ui.pages.addWidget(UserView(self))
-        self._ui.pages.addWidget(EventView(self))
-
     def setup_connections(self):
-        self._ui.col_toggle.clicked.connect(lambda: self.toggle_nav())
-        self._ui.exp_toggle.clicked.connect(lambda: self.toggle_nav())
+        self._Ui.col_toggle.clicked.connect(lambda: self.toggle_nav())
+        self._Ui.exp_toggle.clicked.connect(lambda: self.toggle_nav())
 
-        self._ui.exp_p1_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
-        self._ui.exp_p3_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
+        self._Ui.exp_p1_user.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(0))
+        self._Ui.exp_p2_events.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(1))
 
-        self._ui.col_p1_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
-        self._ui.col_p3_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
+        self._Ui.col_p1_user.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(0))
+        self._Ui.col_p2_events.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(1))
 
-        self._ui.col_p4_pref.clicked.connect(lambda: print(f"""
-            Family: {self._ui.col_p4_pref.fontInfo().family()}
-            PixelSize: {self._ui.col_p4_pref.fontInfo().pixelSize()}
-            PointSize: {self._ui.col_p4_pref.fontInfo().pointSize()}
-            WidgetSize: {self._ui.col_p4_pref.size()}
-            """)
-                                             )
+        self._Ui.UserPage.userChanged.connect(lambda package: self._Ui.EventPage.setUserFilter(package))
+
 
     def toggle_nav(self):
-        if self._ui.collapsed.isVisible():
-            self._ui.expanded.show()
-            self._ui.collapsed.hide()
+        if self._Ui.collapsed.isVisible():
+            self._Ui.expanded.show()
+            self._Ui.collapsed.hide()
         else:
-            self._ui.collapsed.show()
-            self._ui.expanded.hide()
+            self._Ui.collapsed.show()
+            self._Ui.expanded.hide()

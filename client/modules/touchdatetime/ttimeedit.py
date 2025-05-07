@@ -5,13 +5,13 @@ from shiboken6 import Shiboken
 
 from PySide6 import QtCore
 from PySide6.QtCore import (Qt, 
-                            QDateTime, QDate, QTime, 
+                            QDate, QTime,
                             QEasingCurve, 
                             Slot, Signal,
-                            QPointF,
+                            QPointF, QObject,
                             QTimer)
 from PySide6.QtWidgets import (QWidget, QScrollArea, QLabel, QPushButton, 
-                               QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel, 
+                               QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QLabel,
                                QDialog, QDialogButtonBox)
 from PySide6.QtWidgets import (QSizePolicy, 
                                QScroller, QScrollerProperties)
@@ -163,7 +163,7 @@ class TimeSelect(QWidget):
             #   Using the above form for the initialisation, rather than passing a list of all known valid snappable locations
             #       'first':    The starting position
             #       'interval': The distance between it & succeeding _entries. Assumes uniform snapping distance (valid here)
-            #       qreal:      PyQt Typedef equivalent for doubles/floats 
+            #       qreal:      PySide6 Typedef equivalent for doubles/floats
 
             ### Variables outline:
             #       'offset':   Value indicating 'central-y'.
@@ -288,28 +288,28 @@ class  TTimeEditDialog(QDialog):
     """
     timeSelected = Signal(QTime)
 
-    def __init__(self, parent, 
-                 cur_QDT    :   QDateTime, 
-                 min_QDT    =   QDateTime(QDate(0000,0,0),QTime(0,0,0,0)), 
-                 minuteType =   TimeType.SimpleMinutes,
+    def __init__(self, parent,
+                 cur_Time    :   QTime,
+                 min_Time    =   QTime(0, 0, 0),
+                 min_Type =   TimeType.SimpleMinutes,
                  theme='light'):
         super().__init__(parent)
-        self._minimumDateTime = min_QDT
-        self._dateTime = cur_QDT
-        self._minuteType = minuteType
+        self._minimumTime = min_Time
+        self._Time = cur_Time
+        self._minuteType = min_Type
 
         self._hours, self._minutes = 0, 0
         self._function_lock = False         # Flag for locking infinite scroll
-        self._l1t_mins_TimeSelect_ACTIVE: Dict[str, TimeSelect] = {}
-        self._active = 'default'
+        self.minsTimeSelect_ACTIVE: Dict[str, TimeSelect] = {}
+        self._Active = 'default'
 
-        self.__setup_ui()
-        self.__set_styles()
-        self.__setup_connections()
+        self.__setupUi()
+        self.__setStyles()
+        self.__setupConnections()
 
-    def __setup_ui(self):
+    def __setupUi(self):
         self.setWindowTitle("TTimeEditDialog")
-        self.setObjectName(f"TimeEditDialogue_{hex(id(self))}")
+        self.setObjectName(f"TTimeEditDialogue_{hex(id(self))}")
 
         self._layer0_base       = QVBoxLayout(self)
 
@@ -319,42 +319,41 @@ class  TTimeEditDialog(QDialog):
         self._layer0_base.addLayout(self._layer1_times)
         self._layer0_base.addLayout(self._layer1_buttons)
             
-        self._l1t_hours_scrollArea = QScrollArea(self)
-        self._l1t_hours_scrollArea.setObjectName(f'{self.objectName()}_hours_scrollArea')
+        self.hoursScrollArea = QScrollArea(self)
+        self.hoursScrollArea.setObjectName(f'{self.objectName()}_hours_scrollArea')
 
-        if ((self._minimumDateTime.date() == self._dateTime.date()) 
-            and (self._minimumDateTime.time().hour() > 0)): 
-            self._l1t_hours_TimeSelect: TimeSelect = TimeSelect(self, TimeType.Hours, self._minimumDateTime.time().hour())
-            self._active = 'alternate'
-        else: self._l1t_hours_TimeSelect: TimeSelect = TimeSelect(self, TimeType.Hours)
+        if self._minimumTime.hour() > 0:
+            self.hoursTimeSelect: TimeSelect = TimeSelect(self, TimeType.Hours, self._minimumTime.hour())
+            self._Active = 'alternate'
+        else: self.hoursTimeSelect: TimeSelect = TimeSelect(self, TimeType.Hours)
 
-        self._l1t_hours_scrollArea.setWidget(self._l1t_hours_TimeSelect)
-        self._l1t_hours_scrollArea.setWidgetResizable(True)
+        self.hoursScrollArea.setWidget(self.hoursTimeSelect)
+        self.hoursScrollArea.setWidgetResizable(True)
 
-        self._l1t_hours_timeScroller :QScroller = scrQt.returnDragScroller(self._l1t_hours_scrollArea, scroller_header=f'{self.objectName()}_hours_sA_')
+        self.hoursTimeScroller :QScroller = scrQt.returnDragScroller(self.hoursScrollArea, scroller_header=f'{self.objectName()}_hours_sA_')
 
-        self._l1t_mins_scrollArea = QScrollArea(self)
-        self._l1t_mins_scrollArea.setObjectName(f'{self.objectName()}_mins_scrollArea')
-        self._l1t_mins_TimeSelect_ACTIVE['default'] = TimeSelect(self, self._minuteType)  
-        self._l1t_mins_TimeSelect_ACTIVE['alternate'] = TimeSelect(self, self._minuteType, self._minimumDateTime.time().minute())
+        self.minsScrollArea = QScrollArea(self)
+        self.minsScrollArea.setObjectName(f'{self.objectName()}_mins_scrollArea')
+        self.minsTimeSelect_ACTIVE['default'] = TimeSelect(self, self._minuteType)
+        self.minsTimeSelect_ACTIVE['alternate'] = TimeSelect(self, self._minuteType, self._minimumTime.minute())
 
-        self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
-        self._l1t_mins_scrollArea.setWidgetResizable(True)
+        self.minsScrollArea.setWidget(self.minsTimeSelect_ACTIVE[self._Active])
+        self.minsScrollArea.setWidgetResizable(True)
 
-        self._l1t_mins_timeScroller :QScroller = scrQt.returnDragScroller(self._l1t_mins_scrollArea, scroller_header=f'{self.objectName()}_mins_sA_')
+        self.minsTimeScroller :QScroller = scrQt.returnDragScroller(self.minsScrollArea, scroller_header=f'{self.objectName()}_mins_sA_')
 
-        self._layer1_times.addWidget(self._l1t_hours_scrollArea)
-        self._layer1_times.addWidget(self._l1t_mins_scrollArea)
+        self._layer1_times.addWidget(self.hoursScrollArea)
+        self._layer1_times.addWidget(self.minsScrollArea)
         
-        self._l1b_confirm_pushButton = QPushButton(text="Confirm", parent=self)
-        self._l1b_cancel_pushButton = QPushButton(text="Cancel", parent=self)
-        self._layer1_buttons.addWidget(self._l1b_confirm_pushButton)
-        self._layer1_buttons.addWidget(self._l1b_cancel_pushButton)
+        self.confirmPushButton = QPushButton(text="Confirm", parent=self)
+        self.cancelPushButton = QPushButton(text="Cancel", parent=self)
+        self._layer1_buttons.addWidget(self.confirmPushButton)
+        self._layer1_buttons.addWidget(self.cancelPushButton)
 
-        self._l1b_confirm_pushButton.setObjectName("datetime_dialog_confirm_pushbutton")
-        self._l1b_cancel_pushButton.setObjectName("datetime_dialog_cancel_pushbutton")
+        self.confirmPushButton.setObjectName("datetime_dialog_confirm_pushbutton")
+        self.cancelPushButton.setObjectName("datetime_dialog_cancel_pushbutton")
 
-    def __set_styles(self):
+    def __setStyles(self):
         """self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint | 
             Qt.WindowType.WindowStaysOnTopHint) #sets Window to clear"""
@@ -407,14 +406,14 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
 }}
 """)
         
-        self._l1b_confirm_pushButton.setFont(QFont("Arial",18))
-        self._l1b_cancel_pushButton.setFont(QFont("Arial",18))
+        self.confirmPushButton.setFont(QFont("Arial", 18))
+        self.cancelPushButton.setFont(QFont("Arial", 18))
 
-        self._l1b_confirm_pushButton.setMaximumHeight(40)
-        self._l1b_cancel_pushButton.setMaximumHeight(40)
+        self.confirmPushButton.setMaximumHeight(40)
+        self.cancelPushButton.setMaximumHeight(40)
 
-        self._l1b_confirm_pushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
-        self._l1b_cancel_pushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        self.confirmPushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        self.cancelPushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
 
         self.layout().setSpacing(0)
         self._layer0_base.setSpacing(0)
@@ -441,8 +440,8 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
             )
         
         pref_height = (
-            (5 * self._l1t_hours_TimeSelect.returnInterval())
-            + self._l1b_confirm_pushButton.sizeHint().height()
+            (5 * self.hoursTimeSelect.returnInterval())
+            + self.confirmPushButton.sizeHint().height()
             - 20
             )
 
@@ -453,48 +452,48 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
         self.setMaximumHeight(pref_height)
 
         self.adjustSize()
-        self._l1b_confirm_pushButton.adjustSize()
+        self.confirmPushButton.adjustSize()
 
-    def __setup_connections(self):
-        self._l1b_confirm_pushButton.clicked.connect(lambda: self.dialogueAccepted())
-        self._l1b_cancel_pushButton.clicked.connect(lambda: self.dialogueRejected())
+    def __setupConnections(self):
+        self.confirmPushButton.clicked.connect(lambda: self.dialogueAccepted())
+        self.cancelPushButton.clicked.connect(lambda: self.dialogueRejected())
 
-        self._l1t_hours_timeScroller.stateChanged.connect(
+        self.hoursTimeScroller.stateChanged.connect(
             lambda state: 
             self._stateHandler(
                 state,
-                self._l1t_hours_TimeSelect,
+                self.hoursTimeSelect,
                 int(
-                    self._l1t_hours_timeScroller.finalPosition().y() + 
-                    (self._l1t_hours_scrollArea.verticalScrollBar().pageStep()/2)
+                    self.hoursTimeScroller.finalPosition().y() +
+                    (self.hoursScrollArea.verticalScrollBar().pageStep() / 2)
                 )
                 ))
-        self._l1t_mins_timeScroller.stateChanged.connect(
+        self.minsTimeScroller.stateChanged.connect(
             lambda state: 
             self._stateHandler(
                 state,
-                self._l1t_mins_TimeSelect_ACTIVE[self._active],
+                self.minsTimeSelect_ACTIVE[self._Active],
                 int(
-                    self._l1t_mins_timeScroller.finalPosition().y() +
-                    (self._l1t_mins_scrollArea.verticalScrollBar().pageStep()/2)
+                    self.minsTimeScroller.finalPosition().y() +
+                    (self.minsScrollArea.verticalScrollBar().pageStep() / 2)
                 )
                 ))
         
-        self._l1t_hours_scrollArea.verticalScrollBar().valueChanged.connect(
+        self.hoursScrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
             self._infiniteScroll(
                 value,
-                self._l1t_hours_scrollArea,
-                self._l1t_hours_timeScroller,
-                self._l1t_hours_TimeSelect
+                self.hoursScrollArea,
+                self.hoursTimeScroller,
+                self.hoursTimeSelect
                 ))
-        self._l1t_mins_scrollArea.verticalScrollBar().valueChanged.connect(
+        self.minsScrollArea.verticalScrollBar().valueChanged.connect(
             lambda value: 
             self._infiniteScroll(
                 value,
-                self._l1t_mins_scrollArea,
-                self._l1t_mins_timeScroller,
-                self._l1t_mins_TimeSelect_ACTIVE[self._active]
+                self.minsScrollArea,
+                self.minsTimeScroller,
+                self.minsTimeSelect_ACTIVE[self._Active]
                 ))
 
     @Slot(QScroller.State)
@@ -503,9 +502,9 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
         if (state == QScroller.State.Inactive):
             final_val = TimeSelect.returnCurrentVal(pagestep)
             self._updateCurrentVarsAndQTime(final_val, TimeSelect)
-            self._l1b_confirm_pushButton.setEnabled(True)
+            self.confirmPushButton.setEnabled(True)
         else:
-            if (self._l1b_confirm_pushButton.isEnabled()): self._l1b_confirm_pushButton.setDisabled(True)
+            if (self.confirmPushButton.isEnabled()): self.confirmPushButton.setDisabled(True)
             TimeSelect.clearSelected()
         
     def _updateCurrentVarsAndQTime(self, f_val: int, TimeSelect: TimeSelect):
@@ -523,35 +522,35 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
             self._updateCurrentQTime(test_en=True)
         
     def _updateCurrentQTime(self, test_en=False):
-        self._dateTime.setTime(QTime(self._hours, self._minutes, 0, 0))
-        if (test_en == True): print(f"Current time: {self._dateTime.time()}")
+        self._Time = (QTime(self._hours, self._minutes, 0, 0))
+        if (test_en == True): print(f"Current time: {self._Time}")
 
     def _setActiveTimeSelect(self, new: str):
-        if (new == self._active):
+        if (new == self._Active):
             self._updateCurrentQTime(test_en=True)
         else: 
             self._swapActiveTimeSelect()
 
     def _swapActiveTimeSelect(self):
-        if (self._active == 'default'):
-            self._active = 'alternate'
+        if (self._Active == 'default'):
+            self._Active = 'alternate'
             self._updateMinutesActiveTimeSelect()
-        elif (self._active == 'alternate'):
-            self._active = 'default'
+        elif (self._Active == 'alternate'):
+            self._Active = 'default'
             self._updateMinutesActiveTimeSelect()
         else: 
-            self._active = 'default'
+            self._Active = 'default'
             self._updateMinutesActiveTimeSelect()
 
     def _updateMinutesActiveTimeSelect(self):
         inactive: str = None
-        for key in self._l1t_mins_TimeSelect_ACTIVE.keys():
-            if (key == self._active): pass
+        for key in self.minsTimeSelect_ACTIVE.keys():
+            if (key == self._Active): pass
             inactive = key
         if inactive is None: pass
-        self._l1t_mins_TimeSelect_ACTIVE[inactive] = self._l1t_mins_scrollArea.takeWidget()
+        self.minsTimeSelect_ACTIVE[inactive] = self.minsScrollArea.takeWidget()
 
-        self._l1t_mins_scrollArea.setWidget(self._l1t_mins_TimeSelect_ACTIVE[self._active])
+        self.minsScrollArea.setWidget(self.minsTimeSelect_ACTIVE[self._Active])
         self._updateMinutesPositions()
         self._updateCurrentQTime(test_en=True)
 
@@ -672,40 +671,39 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
         )
 
     def _updateHoursPositions(self):
-        self._hours = self._updatePositions(TimeSelect    =self._l1t_hours_TimeSelect,
-                                            scrollArea    =self._l1t_hours_scrollArea,
-                                            timeScroller  =self._l1t_hours_timeScroller)
+        self._hours = self._updatePositions(TimeSelect    =self.hoursTimeSelect,
+                                            scrollArea    =self.hoursScrollArea,
+                                            timeScroller  =self.hoursTimeScroller)
     
     def _updateMinutesPositions(self):
-        self._minutes = self._updatePositions(TimeSelect    =self._l1t_mins_TimeSelect_ACTIVE[self._active],
-                                              scrollArea    =self._l1t_mins_scrollArea,
-                                              timeScroller  =self._l1t_mins_timeScroller)
+        self._minutes = self._updatePositions(TimeSelect    =self.minsTimeSelect_ACTIVE[self._Active],
+                                              scrollArea    =self.minsScrollArea,
+                                              timeScroller  =self.minsTimeScroller)
 
     def _setPositions(self):
         self._updateHoursPositions()
         self._updateMinutesPositions()
 
-    def changeDates(self, new_M_QDT: QDateTime, new_C_QDT: QDateTime):
+    def changeTimes(self, new_M_Time: QTime, new_C_Time: QTime):
         """ Public access function for changing/updating the values in the TTimeEditDialog
             #   Requires both new values for reuse.
             #   Uses 'changeMinVal' in TimeSelect to change ui features
         """
-        self._minimumDateTime = new_M_QDT
-        self._dateTime = new_C_QDT
+        self._minimumTime = new_M_Time
+        self._Time = new_C_Time
 
-        print(self._minimumDateTime)
-        print(self._dateTime)
+        print(self._minimumTime)
+        print(self._Time)
 
-        if ((self._minimumDateTime.date() == self._dateTime.date()) 
-            and (self._minimumDateTime.time() > QTime(0,0,0,0))):
-            self._l1t_hours_TimeSelect.changeMinVal(self._minimumDateTime.time().hour())
-            self._l1t_mins_TimeSelect_ACTIVE['alternate'].changeMinVal(self._minimumDateTime.time().minute())
+        if self._minimumTime > QTime(0, 0, 0, 0):
+            self.hoursTimeSelect.changeMinVal(self._minimumTime.hour())
+            self.minsTimeSelect_ACTIVE['alternate'].changeMinVal(self._minimumTime.minute())
             self._setActiveTimeSelect('alternate')
         else:
-            self._l1t_hours_TimeSelect.changeMinVal(QTime(0,0,0,0).hour())
+            self.hoursTimeSelect.changeMinVal(QTime(0, 0, 0, 0).hour())
     
-    def setMinimumDateTime(self, new_min: QDateTime): self.changeDates(new_min, self._dateTime)
-    def setCurrentDateTime(self, new_cur: QDateTime): self.changeDates(self._minimumDateTime, new_cur)
+    def setMinimumTime(self, new_min: QTime): self.changeTimes(new_min, self._Time)
+    def setCurrentTime(self, new_cur: QTime): self.changeTimes(self._minimumTime, new_cur)
 
     def resizeEvent(self, event):
         self._setPositions()
@@ -715,5 +713,5 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
         self._setPositions()
         return super().showEvent(event)
     
-    def dialogueAccepted(self): self.timeSelected.emit(self._dateTime.time()), self.accept()
+    def dialogueAccepted(self): self.timeSelected.emit(self._Time), self.accept()
     def dialogueRejected(self): self.reject(), self.rejected.emit()

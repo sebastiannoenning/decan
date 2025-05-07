@@ -1,10 +1,11 @@
 import sys, re, datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 from PySide6 import QtCore
 from PySide6.QtCore import (Qt, QObject, 
                             QSortFilterProxyModel, QConcatenateTablesProxyModel, 
                             QDate, QDateTime, QTime,
-                            QRegularExpression, Signal)
+                            QRegularExpression, Signal,
+                            QModelIndex)
 from PySide6.QtSql import (QSqlDatabase, 
                            QSqlTableModel, QSqlQueryModel, 
                            QSqlQuery,
@@ -113,6 +114,7 @@ class EventFilter:
         if index >= len(self._date_ranges): raise Exception(f"getDateRange() error: Please select an index between [1-{len(self._date_ranges)}]")
         return self._date_ranges[index]
 
+
     def constructFilter(self):
         """ Function that builds a SQL WHERE complete_filter from the stored information """
         f: dt_funcs.EDateTime = dt_funcs.EDateTime.Date
@@ -200,8 +202,11 @@ class EventModel(QSortFilterProxyModel):
     def data(self, index, /, role = ...):
         return super().data(index, role)
 
-    def changeUser(self, uid: int):
+    def changeUser(self, uid: Union[int, QModelIndex]):
         # Will validate user_id and act as padding before running on the view program
+        if isinstance(uid, QModelIndex):
+            print(QModelIndex)
+            uid = uid.row()
         self._setUserIDFilter(uid, test_en=True)
         pass
 
@@ -221,7 +226,7 @@ class EventModel(QSortFilterProxyModel):
             else:               
                 self._Filters.EventModel.addUserFilter(uid)
                 real_id = uid                                   # Sets real_id to the actual ID 
-        
+
         try:
             self._Queries.EventsUsersView.alterView(real_id, id_check=True)
         except Exception as e:

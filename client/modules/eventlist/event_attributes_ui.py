@@ -43,8 +43,8 @@ class Ui_event_description(object):
         if not event_description.objectName():
             event_description.setObjectName(u"event_description")
         event_description.resize(0, 0)
-        event_description.setMinimumHeight(30)
-        event_description.setMaximumHeight(200)
+        event_description.setMinimumHeight(100)
+        event_description.setMaximumHeight(100)
         event_description.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum))
 
         self.container = QVBoxLayout(event_description)

@@ -32,7 +32,7 @@ class Ui_event_item(object):
         self.layout = QVBoxLayout(event_item)
         self.layout.setSpacing(0)
         self.layout.setObjectName(u"layout")
-        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(4, 4, 4, 4)
 
         event_item.setStyleSheet(""" * { border: 0px; }""")
 

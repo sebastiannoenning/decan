@@ -11,7 +11,7 @@ from PySide6.QtCore import (Qt, QObject, Signal,
                             QDateTime, QDate, QTime, 
                             QSize)
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, 
-                               QWidget, QScrollArea, QLabel, QCheckBox, 
+                               QWidget, QScrollArea, QLabel, QCheckBox, QPushButton,
                                QSizePolicy,
                                QDataWidgetMapper,
                                QScroller, QScrollerProperties, QStyleOption, QStyle)
@@ -29,16 +29,17 @@ class EBody(QWidget):
     """ Provides a UI representation of an associated 
     """
     sizeChanged = Signal(QSize)
-    itemsChanged = Signal()
+    dataChanged = Signal()
     hasItems = Signal(bool)
 
     def __init__(self, parent, 
-                 jsonParser: EventJsonParser = None):
+                 jsonParser: EventJsonParser = None,
+                 test_en: bool = False):
         super().__init__(parent)
         self._jsonParser: Optional[EventJsonParser] = None
         if jsonParser is not None:
             self._jsonParser = jsonParser
-            print(self._jsonParser.objectName())
+            if test_en: print(self._jsonParser.objectName())
             self.setJsonParser(self._jsonParser)
             self.setConnections()
 
@@ -70,6 +71,11 @@ class EBody(QWidget):
         try: self._jsonParser.objectsMoved.disconnect(self.moveItems)
         except Exception as e: 
             if test_en: print('removeConnections()->objectsMoved.disconnect() error: Was not connected,',e)
+        try: self._jsonParser.finished.disconnect(self.checkState)
+        except Exception as e:
+            if test_en: print('removeConnections()->objectsMoved.disconnect() error: Was not connected,',e)
+
+
 
     def setConnections(self):
         if self._jsonParser:
@@ -79,13 +85,11 @@ class EBody(QWidget):
             self._jsonParser.objectsMoved.connect(lambda moved: self.moveItems(moved_items=moved))
 
             self._jsonParser.finishedEditing.connect(lambda: self.checkState())
-            self._jsonParser.finishedEditing.connect(lambda: self.updateStatus())
 
     def importAll(self):
         new_objects: List[str] = self._jsonParser.Positions()
         if new_objects:
             self.addItems(new_objects)
-            print()
             self.sizeChanged.emit(self.sizeHint())
 
     def clearAll(self):
@@ -93,19 +97,17 @@ class EBody(QWidget):
         if all_objects: self.removeItems(all_objects)
 
     def checkState(self):
+        self.propagateMinimumDimensions()
         if self._Items: self.hasItems.emit(True)
         else: self.hasItems.emit(False)
-
-    def updateStatus(self):
-        pass#self.propagateMinimumDimensions()
 
     def propagateMinimumDimensions(self):
         """ Absolute minimum height return wrapper holding this """
         spacing = (self._Ui.container.spacing() * len(self._Items))
-        """item_dimensions: Tuple[int] = tuple(event_item.sizeHint().height() for event_item in self._Items.values())
-        self.setMinimumSize(self.minimumWidth(), sum(item_height_dimensions))"""
+        item_dimensions: Tuple[int] = tuple(event_item.sizeHint().height() for event_item in self._Items.values())
+        self.setMinimumSize(self.minimumWidth(), (sum(item_dimensions)+spacing))
 
-    def addItems(self, new_items: List[str]):
+    def addItems(self, new_items: List[str], test_en: bool = False):
         for key in new_items:
             new_widget: Union[EToDo, EDescription, None] = None
             obj_name, index = key.split('_',1)
@@ -127,6 +129,7 @@ class EBody(QWidget):
                 new_widget.setChecked(value_bool)
 
                 new_widget.checkStateChanged.connect(lambda: self._jsonParser.setObjectProperty(key, {'ETaskDescription':new_widget.text(),'EBool':new_widget.isChecked()}))
+                new_widget.checkStateChanged.connect(lambda: self.dataChanged.emit())
 
             index = self._jsonParser.Positions().index(key)
 
@@ -136,7 +139,7 @@ class EBody(QWidget):
             self._Ui.container.insertWidget(index, new_widget)
             self._Items.update({key: new_widget})
 
-            print(f'New_widget[{key}]].sizeHint()--> {new_widget.sizeHint()}')
+            if test_en: print(f'New_widget[{key}]].sizeHint()--> {new_widget.sizeHint()}')
 
     def removeItems(self, removed_items: List[str]):
         for key in removed_items:
@@ -175,6 +178,7 @@ class EBody(QWidget):
                 update_widget.setText(value)
             elif obj_type == ObjectType.EToDo:
                 update_widget.checkStateChanged.disconnect(self._jsonParser.setObjectProperty)
+                update_widget.checkStateChanged.disconnect(self.dataChanged.emit)
 
                 value:  Dict[str, Union[str, bool]] = self._jsonParser.formatEToDo(value)
                 value_bool:     bool                = value.get('EBool')
@@ -184,8 +188,113 @@ class EBody(QWidget):
                 update_widget.setChecked(value_bool)
 
                 update_widget.checkStateChanged.connect(lambda: self._jsonParser.setObjectProperty(key, {'ETaskDescription':update_widget.text(),'EBool':update_widget.isChecked()}))
+                update_widget.checkStateChanged.connect(lambda: self.dataChanged.emit())
 
-            update_widget.adjustSize()
+
+class EBodySingleDisplay(EBody):
+    def __init__(self, parent,
+                 s_jsonParser: EventJsonParser = None,
+                 test_en: bool = False
+                 ):
+        super().__init__(parent=parent, jsonParser=s_jsonParser, test_en=test_en)
+        self._activeKey: Optional[str] = None
+        self._keyList: List[str] = list(self._Items.keys())
+        self._Ui.container.setContentsMargins(0,0,0,0)
+        self._Ui.container.setSpacing(10)
+
+        self._Ui.empty_label = QLabel('No objects', self)
+        self._Ui.empty_label.setObjectName(u"empty_label")
+        self._Ui.empty_label.setMinimumSize(QSize(80, 50))
+        self._Ui.empty_label.setStyleSheet(u"border: 2px solid rgba(120,120,120,1);\n"
+                                                  "border-radius: 7px;")
+        self._Ui.empty_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._Ui.container.addWidget(self._Ui.empty_label)
+
+        self._Ui.header = QWidget(self)
+        self._Ui.header_layout = QHBoxLayout(self._Ui.header)
+        self._Ui.header_layout.setContentsMargins(0,0,0,0)
+        self._Ui.header_layout.setSpacing(0)
+        self._Ui.header.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        self._Ui.prev_att = QPushButton('Previous')
+        self._Ui.next_att = QPushButton('Next')
+        self._Ui.prev_att.setMinimumHeight(30)
+        self._Ui.next_att.setMinimumHeight(30)
+        self.disableButtons()
+        self._Ui.header_layout.addWidget(self._Ui.prev_att)
+        self._Ui.header_layout.addWidget(self._Ui.next_att)
+        self._Ui.container.insertWidget(0, self._Ui.header)
+
+        self._Ui.prev_att.clicked.connect(self.moveLeft)
+        self._Ui.next_att.clicked.connect(self.moveRight)
+        pass
+
+    def setConnections(self):
+        super().setConnections()
+        self._jsonParser.finishedEditing.connect(lambda: self.updateKey())
+
+    def removeConnections(self, test_en: bool=False):
+        super().removeConnections()
+        try: self._jsonParser.finished.disconnect(self.updateKey)
+        except Exception as e:
+            if test_en: print('removeConnections()->objectsMoved.disconnect() error: Was not connected,',e)
+
+    def addItems(self, new_items: List[str], test_en: bool = False):
+        self._Ui.empty_label.hide()
+        super().addItems(new_items, test_en)
+        for key in new_items:
+            self._Items[key].hide()
+            self._activeKey = key
+
+    def updateKey(self):
+        self._keyList = list(self._Items.keys()) # Update key-list after updates made
+        if self._activeKey:
+            t_key = self._Items.get(self._activeKey)
+            if t_key is None:
+                if not len(self._keyList)<1: self._activeKey = self._keyList[0]
+        if self._activeKey is None:
+            self.displayEmpty()
+        else:
+            self.showActive()
+
+    def showActive(self):
+        active_task: Union[EToDo, EDescription] = self._Items.get(self._activeKey)
+        if active_task:
+            active_task.show()
+            self.toggleButtonEnable()
+
+    def toggleButtonEnable(self):
+        if len(self._keyList)<=1: self.disableButtons()
+        else: self.enableButtons()
+
+    def moveLeft(self):
+        _index = self._keyList.index(self._activeKey)
+        _index = (_index + 1) % len(self._keyList)
+        h_widget = self._Items.get(self._activeKey)
+        h_widget.hide()
+        self._activeKey = self._keyList[_index]
+        s_widget = self._Items.get(self._activeKey)
+        s_widget.show()
+
+    def moveRight(self):
+        _index = self._keyList.index(self._activeKey)
+        _index = (_index - 1) % len(self._keyList)
+        h_widget = self._Items.get(self._activeKey)
+        h_widget.hide()
+        self._activeKey = self._keyList[_index]
+        s_widget = self._Items.get(self._activeKey)
+        s_widget.show()
+
+    def displayEmpty(self):
+        self._Ui.empty_label.show()
+        self.disableButtons()
+
+    def enableButtons(self):
+        self._Ui.prev_att.setEnabled(True)
+        self._Ui.next_att.setEnabled(True)
+
+    def disableButtons(self):
+        self._Ui.prev_att.setDisabled(True)
+        self._Ui.next_att.setDisabled(True)
 
 
 # noinspection PyTypeChecker,PyAttributeOutsideInit

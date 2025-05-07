@@ -704,51 +704,51 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
         #self._controller = controller
 
         #self load ui components
-        self._ui = Ui_MainWindow()
-        self._ui.setupUi(self)
+        self._Ui = Ui_MainWindow()
+        self._Ui.setupUi(self)
         
         #print(QSqlDatabase.drivers())
 
         #remove title bar
         #self.setWindowFlag(Qt.FramelessWindowHint)
 
-        self._ui.pages.setCurrentIndex(0)
+        self._Ui.pages.setCurrentIndex(0)
         self.setup_links_nav()
         self.setup_connection()
         self.setup_tables()
         self.setup_links_combo()
         self.setup_add_event()
 
-        #self._ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
+        #self._Ui.Event.set_data('Daniels Birthday'*10, 'I love the rain'*100, '16:30')
 
     def setup_links_nav(self):
         #defines all links for components in ui
-        self._ui.b_user.clicked.connect(lambda: self._ui.pages.setCurrentIndex(0))
-        self._ui.b_calendar.clicked.connect(lambda: self._ui.pages.setCurrentIndex(1))
-        self._ui.b_events.clicked.connect(lambda: self._ui.pages.setCurrentIndex(2))
-        self._ui.b_settings.clicked.connect(lambda: self._ui.pages.setCurrentIndex(3))
+        self._Ui.b_user.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(0))
+        self._Ui.b_calendar.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(1))
+        self._Ui.b_events.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(2))
+        self._Ui.b_settings.clicked.connect(lambda: self._Ui.pages.setCurrentIndex(3))
 
     def setup_links_combo(self): #Temporary function for connecting userSelect to the 
-        self._ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
-        self._ui.b_delete.clicked.connect(self._ui.scrollAreaWidgetContents.deleteSelected)
+        self._Ui.userSelect.currentTextChanged.connect(lambda name: self.changeEventFilter(name))
+        self._Ui.b_delete.clicked.connect(self._Ui.scrollAreaWidgetContents.deleteSelected)
 
     def setup_add_event(self):
-        self._ui.AE_CB_userSelect.setModel(self._user_profile_model)
-        self._ui.AE_CB_userSelect.setModelColumn(2)
+        self._Ui.AE_CB_userSelect.setModel(self._user_profile_model)
+        self._Ui.AE_CB_userSelect.setModelColumn(2)
 
-        #self._ui.AE_LE_inputTitle.editingFinished
-        self._ui.AE_DTE_startDTSelect.dateChanged.connect(lambda: 
-                                                          self._ui.AE_DTE_endDTSelect.setMinimumDateTime(
-                                                              self._ui.AE_DTE_startDTSelect.dateTime()
+        #self._Ui.AE_LE_inputTitle.editingFinished
+        self._Ui.AE_DTE_startDTSelect.dateChanged.connect(lambda: 
+                                                          self._Ui.AE_DTE_endDTSelect.setMinimumDateTime(
+                                                              self._Ui.AE_DTE_startDTSelect.dateTime()
                                                           ))
         
-        self._ui.AE_DTE_startSelect.dateTimeChanged.connect(lambda datetime:
-                                                      self._ui.AE_DTE_endSelect.setMinimumDateTime(datetime))
+        self._Ui.AE_DTE_startSelect.dateTimeChanged.connect(lambda datetime:
+                                                      self._Ui.AE_DTE_endSelect.setMinimumDateTime(datetime))
 
-        self._ui.AE_DTE_startDTSelect.setDate(QDate.currentDate())
-        self._ui.AE_DTE_endDTSelect.setDate(QDate.currentDate())
+        self._Ui.AE_DTE_startDTSelect.setDate(QDate.currentDate())
+        self._Ui.AE_DTE_endDTSelect.setDate(QDate.currentDate())
 
-        self._ui.AE_PB_addEvent.clicked.connect(lambda: self.addEvent())
+        self._Ui.AE_PB_addEvent.clicked.connect(lambda: self.addEvent())
 
     def setup_tables(self):
         print(self._database.tables())
@@ -771,15 +771,15 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
         self._user_profile_model.select()
         self._event_model.select()
         
-        self._ui.table_user.setModel(self._user_model)
-        self._ui.table_user_profile.setModel(self._user_profile_model)
-        self._ui.table_events.setModel(self._event_model)
+        self._Ui.table_user.setModel(self._user_model)
+        self._Ui.table_user_profile.setModel(self._user_profile_model)
+        self._Ui.table_events.setModel(self._event_model)
 
-        self._ui.userSelect.setModel(self._user_profile_model)
-        self._ui.userSelect.setModelColumn(2)
+        self._Ui.userSelect.setModel(self._user_profile_model)
+        self._Ui.userSelect.setModelColumn(2)
 
-        self._ui.scrollAreaWidgetContents.resize(self._ui.upcomingevents.width(), self._ui.upcomingevents.height())
-        self._ui.scrollAreaWidgetContents.setModel(self._event_model)
+        self._Ui.scrollAreaWidgetContents.resize(self._Ui.upcomingevents.width(), self._Ui.upcomingevents.height())
+        self._Ui.scrollAreaWidgetContents.setModel(self._event_model)
         #print(self._user_model.rowCount())
         # 
         self._event_model2 =  QSqlRelationalTableModel()
@@ -787,7 +787,7 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
         self._event_model2.setRelation(7, QSqlRelation("Users","UserID","Username"))
         self._event_model2.setFilter("UserID = '3'")
         self._event_model2.select()
-        self._ui.scrollAreaWidgetContents.setModel(self._event_model2)
+        self._Ui.scrollAreaWidgetContents.setModel(self._event_model2)
         
     def setup_connection(self):
         self._database = QSqlDatabase.addDatabase('QMYSQL')
@@ -805,19 +805,19 @@ class CEventUserModel(QSqlTableModel): #Access model for view in database
             user_id = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{currentText}'"))
             self._event_model.setFilter(f"UserID = '{user_id}'")
             self._event_model.select()
-            self._ui.table_events.setModel(self._event_model)
+            self._Ui.table_events.setModel(self._event_model)
         except Exception as e:
             print("eventFilter change not possible:",e)
     
     def addEvent(self):
-        user_id = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._ui.AE_CB_userSelect.currentText())}'"))
-        print(self._ui.AE_LE_inputTitle.displayText())
+        user_id = self.returnQuery(QSqlQuery(f"SELECT `UP_UserID` FROM `UserProfile` WHERE `Forename` = '{(self._Ui.AE_CB_userSelect.currentText())}'"))
+        print(self._Ui.AE_LE_inputTitle.displayText())
         newEvent = {
-            'ETitle'            :   self._ui.AE_LE_inputTitle.displayText(),
-            'EStart_Date'       :   (self._ui.AE_DTE_startDTSelect.date()).toPython().strftime('%Y-%m-%d'),
-            'EStart_Time'       :   (self._ui.AE_DTE_startDTSelect.time()).toPython().strftime('%H:%M:%S'),
-            'EEnd_Date'         :   (self._ui.AE_DTE_endDTSelect.date()).toPython().strftime('%Y-%m-%d'),
-            'EEnd_Time'         :   (self._ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
+            'ETitle'            :   self._Ui.AE_LE_inputTitle.displayText(),
+            'EStart_Date'       :   (self._Ui.AE_DTE_startDTSelect.date()).toPython().strftime('%Y-%m-%d'),
+            'EStart_Time'       :   (self._Ui.AE_DTE_startDTSelect.time()).toPython().strftime('%H:%M:%S'),
+            'EEnd_Date'         :   (self._Ui.AE_DTE_endDTSelect.date()).toPython().strftime('%Y-%m-%d'),
+            'EEnd_Time'         :   (self._Ui.AE_DTE_endDTSelect.time()).toPython().strftime('%H:%M:%S'),
             'E_CreatorUserID'   :   user_id
         }
         try:

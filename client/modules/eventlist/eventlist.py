@@ -13,6 +13,8 @@ class EventList(QWidget):
     """ Event List is a container widget for multiple EventItems 
         It is not concerned/aware about changes made to or within the EventItem attributes, & solely manages the removal & insertion of rows.
     """
+    itemSelected = Signal(bool)
+
     def __init__(self) -> None:
         super().__init__()
         self._Ui = Ui_event_list()
@@ -28,14 +30,19 @@ class EventList(QWidget):
         try: func()
         except Exception as e: print(message, e)
 
+    def current(self) -> int:
+        if self._current is None: return -1
+        return self._current
+
     def resetList(self, 
-                  test_en:Tuple[bool,str]=[True,'']):
+                  test_en:Tuple[bool,str]=[False,'']):
         if self._model is None: return
+        self._current = None
         self.clearList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
         self.populateList(test_en=[test_en[0],f'{test_en[1]}resetList()->'])
 
     def setModel(self, model: EventModel, 
-                 test_en:bool=True):
+                 test_en: bool = False):
         if self._model is not None:
             msg = 'eventList->setModel()->eventModel->disconnect() error:'
             self.tryExcept(self._model.rowsMoved.disconnect,                      f'{msg} Could not disconnect rowsMoved',            test_en)
@@ -71,9 +78,9 @@ class EventList(QWidget):
         item.setObjectName(f'EventItem_{index.row()}')
         if test_en[0]:
             print(f'{test_en[1]}addItem()->item.objectName(): {item.objectName()}')
-
+        item.mousePressed.connect(lambda i_index: self.setSelected(i_index))
         self._Ui.container.addWidget(item)
-        self._Items.update({index.row():item}) #Row in model used as index 
+        self._Items.update({index.row():item}) #Row in model used as index
         if test_en[0]:
             print(f'{test_en[1]}addItem() event added({item.objectName()}) added')
 
@@ -100,6 +107,7 @@ class EventList(QWidget):
         layout_item : QLayoutItem  = self._Ui.container.takeAt(index)
 
         event_item  : EventItem    = layout_item.widget()
+        event_item.mousePressed.disconnect(self.setSelected)
         if (test_en[0]): print(f'{test_en[1]}removeItem()->item.objectName(): {event_item.objectName()}')
 
         if event_item is not None: 
@@ -126,3 +134,27 @@ class EventList(QWidget):
         if (test_en[0]): print(f'{test_en[1]}clearList() len(items)[{len(self._Items)}]:len(container)[{self._Ui.container.count()}]')
 
         if len(self._Items) != 0: self._Items.clear()
+
+    @Slot(QModelIndex)
+    def setSelected(self, calling_index: QModelIndex):
+        calling_item: EventItem = self._Items[calling_index.row()]
+        if calling_index.row() == self._current:
+            calling_item.toggleSelected()
+            self._current = None
+            self.itemSelected.emit(False)
+            return
+
+        if isinstance(self._current, int):
+            previous_item: EventItem = self._Items[self._current]
+            previous_item.toggleSelected()
+
+        self._current = calling_index.row()
+        calling_item.toggleSelected()
+        self.itemSelected.emit(True)
+
+    def reject(self):
+        if self._current is None: return
+        reject_item: EventItem = self._Items[self._current]
+        reject_item.toggleSelected()
+        self._current = None
+

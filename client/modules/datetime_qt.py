@@ -2,7 +2,7 @@ from enum import Enum
 from PySide6.QtCore import Qt, QDate, QDateTime, QTime
 
 """ ### Custom DateTime Functions for QT Modules
-    #   -   PyQt Custom Functions that are expected to be reused
+    #   -   PySide6 Custom Functions that are expected to be reused
 """
 
 

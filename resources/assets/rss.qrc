@@ -30,12 +30,6 @@
         <file>arrow_up_blue.svg</file>
     </qresource>
     <qresource prefix="/icons/user">
-        <file>user_add_red.svg</file>
-        <file>user_add_light.svg</file>
-        <file>user_add_dark.svg</file>
-        <file>profile_2_red.svg</file>
-        <file>profile_2_light.svg</file>
-        <file>profile_2_dark.svg</file>
         <file>security_password_dark.svg</file>
         <file>security_password_light.svg</file>
         <file>security_slash_dark.svg</file>
@@ -49,13 +43,15 @@
         <file>security_tick_light.svg</file>
         <file>security_user_dark.svg</file>
         <file>security_user_light.svg</file>
-        <file>profile_2_grey.svg</file>
-        <file>profile_2_orange.svg</file>
         <file>profile_2_slash_dark.svg</file>
         <file>profile_2_slash_grey.svg</file>
         <file>profile_2_slash_light.svg</file>
         <file>profile_2_slash_orange.svg</file>
         <file>profile_2_slash_red.svg</file>
+        <file>security_pin_dark.svg</file>
+        <file>profile2_user_light.svg</file>
+        <file>profile2_user_dark.svg</file>
+        <file>profile2_user_red.svg</file>
     </qresource>
     <qresource prefix="/icons/nav">
         <file>setting_red.svg</file>
@@ -363,4 +359,53 @@
         <file>text_underline_grey.svg</file>
         <file>text_underline_light.svg</file>
     </qresource>
+    <qresource prefix="/icons/user/nav">
+        <file>user_select_light.svg</file>
+        <file>user_select_dark.svg</file>
+        <file>user_select_selected.svg</file>
+        <file>user_current_light.svg</file>
+        <file>user_current_dark.svg</file>
+        <file>user_current_selected.svg</file>
+        <file>user_add_selected.svg</file>
+        <file>user_add_light.svg</file>
+        <file>user_add_dark.svg</file>
+    </qresource>
+    <qresource prefix="/icons/user/options">
+        <file>user_icon_option_1.svg</file>
+        <file>user_icon_option_2.svg</file>
+        <file>user_icon_option_3.svg</file>
+        <file>user_icon_option_4.svg</file>
+        <file>user_icon_option_5.svg</file>
+        <file>user_icon_option_6.svg</file>
+        <file>user_icon_option_7.svg</file>
+        <file>user_icon_option_8.svg</file>
+        <file>user_icon_option_9.svg</file>
+        <file>user_icon_option_10.svg</file>
+        <file>user_icon_option_11.svg</file>
+        <file>user_icon_option_12.svg</file>
+        <file>user_icon_option_13.svg</file>
+        <file>user_icon_option_14.svg</file>
+        <file>user_icon_option_15.svg</file>
+        <file>user_icon_option_16.svg</file>
+        <file>user_icon_option_17.svg</file>
+        <file>user_icon_option_18.svg</file>
+        <file>user_icon_option_19.svg</file>
+        <file>user_icon_option_20.svg</file>
+        <file>user_icon_option_21.svg</file>
+        <file>user_icon_option_22.svg</file>
+        <file>user_icon_option_23.svg</file>
+        <file>user_icon_option_24.svg</file>
+        <file>user_icon_option_25.svg</file>
+        <file>user_icon_option_26.svg</file>
+        <file>user_icon_option_27.svg</file>
+        <file>user_icon_option_28.svg</file>
+        <file>user_icon_option_35.svg</file>
+        <file>user_icon_option_34.svg</file>
+        <file>user_icon_option_33.svg</file>
+        <file>user_icon_option_32.svg</file>
+        <file>user_icon_option_31.svg</file>
+        <file>user_icon_option_30.svg</file>
+        <file>user_icon_option_29.svg</file>
+    </qresource>
+    <qresource prefix="/icons/user/security"/>
 </RCC>

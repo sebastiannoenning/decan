@@ -23,7 +23,7 @@ from modules.eventlist.eventtype import EventType
 from modules.eventlist.eventjsonparser import EventJsonParser
 
 class EventItem(QWidget):
-    mousePressed = Signal(QWidget)
+    mousePressed = Signal(QModelIndex)
 
     def __init__(self, parent=None, model=None, index=None):
         super().__init__(parent)
@@ -39,6 +39,10 @@ class EventItem(QWidget):
 
         self._Ui.event_body.setJsonParser(self._jsonParser)
 
+        self._Ui.event_body.dataChanged.connect(lambda: self._mapper.submit())
+
+        self._selected = False
+
         self._setupMappings()
 
         self._index     :QModelIndex           = index
@@ -51,37 +55,65 @@ class EventItem(QWidget):
     def setCurrentIndex(self, row: int):                self._mapper.setCurrentIndex(row)
     def currentIndex(self):                             self._mapper.currentIndex()
 
-    def _setupMappings(self): # Sets mappings to each ui object generated via the _setup_Ui
+    def _setupMappings(self, test_en: bool = False): # Sets mappings to each ui object generated via the _setup_Ui
         self._mapper.addMapping(self._Ui.event_title, 1, QByteArray("text"))
-        print(f'{self.objectName()}_{hex(id(self))} added mapping to _eventTitle')
+        if test_en: print(f'{self.objectName()}_{hex(id(self))} added mapping to _eventTitle')
         self._Ui.event_time.addMappings(self._mapper, 2, 3)
-        print(f'{self.objectName()}_{hex(id(self))} added mapping to _eventTime')
+        if test_en: print(f'{self.objectName()}_{hex(id(self))} added mapping to _eventTime')
         self._mapper.addMapping(self._jsonParser, 4, QByteArray("Attributes"))
-        print(f'{self.objectName()}_{hex(id(self))} added mapping to _jsonParser/_eventBody')
+        if test_en: print(f'{self.objectName()}_{hex(id(self))} added mapping to _jsonParser/_eventBody')
         self._mapper.addMapping(self._Ui.event_location, 6)
 
         self._mapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)
+
+    def jsonParser(self): return self._jsonParser
 
     def mousePressEvent(self, event):
         # Check if the left mouse button was pressed
         if event.button() == Qt.MouseButton.LeftButton:
             # Change the background color to a new color
-            self.mousePressed.emit(self)
-            #print('mouse pressed!')
+            self.mousePressed.emit(self._index)
 
         # Call the base class implementation to ensure the event is handled correctly
         super().mousePressEvent(event)
 
-    def setObjectName(self, name, /):
+    def setObjectName(self, name):
         self.setStyleSheet(f"""
         QWidget#{name} {{
-            border-radius: 4px;
+            border-radius: 5px;
             background-color: rgba(30,30,30,1);
         }}""")
         return super().setObjectName(name)
+
+    def _setSelected(self):
+        self._selected = True
+        self.setStyleSheet(f"""
+        QWidget#{self.objectName()} {{
+            border-radius: 5px;
+            border: 2px solid rgba(255,255,255,1);
+            background-color: rgba(30,30,30,1);
+        }}""")
+        return None
+
+    def _setUnselected(self):
+        self._selected = False
+        self.setStyleSheet(f"""
+        QWidget#{self.objectName()} {{
+            border-radius: 5px;
+            border: 2px solid rgba(30,30,30,1);
+            background-color: rgba(30,30,30,1);
+        }}""")
+        return None
+
+    def toggleSelected(self) -> None:
+        if self._selected: self._setUnselected()
+        else: self._setSelected()
 
     def paintEvent(self, pe):
         opt = QStyleOption()
         opt.initFrom(self)
         p = QPainter(self)
         self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, p, self)
+
+    def deleteLater(self):
+        super().deleteLater()

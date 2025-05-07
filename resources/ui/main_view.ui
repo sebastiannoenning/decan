@@ -84,7 +84,109 @@ border-radius: 8px;
 }
 #nav * QPushButton:pressed{
 background-color: rgba(120,120,120,1);
-}</string>
+}
+
+#qt_calendar_navigationbar {
+    background-color: rgba(30,30,30,1);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}                    
+
+#qt_calendar_navigationbar * {
+    border-left: 1px solid rgba(240,240,240,0.9);
+}
+
+/*#################### YEAR BUTTONS ####################*/
+
+QPushButton#qt_calendar_nextyear {
+    border-top-left-radius: 4px;
+    border: none;
+}
+
+QPushButton#qt_calendar_prevyear {
+    border-radius: 0px;
+}
+                           
+QPushButton:pressed {
+    /* Pressed state */
+    background-color: rgba(90, 90, 90, 1);
+}
+
+QLabel#qt_calendar_yearlabel {
+    padding-left: 8px;
+    padding-right: 8px;
+    color: rgba(240,240,240,1);
+    background-color: rgba(30,30,30,1);
+    border-right: 1px solid rgba(240,240,240,0.9);
+}
+
+/*#################### MONTH BUTTONS ####################*/
+
+QToolButton#qt_calendar_monthbutton {
+    padding: 4px;
+    background-color: rgba(30,30,30,1);
+    color: rgba(240,240,240,0.9);
+    border: none;
+}
+
+#qt_calendar_monthbutton * {
+    border: none;
+    color: rgba(240,240,240,0.9);
+}
+
+QToolButton#qt_calendar_monthbutton::menu-indicator {
+    image: url(&quot;:/icons/arrows/arrow_down_dark.svg&quot;);
+    subcontrol-origin: padding;
+    subcontrol-position: bottom left;
+    width: 23px;
+    height: 23px;
+}
+
+QToolButton#qt_calendar_monthbutton::menu-indicator:pressed {
+    image: url(&quot;:/icons/arrows/arrow_down_red.svg&quot;);
+}
+
+QMenu#qt_calendar_monthmenu {
+    background-color: rgba(30,30,30,1);
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+QMenu#qt_calendar_monthmenu::item {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(240,240,240,0.9);
+}
+
+QMenu#qt_calendar_monthmenu::item:selected {
+    background: rgba(255, 80, 80, 0.7);
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+QMenu#qt_calendar_monthmenu::item:disabled {
+    color: rgba(90, 90, 90, 0.9);
+}
+
+QToolButton#qt_calendar_prevmonth {
+    /* Base state */
+    border-radius: 0px;
+}
+
+QToolButton#qt_calendar_nextmonth {
+    /* Base state */
+    border-radius: 0px;
+    border-top-right-radius: 4px;
+}
+
+QToolButton:pressed {
+    background-color: rgba(90, 90, 90, 1);
+}
+</string>
   </property>
   <widget class="QWidget" name="main_container">
    <layout class="QHBoxLayout" name="central_layout" stretch="0,0">
@@ -213,7 +315,7 @@ background-color: rgba(120,120,120,1);
             <property name="minimumSize">
              <size>
               <width>60</width>
-              <height>90</height>
+              <height>123</height>
              </size>
             </property>
             <property name="text">
@@ -221,8 +323,10 @@ background-color: rgba(120,120,120,1);
             </property>
             <property name="icon">
              <iconset resource="../assets/rss.qrc">
-              <normaloff>:/icons/user/profile_2_dark.svg</normaloff>
-              <selectedoff>:/icons/user/profile_2_red.svg</selectedoff>:/icons/user/profile_2_dark.svg</iconset>
+              <normaloff>:/icons/user/profile2_user_dark.svg</normaloff>
+              <normalon>:/icons/user/profile2_user_red.svg</normalon>
+              <disabledoff>:/icons/user/profile2_user_dark.svg</disabledoff>
+              <disabledon>:/icons/user/profile2_user_red.svg</disabledon>:/icons/user/profile2_user_dark.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -230,41 +334,23 @@ background-color: rgba(120,120,120,1);
               <height>30</height>
              </size>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="col_p2_cal">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>90</height>
-             </size>
+            <property name="checkable">
+             <bool>true</bool>
             </property>
-            <property name="styleSheet">
-             <string notr="true"/>
+            <property name="checked">
+             <bool>false</bool>
             </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../assets/rss.qrc">
-              <normaloff>:/icons/nav/calendar_dark.svg</normaloff>
-              <selectedoff>:/icons/nav/calendar_red.svg</selectedoff>:/icons/nav/calendar_dark.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
+            <property name="autoExclusive">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="col_p3_events">
+           <widget class="QPushButton" name="col_p2_events">
             <property name="minimumSize">
              <size>
               <width>60</width>
-              <height>90</height>
+              <height>123</height>
              </size>
             </property>
             <property name="text">
@@ -273,7 +359,9 @@ background-color: rgba(120,120,120,1);
             <property name="icon">
              <iconset resource="../assets/rss.qrc">
               <normaloff>:/icons/calendar/calendar_edit_dark.svg</normaloff>
-              <selectedoff>:/icons/calendar/calendar_edit_red.svg</selectedoff>:/icons/calendar/calendar_edit_dark.svg</iconset>
+              <normalon>:/icons/calendar/calendar_edit_red.svg</normalon>
+              <disabledoff>:/icons/calendar/calendar_edit_dark.svg</disabledoff>
+              <disabledon>:/icons/calendar/calendar_edit_red.svg</disabledon>:/icons/calendar/calendar_edit_dark.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -281,14 +369,23 @@ background-color: rgba(120,120,120,1);
               <height>30</height>
              </size>
             </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="col_p4_pref">
+           <widget class="QPushButton" name="col_p3_pref">
             <property name="minimumSize">
              <size>
               <width>60</width>
-              <height>90</height>
+              <height>123</height>
              </size>
             </property>
             <property name="text">
@@ -297,13 +394,21 @@ background-color: rgba(120,120,120,1);
             <property name="icon">
              <iconset resource="../assets/rss.qrc">
               <normaloff>:/icons/nav/setting_dark.svg</normaloff>
-              <selectedoff>:/icons/nav/setting_red.svg</selectedoff>:/icons/nav/setting_dark.svg</iconset>
+              <normalon>:/icons/nav/setting_red.svg</normalon>
+              <disabledoff>:/icons/nav/setting_dark.svg</disabledoff>
+              <disabledon>:/icons/nav/setting_red.svg</disabledon>:/icons/nav/setting_dark.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
               <width>30</width>
               <height>30</height>
              </size>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -333,6 +438,11 @@ background-color: rgba(120,120,120,1);
          <property name="styleSheet">
           <string notr="true">QPushButton {
 	text-align: left;
+	color: white;
+}
+QPushButton:disabled {
+    background-color: rgba(20,20,20,1);
+    color: white;
 }</string>
          </property>
          <layout class="QVBoxLayout" name="expanded_layout">
@@ -392,7 +502,7 @@ background-color: rgba(120,120,120,1);
             <property name="minimumSize">
              <size>
               <width>135</width>
-              <height>90</height>
+              <height>123</height>
              </size>
             </property>
             <property name="font">
@@ -406,8 +516,10 @@ background-color: rgba(120,120,120,1);
             </property>
             <property name="icon">
              <iconset resource="../assets/rss.qrc">
-              <normaloff>:/icons/user/profile_2_dark.svg</normaloff>
-              <selectedoff>:/icons/user/profile_2_red.svg</selectedoff>:/icons/user/profile_2_dark.svg</iconset>
+              <normaloff>:/icons/user/profile2_user_dark.svg</normaloff>
+              <normalon>:/icons/user/profile2_user_red.svg</normalon>
+              <disabledoff>:/icons/user/profile2_user_dark.svg</disabledoff>
+              <disabledon>:/icons/user/profile2_user_red.svg</disabledon>:/icons/user/profile2_user_dark.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -415,44 +527,23 @@ background-color: rgba(120,120,120,1);
               <height>30</height>
              </size>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="exp_p2_cal">
-            <property name="minimumSize">
-             <size>
-              <width>135</width>
-              <height>90</height>
-             </size>
+            <property name="checkable">
+             <bool>true</bool>
             </property>
-            <property name="font">
-             <font>
-              <family>Arial</family>
-              <pointsize>-1</pointsize>
-             </font>
+            <property name="checked">
+             <bool>false</bool>
             </property>
-            <property name="text">
-             <string>Calendar</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../assets/rss.qrc">
-              <normaloff>:/icons/nav/calendar_dark.svg</normaloff>
-              <selectedoff>:/icons/nav/calendar_red.svg</selectedoff>:/icons/nav/calendar_dark.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
+            <property name="autoExclusive">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="exp_p3_events">
+           <widget class="QPushButton" name="exp_p2_events">
             <property name="minimumSize">
              <size>
               <width>135</width>
-              <height>90</height>
+              <height>123</height>
              </size>
             </property>
             <property name="font">
@@ -467,7 +558,9 @@ background-color: rgba(120,120,120,1);
             <property name="icon">
              <iconset resource="../assets/rss.qrc">
               <normaloff>:/icons/calendar/calendar_edit_dark.svg</normaloff>
-              <selectedoff>:/icons/calendar/calendar_edit_red.svg</selectedoff>:/icons/calendar/calendar_edit_dark.svg</iconset>
+              <normalon>:/icons/calendar/calendar_edit_red.svg</normalon>
+              <disabledoff>:/icons/calendar/calendar_edit_dark.svg</disabledoff>
+              <disabledon>:/icons/calendar/calendar_edit_red.svg</disabledon>:/icons/calendar/calendar_edit_dark.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -475,14 +568,23 @@ background-color: rgba(120,120,120,1);
               <height>30</height>
              </size>
             </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="exp_p4_pref">
+           <widget class="QPushButton" name="exp_p3_pref">
             <property name="minimumSize">
              <size>
               <width>135</width>
-              <height>90</height>
+              <height>123</height>
              </size>
             </property>
             <property name="font">
@@ -497,13 +599,21 @@ background-color: rgba(120,120,120,1);
             <property name="icon">
              <iconset resource="../assets/rss.qrc">
               <normaloff>:/icons/nav/setting_dark.svg</normaloff>
-              <selectedoff>:/icons/nav/setting_red.svg</selectedoff>:/icons/nav/setting_dark.svg</iconset>
+              <normalon>:/icons/nav/setting_red.svg</normalon>
+              <disabledoff>:/icons/nav/setting_dark.svg</disabledoff>
+              <disabledon>:/icons/nav/setting_red.svg</disabledon>:/icons/nav/setting_dark.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
               <width>30</width>
               <height>30</height>
              </size>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -547,5 +657,102 @@ background-color: rgba(120,120,120,1);
  <resources>
   <include location="../assets/rss.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>col_p1_user</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>exp_p1_user</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>45</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>98</x>
+     <y>117</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>col_p2_events</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>exp_p2_events</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>94</x>
+     <y>305</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>col_p3_pref</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>exp_p3_pref</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>53</x>
+     <y>416</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>97</x>
+     <y>416</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exp_p3_pref</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>col_p3_pref</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>386</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>38</x>
+     <y>387</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exp_p2_events</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>col_p2_events</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>28</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exp_p1_user</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>col_p1_user</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>35</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

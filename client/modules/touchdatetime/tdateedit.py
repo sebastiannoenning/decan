@@ -15,11 +15,11 @@ class DateSelect(QCalendarWidget):
                  theme='light'):
         super().__init__(parent)
         self.theme=theme
-        self.__setup_ui()
-        self.__set_styles()
-        self.__setup_connections()
+        self.__setupUi()
+        self.__setStyles()
+        self.__setupConnections()
 
-    def __setup_ui(self):
+    def __setupUi(self):
         self.setVerticalHeaderFormat(QCalendarWidget.VerticalHeaderFormat.NoVerticalHeader)
         self.setGridVisible(False)
 
@@ -60,11 +60,11 @@ class DateSelect(QCalendarWidget):
         self._prevMonth.show(),                     self._header.addWidget(self._prevMonth)
         self._nextMonth.show(),                     self._header.addWidget(self._nextMonth)
 
-    def __set_styles(self):
-        self.__set_header_style()
-        self.__setup_calendar_style()
+    def __setStyles(self):
+        self.__setHeaderStyle()
+        self.__setupCalendarStyle()
 
-    def __set_header_style(self):
+    def __setHeaderStyle(self):
         if (self.theme == 'light'): c, b = 255, 30
         else: c, b = 20, 255
         a = 1
@@ -95,13 +95,13 @@ class DateSelect(QCalendarWidget):
         self._monthMenu.setFont(month_font)
 
         left_arrow, right_arrow, up_arrow, down_arrow = QIcon(), QIcon(), QIcon(), QIcon()
-        left_arrow.addFile(f":/icons/arrows/arrow_left_{self.theme}.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        left_arrow.addFile(f":/icons/arrows/arrow_left_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         left_arrow.addFile(f":/icons/arrows/arrow_left_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        right_arrow.addFile(f":/icons/arrows/arrow_right_{self.theme}.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        right_arrow.addFile(f":/icons/arrows/arrow_right_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         right_arrow.addFile(f":/icons/arrows/arrow_right_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        up_arrow.addFile(f":/icons/arrows/arrow_up_{self.theme}.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        up_arrow.addFile(f":/icons/arrows/arrow_up_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         up_arrow.addFile(f":/icons/arrows/arrow_up_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
-        down_arrow.addFile(f":/icons/arrows/arrow_down_{self.theme}.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        down_arrow.addFile(f":/icons/arrows/arrow_down_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         down_arrow.addFile(f":/icons/arrows/arrow_down_red.svg", QSize(), QIcon.Mode.Active, QIcon.State.On)
 
         self._nextMonth.setIcon(right_arrow),       self._nextMonth.setIconSize(QSize(23,23))
@@ -109,7 +109,7 @@ class DateSelect(QCalendarWidget):
         self._nextYear.setIcon(up_arrow),           self._nextYear.setIconSize(QSize(23,23))
         self._prevYear.setIcon(down_arrow),         self._prevYear.setIconSize(QSize(23,23))
 
-        self._nav.setStyleSheet(f"""
+        string = f"""
 
 #qt_calendar_navigationbar {{
     background-color: rgba({c}, {c}, {c}, {a});
@@ -211,9 +211,9 @@ QToolButton#qt_calendar_nextmonth {{
 QToolButton:pressed {{
     background-color: rgba(90, 90, 90, {a});
 }}
-""")
+"""
         
-    def __setup_calendar_style(self):
+    def __setupCalendarStyle(self):
         if (self.theme == 'light'): c, b = 255, 30
         else: c, b = 20, 255
         a = 1
@@ -246,7 +246,7 @@ QToolButton:pressed {{
 
         self.setPalette(palette)
 
-    def __setup_connections(self):
+    def __setupConnections(self):
         self._nextYear.clicked.connect(lambda: self._stepUpYearEdit())
         self._prevYear.clicked.connect(lambda: self._stepDownYearEdit())
         self._yearEdit.valueChanged.connect(lambda value: self._updateYearComponents(value))
@@ -299,38 +299,38 @@ class TDateEditDialog(QDialog):
     dateSelected = Signal(QDate)
 
     def __init__(self, parent, 
-                 cur_QDT: QDateTime):
+                 cur_Date: QDate):
         super().__init__(parent)
-        self._dateTime = cur_QDT
-        self.__setup_ui()
-        self.__setup_styles()
-        self.__setup_connections()
+        self._Date = cur_Date
+        self.__setupUi()
+        self.__setupStyles()
+        self.__setupConnections()
 
-    def __setup_ui(self):
+    def __setupUi(self):
         self.setObjectName("datetime_dialog")
         self._layer_base = QVBoxLayout(self)          
-        self._lb_dateSelect = DateSelect(self, theme='dark')
-        self._lb_dateSelect.setSelectedDate(self._dateTime.date())
-        self._layer_base.addWidget(self._lb_dateSelect)
+        self._dateSelect = DateSelect(self, theme='dark')
+        self._dateSelect.setSelectedDate(self._Date)
+        self._layer_base.addWidget(self._dateSelect)
 
         self._footer_container = QWidget(self)
         self._layer1_footer = QHBoxLayout(self._footer_container)                            
         
         
-        self._l1f_confirmPB = QPushButton(parent=self, text='Confirm') 
-        self._l1f_cancelPB = QPushButton(parent=self, text='Cancel')       
-        self._layer1_footer.addWidget(self._l1f_confirmPB)
-        self._layer1_footer.addWidget(self._l1f_cancelPB)
+        self.confirmPushButton = QPushButton(parent=self, text='Confirm')
+        self.cancelPushButton = QPushButton(parent=self, text='Cancel')
+        self._layer1_footer.addWidget(self.confirmPushButton)
+        self._layer1_footer.addWidget(self.cancelPushButton)
 
         self._layer_base.addWidget(self._footer_container)
 
         self._layer_base.setObjectName("datetime_dialog_layout_base")
-        self._lb_dateSelect.setObjectName("datetime_dialog_dateselect")
+        self._dateSelect.setObjectName("datetime_dialog_dateselect")
         self._layer1_footer.setObjectName("datetime_dialog_layout_footer")
-        self._l1f_confirmPB.setObjectName("datetime_dialog_confirm_pushbutton")
-        self._l1f_cancelPB.setObjectName("datetime_dialog_cancel_pushbutton")
+        self.confirmPushButton.setObjectName("datetime_dialog_confirm_pushbutton")
+        self.cancelPushButton.setObjectName("datetime_dialog_cancel_pushbutton")
 
-    def __setup_styles(self):
+    def __setupStyles(self):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowOpacity(0.9)
         self.setMinimumSize(500, 400)
@@ -342,15 +342,15 @@ class TDateEditDialog(QDialog):
         self._layer1_footer.setSpacing(0)
 
         self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
-        self._l1f_confirmPB.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
-        self._l1f_cancelPB.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        self.confirmPushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        self.cancelPushButton.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         
-        self._l1f_confirmPB.setMaximumHeight(40)
-        self._l1f_cancelPB.setMaximumHeight(40)
+        self.confirmPushButton.setMaximumHeight(40)
+        self.cancelPushButton.setMaximumHeight(40)
         self._footer_container.setMaximumHeight(40)
 
-        self._l1f_confirmPB.setFont(QFont("Arial",18))
-        self._l1f_cancelPB.setFont(QFont("Arial",18))
+        self.confirmPushButton.setFont(QFont("Arial", 18))
+        self.cancelPushButton.setFont(QFont("Arial", 18))
 
         self._footer_container.setStyleSheet(f"""
 
@@ -387,22 +387,22 @@ QPushButton#datetime_dialog_cancel_pushbutton:pressed {{
 }}
 """)
         
-    def __setup_connections(self):
-        self._l1f_confirmPB.clicked.connect(lambda: self.dialogueAccepted())
-        self._l1f_cancelPB.clicked.connect(lambda: self.dialogueRejected())
+    def __setupConnections(self):
+        self.confirmPushButton.clicked.connect(lambda: self.dialogueAccepted())
+        self.cancelPushButton.clicked.connect(lambda: self.dialogueRejected())
 
-    def dialogueAccepted(self): self.dateSelected.emit(self._lb_dateSelect.selectedDate()), self.accept()
+    def dialogueAccepted(self): self.dateSelected.emit(self._dateSelect.selectedDate()), self.accept()
     def dialogueRejected(self): self.reject(), self.rejected.emit()
 
     # Setters for DateSelect Object values
-    def setMinimumDate(self, date: QDate):      self._lb_dateSelect.setMinimumDate(date)
-    def setMaximumDate(self, date: QDate):      self._lb_dateSelect.setMaximumDate(date)
-    def setSelectedDate(self, date: QDate):     self._lb_dateSelect.setSelectedDate(date)
-    def clearMinimumDate(self):                 self._lb_dateSelect.clearMinimumDate()
-    def clearMaximumDate(self):                 self._lb_dateSelect.clearMaximumDate()
+    def setMinimumDate(self, date: QDate):      self._dateSelect.setMinimumDate(date)
+    def setMaximumDate(self, date: QDate):      self._dateSelect.setMaximumDate(date)
+    def setSelectedDate(self, date: QDate):     self._dateSelect.setSelectedDate(date)
+    def clearMinimumDate(self):                 self._dateSelect.clearMinimumDate()
+    def clearMaximumDate(self):                 self._dateSelect.clearMaximumDate()
     # Getters for DateSelect Object values
-    def minimumDate(self):                      return self._lb_dateSelect.minimumDate()
-    def maximumDate(self):                      return self._lb_dateSelect.maximumDate()
-    def selectedDate(self):                     return self._lb_dateSelect.selectedDate()
-    def yearShown(self):                        return self._lb_dateSelect.yearShown()
-    def dateSelect(self):                       return self._lb_dateSelect
+    def minimumDate(self):                      return self._dateSelect.minimumDate()
+    def maximumDate(self):                      return self._dateSelect.maximumDate()
+    def selectedDate(self):                     return self._dateSelect.selectedDate()
+    def yearShown(self):                        return self._dateSelect.yearShown()
+    def dateSelect(self):                       return self._dateSelect

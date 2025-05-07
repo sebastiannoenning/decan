@@ -13,6 +13,8 @@
         "client/modules/touchdatetime/tdateedit.py",
         "client/modules/touchdatetime/tdatetimeedit.py",
         "client/modules/touchdatetime/ttimeedit.py",
+        "client/modules/userlist/usericonoptions.py",
+        "client/modules/userlist/userselect.py",
         "client/views/dialogs/__init__.py",
         "client/views/dialogs/confirm_preset_dialog.py",
         "client/views/dialogs/confirm_preset_dialog_ui.py",
@@ -23,11 +25,15 @@
         "client/views/pages/user_view.py",
         "client/views/pages/user_view_ui.py",
         "client/views/rss_rc.py",
-        "client/views/rss_rc.py",
         "resources/assets/rss.qrc",
+        "resources/modules/__init__.py",
+        "resources/modules/user_tab.ui",
+        "resources/ui/dialogs/check_password_dialog.ui",
         "resources/ui/dialogs/confirm_preset_dialog.ui",
+        "resources/ui/dialogs/icon_picker_dialog.ui",
         "resources/ui/main_view.ui",
         "resources/ui/pages/event_view.ui",
+        "resources/ui/pages/pref_view.ui",
         "resources/ui/pages/user_view.ui"
     ]
 }

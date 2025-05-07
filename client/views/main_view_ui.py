@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_view.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -34,13 +34,13 @@ class Ui_main_view(object):
         main_view.setMaximumSize(QSize(800, 480))
         palette = QPalette()
         brush = QBrush(QColor(255, 255, 255, 255))
-        brush.setStyle(Qt.SolidPattern)
-        palette.setBrush(QPalette.Active, QPalette.Text, brush)
-        palette.setBrush(QPalette.Inactive, QPalette.Text, brush)
-        palette.setBrush(QPalette.Inactive, QPalette.ButtonText, brush)
+        brush.setStyle(Qt.BrushStyle.SolidPattern)
+        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Text, brush)
+        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Text, brush)
+        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.ButtonText, brush)
         brush1 = QBrush(QColor(255, 255, 255, 63))
-        brush1.setStyle(Qt.SolidPattern)
-        palette.setBrush(QPalette.Disabled, QPalette.Text, brush1)
+        brush1.setStyle(Qt.BrushStyle.SolidPattern)
+        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text, brush1)
         main_view.setPalette(palette)
         main_view.setStyleSheet(u"#nav * QPushButton{\n"
 "background-color: rgba(20, 20, 20, 1);\n"
@@ -48,7 +48,111 @@ class Ui_main_view(object):
 "}\n"
 "#nav * QPushButton:pressed{\n"
 "background-color: rgba(120,120,120,1);\n"
-"}")
+"}\n"
+"\n"
+"#qt_calendar_navigationbar {\n"
+"    background-color: rgba(30,30,30,1);\n"
+"    border-top-left-radius: 4px;\n"
+"    border-top-right-radius: 4px;\n"
+"}                    \n"
+"\n"
+"#qt_calendar_navigationbar * {\n"
+"    border-left: 1px solid rgba(240,240,240,0.9);\n"
+"}\n"
+"\n"
+"/*#################### YEAR BUTTONS ####################*/\n"
+"\n"
+"QPushButton#qt_calendar_nextyear {\n"
+"    border-top-left-radius: 4px;\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"QPushButton#qt_calendar_prevyear {\n"
+"    border-radius: 0px;\n"
+"}\n"
+"                           \n"
+"QPushButton:pressed {\n"
+"    /* Pressed state */\n"
+"    background-color: rgba(90, 90, 90, 1);\n"
+"}\n"
+"\n"
+"QLabel#qt_calendar_yearlabel {\n"
+"    padding-left: 8px;\n"
+"    padding-right: 8px;\n"
+"    color: rgba(240,240,240,1);\n"
+"    background-color: rgba(30,30,30,1);"
+                        "\n"
+"    border-right: 1px solid rgba(240,240,240,0.9);\n"
+"}\n"
+"\n"
+"/*#################### MONTH BUTTONS ####################*/\n"
+"\n"
+"QToolButton#qt_calendar_monthbutton {\n"
+"    padding: 4px;\n"
+"    background-color: rgba(30,30,30,1);\n"
+"    color: rgba(240,240,240,0.9);\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"#qt_calendar_monthbutton * {\n"
+"    border: none;\n"
+"    color: rgba(240,240,240,0.9);\n"
+"}\n"
+"\n"
+"QToolButton#qt_calendar_monthbutton::menu-indicator {\n"
+"    image: url(\":/icons/arrows/arrow_down_dark.svg\");\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: bottom left;\n"
+"    width: 23px;\n"
+"    height: 23px;\n"
+"}\n"
+"\n"
+"QToolButton#qt_calendar_monthbutton::menu-indicator:pressed {\n"
+"    image: url(\":/icons/arrows/arrow_down_red.svg\");\n"
+"}\n"
+"\n"
+"QMenu#qt_calendar_monthmenu {\n"
+"    background-color: rgba(30,30,30,1);\n"
+"    padding-top: 0px;\n"
+"    padding-bottom: 0px;\n"
+"    border-bottom-left-radius: 4px;\n"
+"    border-bottom-right-radius: 4px;\n"
+"}\n"
+""
+                        "\n"
+"QMenu#qt_calendar_monthmenu::item {\n"
+"    padding-left: 10px;\n"
+"    padding-right: 10px;\n"
+"    padding-top: 4px;\n"
+"    padding-bottom: 4px;\n"
+"    border-bottom: 1px solid rgba(240,240,240,0.9);\n"
+"}\n"
+"\n"
+"QMenu#qt_calendar_monthmenu::item:selected {\n"
+"    background: rgba(255, 80, 80, 0.7);\n"
+"    border-bottom-left-radius: 2px;\n"
+"    border-bottom-right-radius: 2px;\n"
+"}\n"
+"\n"
+"QMenu#qt_calendar_monthmenu::item:disabled {\n"
+"    color: rgba(90, 90, 90, 0.9);\n"
+"}\n"
+"\n"
+"QToolButton#qt_calendar_prevmonth {\n"
+"    /* Base state */\n"
+"    border-radius: 0px;\n"
+"}\n"
+"\n"
+"QToolButton#qt_calendar_nextmonth {\n"
+"    /* Base state */\n"
+"    border-radius: 0px;\n"
+"    border-top-right-radius: 4px;\n"
+"}\n"
+"\n"
+"QToolButton:pressed {\n"
+"    background-color: rgba(90, 90, 90, 1);\n"
+"}\n"
+"")
         self.main_container = QWidget(main_view)
         self.main_container.setObjectName(u"main_container")
         self.central_layout = QHBoxLayout(self.main_container)
@@ -96,48 +200,50 @@ class Ui_main_view(object):
 
         self.col_p1_user = QPushButton(self.collapsed)
         self.col_p1_user.setObjectName(u"col_p1_user")
-        self.col_p1_user.setMinimumSize(QSize(60, 90))
+        self.col_p1_user.setMinimumSize(QSize(60, 123))
         icon1 = QIcon()
-        icon1.addFile(u":/icons/user/profile_2_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon1.addFile(u":/icons/user/profile_2_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        icon1.addFile(u":/icons/user/profile2_user_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon1.addFile(u":/icons/user/profile2_user_red.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon1.addFile(u":/icons/user/profile2_user_dark.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon1.addFile(u":/icons/user/profile2_user_red.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.col_p1_user.setIcon(icon1)
         self.col_p1_user.setIconSize(QSize(30, 30))
+        self.col_p1_user.setCheckable(True)
+        self.col_p1_user.setChecked(False)
+        self.col_p1_user.setAutoExclusive(True)
 
         self.collapsed_layout.addWidget(self.col_p1_user)
 
-        self.col_p2_cal = QPushButton(self.collapsed)
-        self.col_p2_cal.setObjectName(u"col_p2_cal")
-        self.col_p2_cal.setMinimumSize(QSize(60, 90))
-        self.col_p2_cal.setStyleSheet(u"")
+        self.col_p2_events = QPushButton(self.collapsed)
+        self.col_p2_events.setObjectName(u"col_p2_events")
+        self.col_p2_events.setMinimumSize(QSize(60, 123))
         icon2 = QIcon()
-        icon2.addFile(u":/icons/nav/calendar_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon2.addFile(u":/icons/nav/calendar_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.col_p2_cal.setIcon(icon2)
-        self.col_p2_cal.setIconSize(QSize(30, 30))
+        icon2.addFile(u":/icons/calendar/calendar_edit_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon2.addFile(u":/icons/calendar/calendar_edit_red.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon2.addFile(u":/icons/calendar/calendar_edit_dark.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon2.addFile(u":/icons/calendar/calendar_edit_red.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        self.col_p2_events.setIcon(icon2)
+        self.col_p2_events.setIconSize(QSize(30, 30))
+        self.col_p2_events.setCheckable(True)
+        self.col_p2_events.setChecked(True)
+        self.col_p2_events.setAutoExclusive(True)
 
-        self.collapsed_layout.addWidget(self.col_p2_cal)
+        self.collapsed_layout.addWidget(self.col_p2_events)
 
-        self.col_p3_events = QPushButton(self.collapsed)
-        self.col_p3_events.setObjectName(u"col_p3_events")
-        self.col_p3_events.setMinimumSize(QSize(60, 90))
+        self.col_p3_pref = QPushButton(self.collapsed)
+        self.col_p3_pref.setObjectName(u"col_p3_pref")
+        self.col_p3_pref.setMinimumSize(QSize(60, 123))
         icon3 = QIcon()
-        icon3.addFile(u":/icons/calendar/calendar_edit_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon3.addFile(u":/icons/calendar/calendar_edit_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.col_p3_events.setIcon(icon3)
-        self.col_p3_events.setIconSize(QSize(30, 30))
+        icon3.addFile(u":/icons/nav/setting_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon3.addFile(u":/icons/nav/setting_red.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon3.addFile(u":/icons/nav/setting_dark.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon3.addFile(u":/icons/nav/setting_red.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        self.col_p3_pref.setIcon(icon3)
+        self.col_p3_pref.setIconSize(QSize(30, 30))
+        self.col_p3_pref.setCheckable(True)
+        self.col_p3_pref.setAutoExclusive(True)
 
-        self.collapsed_layout.addWidget(self.col_p3_events)
-
-        self.col_p4_pref = QPushButton(self.collapsed)
-        self.col_p4_pref.setObjectName(u"col_p4_pref")
-        self.col_p4_pref.setMinimumSize(QSize(60, 90))
-        icon4 = QIcon()
-        icon4.addFile(u":/icons/nav/setting_dark.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon4.addFile(u":/icons/nav/setting_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.col_p4_pref.setIcon(icon4)
-        self.col_p4_pref.setIconSize(QSize(30, 30))
-
-        self.collapsed_layout.addWidget(self.col_p4_pref)
+        self.collapsed_layout.addWidget(self.col_p3_pref)
 
 
         self.nav_layout.addWidget(self.collapsed)
@@ -150,6 +256,11 @@ class Ui_main_view(object):
         self.expanded.setMaximumSize(QSize(135, 16777215))
         self.expanded.setStyleSheet(u"QPushButton {\n"
 "	text-align: left;\n"
+"	color: white;\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color: rgba(20,20,20,1);\n"
+"    color: white;\n"
 "}")
         self.expanded_layout = QVBoxLayout(self.expanded)
         self.expanded_layout.setSpacing(10)
@@ -161,9 +272,9 @@ class Ui_main_view(object):
         font = QFont()
         font.setFamilies([u"Arial"])
         self.exp_toggle.setFont(font)
-        icon5 = QIcon()
-        icon5.addFile(u":/icons/nav/burger_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
-        self.exp_toggle.setIcon(icon5)
+        icon4 = QIcon()
+        icon4.addFile(u":/icons/nav/burger_red.svg", QSize(), QIcon.Mode.Selected, QIcon.State.Off)
+        self.exp_toggle.setIcon(icon4)
         self.exp_toggle.setIconSize(QSize(30, 30))
 
         self.expanded_layout.addWidget(self.exp_toggle)
@@ -175,39 +286,38 @@ class Ui_main_view(object):
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.exp_p1_user.sizePolicy().hasHeightForWidth())
         self.exp_p1_user.setSizePolicy(sizePolicy2)
-        self.exp_p1_user.setMinimumSize(QSize(135, 90))
+        self.exp_p1_user.setMinimumSize(QSize(135, 123))
         self.exp_p1_user.setFont(font)
         self.exp_p1_user.setIcon(icon1)
         self.exp_p1_user.setIconSize(QSize(30, 30))
+        self.exp_p1_user.setCheckable(True)
+        self.exp_p1_user.setChecked(False)
+        self.exp_p1_user.setAutoExclusive(True)
 
         self.expanded_layout.addWidget(self.exp_p1_user)
 
-        self.exp_p2_cal = QPushButton(self.expanded)
-        self.exp_p2_cal.setObjectName(u"exp_p2_cal")
-        self.exp_p2_cal.setMinimumSize(QSize(135, 90))
-        self.exp_p2_cal.setFont(font)
-        self.exp_p2_cal.setIcon(icon2)
-        self.exp_p2_cal.setIconSize(QSize(30, 30))
+        self.exp_p2_events = QPushButton(self.expanded)
+        self.exp_p2_events.setObjectName(u"exp_p2_events")
+        self.exp_p2_events.setMinimumSize(QSize(135, 123))
+        self.exp_p2_events.setFont(font)
+        self.exp_p2_events.setIcon(icon2)
+        self.exp_p2_events.setIconSize(QSize(30, 30))
+        self.exp_p2_events.setCheckable(True)
+        self.exp_p2_events.setChecked(True)
+        self.exp_p2_events.setAutoExclusive(True)
 
-        self.expanded_layout.addWidget(self.exp_p2_cal)
+        self.expanded_layout.addWidget(self.exp_p2_events)
 
-        self.exp_p3_events = QPushButton(self.expanded)
-        self.exp_p3_events.setObjectName(u"exp_p3_events")
-        self.exp_p3_events.setMinimumSize(QSize(135, 90))
-        self.exp_p3_events.setFont(font)
-        self.exp_p3_events.setIcon(icon3)
-        self.exp_p3_events.setIconSize(QSize(30, 30))
+        self.exp_p3_pref = QPushButton(self.expanded)
+        self.exp_p3_pref.setObjectName(u"exp_p3_pref")
+        self.exp_p3_pref.setMinimumSize(QSize(135, 123))
+        self.exp_p3_pref.setFont(font)
+        self.exp_p3_pref.setIcon(icon3)
+        self.exp_p3_pref.setIconSize(QSize(30, 30))
+        self.exp_p3_pref.setCheckable(True)
+        self.exp_p3_pref.setAutoExclusive(True)
 
-        self.expanded_layout.addWidget(self.exp_p3_events)
-
-        self.exp_p4_pref = QPushButton(self.expanded)
-        self.exp_p4_pref.setObjectName(u"exp_p4_pref")
-        self.exp_p4_pref.setMinimumSize(QSize(135, 90))
-        self.exp_p4_pref.setFont(font)
-        self.exp_p4_pref.setIcon(icon4)
-        self.exp_p4_pref.setIconSize(QSize(30, 30))
-
-        self.expanded_layout.addWidget(self.exp_p4_pref)
+        self.expanded_layout.addWidget(self.exp_p3_pref)
 
 
         self.nav_layout.addWidget(self.expanded)
@@ -232,6 +342,12 @@ class Ui_main_view(object):
         main_view.setCentralWidget(self.main_container)
 
         self.retranslateUi(main_view)
+        self.col_p1_user.toggled.connect(self.exp_p1_user.setChecked)
+        self.col_p2_events.toggled.connect(self.exp_p2_events.setChecked)
+        self.col_p3_pref.toggled.connect(self.exp_p3_pref.setChecked)
+        self.exp_p3_pref.toggled.connect(self.col_p3_pref.setChecked)
+        self.exp_p2_events.toggled.connect(self.col_p2_events.setChecked)
+        self.exp_p1_user.toggled.connect(self.col_p1_user.setChecked)
 
         QMetaObject.connectSlotsByName(main_view)
     # setupUi
@@ -240,13 +356,11 @@ class Ui_main_view(object):
         main_view.setWindowTitle(QCoreApplication.translate("main_view", u"main", None))
         self.col_toggle.setText("")
         self.col_p1_user.setText("")
-        self.col_p2_cal.setText("")
-        self.col_p3_events.setText("")
-        self.col_p4_pref.setText("")
+        self.col_p2_events.setText("")
+        self.col_p3_pref.setText("")
         self.exp_toggle.setText(QCoreApplication.translate("main_view", u"Menu", None))
         self.exp_p1_user.setText(QCoreApplication.translate("main_view", u"Users", None))
-        self.exp_p2_cal.setText(QCoreApplication.translate("main_view", u"Calendar", None))
-        self.exp_p3_events.setText(QCoreApplication.translate("main_view", u"Events", None))
-        self.exp_p4_pref.setText(QCoreApplication.translate("main_view", u"Settings", None))
+        self.exp_p2_events.setText(QCoreApplication.translate("main_view", u"Events", None))
+        self.exp_p3_pref.setText(QCoreApplication.translate("main_view", u"Settings", None))
     # retranslateUi
 

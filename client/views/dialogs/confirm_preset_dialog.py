@@ -9,7 +9,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQuery, QSqlRelationa
 # Important:
 # You need to run the following command to generate the ui_form.py file
 #       pyside6-uic --from-imports resources/ui/dialogs/confirm_preset_dialog.ui -o client/views/dialogs/confirm_preset_dialog_ui.py, or
-#       pyside6-uic --from-imports dialogues/confirm_preset_dialogue.ui -o ../client/views/dialogues/confirm_preset_dialogue_ui.py
+#       pyside6-uic --from-imports dialogs/confirm_preset_dialog.ui -o ../client/views/dialogs/confirm_preset_dialog_ui.py
 #       
 # For icons:
 #       pyside6-rcc resources/assets/rss.qrc -o resources/assets/rss.py
@@ -25,3 +25,11 @@ class ConfirmPreset(QDialog):
     def __init__(self, /, parent = None, f = ..., *, sizeGripEnabled = ..., modal = ...):
         super().__init__(parent, f, sizeGripEnabled=sizeGripEnabled, modal=modal)
         self.setWindowTitle("")
+        self._Ui = Ui_confirm_preset_dialog()
+        self._Ui.setupUi(self)
+
+        self._Io
+
+    def defaultSimple(self):
+
+
