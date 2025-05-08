@@ -100,8 +100,38 @@ class EventView(QWidget):
 
         self.eventMapper.setModel(self.eventmodel)
         self.mapToWidgets()
+        self._Ui.add_event_button.clicked.connect(lambda: self._Ui.details_container.setCurrentIndex(3))
+        self._Ui.add_event_button.clicked.connect(self.onAddEvent)
+        self._Ui.save_button.clicked.connect(self.onSaveEvent)
 
-    def updateInfo():
+    def onAddEvent(self, test_en: bool = True):
+        self.setFormDefault()
+        if not self.eventmodel.insertRow(-1):
+            if test_en: print("[EventView] Failed to insert empty row")
+            return
+
+        self.mapper.setCurrentIndex(-1)
+
+        self._Ui.title_line_edit.clear()
+        now = QDateTime.currentDateTime()
+        self._Ui.time_start_select.setDateTime(now)
+        self._Ui.time_end_select.setDateTime(now.addSecs(3600))
+
+        self._Ui.details_container.setCurrentIndex(2)
+
+    def onSaveEvent(self, test_en: bool = False):
+        if not self.mapper.submit():
+            if test_en: ("EventView mapper.submit() failed")
+            return
+
+        if not self.eventmodel.submitAll():
+            err = self.eventmodel.lastError().text()
+            print(f"[EventView] submitAll() failed → {err}")
+            self.eventmodel.revertAll()
+            return
+
+        self._Ui.details_container.setCurrentIndex(3)
+        self._Ui.setFormDefault()
         t = None
         if t == None: return None
 

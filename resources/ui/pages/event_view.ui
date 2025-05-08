@@ -400,6 +400,9 @@ EToDo * QLabel{
         <property name="lineWidth">
          <number>0</number>
         </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+        </property>
         <property name="horizontalScrollBarPolicy">
          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
         </property>
@@ -967,7 +970,7 @@ QScrollBar::add-line:vertical  {
           <number>0</number>
          </property>
          <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
